@@ -1,0 +1,1143 @@
+!<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+    <title>Loading Screen</title>
+    <style>
+        /* تنظیمات کلی */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        /* صفحه لودینگ */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            animation: fadeOut 3s ease forwards;
+        }
+
+        /* انیمیشن محو شدن */
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* دایره چرخان */
+        .loading-spinner {
+            border: 8px solid #fff;
+            border-top: 8px solid #2575fc;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* متن لودینگ */
+        .loading-text {
+            position: absolute;
+            top: 70%;
+            font-size: 24px;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+            animation: textAnimation 1.5s infinite;
+        }
+
+        /* انیمیشن ظاهر شدن متن */
+        @keyframes textAnimation {
+            0%, 100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* پس از بارگذاری، صفحه اصلی */
+        .content {
+            display: none;
+        }
+
+    </style>
+</head>
+
+
+<body>
+<!-- پخش خودکار صدا در پس‌زمینه -->
+<audio id="background-music" autoplay loop>
+    <source src="Back gerand.mp3" type="audio/mp3">
+    مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
+</audio>
+
+<div class="content">
+    <h1>Welcome to My Website</h1>
+    <p>This page includes advanced background music with real-time controls.</p>
+</div>
+
+<div class="controls">
+    <button id="playButton">Play Music</button>
+    <button id="pauseButton">Pause Music</button>
+    <button id="increaseVolumeButton">Increase Volume</button>
+    <button id="decreaseVolumeButton">Decrease Volume</button>
+</div>
+
+<script>
+    // متغیرها برای صدا و کنترل‌های آن
+    const audioElement = document.getElementById('background-music');
+    const playButton = document.getElementById('playButton');
+    const pauseButton = document.getElementById('pauseButton');
+    const increaseVolumeButton = document.getElementById('increaseVolumeButton');
+    const decreaseVolumeButton = document.getElementById('decreaseVolumeButton');
+
+    // پخش و توقف صدا با دکمه‌ها
+    playButton.addEventListener('click', function() {
+        audioElement.play();
+    });
+
+    pauseButton.addEventListener('click', function() {
+        audioElement.pause();
+    });
+
+    // افزایش و کاهش حجم صدا
+    increaseVolumeButton.addEventListener('click', function() {
+        if (audioElement.volume < 1) {
+            audioElement.volume += 0.1; // افزایش حجم صدا
+        }
+    });
+
+    decreaseVolumeButton.addEventListener('click', function() {
+        if (audioElement.volume > 0) {
+            audioElement.volume -= 0.1; // کاهش حجم صدا
+        }
+    });
+
+    // استفاده از Web Audio API برای افکت‌های صوتی پیشرفته
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = audioContext.createAnalyser();
+    const source = audioContext.createMediaElementSource(audioElement);
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    // افکت‌های صوتی پیشرفته (ایجاد نمای صوتی از گرافیک)
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    function visualize() {
+        analyser.getByteFrequencyData(dataArray);
+        // پردازش داده‌های صوتی (نمایش گرافیک و...)
+        requestAnimationFrame(visualize);
+    }
+    visualize();
+
+    // قطع صدا پس از لود کامل صفحه
+    window.onload = function() {
+        audioElement.play();  // اطمینان از پخش خودکار صدا پس از لود صفحه
+    };
+
+</script>
+
+</body> 
+
+</html>
+    <!-- صفحه لودینگ -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Loading...</p>
+    </div>
+
+    <!-- محتوای اصلی -->
+    <div class="content">
+        <header>
+            <h1>Ultimate Ahoura Gaming</h1>
+            <!-- محتوای دیگر صفحه -->
+        </header>
+    </div>
+
+    <script>
+        // بعد از بارگذاری کامل صفحه، صفحه لودینگ را مخفی کنیم
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.querySelector('.content').style.display = 'block';
+            }, 3000); // صفحه لودینگ برای 3 ثانیه نمایش داده می‌شود
+        };
+    </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </script>
+</body>
+</html>
+DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+    <title>Ultimate Gaming Tech - AI & Interactive Experience</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .loading-screen {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5em;
+            animation: fadeOut 3s forwards 4s;
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+        header {
+            background: linear-gradient(to right, #ff0080, #ff6600);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(255, 0, 128, 0.5);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 0;
+        }
+        nav ul li a {
+            color: #fff;
+            font-size: 1.2em;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+        nav ul li a:hover {
+            color: #ffd700;
+            transform: scale(1.1);
+        }
+        section {
+            padding: 80px;
+            text-align: center;
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ai-chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(20, 20, 20, 0.9);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.8);
+            width: 320px;
+        }
+        .ai-chatbot input, .ai-chatbot button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        .ai-chatbot button {
+            background: #ff0080;
+            color: white;
+            cursor: pointer;
+        }
+        .ai-chatbot button:hover {
+            background: #ff6600;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #111;
+            box-shadow: 0 -6px 12px rgba(255, 0, 128, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loading-screen">
+        <h1>LOADING...</h1>
+    </div>
+    
+    <header>
+        <h1>Ultimate Ahoura Gaming - AI g Top Coders Ai created gaming-home</h1>
+        <h2>            Gaming plyer call of duty new     </h2>
+        <img src="images/OIP(1).jpeg.png" alt="تصویر گیمینگ" width="350">
+        <h1>                                                                </h1>
+        <h>                                                </h>
+        <p>               Gaming and morady                </p>
+        <video width="1200" height="450" controls autoplay loop>
+            <source src="videos/myvideo (3).mp4" type="video/mp4">
+            مرورگر شما از نمایش ویدیو پشتیبانی نمی‌کند.
+        </video>                
+        <script>
+            window.onload = function() {
+                document.querySelector("video").play();
+            };
+        </script>        
+        <nav>
+            <ul>
+                <li><a href="https://gaming-home.com">Home</a></li>
+                <li><a href="https://gaming-store.com">Store</a></li>
+                <li><a href="https://gaming-community.com">Community</a></li>
+                <li><a href="https://ai-hub.com">AI Hub</a></li>
+                <li><a href="#login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="login">
+        <h2>Sign In</h2>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+        <p id="login-message"></p>
+    </section>
+    
+    <div class="ai-chatbot">
+        <h3>AI ChatBot</h3>
+        <input type="text" id="chatInput" placeholder="Ask me anything...">
+        <button onclick="chatResponse()">Send</button>
+        <p id="chatResponse"></p>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Ultimate Gaming Tech. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        function chatResponse() {
+            let question = document.getElementById("chatInput").value;
+            document.getElementById("chatResponse").innerText = "Processing...";
+            setTimeout(() => {
+                document.getElementById("chatResponse").innerText = "AI Response: " + question;
+            }, 1500);
+        }
+        
+        $(document).ready(function() {
+            $("#loginForm").submit(function(event) {
+                event.preventDefault();
+                let username = $("#username").val();
+                let password = $("#password").val();
+                if (username === "amirhosinehemmati" && password === "2222") {
+                    $("#login-message").html("Login successful! Redirecting...");
+                    setTimeout(() => {
+                        window.location.href = "https://ultimate-gaming-world.com";
+                    }, 2000);
+                } else {
+                    $("#login-message").html("Invalid credentials. Please try again.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+    <title>Ultimate Gaming Tech</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="loading-screen" id="loading">
+        <h1>Loading...</h1>
+    </div>
+    
+    <header>
+        <h1>Specte Metic call of duty Ai</h1>
+        <h3>      King Specter     </h3>
+        <img src="images/OIP(2).jpeg.png" alt="تصویر گیمینگ" width="1000">
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI</a></li>
+                <li><a href="#metaverse">Metaverse</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="home">
+            <h2>Welcome to the Future</h2>
+            <p>Experience the most advanced gaming and AI technology in existence.</p>
+            <button onclick="enterMetaverse()">Enter Metaverse</button>
+        </section>
+        
+        <section id="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Quantum AI-Powered Game Processing</li>
+                <li>Metaverse Integration</li>
+                <li>Hyper-Realistic Graphics with Unreal Engine</li>
+                <li>Blockchain Security & Decentralized Data</li>
+                <li>Neural Interface & Brainwave Control</li>
+                <li>Holographic UI & Augmented Reality</li>
+                <li>Instant Loading with Edge Computing</li>
+            </ul>
+        </section>
+        
+        <section id="ai">
+            <h2>Advanced AI</h2>
+            <p>Interact with the most powerful AI system ever created.</p>
+            <button onclick="startAIChat()">Chat with AI</button>
+            <button onclick="enableVoiceControl()">Enable Voice Control</button>
+        </section>
+        
+        <section id="metaverse">
+            <h2>Metaverse Experience</h2>
+            <p>Step into a digital universe where reality meets imagination.</p>
+            <button onclick="startVRMode()">Enter VR Mode</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Ultimate Gaming Tech. All rights reserved.</p>
+        <p>Powered by Quantum AI & Blockchain Security</p>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Gaming Tech</title>
+    <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ml5/0.6.0/ml5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+</head>
+<body>
+    <div class="loading-screen" id="loading">
+        <h1 class="glowing-text">Loading...</h1>
+    </div>
+    
+    <header>
+        <h1 class="glow-text">Ultimate Gaming Tech</h1>
+        <img src="images/OIP(3).jpeg.png" alt="تصویر گیمینگ" width="980">
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI</a></li>
+                <li><a href="#metaverse">Metaverse</a></li>
+                <li><a href="#blockchain">Blockchain</a></li>
+                <li><a href="#vr">VR/AR</a></li>
+                <li><a href="#quantum">Quantum Computing</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="home" class="animated-bg">
+            <canvas id="threejs-canvas"></canvas>
+            <h2 class="neon-text">Welcome to the Future</h2>
+            <p>Experience the most advanced gaming and AI technology in existence.</p>
+            <button onclick="enterMetaverse()" class="cyber-button">Enter Metaverse</button>
+        </section>
+        
+        <section id="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Quantum AI-Powered Game Processing</li>
+                <li>Metaverse Integration with Full VR Support</li>
+                <li>Ultra-Realistic Graphics powered by Unreal Engine 5 & WebGL</li>
+                <li>Blockchain Security & Decentralized Data with NFT Integration</li>
+                <li>Neural Interface & Brainwave Control</li>
+                <li>Holographic UI & Augmented Reality</li>
+                <li>Instant Loading with Edge Computing & AI Optimization</li>
+                <li>Dynamic 3D Animated Background & Parallax Effects</li>
+                <li>Quantum Computing for Advanced Simulations</li>
+                <li>AI-Driven Predictive Gaming Strategies</li>
+            </ul>
+        </section>
+        
+        <section id="ai">
+            <h2>Advanced AI</h2>
+            <p>Interact with the most powerful AI system ever created.</p>
+            <button onclick="startAIChat()" class="cyber-button">Chat with AI</button>
+            <button onclick="enableVoiceControl()" class="cyber-button">Enable Voice Control</button>
+            <button onclick="startBrainwaveControl()" class="cyber-button">Control with Brainwaves</button>
+        </section>
+        
+        <section id="metaverse">
+            <h2>Metaverse Experience</h2>
+            <p>Step into a digital universe where reality meets imagination.</p>
+            <button onclick="startVRMode()" class="cyber-button">Enter VR Mode</button>
+        </section>
+        
+        <section id="blockchain">
+            <h2>Blockchain Security</h2>
+            <p>Experience next-level security with decentralized technology.</p>
+            <button onclick="accessNFTMarket()" class="cyber-button">Explore NFT Marketplace</button>
+        </section>
+        
+        <section id="vr">
+            <h2>VR & AR Experience</h2>
+            <p>Step into fully immersive virtual and augmented reality worlds.</p>
+            <button onclick="startARExperience()" class="cyber-button">Augmented Reality Mode</button>
+        </section>
+        
+        <section id="quantum">
+            <h2>Quantum Computing</h2>
+            <p>Harness the power of quantum mechanics for next-gen computations.</p>
+            <button onclick="startQuantumSimulation()" class="cyber-button">Run Quantum Simulation</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Ultimate Gaming Tech. All rights reserved.</p>
+        <p>Powered by Quantum AI, Blockchain Security, and Next-Gen Gaming Tech</p>
+        <p>  Amirhosine Hemmati top coders Ai </p>
+    </footer>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            gsap.from(".glow-text", {opacity: 0, y: -50, duration: 1.5, ease: "power2.out"});
+            gsap.from(".cyber-button", {opacity: 0, scale: 0.5, duration: 0.8, stagger: 0.2, ease: "power2.out"});
+            gsap.to(".animated-bg", {background: "linear-gradient(45deg, #ff00ff, #0000ff)", duration: 3, repeat: -1, yoyo: true});
+            gsap.from(".neon-text", {textShadow: "0 0 20px #fff", duration: 2, repeat: -1, yoyo: true});
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+    <title>Ultimate Gaming Tech</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div class="loading-screen" id="loading">
+        <h1>Loading...</h1>
+    </div>
+    
+    <header>
+        <h1 class="glow-text">Ultimate Gaming Tech</h1>
+        <video width="950" height="450" controls>
+            <source src="videos/myvideo.mp4" type="video/mp4">
+            مرورگر شما از نمایش ویدیو پشتیبانی نمی‌کند.
+        </video>        
+        <h>                                              </h>
+        <h>                  .                           </h>
+        <audio controls>
+            <source src="Game-mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>        
+        
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI</a></li>
+                <li><a href="#metaverse">Metaverse</a></li>
+                <li><a href="#blockchain">Blockchain</a></li>
+                <li><a href="#vr">VR/AR</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="home" class="animated-bg">
+            <canvas id="threejs-canvas"></canvas>
+            <h2 class="neon-text">Welcome to the Future</h2>
+            <p>Experience the most advanced gaming and AI technology in existence.</p>
+            <button onclick="enterMetaverse()" class="cyber-button">Enter Metaverse</button>
+        </section>
+        
+        <section id="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Quantum AI-Powered Game Processing</li>
+                <li>Metaverse Integration with Full VR Support</li>
+                <li>Ultra-Realistic Graphics powered by Unreal Engine 5 & WebGL</li>
+                <li>Blockchain Security & Decentralized Data with NFT Integration</li>
+                <li>Neural Interface & Brainwave Control</li>
+                <li>Holographic UI & Augmented Reality</li>
+                <li>Instant Loading with Edge Computing & AI Optimization</li>
+                <li>Dynamic 3D Animated Background & Parallax Effects</li>
+            </ul>
+        </section>
+        
+        <section id="ai">
+            <h2>Advanced AI</h2>
+            <p>Interact with the most powerful AI system ever created.</p>
+            <button onclick="startAIChat()" class="cyber-button">Chat with AI</button>
+            <button onclick="enableVoiceControl()" class="cyber-button">Enable Voice Control</button>
+            <button onclick="startBrainwaveControl()" class="cyber-button">Control with Brainwaves</button>
+        </section>
+        
+        <section id="metaverse">
+            <h2>Metaverse Experience</h2>
+            <p>Step into a digital universe where reality meets imagination.</p>
+            <button onclick="startVRMode()" class="cyber-button">Enter VR Mode</button>
+        </section>
+        
+        <section id="blockchain">
+            <h2>Blockchain Security</h2>
+            <p>Experience next-level security with decentralized technology.</p>
+            <button onclick="accessNFTMarket()" class="cyber-button">Explore NFT Marketplace</button>
+        </section>
+        
+        <section id="vr">
+            <h2>VR & AR Experience</h2>
+            <p>Step into fully immersive virtual and augmented reality worlds.</p>
+            <button onclick="startARExperience()" class="cyber-button">Augmented Reality Mode</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Ultimate Gaming Tech. All rights reserved.</p>
+        <p>Powered by Quantum AI, Blockchain Security, and Next-Gen Gaming Tech</p>
+        <p> Heelo Qulity powerful</p>
+    </footer>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            gsap.from(".glow-text", {opacity: 0, y: -50, duration: 1.5, ease: "power2.out"});
+            gsap.from(".cyber-button", {opacity: 0, scale: 0.5, duration: 0.8, stagger: 0.2, ease: "power2.out"});
+        });
+    </script>
+    
+
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+    <title>Ultimate Gaming Tech</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="loading-screen" id="loading">
+        <h1>Loading...</h1>
+    </div>
+    
+    <header>
+        <h1>Ultimate Gaming Tech</h1>
+        
+        <h2>     Top coders ai nob the bot = AmirRezaMorad<h2>
+        <video width="1200" height="450" controls>
+            <source src="videos/myvideo (2).mp4" type="video/mp4">
+            مرورگر شما از نمایش ویدیو پشتیبانی نمی‌کند.
+        </video>      
+        <audio id="background-music" autoplay loop>
+            <source src="calm-gaming-background.mp3" type="audio/mp3">
+            مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
+        </audio>  
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI</a></li>
+                <li><a href="#metaverse">Metaverse</a></li>
+                <li><a href="#blockchain">Blockchain</a></li>
+                <li><a href="#vr">VR/AR</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="home" class="animated-bg">
+            <h2>Welcome to the Future</h2>
+            <p>Experience the most advanced gaming and AI technology in existence.</p>
+            <button onclick="enterMetaverse()">Enter Metaverse</button>
+        </section>
+        
+        <section id="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Quantum AI-Powered Game Processing</li>
+                <li>Metaverse Integration with Full VR Support</li>
+                <li>Ultra-Realistic Graphics powered by Unreal Engine 5 & WebGL</li>
+                <li>Blockchain Security & Decentralized Data with NFT Integration</li>
+                <li>Neural Interface & Brainwave Control</li>
+                <li>Holographic UI & Augmented Reality</li>
+                <li>Instant Loading with Edge Computing & AI Optimization</li>
+                <li>Dynamic 3D Animated Background & Parallax Effects</li>
+            </ul>
+        </section>
+        
+        <section id="ai">
+            <h2>Advanced AI</h2>
+            <p>Interact with the most powerful AI system ever created.</p>
+            <button onclick="startAIChat()">Chat with AI</button>
+            <button onclick="enableVoiceControl()">Enable Voice Control</button>
+            <button onclick="startBrainwaveControl()">Control with Brainwaves</button>
+        </section>
+        
+        <section id="metaverse">
+            <h2>Metaverse Experience</h2>
+            <p>Step into a digital universe where reality meets imagination.</p>
+            <button onclick="startVRMode()">Enter VR Mode</button>
+        </section>
+        
+        <section id="blockchain">
+            <h2>Blockchain Security</h2>
+            <p>Experience next-level security with decentralized technology.</p>
+            <button onclick="accessNFTMarket()">Explore NFT Marketplace</button>
+        </section>
+        
+        <section id="vr">
+            <h2>VR & AR Experience</h2>
+            <p>Step into fully immersive virtual and augmented reality worlds.</p>
+            <button onclick="startARExperience()">Augmented Reality Mode</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Ultimate Gaming Tech. All rights reserved.</p>
+        <p>Powered by Quantum AI, Blockchain Security, and Next-Gen Gaming Tech</p>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+    <title>Ultimate Gaming Tech</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="loading-screen" id="loading">
+        <h1>Loading...</h1>
+    </div>
+    
+    <header>
+        <h1>Ultimate Gaming Tech</h1>
+        <img src="images/OIP(4).jpeg.png" alt="تصویر گیمینگ" width="980">
+        <h>    Hi All student</h>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI</a></li>
+                <li><a href="#metaverse">Metaverse</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="home">
+            <h2>Welcome to the Future</h2>
+            <p>Experience the most advanced gaming and AI technology in existence.</p>
+            <button onclick="enterMetaverse()">Enter Metaverse</button>
+        </section>
+        
+        <section id="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Quantum AI-Powered Game Processing</li>
+                <li>Metaverse Integration</li>
+                <li>Hyper-Realistic Graphics with Unreal Engine</li>
+                <li>Blockchain Security & Decentralized Data</li>
+                <li>Neural Interface & Brainwave Control</li>
+                <li>Holographic UI & Augmented Reality</li>
+                <li>Instant Loading with Edge Computing</li>
+            </ul>
+        </section>
+        
+        <section id="ai">
+            <h2>Advanced AI</h2>
+            <p>Interact with the most powerful AI system ever created.</p>
+            <button onclick="startAIChat()">Chat with AI</button>
+            <button onclick="enableVoiceControl()">Enable Voice Control</button>
+        </section>
+        
+        <section id="metaverse">
+            <h2>Metaverse Experience</h2>
+            <p>Step into a digital universe where reality meets imagination.</p>
+            <button onclick="startVRMode()">Enter VR Mode</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Ultimate Gaming Tech. All rights reserved.</p>
+        <p>Powered by Quantum AI & Blockchain Security</p>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+    <title>Ultimate Gaming Tech</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="loading-screen" id="loading">
+        <h1>Loading...</h1>
+    </div>
+    
+    <header>
+        <h1> Game Forza Horzon 5 play </h1>
+        <img src="images/OIP(6).jpeg.png" alt="تصویر گیمینگ" width="900">
+        <p>                             </p>
+        <h>         Ahoura.Gamer        </h>
+       <p>        @ahoura.gamer.....  </p> 
+       <audio controls>
+        <source src="Back gerand.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI</a></li>
+                <li><a href="#metaverse">Metaverse</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="home">
+            <h2>Welcome to the Future</h2>
+            <p>Experience the most advanced gaming and AI technology in existence.</p>
+        </section>
+        
+        <section id="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Quantum AI-Powered Game Processing</li>
+                <li>Metaverse Integration</li>
+                <li>Hyper-Realistic Graphics with Unreal Engine</li>
+                <li>Blockchain Security & Decentralized Data</li>
+                <li>Neural Interface & Brainwave Control</li>
+            </ul>
+        </section>
+        
+        <section id="ai">
+            <h2>Advanced AI</h2>
+            <p>Interact with the most powerful AI system ever created.</p>
+            <button onclick="startAIChat()">Chat with AI</button>
+        </section>
+        
+        <section id="metaverse">
+            <h2>Metaverse Experience</h2>
+            <p>Step into a digital universe where reality meets imagination.</p>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Ultimate Gaming Tech. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Music</title>
+    <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+    <style>
+        body {
+            background-color: #f0f0f0; /* پس‌زمینه رنگی */
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- پخش آهنگ در پس‌زمینه -->
+    <audio id="background-music" autoplay loop>
+        <source src="Back gerand.mp3" type="audio/mp3">
+        مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
+    </audio>
+
+    <h1>Welcome to My Website</h1>
+    <p>This is a page with background music playing.</p>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Gaming Website</title>
+    <style>
+        /* بارگذاری فونت‌ها */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+        
+        /* تنظیمات عمومی */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #121212; /* پس‌زمینه تیره */
+            font-family: 'Rajdhani', sans-serif;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* افکت‌های حرکت */
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #ff0044, 0 0 10px #ff0044; }
+            50% { box-shadow: 0 0 15px #ff0044, 0 0 20px #8e44ad; }
+            100% { box-shadow: 0 0 30px #8e44ad, 0 0 40px #ff0044; }
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* هدر */
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(45deg, #ff0044, #8e44ad);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        /* عنوان h1 */
+        h1 {
+            font-family: 'Press Start 2P', sans-serif;
+            font-size: 5em;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6), 0 0 10px #ff0044;
+            animation: bounce 1.5s infinite alternate;
+        }
+
+        /* متن‌های کوچک‌تر */
+        p {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+            animation: slide 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(20px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* منو */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+            margin-top: 50px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            font-size: 1.5em;
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: 15px 30px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        nav ul li a:hover {
+            background: #ff0044;
+            color: #121212;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* استایل رسانه‌ها */
+        .media-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .media-container iframe {
+            width: 80%;
+            height: 500px;
+            border: none;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .media-container iframe:hover {
+            transform: scale(1.05);
+        }
+
+        /* افکت‌های متحرک نور پس‌زمینه */
+        .background-effects {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1));
+            animation: pulse 5s infinite ease-in-out;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- افکت‌های پس‌زمینه -->
+    <div class="background-effects"></div>
+
+    <!-- هدر -->
+    <header>
+        <title>سایت من - اخبار بازی و تکنولوژی</title>
+<meta name="description" content="بهترین سایت برای اخبار جدید بازی‌ها و تکنولوژی روز.">
+<meta name="keywords" content="بازی, تکنولوژی, اخبار گیمینگ, بهترین بازی‌ها">
+        <meta http-equiv="Content-Security-Policy" content="frame-src 'self' https://www.youtube.com;">
+        <h1>CALL OF DUTY MOBILE</h1>
+        <p>®AHURA.GAMER®</p>
+        <div class="media-container">
+            <iframe src="https://youtube.com/@og.l.ahura.gamer.-yt?si=l_oB1ykJGYGiLcFhq_ID" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <!-- پخش آهنگ پس‌زمینه -->
+        <audio autoplay loop>
+            <source src="Back-gerand.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </header>
+
+    <!-- منو -->
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#ai">AI</a></li>
+            <li><a href="#metaverse">Metaverse</a></li>
+        </ul>
+    </nav>
+
+    <!-- محتوا و ویدئو -->
+    <div class="media-container">
+        <iframe src="https://youtube.com/shorts/keD0OFCM5mU?si=gK1mRzBqeQPKH16j_ID" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+</body>
+</html>
