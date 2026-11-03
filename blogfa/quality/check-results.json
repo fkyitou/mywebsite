@@ -1,0 +1,486 @@
+{
+  "at": "2026-11-03T17:44:14.347Z",
+  "failed": 0,
+  "results": [
+    {
+      "name": "template.html: three template holders",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: creator credit present",
+      "pass": true,
+      "info": "5×"
+    },
+    {
+      "name": "template.html PostTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: creator credit present",
+      "pass": true,
+      "info": "1×"
+    },
+    {
+      "name": "template.html ArchiveTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: creator credit present",
+      "pass": true,
+      "info": "2×"
+    },
+    {
+      "name": "template.html PageTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html: size",
+      "pass": true,
+      "info": "461.4 KB"
+    },
+    {
+      "name": "template-lite.html: three template holders",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: creator credit present",
+      "pass": true,
+      "info": "5×"
+    },
+    {
+      "name": "template-lite.html PostTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: creator credit present",
+      "pass": true,
+      "info": "1×"
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: creator credit present",
+      "pass": true,
+      "info": "2×"
+    },
+    {
+      "name": "template-lite.html PageTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html: size",
+      "pass": true,
+      "info": "405.7 KB"
+    },
+    {
+      "name": "desktop/a index.html",
+      "pass": true,
+      "info": "home, 10 cards"
+    },
+    {
+      "name": "desktop/a archive.html",
+      "pass": true,
+      "info": "archive"
+    },
+    {
+      "name": "desktop/a cat-1.html",
+      "pass": true,
+      "info": "list, 2 cards"
+    },
+    {
+      "name": "desktop/a cat-2.html",
+      "pass": true,
+      "info": "list, 2 cards"
+    },
+    {
+      "name": "desktop/a cat-3.html",
+      "pass": true,
+      "info": "list, 2 cards"
+    },
+    {
+      "name": "desktop/a cat-4.html",
+      "pass": true,
+      "info": "list, 1 cards"
+    },
+    {
+      "name": "desktop/a cat-5.html",
+      "pass": true,
+      "info": "list, 1 cards"
+    },
+    {
+      "name": "desktop/a cat-6.html",
+      "pass": true,
+      "info": "list, 1 cards"
+    },
+    {
+      "name": "desktop/a cat-7.html",
+      "pass": true,
+      "info": "list, 1 cards"
+    },
+    {
+      "name": "desktop/a page-about.html",
+      "pass": true,
+      "info": "page, 1 chart"
+    },
+    {
+      "name": "desktop/a post-1.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a post-2.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a post-3.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a post-4.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a post-5.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a post-6.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a post-7.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a post-8.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a post-9.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a post-10.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "desktop/a posts.html",
+      "pass": true,
+      "info": "titles, 10 cards"
+    },
+    {
+      "name": "desktop/b index.html",
+      "pass": true,
+      "info": "home, 10 cards"
+    },
+    {
+      "name": "desktop/b archive.html",
+      "pass": true,
+      "info": "archive"
+    },
+    {
+      "name": "desktop/b page-about.html",
+      "pass": true,
+      "info": "page, 1 chart"
+    },
+    {
+      "name": "desktop/b post-1.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a index.html",
+      "pass": true,
+      "info": "home, 10 cards"
+    },
+    {
+      "name": "mobile/a archive.html",
+      "pass": true,
+      "info": "archive"
+    },
+    {
+      "name": "mobile/a cat-1.html",
+      "pass": true,
+      "info": "list, 2 cards"
+    },
+    {
+      "name": "mobile/a cat-2.html",
+      "pass": true,
+      "info": "list, 2 cards"
+    },
+    {
+      "name": "mobile/a cat-3.html",
+      "pass": true,
+      "info": "list, 2 cards"
+    },
+    {
+      "name": "mobile/a cat-4.html",
+      "pass": true,
+      "info": "list, 1 cards"
+    },
+    {
+      "name": "mobile/a cat-5.html",
+      "pass": true,
+      "info": "list, 1 cards"
+    },
+    {
+      "name": "mobile/a cat-6.html",
+      "pass": true,
+      "info": "list, 1 cards"
+    },
+    {
+      "name": "mobile/a cat-7.html",
+      "pass": true,
+      "info": "list, 1 cards"
+    },
+    {
+      "name": "mobile/a page-about.html",
+      "pass": true,
+      "info": "page, 1 chart"
+    },
+    {
+      "name": "mobile/a post-1.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a post-2.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a post-3.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a post-4.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a post-5.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a post-6.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a post-7.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a post-8.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a post-9.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a post-10.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
+      "name": "mobile/a posts.html",
+      "pass": true,
+      "info": "titles, 10 cards"
+    },
+    {
+      "name": "mobile/b index.html",
+      "pass": true,
+      "info": "home, 10 cards"
+    },
+    {
+      "name": "mobile/b archive.html",
+      "pass": true,
+      "info": "archive"
+    },
+    {
+      "name": "mobile/b page-about.html",
+      "pass": true,
+      "info": "page, 1 chart"
+    },
+    {
+      "name": "mobile/b post-1.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    }
+  ]
+}

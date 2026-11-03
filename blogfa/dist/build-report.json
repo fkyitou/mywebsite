@@ -1,0 +1,59 @@
+{
+  "builtAt": "2026-11-03T17:45:07.713Z",
+  "reports": [
+    {
+      "variant": "full",
+      "bytes": 472422,
+      "parts": {
+        "post": {
+          "css": 68750,
+          "js": 189960,
+          "html": 294802
+        },
+        "archive": {
+          "css": 53341,
+          "js": 16473,
+          "html": 77352
+        },
+        "page": {
+          "css": 53341,
+          "js": 36182,
+          "html": 100139
+        }
+      },
+      "facts": {
+        "posts": 0,
+        "labs": 0,
+        "sources": 0,
+        "minutes": 0
+      }
+    },
+    {
+      "variant": "lite",
+      "bytes": 415419,
+      "parts": {
+        "post": {
+          "css": 68750,
+          "js": 132946,
+          "html": 237799
+        },
+        "archive": {
+          "css": 53341,
+          "js": 16473,
+          "html": 77352
+        },
+        "page": {
+          "css": 53341,
+          "js": 36182,
+          "html": 100139
+        }
+      },
+      "facts": {
+        "posts": 0,
+        "labs": 0,
+        "sources": 0,
+        "minutes": 0
+      }
+    }
+  ]
+}
