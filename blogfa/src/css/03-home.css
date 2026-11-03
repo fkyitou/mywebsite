@@ -49,7 +49,7 @@
 .an-cover-lab i { width: 6px; height: 6px; border-radius: 50%; background: #5FD49A; box-shadow: 0 0 8px #5FD49A; }
 .an-card-in { display: flex; flex-direction: column; gap: 10px; padding: var(--s5); flex: 1; }
 .an-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: var(--fs-0); color: var(--muted); }
-.an-card h3 { margin: 0; font-size: var(--fs-3); line-height: 1.55; }
+.an-card .an-card-t { margin: 0; font-size: var(--fs-3); line-height: 1.55; }
 .an-card-ex { margin: 0; color: var(--muted); font-size: var(--fs-1); line-height: 1.9; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .an-card-go { margin-top: auto; padding-top: 6px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: var(--fs-0); color: var(--rc, var(--accent)); }
 .an-card-go svg { width: 16px; height: 16px; transition: transform var(--t-mid) var(--ease); }
@@ -57,7 +57,7 @@
 .an-card.an-feat { grid-column: 1 / -1; display: grid; grid-template-columns: 1.25fr 1fr; }
 .an-feat .an-cover { aspect-ratio: auto; min-height: 380px; }
 .an-feat .an-card-in { padding: var(--s7) var(--s6); justify-content: center; }
-.an-feat h3 { font-size: var(--fs-5); line-height: 1.45; }
+.an-feat .an-card-t { font-size: var(--fs-5); line-height: 1.45; }
 .an-feat .an-card-ex { -webkit-line-clamp: 4; font-size: var(--fs-2); }
 .an-feat-badge { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: var(--r-pill); background: var(--sunrise); color: var(--on-accent); font-size: .75rem; font-weight: 800; }
 

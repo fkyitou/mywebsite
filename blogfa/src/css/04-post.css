@@ -25,7 +25,8 @@
 .an-banner-art { position: absolute; inset: 0; z-index: -2; }
 .an-banner-art canvas { width: 100%; height: 100%; }
 .an-banner::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, var(--bg) 0%, rgba(4, 6, 13, .78) 32%, rgba(4, 6, 13, .15) 70%, rgba(4, 6, 13, .35) 100%); }
-[data-v="b"] .an-banner::after { background: linear-gradient(0deg, var(--bg) 0%, rgba(4, 6, 13, .78) 34%, rgba(4, 6, 13, .15) 70%, rgba(4, 6, 13, .35) 100%); }
+/* B fades to the light page only in the last 28px, below the byline, so the byline stays on dark. */
+[data-v="b"] .an-banner::after { background: linear-gradient(0deg, var(--bg) 0, rgba(4, 6, 13, .86) 28px, rgba(4, 6, 13, .78) 34%, rgba(4, 6, 13, .15) 70%, rgba(4, 6, 13, .35) 100%); }
 .an-banner-in { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: calc(var(--bar-h) + var(--s8)) var(--gut) var(--s7); }
 .an-banner .an-post-meta { color: rgba(237, 242, 250, .78); font-size: var(--fs-1); }
 .an-banner .an-post-title { font-size: var(--fs-7); max-width: 20ch; margin-bottom: var(--s4); color: #FFFFFF; text-shadow: 0 4px 30px rgba(0, 0, 0, .5); }
@@ -90,7 +91,7 @@ abbr.an-term, abbr[title] { text-decoration: none; border-bottom: 1.5px dotted c
 .an-ev { display: inline-flex; align-items: center; gap: 6px; margin-inline: 4px; padding: 1px 9px 1px 8px; border-radius: var(--r-pill); font-size: .72rem; font-weight: 800; line-height: 1.9; vertical-align: .15em; white-space: nowrap; color: var(--evc); background: color-mix(in srgb, var(--evc) 12%, transparent); border: 1px solid color-mix(in srgb, var(--evc) 40%, transparent); }
 .an-ev::before { content: ""; width: 22px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--evc) 0 calc(var(--n) * 25%), color-mix(in srgb, var(--evc) 22%, transparent) 0); transform: scaleX(-1); }
 .an-ev-4 { --evc: #5FD49A; --n: 4; } .an-ev-3 { --evc: #82B4FF; --n: 3; } .an-ev-2 { --evc: #FFC861; --n: 2; } .an-ev-1 { --evc: #FF9C7A; --n: 1; }
-[data-v="b"] .an-ev-4 { --evc: #1C7C4F; } [data-v="b"] .an-ev-3 { --evc: #1F5FD1; } [data-v="b"] .an-ev-2 { --evc: #8A5A00; } [data-v="b"] .an-ev-1 { --evc: #B42318; }
+[data-v="b"] .an-ev-4 { --evc: #166B43; } [data-v="b"] .an-ev-3 { --evc: #1F5FD1; } [data-v="b"] .an-ev-2 { --evc: #8A5A00; } [data-v="b"] .an-ev-1 { --evc: #B42318; }
 .an-simple, .an-myth, .an-fact, .an-keys, .an-info, .an-sources { position: relative; margin: 2em 0; padding: var(--s5) var(--s6); border-radius: var(--r-l); border: 1px solid var(--bxc-b, var(--border)); background: var(--bxc-bg, var(--surface)); }
 .an-box-t { display: flex; align-items: center; gap: 10px; margin: 0 0 .6em !important; font-weight: 800; color: var(--bxc, var(--text)); font-size: var(--fs-1); }
 .an-box-t::before { content: ""; width: 26px; height: 26px; flex: none; border-radius: 8px; background: var(--bxc, var(--accent)) var(--ico) center / 16px no-repeat; }

@@ -7,10 +7,12 @@
   "scripts": {
     "build": "node tools/build.mjs",
     "preview": "node tools/preview.mjs",
-    "test": "node tools/check.mjs"
+    "test": "node tools/check.mjs",
+    "a11y": "node tools/a11y.mjs"
   },
   "devDependencies": {
     "all-the-cities": "^3.1.0",
+    "axe-core": "^4.10.2",
     "csso": "^5.0.5",
     "d3-geo": "^3.1.1",
     "terser": "^5.51.2",

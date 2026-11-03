@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T22:09:43.798Z",
+  "at": "2026-11-03T23:21:49.594Z",
   "failed": 0,
   "results": [
     {
@@ -115,7 +115,7 @@
     {
       "name": "template.html: size",
       "pass": true,
-      "info": "461.8 KB"
+      "info": "464.9 KB"
     },
     {
       "name": "template-lite.html: three template holders",
@@ -230,7 +230,7 @@
     {
       "name": "template-lite.html: size",
       "pass": true,
-      "info": "406.2 KB"
+      "info": "409.2 KB"
     },
     {
       "name": "desktop/a index.html",

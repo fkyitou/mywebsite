@@ -1,7 +1,7 @@
 /* ==========================================================================
    آینده‌نگار · Ayandeh-Negar — custom Blogfa theme
    Version A «شب» (default: dark, cinematic) · Version B «روز» (light, calm)
-   Text/background pairs are checked to WCAG AA (≥ 4.5:1) in quality/test-report.md.
+   Text/background pairs meet WCAG AA (≥ 4.5:1); the ratios are listed in docs/06-qa-report.md.
    ========================================================================== */
 :root {
   color-scheme: dark;
@@ -50,7 +50,8 @@ img, svg, canvas, video, iframe { display: block; max-width: 100%; }
 svg:not([fill]) { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 a { color: var(--primary-h); text-decoration: none; text-underline-offset: .28em; }
 a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
-[data-v="b"] a { color: var(--primary); }
+/* :where() keeps this at element weight, so buttons and other classed links keep their own colours. */
+:where([data-v="b"]) a { color: var(--primary); }
 p, ul, ol, dl, blockquote, figure { margin: 0 0 1.1em; }
 h1, h2, h3, h4 { line-height: 1.35; margin: 0 0 .6em; font-weight: 800; letter-spacing: -.01em; text-wrap: balance; }
 b, strong { font-weight: 700; }

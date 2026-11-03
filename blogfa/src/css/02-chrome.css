@@ -1,7 +1,11 @@
 /* ---------- top bar ---------- */
 .an-bar { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--bar-h); display: flex; align-items: center; gap: var(--s5); padding: 0 var(--gut); transition: background var(--t-mid), border-color var(--t-mid), transform var(--t-mid) var(--ease); border-bottom: 1px solid transparent; }
 .an-bar.solid { background: color-mix(in srgb, var(--bg) 78%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3); border-bottom-color: var(--border); }
+/* Over a dark post banner the 78% light glass turns grey; B uses a denser glass so small text keeps ≥ 4.5:1. */
+[data-v="b"] .an-bar.solid { background: color-mix(in srgb, var(--bg) 92%, transparent); }
 .an-bar.away { transform: translateY(-100%); }
+/* Version B keeps the dark cinematic hero, so the bar takes the night palette while it floats over it. */
+[data-v="b"][data-page="home"] .an-bar:not(.solid) { color-scheme: dark; --text: #EDF2FA; --text-2: #C9D3E3; --muted: #9AA8C0; --subtle: #8391AB; --primary: #5B9BFF; --primary-h: #82B4FF; --border: #1C2741; --border-2: #27355A; --border-strong: #3F5079; --focus: #FFC27A; --surface: #0B1222; --surface-2: #111A2F; --surface-3: #18233D; --glass: rgba(11, 18, 34, .62); --glass-2: rgba(17, 26, 47, .74); --bg: #04060D; }
 .an-logo { display: inline-flex; align-items: center; gap: 10px; color: var(--text); flex: none; }
 .an-logo:hover { text-decoration: none; }
 .an-mark { width: 38px; height: 38px; transition: transform var(--t-slow) var(--ease); }
@@ -49,7 +53,7 @@
 .an-dot { width: 8px; height: 8px; border-radius: 50%; background: #FFB36B; box-shadow: 0 0 14px #FF8A4C; }
 .an-hero-title { margin: 0; font-size: var(--fs-hero); line-height: .98; font-weight: 900; letter-spacing: -.035em; }
 .an-ht { display: inline-block; padding-bottom: .12em; background: linear-gradient(100deg, #FFFFFF 0%, #FFF1DD 34%, #FFC27A 52%, #FF8A4C 64%, #FFFFFF 82%) 0 0 / 260% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: an-sheen 9s 1.2s var(--ease-io) infinite; filter: drop-shadow(0 10px 40px rgba(255, 138, 76, .25)); }
-.an-hero-en { margin: .2em 0 var(--s4); font-size: clamp(.8rem, .55rem + .8vw, 1.15rem); letter-spacing: .62em; font-weight: 800; direction: ltr; text-align: end; color: transparent; -webkit-text-stroke: 1px rgba(237, 242, 250, .38); }
+.an-hero-en { margin: .2em 0 var(--s4); font-size: clamp(.8rem, .55rem + .8vw, 1.15rem); letter-spacing: .62em; font-weight: 800; direction: ltr; text-align: end; color: transparent; -webkit-text-stroke: 1px rgba(237, 242, 250, .56); }
 .an-hero-slogan { margin: 0 0 var(--s5); font-size: var(--fs-5); font-weight: 700; color: #FFFFFF; letter-spacing: -.01em; }
 .an-hero-slogan span { display: inline-block; }
 .an-js .an-hero-slogan span { opacity: 0; transform: translateY(.5em); filter: blur(6px); animation: an-word .9s var(--ease) forwards; }

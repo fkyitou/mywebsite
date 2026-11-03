@@ -46,13 +46,15 @@
   }
   AN.lazyCover = lazyCover;
 
-  function card(p, i, feat) {
+  // hl: heading level of the card title; h3 under a section heading, h2 straight under the page h1
+  function card(p, i, feat, hl) {
+    hl = hl || 'h3';
     var a = el('a', 'an-card an-rv' + (feat ? ' an-feat' : '')), t = AN.TOPICS[p.topic];
     a.href = p.url; a.style.setProperty('--rc', AN.color(p.realm)); a.style.setProperty('--d', (Math.min(i, 6) * 0.06) + 's');
     a.innerHTML = '<div class="an-cover"><canvas width="640" height="400" aria-hidden="true"></canvas><span class="an-cover-n">' + AN.faDigits(String(i + 1).padStart(2, '0')) + ' · ' + esc(t ? t.n : '') + '</span>' + (p.lab ? '<span class="an-cover-lab"><i></i>آزمایشگاه زنده</span>' : '') + '</div>' +
       '<div class="an-card-in">' + (feat ? '<span class="an-feat-badge">تازه‌ترین روایت</span>' : '') +
       '<div class="an-card-meta">' + (p.cat ? '<span class="an-chip">' + esc(p.cat) + '</span>' : '') + (p.date ? '<span>' + esc(p.date) + '</span>' : '') + (p.min ? '<span>' + AN.fa(p.min) + ' دقیقه خواندن</span>' : '') + (cmtCount(p.id) > 0 ? '<span>' + AN.fa(cmtCount(p.id)) + ' نظر</span>' : '') + '</div>' +
-      '<h3>' + esc(p.title) + '</h3>' + (p.ex ? '<p class="an-card-ex">' + esc(p.ex) + '</p>' : '') +
+      '<' + hl + ' class="an-card-t">' + esc(p.title) + '</' + hl + '>' + (p.ex ? '<p class="an-card-ex">' + esc(p.ex) + '</p>' : '') +
       '<span class="an-card-go">بخوانید' + ARROW + '</span></div>';
     lazyCover(a.querySelector('canvas'), p.topic, p.id || i);
     return a;
@@ -102,7 +104,7 @@
       head.innerHTML = '<p class="an-eyebrow">' + (/\/category\//i.test(path) ? 'قلمرو' : 'آرشیو نوشته‌ها') + '</p><h1 class="an-page-title">' + esc(title) + '</h1><p class="an-page-sub">' + AN.fa(posts.length) + ' روایت در این صفحه. روی هر کارت بزن تا مقاله و آزمایشگاه زنده‌اش باز شود.</p>';
     }
     var grid = el('div', 'an-list-cards');
-    posts.forEach(function (p, i) { grid.appendChild(card(p, i, false)); });
+    posts.forEach(function (p, i) { grid.appendChild(card(p, i, false, 'h2')); });
     feed.insertBefore(grid, feed.firstChild);
   }
 
@@ -149,9 +151,13 @@
     // heading anchors
     hs.forEach(function (h) { h.classList.add('an-rv'); });
     // glossary tooltips
-    var tip = el('div', 'an-tip'); tip.setAttribute('role', 'tooltip'); tip.id = 'an-tip'; D.body.appendChild(tip);
-    $$('abbr[title]', body).forEach(function (ab) {
-      ab.setAttribute('data-tip', ab.title); ab.removeAttribute('title'); ab.tabIndex = 0; ab.setAttribute('aria-describedby', 'an-tip');
+    // The floating tip is visual only; each term points to its own hidden definition, so screen readers
+    // get the right description even before (or without) the tip being shown.
+    var tip = el('div', 'an-tip'); tip.setAttribute('aria-hidden', 'true'); tip.id = 'an-tip'; D.body.appendChild(tip);
+    var defs = el('div', 'an-tip-defs'); defs.hidden = true; D.body.appendChild(defs);
+    $$('abbr[title]', body).forEach(function (ab, i) {
+      var def = el('span'); def.id = 'an-tip-d' + i; def.textContent = ab.title; defs.appendChild(def);
+      ab.setAttribute('data-tip', ab.title); ab.removeAttribute('title'); ab.tabIndex = 0; ab.setAttribute('aria-describedby', def.id);
       function show() { tip.innerHTML = '<b>' + esc(ab.textContent) + '</b>' + esc(ab.getAttribute('data-tip')); var r = ab.getBoundingClientRect(); tip.classList.add('on'); var tw = tip.offsetWidth, x = Math.min(W.innerWidth - tw - 12, Math.max(12, r.left + r.width / 2 - tw / 2)), y = r.bottom + W.scrollY + 10; tip.style.left = x + 'px'; tip.style.top = y + 'px'; }
       function hide() { tip.classList.remove('on'); }
       ab.addEventListener('mouseenter', show); ab.addEventListener('focus', show); ab.addEventListener('mouseleave', hide); ab.addEventListener('blur', hide);
@@ -189,7 +195,23 @@
     function openCmt(e) {
       if (!cu) return; e.preventDefault();
       var d = AN.dialog('an-cmt', '<div class="an-dlg-head"><h2>نظرها</h2><a class="an-btn an-btn-ghost an-btn-sm" href="' + esc(cu) + '" target="_blank" rel="noopener">باز کردن در صفحه‌ی جدید</a><button type="button" class="an-dlg-x" aria-label="بستن">✕</button></div><iframe class="an-cmt-frame" title="نظرهای این مقاله" loading="lazy"></iframe>', 'an-dlg-cmt');
-      var f = d.querySelector('iframe'); if (!f.getAttribute('src')) f.src = cu; AN.openDlg(d, '.an-dlg-x');
+      var f = d.querySelector('iframe');
+      if (f && !f.getAttribute('src')) {
+        // If the comments page refuses to be framed, the frame lands on an error page we cannot read;
+        // swap the blank frame for a message and a link instead of leaving an empty white box.
+        f.addEventListener('load', function () {
+          var href = null, ok = false;
+          try { href = f.contentWindow.location.href; } catch (e) {}
+          if (href === 'about:blank') return;
+          try { var doc = f.contentDocument; ok = !!(doc && doc.body && doc.body.childElementCount); } catch (e) {}
+          if (!ok && f.parentNode) {
+            var m = el('p', 'an-cmt-off', 'صفحه‌ی نظرها داخل این پنجره باز نشد. <a href="' + esc(cu) + '" target="_blank" rel="noopener">نظرها را در صفحه‌ی جدید باز کنید</a>.');
+            f.parentNode.replaceChild(m, f);
+          }
+        });
+        f.src = cu;
+      }
+      AN.openDlg(d, '.an-dlg-x');
     }
     $$('[data-an="cmt"]').forEach(function (a) { a.addEventListener('click', openCmt); });
     D.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('.an-cmt a'); if (a && cu) openCmt(e); });
