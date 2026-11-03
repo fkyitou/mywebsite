@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T17:44:14.347Z",
+  "at": "2026-11-03T22:09:43.798Z",
   "failed": 0,
   "results": [
     {
@@ -115,7 +115,7 @@
     {
       "name": "template.html: size",
       "pass": true,
-      "info": "461.4 KB"
+      "info": "461.8 KB"
     },
     {
       "name": "template-lite.html: three template holders",
@@ -230,7 +230,7 @@
     {
       "name": "template-lite.html: size",
       "pass": true,
-      "info": "405.7 KB"
+      "info": "406.2 KB"
     },
     {
       "name": "desktop/a index.html",
@@ -280,7 +280,7 @@
     {
       "name": "desktop/a page-about.html",
       "pass": true,
-      "info": "page, 1 chart"
+      "info": "page"
     },
     {
       "name": "desktop/a post-1.html",
@@ -305,7 +305,7 @@
     {
       "name": "desktop/a post-5.html",
       "pass": true,
-      "info": "post, 3 cards, lab ok, 1 chart"
+      "info": "post, 3 cards, lab ok, 2 chart"
     },
     {
       "name": "desktop/a post-6.html",
@@ -325,7 +325,7 @@
     {
       "name": "desktop/a post-9.html",
       "pass": true,
-      "info": "post, 3 cards, lab ok, 1 chart"
+      "info": "post, 3 cards, lab ok, 2 chart"
     },
     {
       "name": "desktop/a post-10.html",
@@ -350,7 +350,7 @@
     {
       "name": "desktop/b page-about.html",
       "pass": true,
-      "info": "page, 1 chart"
+      "info": "page"
     },
     {
       "name": "desktop/b post-1.html",
@@ -405,7 +405,7 @@
     {
       "name": "mobile/a page-about.html",
       "pass": true,
-      "info": "page, 1 chart"
+      "info": "page"
     },
     {
       "name": "mobile/a post-1.html",
@@ -430,7 +430,7 @@
     {
       "name": "mobile/a post-5.html",
       "pass": true,
-      "info": "post, 3 cards, lab ok, 1 chart"
+      "info": "post, 3 cards, lab ok, 2 chart"
     },
     {
       "name": "mobile/a post-6.html",
@@ -450,7 +450,7 @@
     {
       "name": "mobile/a post-9.html",
       "pass": true,
-      "info": "post, 3 cards, lab ok, 1 chart"
+      "info": "post, 3 cards, lab ok, 2 chart"
     },
     {
       "name": "mobile/a post-10.html",
@@ -475,7 +475,7 @@
     {
       "name": "mobile/b page-about.html",
       "pass": true,
-      "info": "page, 1 chart"
+      "info": "page"
     },
     {
       "name": "mobile/b post-1.html",

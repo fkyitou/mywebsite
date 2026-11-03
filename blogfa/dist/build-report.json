@@ -1,14 +1,14 @@
 {
-  "builtAt": "2026-11-03T17:45:07.713Z",
+  "builtAt": "2026-11-03T22:03:53.952Z",
   "reports": [
     {
       "variant": "full",
-      "bytes": 472422,
+      "bytes": 472931,
       "parts": {
         "post": {
           "css": 68750,
-          "js": 189960,
-          "html": 294802
+          "js": 190215,
+          "html": 295051
         },
         "archive": {
           "css": 53341,
@@ -17,25 +17,25 @@
         },
         "page": {
           "css": 53341,
-          "js": 36182,
-          "html": 100139
+          "js": 36442,
+          "html": 100399
         }
       },
       "facts": {
-        "posts": 0,
-        "labs": 0,
-        "sources": 0,
-        "minutes": 0
+        "posts": 10,
+        "labs": 10,
+        "sources": 57,
+        "minutes": 57
       }
     },
     {
       "variant": "lite",
-      "bytes": 415419,
+      "bytes": 415928,
       "parts": {
         "post": {
           "css": 68750,
-          "js": 132946,
-          "html": 237799
+          "js": 133201,
+          "html": 238048
         },
         "archive": {
           "css": 53341,
@@ -44,15 +44,15 @@
         },
         "page": {
           "css": 53341,
-          "js": 36182,
-          "html": 100139
+          "js": 36442,
+          "html": 100399
         }
       },
       "facts": {
-        "posts": 0,
-        "labs": 0,
-        "sources": 0,
-        "minutes": 0
+        "posts": 10,
+        "labs": 10,
+        "sources": 57,
+        "minutes": 57
       }
     }
   ]
