@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>گزارش ممیزی کامل پروژه · آینده‌نگار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&amp;display=swap">
+<style>:root { color-scheme: dark; --bg: #04060D; --surface: #0B1222; --surface-2: #111A2F; --line: #1C2741; --text: #EDF2FA; --muted: #9AA8C0; --link: #8FD3FF; --accent: #FFB36B;
+  --font: Vazirmatn, Tahoma, "Segoe UI", sans-serif; --mono: ui-monospace, "Cascadia Code", Consolas, monospace; }
+@media (prefers-color-scheme: light) { :root { color-scheme: light; --bg: #F6F8FB; --surface: #FFFFFF; --surface-2: #EEF2F8; --line: #D8E0EC; --text: #0E1626; --muted: #4A5872; --link: #0B5CAD; --accent: #A04A00; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.95; direction: rtl; }
+.top { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); font-size: 14px; }
+.top b { font-weight: 800; margin-inline-end: auto; }
+main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 1.9rem; line-height: 1.5; margin: .4em 0 .6em; }
+h2 { font-size: 1.35rem; margin: 2em 0 .6em; padding-top: .6em; border-top: 1px solid var(--line); }
+h3 { font-size: 1.1rem; margin: 1.6em 0 .4em; }
+a { color: var(--link); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+code { font-family: var(--mono); font-size: .88em; padding: 1px 6px; border-radius: 6px; background: var(--surface-2); direction: ltr; unicode-bidi: isolate; }
+pre { direction: ltr; text-align: left; overflow-x: auto; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); line-height: 1.6; }
+pre code { padding: 0; background: none; }
+.tbl { overflow-x: auto; margin: 1em 0; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { padding: 8px 12px; border-bottom: 1px solid var(--line); text-align: right; vertical-align: top; }
+th { background: var(--surface-2); font-weight: 700; }
+tr:last-child td { border-bottom: 0; }
+blockquote { margin: 1em 0; padding: 4px 16px; border-inline-start: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; color: var(--muted); }
+li { margin: .2em 0; }
+nav.docs { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+nav.docs ol { padding-inline-start: 1.4em; }
+nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration: none; }</style>
+</head>
+<body>
+<header class="top"><b>آینده‌نگار · راهنماها</b><a href="../../kit.html">کیت نصب</a><a href="../09-audit-report.md">متن Markdown</a></header>
+<main>
+<h1 id="گزارش-ممیزی-کامل-پروژه">گزارش ممیزی کامل پروژه</h1>
+<p>این ممیزی در ۱۳ آبان ۱۴۰۵ (۴ نوامبر ۲۰۲۶) و بر پایه‌ی خود فایل‌ها انجام شد، نه گزارش‌های قبلی. همه‌ی فایل‌های قالب، قطعه‌ها، سبک‌ها، اسکریپت‌ها، ده مقاله، صفحه‌ی درباره، ابزارهای ساخت و آزمون و راهنماها خوانده شدند. قالب از نو ساخته شد، پیش‌نمایش از نو تولید شد و هر ادعای گزارش‌های قبلی با یک آزمون یا با خود فایل سنجیده شد.</p>
+<p>در جدول‌ها «تأییدشده» یعنی با ابزار یا با خواندن فایل دیده شده است و «برداشت» یعنی نتیجه‌گیری‌ای که آزمون مستقیم ندارد.</p>
+<h2 id="۱-وضعیت-ده-مقاله">۱. وضعیت ده مقاله</h2>
+<p>گزارش قبلی گفته بود فقط دو مقاله آماده است. فایل‌های واقعی چیز دیگری نشان می‌دهند: <strong>هر ده مقاله کامل‌اند.</strong> این شمارش‌ها را یک اسکریپت از خود فایل‌های <code>posts/</code> درآورده است (تأییدشده):</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>مقاله</th>
+<th>واژه</th>
+<th>بخش (h2)</th>
+<th>منبع</th>
+<th>نمودار</th>
+<th>آزمایشگاه</th>
+<th>کادرهای ثابت</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>۰۱ هوش مصنوعی</td>
+<td>۱۱۴۱</td>
+<td>۶</td>
+<td>۹</td>
+<td>خطی</td>
+<td>دارد</td>
+<td>همه</td>
+</tr>
+<tr>
+<td>۰۲ اینترنت اشیا</td>
+<td>۸۳۶</td>
+<td>۵</td>
+<td>۴</td>
+<td>میله‌ای</td>
+<td>دارد</td>
+<td>همه</td>
+</tr>
+<tr>
+<td>۰۳ شهر هوشمند</td>
+<td>۱۰۰۶</td>
+<td>۶</td>
+<td>۳</td>
+<td>خطی</td>
+<td>دارد</td>
+<td>همه</td>
+</tr>
+<tr>
+<td>۰۴ امنیت دیجیتال</td>
+<td>۱۲۲۱</td>
+<td>۶</td>
+<td>۵</td>
+<td>میله‌ای افقی</td>
+<td>دارد</td>
+<td>همه</td>
+</tr>
+<tr>
+<td>۰۵ مغز و یادگیری</td>
+<td>۱۱۳۲</td>
+<td>۶</td>
+<td>۶</td>
+<td>خطی و میله‌ای</td>
+<td>دارد</td>
+<td>همه</td>
+</tr>
+<tr>
+<td>۰۶ زندگی در مریخ</td>
+<td>۱۰۷۹</td>
+<td>۶</td>
+<td>۸</td>
+<td>میله‌ای افقی</td>
+<td>دارد</td>
+<td>همه</td>
+</tr>
+<tr>
+<td>۰۷ معماری آینده</td>
+<td>۹۴۱</td>
+<td>۵</td>
+<td>۵</td>
+<td>میله‌ای افقی</td>
+<td>دارد</td>
+<td>همه</td>
+</tr>
+<tr>
+<td>۰۸ الگوریتم‌ها</td>
+<td>۸۹۱</td>
+<td>۵</td>
+<td>۳</td>
+<td>میله‌ای افقی</td>
+<td>دارد</td>
+<td>همه</td>
+</tr>
+<tr>
+<td>۰۹ انرژی پاک</td>
+<td>۱۳۸۴</td>
+<td>۶</td>
+<td>۷</td>
+<td>دو میله‌ای افقی</td>
+<td>دارد</td>
+<td>همه</td>
+</tr>
+<tr>
+<td>۱۰ از ایده تا اختراع</td>
+<td>۱۳۲۶</td>
+<td>۵</td>
+<td>۷</td>
+<td>میله‌ای افقی</td>
+<td>دارد</td>
+<td>«به زبان ساده» نداشت، اضافه شد</td>
+</tr>
+</tbody></table></div>
+<p>روی هم ۱۰٬۹۵۷ واژه و ۵۷ منبع. «کادرهای ثابت» یعنی کادرهای «یک واقعیت»، «باور نادرست»، «به زبان ساده»، «نکته‌های کلیدی» و «پرسش». هیچ مقاله‌ای جای خالی یا متن «بعداً نوشته شود» ندارد و هر ده تا تصویر سرصفحه دارند.</p>
+<h2 id="۲-یافتهها-و-وضعیت-هر-کدام">۲. یافته‌ها و وضعیت هر کدام</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>یافته</th>
+<th>چطور پیدا شد</th>
+<th>وضعیت</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>۱</td>
+<td><strong>۴۳۶ خطای HTML</strong> در ۶۴ صفحه با اعتبارسنج رسمی W3C. پیش از این هیچ‌وقت اعتبارسنجی نشده بود. ریز خطاها در جدول بخش ۳</td>
+<td><code>tools/validate.mjs</code> (vnu.jar)</td>
+<td>رفع شد: ۰ خطا</td>
+</tr>
+<tr>
+<td>۲</td>
+<td><strong>همه‌ی ۱۲ نمودار مقاله‌ها خط‌دور داشتند.</strong> نوشته‌ها و میله‌ها با خط ۱٫۸ پیکسلی دورگیری می‌شدند و نوشته‌ی کوچک نمودار بدخوان بود. علت: قاعده‌ی عمومی آیکن‌ها (<code>svg:not([fill])</code>) به SVG نمودار هم می‌رسید. ۹۶ آزمون قبلی و axe این را نمی‌دیدند</td>
+<td>بازبینی تصویر بزرگ‌شده‌ی نمودارها</td>
+<td>رفع شد</td>
+</tr>
+<tr>
+<td>۳</td>
+<td><strong>نام قلمروها در صفحه‌ی اول در سه سطر شکسته می‌شد</strong> و ردیف تاریخ و زمان خواندن کارت‌ها در کارت‌های مختلف متفاوت می‌شکست</td>
+<td>بازبینی تصویرها در ۱۳۶۶ و ۱۹۲۰ پیکسل</td>
+<td>رفع شد: چیدمان تازه‌ی کارت‌ها</td>
+</tr>
+<tr>
+<td>۴</td>
+<td><strong>فهرست مطالب مقاله خواننده را وسط آزمایشگاه می‌انداخت.</strong> آزمایشگاه تا نزدیک شدن به صفحه ساخته نمی‌شود؛ پرش به بخش ۳ مقاله‌ی ۱ از روی آن می‌گذشت، آزمایشگاه حدود ۹۷۵ پیکسل بلند می‌شد و تیتر ۱۱۵۱ پیکسل پایین‌تر از بالای صفحه می‌ماند</td>
+<td>آزمون تعامل تازه (<code>tools/interact.mjs</code>)</td>
+<td>رفع شد: پیش از هر پرش داخلی آزمایشگاه ساخته می‌شود؛ تیتر حالا ۱۵۰ پیکسل زیر بالای صفحه می‌نشیند</td>
+</tr>
+<tr>
+<td>۵</td>
+<td><strong>پس‌زمینه‌ی سایت جز سرصفحه‌ی اول یک رنگ تخت بود</strong> و سرصفحه با لبه‌ی تیز به آن می‌رسید</td>
+<td>بازبینی تصویرها</td>
+<td>بازطراحی شد: آسمان سراسری چندلایه (بخش ۴)</td>
+</tr>
+<tr>
+<td>۶</td>
+<td><strong>در موبایل کره‌ی زمین تقریباً دیده نمی‌شد.</strong> زمین ته سرصفحه‌ای بلندتر از صفحه می‌نشست و کارت آمار زنده و محو شدن پایین سرصفحه آن را می‌پوشاند</td>
+<td>تصویرهای ۳۹۰ پیکسلی</td>
+<td>رفع شد: در تک‌ستونی زمین مثل افق از پایین صفحه‌ی اول بالا می‌آید</td>
+</tr>
+<tr>
+<td>۷</td>
+<td><strong>سرصفحه‌ی مقاله‌ها با یک نوار تخت به آسمان می‌رسید</strong></td>
+<td>بازبینی تصویرها، پس از افزودن آسمان</td>
+<td>رفع شد: محو شدن در ۶۴ پیکسل پایانی</td>
+</tr>
+<tr>
+<td>۸</td>
+<td><strong>پیوندهای «راهنماهای کامل» کیت نصب به فایل‌هایی می‌رفتند که وجود نداشتند</strong> (<code>docs/html/…</code>)، و دو راهنمای فهرست‌شده در کیت، ماتریس ردیابی و گزارش نهایی، اصلاً نوشته نشده بودند</td>
+<td>خواندن <code>tools/kit.mjs</code> و پوشه‌ی <code>docs/</code></td>
+<td>رفع شد: <code>tools/docs.mjs</code> نسخه‌ی HTML همه‌ی راهنماها را می‌سازد؛ دو راهنمای نبوده نوشته شد</td>
+</tr>
+<tr>
+<td>۹</td>
+<td><strong>آزمایشگاه‌ها فقط از نظر «ساخته شد و پیام خطا نداد» آزموده می‌شدند</strong>، نه کار کردن واقعی</td>
+<td>خواندن <code>tools/check.mjs</code></td>
+<td>آزمون تازه: هر ۱۱۳ کنترل ده آزمایشگاه به کار انداخته و پاسخشان سنجیده می‌شود</td>
+</tr>
+<tr>
+<td>۱۰</td>
+<td><strong>پیوندها هیچ‌وقت آزموده نشده بودند</strong></td>
+<td>خواندن ابزارها</td>
+<td>آزمون تازه: ۶۰۵۲ پیوند داخلی، ۰ خراب</td>
+</tr>
+<tr>
+<td>۱۱</td>
+<td><strong>سرعت با Lighthouse هرگز اندازه‌گیری نشده بود</strong> (گزارش قبلی خودش این را گفته بود)</td>
+<td>گزارش QA قبلی</td>
+<td>اندازه‌گیری شد و چهار یافته‌ی ۱۵ تا ۱۸ را داد؛ نتیجه در گزارش QA</td>
+</tr>
+<tr>
+<td>۱۲</td>
+<td>سه ادعای نادرست در گزارش QA قبلی: «ده‌ها انیمیشن» در صفحه‌ی اول (شمارش واقعی ۱۳)، «سه مشکل بصری نسخه‌ی B» در حالی که جدولش دو تا نشان می‌داد، و «کره‌ی زمین هم نمی‌چرخد» که آزمونی پشتش نبود</td>
+<td>مقایسه‌ی متن گزارش با جدول‌ها و ابزارها</td>
+<td>گزارش QA از نو نوشته شد</td>
+</tr>
+<tr>
+<td>۱۳</td>
+<td>تاریخ مقاله‌ها با <code>&lt;time itemprop=&quot;datePublished&quot;&gt;</code> نشانه‌گذاری شده بود، ولی متن آن تاریخ فارسی است و <code>datetime</code> ندارد؛ این برای موتورهای جست‌وجو تاریخ نادرست است</td>
+<td>اعتبارسنج W3C</td>
+<td>رفع شد: نشانه‌گذاری نادرست برداشته شد</td>
+</tr>
+<tr>
+<td>۱۴</td>
+<td>وبلاگ هیچ صدایی نداشت</td>
+<td>بازبینی</td>
+<td>اضافه شد: صداگذاری اختیاری (بخش ۴)</td>
+</tr>
+<tr>
+<td>۱۵</td>
+<td><strong>متن مقاله‌ها هنگام بارگذاری ۷۲۰ پیکسل پایین می‌پرید</strong>، چون اسکریپت بنر سرصفحه را بالای مقاله می‌گذاشت (CLS ۰٫۵۴ در دسکتاپ و ۰٫۹۳ در موبایل)؛ صفحه‌های فهرست هم ۰٫۲۲</td>
+<td>Lighthouse</td>
+<td>رفع شد: جای خالی هم‌اندازه تا ساخته شدن بنر و تیتر؛ Lighthouse حالا ۰ تا ۰٫۰۰۷</td>
+</tr>
+<tr>
+<td>۱۶</td>
+<td><strong>کره‌ی زمین روی کارت گرافیک نرم‌افزاری کل صفحه را به حدود ۳ فریم در ثانیه می‌رساند</strong></td>
+<td>ردیابی کارایی Chrome</td>
+<td>رفع شد: روی پردازش نرم‌افزاری یا فریم‌های کند، کره تصویر ثابت می‌شود؛ ۱۵۵ تا ۱۸۵ فریم در ۵ ثانیه به‌جای ۱۷</td>
+</tr>
+<tr>
+<td>۱۷</td>
+<td><strong>ستاره‌های آسمان صفحه را چند ثانیه نگه می‌داشتند</strong>: بوم ستاره‌ها با <code>toBlob</code> به تصویر تبدیل می‌شد که منتظر کارت گرافیک می‌ماند. چهار بوم نقشه‌ی زمین هم با <code>getImageData</code> همین‌طور</td>
+<td>ردیابی کارایی Chrome</td>
+<td>رفع شد: ستاره‌ها SVG شدند و بوم‌های نقشه در حافظه‌ی اصلی ساخته می‌شوند</td>
+</tr>
+<tr>
+<td>۱۸</td>
+<td>صفحه‌ی آرشیو توضیح متا نداشت (سئوی Lighthouse ۹۰)</td>
+<td>Lighthouse</td>
+<td>رفع شد: ۱۰۰</td>
+</tr>
+</tbody></table></div>
+<h2 id="۳-ریز-۴۳۶-خطای-html">۳. ریز ۴۳۶ خطای HTML</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>خطا</th>
+<th>تعداد</th>
+<th>علت</th>
+<th>اصلاح</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>زبان سند با <code>&lt;meta http-equiv=&quot;content-language&quot;&gt;</code></td>
+<td>۶۳</td>
+<td>روش منسوخ؛ زبان روی <code>&lt;html lang=&quot;fa&quot;&gt;</code> هم بود</td>
+<td>متا حذف شد</td>
+</tr>
+<tr>
+<td>فاصله در نشانی آیکن مرورگر (<code>data:</code> URL)</td>
+<td>۶۳</td>
+<td>فاصله در نشانی مجاز نیست</td>
+<td>فاصله‌ها <code>%20</code> شدند</td>
+</tr>
+<tr>
+<td><code>mask</code> با گرادیان</td>
+<td>۶۳</td>
+<td>این خلاصه‌نویسی در CSS معتبر نیست</td>
+<td><code>mask-image</code> و <code>-webkit-mask-image</code></td>
+</tr>
+<tr>
+<td><code>-webkit-mask</code> با <code>#000 0 0</code></td>
+<td>۶۳</td>
+<td>دو موقعیت برای یک رنگ در این ویژگی پذیرفته نیست</td>
+<td><code>linear-gradient(#000, #000)</code></td>
+</tr>
+<tr>
+<td>متن <code>&lt;time&gt;</code> تاریخ فارسی بود</td>
+<td>۹۲</td>
+<td><code>time</code> تاریخ استاندارد می‌خواهد</td>
+<td><code>&lt;span class=&quot;an-date&quot;&gt;</code></td>
+</tr>
+<tr>
+<td>ویژگی <code>comment-for</code></td>
+<td>۹۲</td>
+<td>ویژگی ناشناخته در HTML</td>
+<td><code>data-comment-for</code>؛ اسکریپت خود قالب شمار نظرها را می‌خواند</td>
+</tr>
+</tbody></table></div>
+<p>۶۳ هشدار باقی‌مانده («<code>type</code> برای اسکریپت لازم نیست») از کدی است که خود بلاگفا بالای هر صفحه می‌گذارد و پیش‌نمایش عین آن را شبیه‌سازی می‌کند؛ این کد در اختیار قالب نیست. هشدار «بخش بدون تیتر» با تبدیل <code>section</code> پانویس به <code>div</code> رفع شد.</p>
+<h2 id="۴-آنچه-در-این-دور-ساخته-شد">۴. آنچه در این دور ساخته شد</h2>
+<p><strong>آسمان سراسری.</strong> یک لایه‌ی ثابت پشت همه‌ی صفحه‌ها که صحنه‌ی سرصفحه، یعنی زمین از مدار هنگام طلوع، را در کل وبلاگ ادامه می‌دهد. لایه‌ها از عقب به جلو: پایه‌ی گرادیانی، نور سپیده که با پایین رفتن خواننده بالا می‌آید، ستاره‌های دور و نزدیک با اختلاف منظر، چشمک ستاره‌ها، دو نوار شفق به رنگ‌های جو و طلوع، صفحه‌های مداری که با پیمایش می‌چرخند، نور دنبال‌کننده‌ی موشواره، دانه‌ی فیلم و سایه‌ی لبه‌ها. ستاره‌ها کاشی‌های SVG با عدد بذر ثابت‌اند، پس در هر بار باز شدن یکسان‌اند (نسخه‌ی اول آن‌ها را روی بوم می‌کشید و یافته‌ی ۱۷ را ساخت). فقط <code>transform</code> و <code>opacity</code> تغییر می‌کنند تا پیمایش روان بماند. در مقاله‌ها آسمان کم‌نورتر است و ستاره‌ها فقط در حاشیه‌اند تا پشت متن نباشند. نسخه‌ی B آسمان صبح دارد. با «حرکت کمتر» همه‌چیز ساکن است و زیر ۷۰۰ پیکسل لایه‌های کمتری کشیده می‌شود.</p>
+<p><strong>صداگذاری.</strong> صداها با Web Audio در خود مرورگر ساخته می‌شوند و هیچ فایل صوتی دانلود نمی‌شود. پیش‌فرض خاموش است و فقط با دکمه‌ی بلندگو یا کلید M روشن می‌شود؛ انتخاب خواننده در مرورگرش می‌ماند. صدای ملایم هنگام اشاره و فشردن دکمه‌ها، باز و بسته شدن پنجره‌ها، رفتن به حالت شب و روز و جابه‌جایی زبانه‌ها، و یک زمینه‌ی آرام فضایی فقط تا وقتی سرصفحه‌ی اول دیده می‌شود.</p>
+<p><strong>ابزارهای آزمون تازه.</strong> اعتبارسنجی W3C (<code>validate.mjs</code>)، آزمون تعامل (<code>interact.mjs</code>)، آزمون پیوند (<code>links.mjs</code>)، آزمون مقایسه‌ی تصویری (<code>visual.mjs</code>) و ساخت HTML راهنماها (<code>docs.mjs</code>). نتیجه‌ها در <a href="06-qa-report.html">گزارش آزمون کیفیت</a>.</p>
+<h2 id="۵-آنچه-این-ممیزی-نمیتواند-تأیید-کند">۵. آنچه این ممیزی نمی‌تواند تأیید کند</h2>
+<ul>
+<li>رفتار خود بلاگفا: پذیرفتن قالب، ویرایشگر مطلب، نشانی صفحه‌ها و جای تبلیغ‌هایش. این‌ها فقط پس از نصب روی حساب واقعی آزمودنی‌اند.</li>
+<li>مرورگرهای غیر از Chromium و گوشی واقعی.</li>
+<li>درست بودن همه‌ی ۱۰۵ نشانی بیرونی. شبکه‌ی این محیط به بیشتر سایت‌ها راه نمی‌دهد. چهار منبع نمونه با ابزار دیگری باز شدند و درست بودند؛ پنجمی را آن ابزار پشتیبانی نکرد (گزارش QA). روی رایانه‌ی خودتان <code>npm run links:external</code> همه را می‌آزماید.</li>
+</ul>
+
+<nav class="docs" aria-label="همه‌ی راهنماها"><ol><li><a href="01-install-guide.html">راهنمای نصب گام‌به‌گام آینده‌نگار روی بلاگفا</a></li><li><a href="02-settings-guide.html">تنظیمات پیشنهادی وبلاگ</a></li><li><a href="03-publishing-guide.html">راهنمای انتشار مقاله‌ها</a></li><li><a href="04-sources-report.html">گزارش پژوهش و منابع</a></li><li><a href="05-decision-log.html">دفتر تصمیم‌ها (Decision Log)</a></li><li><a href="06-qa-report.html">گزارش کنترل کیفیت (QA)</a></li><li><a href="07-traceability-matrix.html">ماتریس ردیابی الزامات</a></li><li><a href="08-final-report.html">گزارش نهایی پروژه‌ی آینده‌نگار</a></li><li><a href="09-audit-report.html" aria-current="page">گزارش ممیزی کامل پروژه</a></li></ol></nav>
+</main>
+</body>
+</html>

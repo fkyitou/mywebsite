@@ -73,8 +73,10 @@
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   .an-js .an-rv { opacity: 1; transform: none; }
   .an-js .an-hero-slogan span { opacity: 1; transform: none; filter: none; }
+  .an-globe-gl { animation: none; opacity: 1; }
 }
 [data-motion="reduce"] .an-js .an-rv, [data-motion="reduce"] .an-rv { opacity: 1; transform: none; }
+[data-motion="reduce"] .an-globe-gl { animation: none; opacity: 1; }
 @media print {
   .an-bar, .an-hero, .an-toc, .an-share, .an-fab, .an-foot-grid, .an-related, .an-pn, .an-lab-stage, .an-progress, .an-dlg { display: none !important; }
   body { background: #fff; color: #000; }

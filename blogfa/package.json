@@ -13,7 +13,8 @@
     "interact": "node tools/interact.mjs",
     "links": "node tools/links.mjs",
     "links:external": "node tools/links.mjs --external",
-    "qa": "npm run build && npm run preview && npm test && npm run validate && npm run a11y && npm run interact && npm run links"
+    "kittest": "node tools/kit.mjs && node tools/kittest.mjs",
+    "qa": "npm run build && npm run preview && npm test && npm run validate && npm run a11y && npm run interact && npm run links && npm run kittest"
   },
   "devDependencies": {
     "all-the-cities": "^3.1.0",

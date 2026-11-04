@@ -45,14 +45,17 @@ const BLOG = {
 const split = dir => ({ 1: read(dir + '1-main-and-posts.html'), 2: read(dir + '2-archive.html'), 3: read(dir + '3-pages.html') });
 const posts = fs.readdirSync(path.join(ROOT, 'posts')).filter(f => /^\d\d-[\w-]+\.html$/.test(f)).sort().map(f => {
   const { meta, body } = source('posts/' + f), tags = (meta.tags || '').split(/\s*[،,]\s*/).filter(Boolean);
-  return { n: parseInt(f, 10), title: meta.title || f, cat: meta.category || '', tags, tagsAll: tags.join('، '), body };
+  return { n: parseInt(f, 10), title: meta.title || f, cat: meta.category || '', tags, tagsAll: tags.join(','), body };
 });
+// categories in the order the posts first use them (Blogfa lists them in the order they are defined)
+const cats = [...new Set(posts.map(p => p.cat).filter(Boolean))];
 const about = source('pages/about.html');
 const DATA = {
   tpl: { full: read('dist/template.html'), lite: read('dist/template-lite.html') },
   split: { full: split('dist/split/'), lite: split('dist/split-lite/') },
   blog: BLOG,
   page: { title: about.meta.title || 'درباره‌ی آینده‌نگار', slug: 'about', body: about.body },
+  cats,
   posts
 };
 // '<' is escaped so nothing inside the data (the template holds many </script> tags) can end the script block
@@ -71,7 +74,8 @@ const docs = [
   ['05-decision-log', 'ثبت تصمیم‌ها'],
   ['06-qa-report', 'گزارش آزمون کیفیت'],
   ['07-traceability-matrix', 'ماتریس ردیابی نیازمندی‌ها'],
-  ['08-final-report', 'گزارش نهایی']
+  ['08-final-report', 'گزارش نهایی'],
+  ['09-audit-report', 'گزارش ممیزی محتوا و کد']
 ];
 const docLink = (slug, label) => `<li><a href="docs/html/${slug}.html">${label}</a></li>`;
 
@@ -90,7 +94,7 @@ const postCards = posts.map((p, i) => `
   </div>
 </li>`).join('');
 
-const STEPS = 5 + posts.length; // blog, template, settings, about and final review, plus one tick per post
+const STEPS = 6 + posts.length; // blog, template, settings, categories, about and final review, plus one tick per post
 const CSS = `
 /* Layout: one reading column of install steps in the order Blogfa asks for them; every value to paste sits on a row
    with its copy button, under a sticky bar that counts finished steps. Tokens follow the blog: night first, day second. */
@@ -194,7 +198,6 @@ details.alt[open] > summary { border-bottom: 1px solid var(--line); }
 .post-t h3 { font-size: 1.05rem; font-weight: 800; }
 .chip { font-size: .75rem; padding: 1px 10px; border-radius: 99px; border: 1px solid var(--line-2); color: var(--muted); white-space: nowrap; }
 .post.done .post-n { background: var(--ok); color: var(--bg); border-color: var(--ok); }
-.post.done .rows { opacity: .62; }
 .warn { padding: 12px 16px; border-radius: var(--r-m); border: 1px solid var(--line-2); background: var(--surface-2); font-size: .9rem; }
 .docs { columns: 2 16rem; column-gap: 24px; }
 .foot { padding-block: 28px 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: .875rem; display: grid; gap: 10px; }
@@ -311,84 +314,102 @@ const body = `
   <p>در <a href="https://blogfa.com/">blogfa.com</a> فرم ساخت وبلاگ تازه را باز کنید. این مقدارها را می‌توانید کپی کنید:</p>
   <div class="rows">
     ${field('نام کاربری', esc(BLOG.user), 'blog.user', 'نام کاربری پیشنهادی', { vcls: 'ltr' })}
-    ${field('', 'فقط حروف انگلیسی و عدد. نشانی وبلاگ از آن ساخته می‌شود، مثل <code>ayandehnegar.blogfa.com</code>. اگر این نام گرفته شده بود، یک عدد به آخرش اضافه کنید.', '', '', { vcls: 'plain muted' })}
+    ${field('', 'فقط حروف انگلیسی و عدد. نشانی وبلاگ از آن ساخته می‌شود: <code>ayandehnegar.blogfa.com</code>. اگر گرفته شده بود، <code>ayandenegar</code> را امتحان کنید.', '', '', { vcls: 'plain muted' })}
     ${field('عنوان وبلاگ', esc(BLOG.title), 'blog.title', 'عنوان وبلاگ')}
     ${field('نام نویسنده', esc(BLOG.author), 'blog.author', 'نام نویسنده')}
     ${field('توضیح وبلاگ', esc(BLOG.desc), 'blog.desc', 'توضیح وبلاگ', { vcls: 'plain' })}
   </div>
+  <p class="note">اگر قبلاً یک وبلاگ آزمایشی ساخته‌اید، به‌جای ثبت‌نام تازه می‌توانید در پنل همان وبلاگ از <span class="path">«تنظیمات و دیگر امکانات» ← «تغییر آدرس وبلاگ»</span> نشانی را عوض کنید. به گفته‌ی خود بلاگفا در همان صفحه، نوشته‌ها منتقل می‌شوند ولی قالب و کدهای اختصاصی نه، و نشانی قبلی آزاد می‌شود. بعد عنوان و نام نویسنده را در گام ۳ درست کنید.</p>
   <p class="warn">رمز عبور، ایمیل و کد امنیتی را فقط خودتان در سایت بلاگفا وارد کنید و برای هیچ‌کس، از جمله دستیار هوش مصنوعی، نفرستید.</p>
   ${tick('s-blog', 'وبلاگ ساخته شد و وارد پنل مدیریت شدم.')}
 </section>
 
 <section class="step" aria-labelledby="h2">
   <div class="step-h"><span class="step-n">۲</span><h2 id="h2">نصب قالب</h2></div>
-  <ol>
-    <li>در پنل بلاگفا به <span class="path">«تنظیمات و دیگر امکانات» ← «ویرایش قالب وبلاگ»</span> بروید. این صفحه سه زبانه دارد: «صفحات اصلی»، «آرشیو» و «صفحات جداگانه».</li>
-    <li>در زبانه‌ی «صفحات اصلی» داخل کادر کد کلیک کنید، با <kbd>Ctrl</kbd>+<kbd>A</kbd> همه‌ی کد قبلی را انتخاب و پاک کنید.</li>
-    <li>قالب کامل را از دکمه‌ی زیر کپی کنید، در همان کادر جای‌گذاری کنید (<kbd>Ctrl</kbd>+<kbd>V</kbd>) و ذخیره کنید. این کد هر سه قالب را با هم دارد و بلاگفا خودش آن‌ها را جدا می‌کند.</li>
-    <li>صفحه‌ی اول وبلاگ را در زبانه‌ی تازه باز کنید. اگر بعد از چند ثانیه نوار «بخشی از امکانات این صفحه بارگذاری نشد» دیدید، یعنی کد کامل ذخیره نشده است؛ قالب سبک یا روش سه‌تکه را امتحان کنید.</li>
-  </ol>
-  <div class="opts">
-    <div class="opt rec"><h3>قالب کامل <span class="badge">پیشنهادی</span></h3><p>همه‌ی امکانات، از جمله کره‌ی زمین سه‌بعدی و زنده‌ی صفحه‌ی اول.</p><span class="size">${kb(DATA.tpl.full)}</span><button type="button" class="btn primary" data-copy="tpl.full" data-label="قالب کامل">کپی قالب کامل</button></div>
-    <div class="opt"><h3>قالب سبک</h3><p>همان قالب، بدون کره‌ی زمین سه‌بعدی. اگر قالب کامل ذخیره نشد یا صفحه‌ی اول روی گوشی‌های قدیمی کند بود.</p><span class="size">${kb(DATA.tpl.lite)}</span><button type="button" class="btn" data-copy="tpl.lite" data-label="قالب سبک">کپی قالب سبک</button></div>
+  <p>در پنل به <span class="path">«تنظیمات و دیگر امکانات» ← «ویرایش قالب وبلاگ»</span> بروید. این صفحه سه زبانه دارد: «صفحات اصلی»، «آرشیو» و «صفحات جداگانه»، و هر زبانه کادر کد و دکمه‌ی «ثبت و بازسازی وبلاگ» خودش را دارد. قالب آینده‌نگار هم سه تکه است، یکی برای هر زبانه.</p>
+  <div class="seg" role="radiogroup" aria-label="نسخه‌ی قالب"><label><input type="radio" name="split-v" value="full" checked>کامل (پیشنهادی)</label><label><input type="radio" name="split-v" value="lite">سبک، بدون کره‌ی سه‌بعدی</label></div>
+  <div class="rows">
+    ${[['1', 'برای زبانه‌ی «صفحات اصلی»'], ['2', 'برای زبانه‌ی «آرشیو»'], ['3', 'برای زبانه‌ی «صفحات جداگانه»']].map(([p, t]) => `<div class="field"><div class="field-k">تکه‌ی ${fa(p)}</div><div class="field-v">${t} <span class="size" data-size-part="${p}"></span></div><button type="button" class="btn${p === '1' ? ' primary' : ''}" data-copy="split" data-part="${p}" data-label="تکه‌ی ${fa(p)} قالب">کپی تکه‌ی ${fa(p)}</button></div>`).join('')}
   </div>
-  <details class="alt"><summary>روش جایگزین: جای‌گذاری سه‌تکه</summary><div class="alt-body">
-    <p class="note">اگر بلاگفا کد یک‌تکه را نپذیرفت، هر تکه را در زبانه‌ی خودش جای‌گذاری و جداگانه ذخیره کنید. در هر زبانه اول کد قبلی را پاک کنید.</p>
-    <div class="seg" role="radiogroup" aria-label="نسخه‌ی تکه‌ها"><label><input type="radio" name="split-v" value="full" checked>کامل</label><label><input type="radio" name="split-v" value="lite">سبک</label></div>
-    <div class="rows">
-      ${[['1', 'زبانه‌ی «صفحات اصلی»'], ['2', 'زبانه‌ی «آرشیو»'], ['3', 'زبانه‌ی «صفحات جداگانه»']].map(([p, t]) => `<div class="field"><div class="field-k">تکه‌ی ${fa(p)}</div><div class="field-v">${t} <span class="size" data-size-part="${p}"></span></div><button type="button" class="btn" data-copy="split" data-part="${p}" data-label="تکه‌ی ${fa(p)} قالب">کپی تکه‌ی ${fa(p)}</button></div>`).join('')}
+  <ol>
+    <li>در زبانه‌ی «صفحات اصلی» داخل کادر کد کلیک کنید و با <kbd>Ctrl</kbd>+<kbd>A</kbd> و سپس <kbd>Delete</kbd> کد قبلی را پاک کنید.</li>
+    <li>«کپی تکه‌ی ۱» را بزنید، با <kbd>Ctrl</kbd>+<kbd>V</kbd> در همان کادر جای‌گذاری کنید و «ثبت و بازسازی وبلاگ» را بزنید.</li>
+    <li>همین کار را در زبانه‌ی «آرشیو» با تکه‌ی ۲ و در زبانه‌ی «صفحات جداگانه» با تکه‌ی ۳ تکرار کنید.</li>
+    <li>صفحه‌ی اول وبلاگ را در زبانه‌ی تازه‌ی مرورگر باز کنید و با <kbd>Ctrl</kbd>+<kbd>F5</kbd> از نو بارگیری کنید. اگر بعد از چند ثانیه نوار «بخشی از امکانات این صفحه بارگذاری نشد» دیدید، تکه‌ی ۱ کامل ذخیره نشده است: یک بار دیگر کپی و ذخیره کنید، و اگر تکرار شد نسخه‌ی سبک را بگذارید.</li>
+  </ol>
+  <details class="alt"><summary>روش دیگر: کل قالب یک‌جا در زبانه‌ی «صفحات اصلی»</summary><div class="alt-body">
+    <p class="note">راهنمای رسمی قالب‌های بلاگفا می‌گوید کدی که سه بخشش داخل برچسب‌های <code>&lt;blog:PostTemplate&gt;</code>، <code>&lt;blog:ArchiveTemplate&gt;</code> و <code>&lt;blog:PageTemplate&gt;</code> باشد، خودش بین سه زبانه پخش می‌شود. این روش در پنل واقعی آزموده نشده است؛ اگر بعد از ذخیره، زبانه‌های «آرشیو» و «صفحات جداگانه» عوض نشدند، از روش سه‌تکه‌ی بالا استفاده کنید.</p>
+    <div class="opts">
+      <div class="opt"><h3>قالب کامل</h3><p>همه‌ی امکانات، از جمله کره‌ی زمین سه‌بعدی صفحه‌ی اول.</p><span class="size">${kb(DATA.tpl.full)}</span><button type="button" class="btn" data-copy="tpl.full" data-label="قالب کامل">کپی قالب کامل</button></div>
+      <div class="opt"><h3>قالب سبک</h3><p>همان قالب، بدون کره‌ی زمین سه‌بعدی.</p><span class="size">${kb(DATA.tpl.lite)}</span><button type="button" class="btn" data-copy="tpl.lite" data-label="قالب سبک">کپی قالب سبک</button></div>
     </div>
   </div></details>
-  ${tick('s-tpl', 'قالب ذخیره شد و صفحه‌ی اول وبلاگ با ظاهر آینده‌نگار باز شد.')}
+  ${tick('s-tpl', 'هر سه تکه ذخیره شد و صفحه‌ی اول وبلاگ با ظاهر آینده‌نگار باز شد.')}
 </section>
 
 <section class="step" aria-labelledby="h3">
-  <div class="step-h"><span class="step-n">۳</span><h2 id="h3">تنظیمات پیشنهادی</h2></div>
-  <p>در بخش تنظیمات وبلاگ این‌ها را بررسی کنید. نام دقیق گزینه‌ها در پنل ممکن است کمی فرق کند.</p>
+  <div class="step-h"><span class="step-n">۳</span><h2 id="h3">تنظیمات وبلاگ</h2></div>
+  <p>در پنل به <span class="path">«تنظیمات و دیگر امکانات» ← «تنظیمات کلی وبلاگ»</span> بروید، این‌ها را بررسی کنید و «ثبت تنظیمات» را بزنید:</p>
   <ul>
-    <li><b>تعداد مطالب صفحه‌ی اول:</b> ۱۰ یا بیشتر، تا هر ده کارت در صفحه‌ی اول دیده شوند.</li>
-    <li><b>نظرها:</b> فعال، تا خواننده‌ها زیر هر مقاله نظر بدهند.</li>
-    <li><b>تصویر پروفایل (اختیاری):</b> فایل <code>assets/logo/logo-512.png</code> از همین بسته.</li>
+    <li><b>عنوان وبلاگ و نام نویسنده:</b> همان مقدارهای گام ۱.</li>
+    <li><b>منطقه زمانی:</b> تهران (UTC+03:30).</li>
+    <li><b>تعداد پستها در صفحه نخست:</b> ۱۰ یا بیشتر (پیش‌فرض بلاگفا ۱۰ است)، تا هر ده کارت در صفحه‌ی اول دیده شوند.</li>
+    <li><b>نحوه آدرس دهی صفحات:</b> همان پیش‌فرض «به مانند post/1»؛ پیوندهای قالب با همین شکل کار می‌کنند.</li>
+    <li><b>تصویر وبلاگ (اختیاری):</b> از «تغییر تصویر وبلاگ»، فایل <code>assets/logo/logo-512.png</code> همین بسته.</li>
   </ul>
-  <div class="rows">${field('درباره‌ی من', esc(BLOG.about), 'blog.about', 'متن درباره‌ی من', { vcls: 'plain' })}</div>
-  ${tick('s-settings', 'تنظیمات را بررسی کردم.')}
+  <div class="rows">
+    ${field('شرح خلاصه', esc(BLOG.desc), 'blog.desc', 'شرح خلاصه', { vcls: 'plain' })}
+    ${field('درباره وبلاگ', esc(BLOG.about), 'blog.about', 'متن درباره وبلاگ', { vcls: 'plain' })}
+  </div>
+  ${tick('s-settings', 'تنظیمات را ثبت کردم.')}
 </section>
 
 <section class="step" aria-labelledby="h4">
-  <div class="step-h"><span class="step-n">۴</span><h2 id="h4">صفحه‌ی «درباره»</h2></div>
-  <p>در پنل بخش «صفحات جداگانه» را باز کنید و صفحه‌ی تازه‌ای بسازید. اگر روش ساخت را پرسید، «در قالب وبلاگ» را انتخاب کنید تا صفحه ظاهر آینده‌نگار را بگیرد.</p>
+  <div class="step-h"><span class="step-n">۴</span><h2 id="h4">تعریف موضوعات</h2></div>
+  <p>هر مقاله یک موضوع دارد و موضوع باید پیش از انتشار مقاله ساخته شده باشد. در پنل «تعاریف موضوعات» را باز کنید و برای هر سطر زیر، نام را در «عنوان موضوع» بگذارید و «درج موضوع» را بزنید. «جایگاه» را می‌توانید خالی بگذارید.</p>
+  <div class="rows">
+    ${cats.map((c, i) => field(fa(i + 1), esc(c), `cats.${i}`, `موضوع ${esc(c)}`)).join('\n    ')}
+  </div>
+  <p class="note">قالب رنگ و نماد هر «قلمرو» را از روی همین نام‌ها پیدا می‌کند؛ با دکمه‌ی کپی بگذارید تا دقیقاً یکی باشند.</p>
+  ${tick('s-cats', `هر ${fa(cats.length)} موضوع ساخته شد.`)}
+</section>
+
+<section class="step" aria-labelledby="h5">
+  <div class="step-h"><span class="step-n">۵</span><h2 id="h5">صفحه‌ی «درباره»</h2></div>
+  <p>در پنل «صفحات جداگانه» را باز کنید و «ایجاد صفحه جدید در قالب وبلاگ» را بزنید (نه «ایجاد صفحه جدید با ویرایش کامل کدها»)، تا صفحه ظاهر آینده‌نگار را بگیرد. خود بلاگفا در همان صفحه نوشته که برای هر صفحه می‌شود نشانی تعیین کرد، مثل <code>yourblog.com/page/myprojects</code>.</p>
   <div class="rows">
     ${field('عنوان صفحه', esc(DATA.page.title), 'page.title', 'عنوان صفحه‌ی درباره')}
     ${field('نشانی صفحه', 'about', 'page.slug', 'نشانی صفحه‌ی درباره', { vcls: 'ltr' })}
     ${field('', 'دقیقاً با حروف کوچک. پیوند پانویس قالب به <code>/page/about</code> می‌رود.', '', '', { vcls: 'plain muted' })}
     ${field('متن صفحه', `کد HTML، ${kb(DATA.page.body)}`, 'page.body', 'متن صفحه‌ی درباره', { vcls: 'muted', btn: 'کپی متن' })}
   </div>
-  <p class="note">متن را در حالت کد (HTML) ویرایشگر جای‌گذاری کنید، همان‌طور که در گام بعد برای مقاله‌ها آمده است.</p>
+  <p class="note">متن را مثل مقاله‌ها با دکمه‌ی «منبع» ویرایشگر جای‌گذاری کنید (گام ۶).</p>
   ${tick('s-about', 'صفحه ساخته شد و پیوند «درباره‌ی آینده‌نگار» در پانویس آن را باز می‌کند.')}
 </section>
 
-<section class="step" aria-labelledby="h5">
-  <div class="step-h"><span class="step-n">۵</span><h2 id="h5">انتشار ۱۰ مقاله</h2></div>
-  <p>برای هر مقاله در پنل «ارسال مطلب جدید» را باز کنید و:</p>
+<section class="step" aria-labelledby="h6">
+  <div class="step-h"><span class="step-n">۶</span><h2 id="h6">انتشار ۱۰ مقاله</h2></div>
+  <p>برای هر مقاله در پنل «نوشته جدید» را باز کنید و:</p>
   <ol>
-    <li>عنوان را کپی کنید و در کادر عنوان بگذارید.</li>
-    <li>ویرایشگر متن را به حالت کد ببرید (معمولاً دکمه‌ای با نام HTML یا نماد <code>&lt;&gt;</code> در نوار ابزار ویرایشگر) و متن مقاله را همان‌جا جای‌گذاری کنید. متن را در حالت عادی ویرایشگر جای‌گذاری نکنید، چون کدها به‌صورت نوشته دیده می‌شوند.</li>
-    <li>موضوع را انتخاب کنید؛ اگر هنوز ساخته نشده، با همین نام بسازید.</li>
-    <li>برچسب‌ها را وارد کنید. اگر بلاگفا برچسب‌ها را یکی‌یکی می‌گیرد، روی هر برچسب بزنید تا جدا کپی شود.</li>
-    <li>کادر «ادامه‌ی مطلب» را خالی بگذارید و مطلب را منتشر کنید.</li>
+    <li>عنوان را کپی کنید و در کادر «عنوان» بگذارید.</li>
+    <li>در نوار ابزار ویرایشگر دکمه‌ی «منبع» را بزنید تا کد متن دیده شود، هر چه در آن هست پاک کنید، متن مقاله را جای‌گذاری کنید و تأیید کنید. متن را در حالت عادی ویرایشگر جای‌گذاری نکنید، چون کدها به‌شکل نوشته دیده می‌شوند.</li>
+    <li>در زبانه‌ی «موضوع نوشته» موضوع مقاله را انتخاب کنید.</li>
+    <li>در زبانه‌ی «برچسب‌ها» برچسب‌ها را با دکمه‌ی «کپی همه» بگذارید. بلاگفا حداکثر چهار برچسب می‌پذیرد و آن‌ها را با ویرگول انگلیسی (<code>,</code>) جدا می‌کند؛ «کپی همه» همین شکل را کپی می‌کند.</li>
+    <li>«ادامه نوشته» و «ثبت موقت» را دست نزنید و «ثبت نوشته و انتشار» را بزنید.</li>
   </ol>
-  <p class="warn">مقاله‌ها را به ترتیب ۱ تا ۱۰ منتشر کنید تا پیوندهای «روایت قبلی» و «روایت بعدی» به همین ترتیب بچینند. آخرین مقاله‌ای که منتشر می‌شود کارت ویژه‌ی صفحه‌ی اول می‌شود. بعد از انتشار مقاله‌ی ۱ آن را باز کنید: باید کادر «آزمایشگاه زنده» و نمودار را ببینید. اگر فقط متن ساده یا کد خام دیدید، متن در حالت کد جای‌گذاری نشده است؛ مطلب را ویرایش کنید و دوباره در حالت کد جای‌گذاری کنید.</p>
+  <p class="warn">مقاله‌ها را به ترتیب ۱ تا ۱۰ منتشر کنید تا پیوندهای «روایت قبلی» و «روایت بعدی» به همین ترتیب بچینند. آخرین مقاله‌ای که منتشر می‌شود کارت ویژه‌ی صفحه‌ی اول می‌شود. بعد از انتشار مقاله‌ی ۱ آن را باز کنید: باید کادر «آزمایشگاه زنده» و نمودار را ببینید. اگر فقط متن ساده یا کد خام دیدید، متن با دکمه‌ی «منبع» جای‌گذاری نشده است؛ مطلب را از «نوشته‌های پیشین» ویرایش کنید و دوباره جای‌گذاری کنید.</p>
   <ol class="posts">${postCards}
   </ol>
 </section>
 
-<section class="step" aria-labelledby="h6">
-  <div class="step-h"><span class="step-n">۶</span><h2 id="h6">بازبینی نهایی</h2></div>
+<section class="step" aria-labelledby="h8">
+  <div class="step-h"><span class="step-n">۷</span><h2 id="h8">بازبینی نهایی</h2></div>
   <ul>
     <li>صفحه‌ی اول: پنل زنده، کره‌ی زمین (در قالب کامل)، ده کارت مقاله و بخش سازنده با نام امیرحسین همتی.</li>
     <li>یک مقاله: فهرست مطالب، نمودار، آزمایشگاه زنده، منابع، مقاله‌های پیشنهادی و دکمه‌های اشتراک.</li>
-    <li>پیوند «درباره‌ی آینده‌نگار» در پانویس و صفحه‌ی بایگانی.</li>
+    <li>پیوند «درباره‌ی آینده‌نگار» در پانویس، منوی «قلمروها» و صفحه‌ی بایگانی.</li>
     <li>همین صفحه‌ها روی گوشی.</li>
+    <li>نشانی عمومی وبلاگ، مثل <code>https://ayandehnegar.blogfa.com/</code>، همان چیزی است که برای معلم می‌فرستید؛ نشانی پنل مدیریت نیست.</li>
     <li>اگر بلاگفا تبلیغ خودش را نشان داد، عادی است؛ قالب آن را پنهان نمی‌کند، چون پنهان کردن تبلیغ خلاف قوانین بلاگفاست.</li>
   </ul>
   ${tick('s-final', 'همه را دیدم؛ وبلاگ آماده‌ی معرفی است.')}

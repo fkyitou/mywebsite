@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ماتریس ردیابی الزامات · آینده‌نگار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&amp;display=swap">
+<style>:root { color-scheme: dark; --bg: #04060D; --surface: #0B1222; --surface-2: #111A2F; --line: #1C2741; --text: #EDF2FA; --muted: #9AA8C0; --link: #8FD3FF; --accent: #FFB36B;
+  --font: Vazirmatn, Tahoma, "Segoe UI", sans-serif; --mono: ui-monospace, "Cascadia Code", Consolas, monospace; }
+@media (prefers-color-scheme: light) { :root { color-scheme: light; --bg: #F6F8FB; --surface: #FFFFFF; --surface-2: #EEF2F8; --line: #D8E0EC; --text: #0E1626; --muted: #4A5872; --link: #0B5CAD; --accent: #A04A00; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.95; direction: rtl; }
+.top { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); font-size: 14px; }
+.top b { font-weight: 800; margin-inline-end: auto; }
+main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 1.9rem; line-height: 1.5; margin: .4em 0 .6em; }
+h2 { font-size: 1.35rem; margin: 2em 0 .6em; padding-top: .6em; border-top: 1px solid var(--line); }
+h3 { font-size: 1.1rem; margin: 1.6em 0 .4em; }
+a { color: var(--link); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+code { font-family: var(--mono); font-size: .88em; padding: 1px 6px; border-radius: 6px; background: var(--surface-2); direction: ltr; unicode-bidi: isolate; }
+pre { direction: ltr; text-align: left; overflow-x: auto; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); line-height: 1.6; }
+pre code { padding: 0; background: none; }
+.tbl { overflow-x: auto; margin: 1em 0; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { padding: 8px 12px; border-bottom: 1px solid var(--line); text-align: right; vertical-align: top; }
+th { background: var(--surface-2); font-weight: 700; }
+tr:last-child td { border-bottom: 0; }
+blockquote { margin: 1em 0; padding: 4px 16px; border-inline-start: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; color: var(--muted); }
+li { margin: .2em 0; }
+nav.docs { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+nav.docs ol { padding-inline-start: 1.4em; }
+nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration: none; }</style>
+</head>
+<body>
+<header class="top"><b>آینده‌نگار · راهنماها</b><a href="../../kit.html">کیت نصب</a><a href="../07-traceability-matrix.md">متن Markdown</a></header>
+<main>
+<h1 id="ماتریس-ردیابی-الزامات">ماتریس ردیابی الزامات</h1>
+<p>این جدول هر خواسته‌ی مشخصات پروژه را به جایی که پیاده شده و راهی که سنجیده شده وصل می‌کند. وضعیت‌ها:</p>
+<ul>
+<li><strong>انجام و آزموده:</strong> با یک آزمون خودکار یا ابزار سنجیده شده است.</li>
+<li><strong>انجام، بازبینی با چشم:</strong> ساخته شده و در تصویرهای آزمون دیده شده، ولی آزمون خودکار ندارد.</li>
+<li><strong>بخشی:</strong> بخشی از خواسته انجام شده؛ آنچه مانده در همان سطر آمده است.</li>
+<li><strong>با شما:</strong> فقط با حساب بلاگفای خودتان انجام‌شدنی است.</li>
+</ul>
+<p>نام ابزارها به پوشه‌ی <code>tools/</code> و نتیجه‌ها به پوشه‌ی <code>quality/</code> اشاره دارند. نتیجه‌ی آزمون‌ها در <a href="06-qa-report.html">گزارش آزمون کیفیت</a> آمده است.</p>
+<h2 id="الف-مشخصات-اصلی-پروژه">الف. مشخصات اصلی پروژه</h2>
+<h3 id="صفحهی-اول-بخش-۶-مشخصات">صفحه‌ی اول (بخش ۶ مشخصات)</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>خواسته</th>
+<th>کجا</th>
+<th>سنجش</th>
+<th>وضعیت</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>سرصفحه‌ی سینمایی</td>
+<td><code>src/partials/hero.html</code>، <code>src/js/globe.js</code></td>
+<td>تصویرهای آزمون، آزمون مقایسه‌ی تصویری</td>
+<td>انجام، بازبینی با چشم</td>
+</tr>
+<tr>
+<td>نام و هویت وبلاگ</td>
+<td>لوگو، سرصفحه، پانویس</td>
+<td><code>check.mjs</code> نام را در هر سه قالب می‌جوید</td>
+<td>انجام و آزموده</td>
+</tr>
+<tr>
+<td>تایپوگرافی بزرگ و متحرک</td>
+<td>شعار سرصفحه که واژه‌به‌واژه ظاهر می‌شود</td>
+<td>تصویرها؛ با «حرکت کمتر» خاموش است (<code>a11y.mjs</code>)</td>
+<td>انجام و آزموده</td>
+</tr>
+<tr>
+<td>پس‌زمینه‌ی چندلایه با عمق</td>
+<td><code>src/js/sky.js</code>، <code>src/css/08-sky.css</code></td>
+<td>تصویرها؛ <a href="05-decision-log.html">دفتر تصمیم‌ها، بند ۲۲</a></td>
+<td>انجام، بازبینی با چشم</td>
+</tr>
+<tr>
+<td>عنصر مرکزی سه‌بعدی</td>
+<td>کره‌ی زمین WebGL با سه لایه‌ی پشتیبان</td>
+<td>تصویرها؛ نسخه‌ی پشتیبان دوبعدی و نسخه‌ی سبک</td>
+<td>انجام، بازبینی با چشم</td>
+</tr>
+<tr>
+<td>معرفی کوتاه وبلاگ</td>
+<td>متن سرصفحه</td>
+<td>تصویرها</td>
+<td>انجام، بازبینی با چشم</td>
+</tr>
+<tr>
+<td>دسترسی سریع به دسته‌ها</td>
+<td>منوی «قلمروها» و کارت‌های قلمرو</td>
+<td><code>interact.mjs</code> منو را باز و بسته می‌کند</td>
+<td>انجام و آزموده</td>
+</tr>
+<tr>
+<td>کارت‌های اختصاصی مقاله‌ها</td>
+<td><code>src/js/covers.js</code>: تصویر هر کارت با کد کشیده می‌شود</td>
+<td><code>interact.mjs</code> شمار تصویرهای کشیده‌شده را می‌سنجد</td>
+<td>انجام و آزموده</td>
+</tr>
+<tr>
+<td>مطالب منتخب</td>
+<td>آخرین مقاله کارت «ویژه» می‌گیرد</td>
+<td>تصویرها</td>
+<td>انجام، بازبینی با چشم</td>
+</tr>
+<tr>
+<td>معرفی سازنده</td>
+<td><code>src/partials/creator.html</code></td>
+<td><code>check.mjs</code></td>
+<td>انجام و آزموده</td>
+</tr>
+<tr>
+<td>پانویس کامل</td>
+<td><code>src/partials/foot_bottom.html</code></td>
+<td><code>links.mjs</code> همه‌ی پیوندهایش را می‌آزماید</td>
+<td>انجام و آزموده</td>
+</tr>
+</tbody></table></div>
+<h3 id="صفحهی-مقالهها-بخش-۷">صفحه‌ی مقاله‌ها (بخش ۷)</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>خواسته</th>
+<th>وضعیت و توضیح</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>عنوان، تصویر اصلی، مقدمه</td>
+<td>انجام، بازبینی با چشم. تصویر اصلی هر مقاله با کد کشیده می‌شود و در تصویرهای آزمون هر ده مقاله دیده شد</td>
+</tr>
+<tr>
+<td>ساختار استاندارد تیترها</td>
+<td>انجام و آزموده. یک h1 در هر صفحه، بخش‌ها h2 (axe-core و اعتبارسنج W3C)</td>
+</tr>
+<tr>
+<td>فهرست مطالب تعاملی</td>
+<td>انجام و آزموده. <code>interact.mjs</code> روی یکی از پیوندهای فهرست کلیک می‌کند و می‌سنجد تیتر بالای صفحه بنشیند</td>
+</tr>
+<tr>
+<td>تصویر و نمودار</td>
+<td>انجام و آزموده. ۱۲ نمودار از جدول‌های خود مقاله‌ها؛ <code>check.mjs</code> برای هر جدول داده نمودار می‌خواهد</td>
+</tr>
+<tr>
+<td>نقل‌قول برجسته</td>
+<td><strong>بخشی.</strong> در مقاله‌های ۳، ۴ و ۱۰ هست. هفت مقاله‌ی دیگر به‌جای آن کادرهای «یک واقعیت» و «باور نادرست» دارند</td>
+</tr>
+<tr>
+<td>کادرهای اطلاعاتی و نکته‌های کلیدی</td>
+<td>انجام. هر ده مقاله همه‌ی کادرهای ثابت را دارند (<a href="09-audit-report.html">گزارش ممیزی</a>، بخش ۱)</td>
+</tr>
+<tr>
+<td>پیوند داخلی و مطالب پیشنهادی</td>
+<td>انجام و آزموده. مقاله‌ی قبلی و بعدی و روایت‌های مرتبط؛ <code>links.mjs</code> ۰ پیوند خراب</td>
+</tr>
+<tr>
+<td>منابع</td>
+<td>انجام. ۵۷ منبع در ده مقاله (<a href="04-sources-report.html">گزارش منابع</a>)</td>
+</tr>
+<tr>
+<td>زمان مطالعه</td>
+<td>انجام و آزموده. از شمار واژه‌ها حساب می‌شود</td>
+</tr>
+<tr>
+<td>نشانه‌گذاری نکته‌های مهم</td>
+<td>انجام. برچسب سطح شاهد کنار ادعاهای عددی</td>
+</tr>
+<tr>
+<td>اشتراک‌گذاری</td>
+<td>انجام، بدون آزمون خودکار. «کپی پیوند» و، اگر مرورگر پشتیبانی کند، پنجره‌ی اشتراک خود سیستم</td>
+</tr>
+</tbody></table></div>
+<h3 id="محتوا-گرافیک-و-فناوری-بخشهای-۸-۹-و-۱۴">محتوا، گرافیک و فناوری (بخش‌های ۸، ۹ و ۱۴)</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>خواسته</th>
+<th>وضعیت و توضیح</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>دست‌کم ۱۰ مقاله‌ی کامل و مستقل</td>
+<td>انجام. ۱۰ مقاله، ۱۰٬۹۵۷ واژه، ۵۷ منبع؛ شمارش با اسکریپت از خود فایل‌ها</td>
+</tr>
+<tr>
+<td>آمار ساختگی و منبع جعلی نباشد</td>
+<td>انجام. هر عدد به منبع اصلی وصل است؛ چهار عدد در بازبینی اصلاح شد (<a href="04-sources-report.html">گزارش منابع</a>)</td>
+</tr>
+<tr>
+<td>هویت تصویری اختصاصی</td>
+<td>انجام. هیچ عکس یا تصویر بیرونی به کار نرفته؛ همه‌ی تصویرها با کد ساخته شده‌اند، پس مسئله‌ی مجوز تصویر پیش نمی‌آید. داده‌ی نقشه‌ی کره از Natural Earth (مالکیت عمومی) و GeoNames (CC BY 4.0) است</td>
+</tr>
+<tr>
+<td>تصویرسازی علمی و داده‌نمایی</td>
+<td>انجام. ۱۲ نمودار و ۱۰ آزمایشگاه زنده</td>
+</tr>
+<tr>
+<td>فناوری فقط وقتی ارزش بیفزاید</td>
+<td>انجام. WebGL برای کره، Canvas برای تصویرها، SVG برای نمودارها و ستاره‌ها، IntersectionObserver برای بارگذاری تنبل، Web Audio برای صدا. Three.js و GSAP به کار نرفت چون بلاگفا فایل بیرونی را تضمین نمی‌کند و همین کارها بدون آن‌ها شد (<a href="05-decision-log.html">دفتر تصمیم‌ها، بند ۸</a>)</td>
+</tr>
+</tbody></table></div>
+<h3 id="بلاگفا-سرعت-و-استانداردها-بخشهای-۱۰-تا-۱۲">بلاگفا، سرعت و استانداردها (بخش‌های ۱۰ تا ۱۲)</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>خواسته</th>
+<th>وضعیت و توضیح</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>قالب واقعی با برچسب‌های بلاگفا</td>
+<td>انجام و آزموده. ۴۶ آزمون ایستای <code>check.mjs</code>: فقط برچسب‌ها و بلوک‌های مستند، بدون کد مسدودشدنی</td>
+</tr>
+<tr>
+<td>HTML و CSS معتبر</td>
+<td>انجام و آزموده. اعتبارسنج W3C: ۰ خطا در ۶۴ صفحه؛ CSS: ۰ خطا (<code>validate.mjs</code>)</td>
+</tr>
+<tr>
+<td>راست‌به‌چپ</td>
+<td>انجام و آزموده. <code>lang=&quot;fa&quot;</code> و <code>dir=&quot;rtl&quot;</code> در هر سه قالب</td>
+</tr>
+<tr>
+<td>موبایل و دسکتاپ</td>
+<td>انجام و آزموده. ۲۵ صفحه در ۳۹۰ و ۱۴۴۰ پیکسل بدون پیمایش افقی؛ تصویرها در ۳۹۰، ۱۳۶۶ و ۱۹۲۰</td>
+</tr>
+<tr>
+<td>مرورگرهای رایج</td>
+<td><strong>بخشی.</strong> فقط Chromium آزموده شد. Firefox، Safari و گوشی واقعی آزموده نشد</td>
+</tr>
+<tr>
+<td>جایگزین برای هر قابلیت پرریسک</td>
+<td>انجام. کره: WebGL، بعد کره‌ی دوبعدی، بعد گرادیان؛ نسخه‌ی سبک بدون کره؛ پنجره‌ی نظرها اگر در قاب باز نشود پیوند جایگزین می‌دهد</td>
+</tr>
+<tr>
+<td>بارگذاری تنبل و پرهیز از پرش صفحه</td>
+<td>انجام و آزموده. تصویرها و آزمایشگاه‌ها نزدیک صفحه ساخته می‌شوند؛ CLS در Lighthouse ۰ تا ۰٫۰۰۷</td>
+</tr>
+<tr>
+<td>سرعت در موبایل و دستگاه ضعیف</td>
+<td><strong>بخشی.</strong> مقاله‌ها و آرشیو در Lighthouse موبایل ۸۱ و ۹۴؛ صفحه‌ی اول ۴۵. این محیط کارت گرافیک نرم‌افزاری دارد و اندازه‌ی واقعی را بدبینانه نشان می‌دهد؛ روی رایانه‌ی واقعی سنجیده نشد (<a href="06-qa-report.html">گزارش QA</a>)</td>
+</tr>
+<tr>
+<td><code>prefers-reduced-motion</code></td>
+<td>انجام و آزموده. <code>a11y.mjs</code> در این حالت انیمیشن در حال اجرا نمی‌یابد</td>
+</tr>
+<tr>
+<td>دسترس‌پذیری</td>
+<td>انجام و آزموده. axe-core: ۰ خطا؛ Lighthouse دسترس‌پذیری: ۱۰۰ در هر هفت اجرا</td>
+</tr>
+<tr>
+<td>صفحه‌کلید</td>
+<td>انجام و آزموده. پیوند «پرش به محتوا»، حلقه‌ی تمرکز، بدون تله‌ی تمرکز</td>
+</tr>
+<tr>
+<td>کنتراست</td>
+<td>انجام و آزموده. همه‌ی جفت‌های متن دست‌کم ۴٫۵ به ۱</td>
+</tr>
+<tr>
+<td>سئو: عنوان، توضیح متا، تیترها، پیوند داخلی</td>
+<td>انجام و آزموده. Lighthouse سئو: ۱۰۰ در هر هفت اجرا</td>
+</tr>
+</tbody></table></div>
+<h3 id="سازنده-تحویل-و-مرزها-بخشهای-۱۳-و-۱۵-تا-۱۹">سازنده، تحویل و مرزها (بخش‌های ۱۳ و ۱۵ تا ۱۹)</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>خواسته</th>
+<th>وضعیت و توضیح</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>«طراحی، مدیریت و نویسندگی: امیرحسین همتی»</td>
+<td>انجام و آزموده. در سرصفحه، بخش سازنده، پانویس، صفحه‌ی درباره و کادر نویسنده‌ی مقاله‌ها</td>
+</tr>
+<tr>
+<td>ساختن واقعی، نه توضیح</td>
+<td>انجام. قالب، ده مقاله، پیش‌نمایش ۶۴ صفحه‌ای، کیت نصب و ابزارهای ساخت و آزمون</td>
+</tr>
+<tr>
+<td>بازبینی شش‌مرحله‌ای</td>
+<td>انجام. <a href="06-qa-report.html">گزارش QA</a></td>
+</tr>
+<tr>
+<td>ساختار فایل‌ها</td>
+<td>انجام با تغییر. ساختار پیشنهادی مشخصات با نیاز فنی جور شد: یک کد برای سه قالب، و قالب به هیچ فایل تصویری وابسته نیست. پوشه‌ی <code>assets/</code> تصویرهای آماده‌ی دلخواه دارد (لوگو، کاور و کارت اشتراک هر مقاله) که <code>tools/assets.mjs</code> از همان طرح‌ها می‌سازد. نقشه‌ی پوشه‌ها در <code>README.md</code></td>
+</tr>
+<tr>
+<td>راهنمای نصب گام‌به‌گام</td>
+<td>انجام. <a href="01-install-guide.html">راهنمای نصب</a> هر ۹ گام مشخصات را دارد، به‌اضافه‌ی کیت نصب (<code>kit.html</code>)</td>
+</tr>
+<tr>
+<td>فرق «فایل آماده»، «قالب نصب‌شده» و «وبلاگ منتشرشده»</td>
+<td>انجام. امروز فقط «فایل آماده» است (<a href="08-final-report.html">گزارش نهایی</a>)</td>
+</tr>
+<tr>
+<td>نخواستن رمز و دور نزدن احراز هویت</td>
+<td>رعایت شد</td>
+</tr>
+</tbody></table></div>
+<h2 id="ب-معیارهای-تحویل-مأموریت-تکمیلی-phase-11">ب. معیارهای تحویل مأموریت تکمیلی (PHASE 11)</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>معیار</th>
+<th>وضعیت</th>
+<th>گواه</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>۱</td>
+<td>همه‌ی الزامات اولیه بررسی شده باشند</td>
+<td>انجام</td>
+<td>همین ماتریس، بخش الف</td>
+</tr>
+<tr>
+<td>۲</td>
+<td>قالب واقعی و سازگار با بلاگفا</td>
+<td>انجام و آزموده</td>
+<td><code>dist/template.html</code>؛ ۴۶ آزمون ایستا. پذیرفته شدن در خود بلاگفا با شماست</td>
+</tr>
+<tr>
+<td>۳</td>
+<td>دست‌کم ده مقاله‌ی کامل</td>
+<td>انجام</td>
+<td><code>posts/</code>؛ <a href="09-audit-report.html">گزارش ممیزی</a>، بخش ۱</td>
+</tr>
+<tr>
+<td>۴</td>
+<td>نام «امیرحسین همتی» درست درج شده باشد</td>
+<td>انجام و آزموده</td>
+<td><code>check.mjs</code> در هر سه قالب و در صفحه‌ها</td>
+</tr>
+<tr>
+<td>۵</td>
+<td>هویت بصری منسجم و اختصاصی</td>
+<td>انجام، بازبینی با چشم</td>
+<td>تصویرهای <code>quality/screenshots/</code></td>
+</tr>
+<tr>
+<td>۶</td>
+<td>پس‌زمینه‌ی اصلی طراحی و بررسی شده باشد</td>
+<td>انجام، بازبینی با چشم</td>
+<td>آسمان سراسری؛ دفتر تصمیم‌ها، بندهای ۲۲ و ۲۳</td>
+</tr>
+<tr>
+<td>۷</td>
+<td>پس‌زمینه، سرصفحه، صفحه‌ها و مقاله‌ها هماهنگ</td>
+<td>انجام، بازبینی با چشم</td>
+<td>سرصفحه‌ی مقاله در آسمان محو می‌شود؛ بند ۳۱</td>
+</tr>
+<tr>
+<td>۸</td>
+<td>درست در نمایشگرهای مختلف</td>
+<td>انجام و آزموده</td>
+<td>۳۹۰، ۱۳۶۶، ۱۴۴۰ و ۱۹۲۰ پیکسل؛ بدون پیمایش افقی</td>
+</tr>
+<tr>
+<td>۹</td>
+<td>انیمیشن‌ها و تعامل‌ها قابل استفاده</td>
+<td>انجام و آزموده</td>
+<td><code>interact.mjs</code>: ۱۱۳ کنترل آزمایشگاه‌ها و ویژگی‌های سراسری</td>
+</tr>
+<tr>
+<td>۱۰</td>
+<td>کیفیت سه‌بعدی و گرافیک</td>
+<td>انجام، بازبینی با چشم</td>
+<td>کره با خط ساحل و نور شهرهای واقعی؛ لبه‌ی نرم؛ در دستگاه کند تصویر ثابت (بند ۲۵)</td>
+</tr>
+<tr>
+<td>۱۱</td>
+<td>ساختار فنی و قالب استاندارد</td>
+<td>انجام و آزموده</td>
+<td>W3C: ۰ خطا؛ CSS: ۰ خطا</td>
+</tr>
+<tr>
+<td>۱۲</td>
+<td>مشکلات شناخته‌شده برطرف شده باشند</td>
+<td>انجام</td>
+<td>۱۴ یافته‌ی ممیزی و یافته‌های Lighthouse رفع شد. آنچه مانده در <a href="../../DEVELOPMENT_ROADMAP.md">نقشه‌ی راه</a> فهرست شده است</td>
+</tr>
+<tr>
+<td>۱۳</td>
+<td>آزمون‌های قابل اجرا موفق</td>
+<td>انجام و آزموده</td>
+<td><a href="06-qa-report.html">گزارش QA</a></td>
+</tr>
+<tr>
+<td>۱۴</td>
+<td>محدودیت‌های واقعی بلاگفا مشخص</td>
+<td>انجام</td>
+<td><a href="01-install-guide.html">راهنمای نصب</a> و <a href="08-final-report.html">گزارش نهایی</a></td>
+</tr>
+<tr>
+<td>۱۵</td>
+<td>فایل‌های نهایی و راهنمای نصب کامل</td>
+<td>انجام</td>
+<td>پوشه‌ی تحویل، کیت نصب و راهنماها</td>
+</tr>
+</tbody></table></div>
+<h2 id="پ-آنچه-فقط-شما-میتوانید-انجام-دهید">پ. آنچه فقط شما می‌توانید انجام دهید</h2>
+<p>۱. ساختن وبلاگ در بلاگفا با حساب خودتان.
+۲. جای‌گذاری قالب (با کیت نصب) و دیدن نتیجه.
+۳. انتشار ده مقاله به ترتیب ۰۱ تا ۱۰ و ساختن صفحه‌ی «درباره».
+۴. دیدن وبلاگ روی گوشی خودتان.
+۵. اختیاری: روی رایانه‌ی خودتان <code>npm run links:external</code> تا همه‌ی ۱۰۵ نشانی بیرونی آزموده شوند.</p>
+
+<nav class="docs" aria-label="همه‌ی راهنماها"><ol><li><a href="01-install-guide.html">راهنمای نصب گام‌به‌گام آینده‌نگار روی بلاگفا</a></li><li><a href="02-settings-guide.html">تنظیمات پیشنهادی وبلاگ</a></li><li><a href="03-publishing-guide.html">راهنمای انتشار مقاله‌ها</a></li><li><a href="04-sources-report.html">گزارش پژوهش و منابع</a></li><li><a href="05-decision-log.html">دفتر تصمیم‌ها (Decision Log)</a></li><li><a href="06-qa-report.html">گزارش کنترل کیفیت (QA)</a></li><li><a href="07-traceability-matrix.html" aria-current="page">ماتریس ردیابی الزامات</a></li><li><a href="08-final-report.html">گزارش نهایی پروژه‌ی آینده‌نگار</a></li><li><a href="09-audit-report.html">گزارش ممیزی کامل پروژه</a></li></ol></nav>
+</main>
+</body>
+</html>
