@@ -1,9 +1,10 @@
 /* آینده‌نگار · hero globe
    WebGL1 Earth seen from orbit at sunrise: real coastlines (Natural Earth), real city lights
-   (GeoNames cities ≥ 150k), clouds baked once into a texture, analytic atmosphere, a sun that
+   (GeoNames cities ≥ 100k, the set in data-geo.js), clouds baked once into a texture, analytic atmosphere, a sun that
    rises over the limb, and illustrative data arcs between cities drawn on a 2D overlay.
    Progressive: WebGL → static Canvas2D night globe → CSS gradient only.
-   Pauses off-screen and in hidden tabs; lowers its resolution when frames get slow. */
+   Pauses off-screen and in hidden tabs; lowers its resolution when frames get slow, and keeps a still
+   picture (as with reduced motion) where the device cannot draw it smoothly. */
 (function () {
   'use strict';
   var W = window, D = document, AN = W.AN || (W.AN = {});
@@ -78,14 +79,19 @@
   function layout() {
     var r = host.getBoundingClientRect(), w = Math.max(1, r.width), h = Math.max(1, r.height);
     st.w = w; st.h = h;
-    if (w < 760) { st.R = Math.min(w * 0.66, h * 0.42); st.cx = w * 0.5; st.cy = h - st.R * 0.58; }
+    // One column (≤ 860px, as in 07-responsive.css): the Earth rises as a horizon across the lower part of the
+    // first screen, its limb behind the buttons, instead of sitting at the bottom of a hero taller than the
+    // screen, where the stats card and the hero's fade-out hid it.
+    if (w <= 860) { var vh = Math.min(h, W.innerHeight || h); st.R = Math.min(w * 0.92, vh * 0.6); st.cx = w * 0.5; st.cy = vh * 0.62 + st.R; }
     else { st.R = Math.min(w * 0.27, h * 0.43); st.cx = w * 0.29; st.cy = h * 0.53; }
   }
 
   /* ---------- textures built on the client from vector data ---------- */
   function makeCanvas(w, h) { var c = D.createElement('canvas'); c.width = w; c.height = h; return c; }
+  // the map layers are read back with getImageData: keep them in main memory, so reading them does not wait for the GPU
+  function cpu2d(c) { return c.getContext('2d', { willReadFrequently: true }); }
   function landCanvas(TW, TH) {
-    var c = makeCanvas(TW, TH), x = c.getContext('2d'), sx = TW / (360 / G.q), sy = TH / (180 / G.q);
+    var c = makeCanvas(TW, TH), x = cpu2d(c), sx = TW / (360 / G.q), sy = TH / (180 / G.q);
     x.fillStyle = '#000'; x.fillRect(0, 0, TW, TH); x.fillStyle = '#fff'; x.beginPath();
     for (var i = 0; i < LAND.length; i++) {
       var a = LAND[i]; x.moveTo(a[0] * sx, a[1] * sy);
@@ -96,18 +102,18 @@
     return c;
   }
   function blurred(src, f) {
-    var w = Math.max(8, src.width / f | 0), h = Math.max(4, src.height / f | 0), s = makeCanvas(w, h), sx = s.getContext('2d');
+    var w = Math.max(8, src.width / f | 0), h = Math.max(4, src.height / f | 0), s = makeCanvas(w, h), sx = cpu2d(s);
     sx.imageSmoothingEnabled = true; sx.drawImage(src, 0, 0, w, h);
-    var s2 = makeCanvas(w >> 1 || 1, h >> 1 || 1), s2x = s2.getContext('2d'); s2x.drawImage(s, 0, 0, s2.width, s2.height);
-    var o = makeCanvas(src.width, src.height), ox = o.getContext('2d');
+    var s2 = makeCanvas(w >> 1 || 1, h >> 1 || 1), s2x = cpu2d(s2); s2x.drawImage(s, 0, 0, s2.width, s2.height);
+    var o = makeCanvas(src.width, src.height), ox = cpu2d(o);
     ox.imageSmoothingEnabled = true; if ('imageSmoothingQuality' in ox) ox.imageSmoothingQuality = 'high';
     ox.globalAlpha = 0.5; ox.drawImage(s, 0, 0, o.width, o.height); ox.drawImage(s2, 0, 0, o.width, o.height);
     return o;
   }
   function lightsCanvas(TW, TH) {
-    var c = makeCanvas(TW, TH), x = c.getContext('2d'), k = TW / 2048;
+    var c = makeCanvas(TW, TH), x = cpu2d(c), k = TW / 2048;
     x.fillStyle = '#000'; x.fillRect(0, 0, TW, TH);
-    var sp = makeCanvas(32, 32), s = sp.getContext('2d'), g = s.createRadialGradient(16, 16, 0, 16, 16, 16);
+    var sp = makeCanvas(32, 32), s = cpu2d(sp), g = s.createRadialGradient(16, 16, 0, 16, 16, 16);
     g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.3, 'rgba(255,255,255,.55)'); g.addColorStop(0.65, 'rgba(255,255,255,.14)'); g.addColorStop(1, 'rgba(255,255,255,0)');
     s.fillStyle = g; s.fillRect(0, 0, 32, 32);
     x.globalCompositeOperation = 'lighter';
@@ -125,7 +131,7 @@
     [83, 39, 7, 2.6, .9], [104, 42.5, 11, 4, .75], [131, -25, 15, 8, .85], [20, -24, 6.5, 6, .65], [-70, -22, 2.6, 9, .8],
     [-112, 32, 7, 5, .6], [-69, -45, 4, 6, .5], [46, 7, 5, 5, .55]];
   function aridCanvas(TW, TH) {
-    var c = makeCanvas(TW, TH), x = c.getContext('2d');
+    var c = makeCanvas(TW, TH), x = cpu2d(c);
     x.fillStyle = '#000'; x.fillRect(0, 0, TW, TH); x.globalCompositeOperation = 'lighter';
     ARID.forEach(function (a) {
       var px = (a[0] + 180) / 360 * TW, py = (90 - a[1]) / 180 * TH, rx = a[2] / 360 * TW * 1.35, ry = a[3] / 180 * TH * 1.35;
@@ -138,8 +144,8 @@
   }
   function packMap(TW, TH) {
     var land = landCanvas(TW, TH), coast = blurred(land, 10), lights = lightsCanvas(TW, TH), arid = aridCanvas(TW, TH);
-    var L = land.getContext('2d').getImageData(0, 0, TW, TH).data, C = coast.getContext('2d').getImageData(0, 0, TW, TH).data;
-    var Li = lights.getContext('2d').getImageData(0, 0, TW, TH).data, Ar = arid.getContext('2d').getImageData(0, 0, TW, TH).data;
+    var L = cpu2d(land).getImageData(0, 0, TW, TH).data, C = cpu2d(coast).getImageData(0, 0, TW, TH).data;
+    var Li = cpu2d(lights).getImageData(0, 0, TW, TH).data, Ar = cpu2d(arid).getImageData(0, 0, TW, TH).data;
     var out = new ImageData(TW, TH), o = out.data;
     for (var i = 0; i < o.length; i += 4) { o[i] = L[i]; o[i + 1] = C[i]; o[i + 2] = Li[i]; o[i + 3] = Ar[i]; }
     return { img: out, land: land, lights: lights };
@@ -176,16 +182,18 @@
     ' vec2 fc=gl_FragCoord.xy;vec3 ro=vec3(0.,0.,uD);vec3 rd=normalize(vec3(fc-uGlobe.xy,-uF));',
     ' float b=dot(ro,rd),c=dot(ro,ro)-1.,h=b*b-c,sd=dot(rd,uSun);',
     ' vec3 col=vec3(0.);',
+    // limb coverage over ~1.2 px: the planet edge stays smooth even when the canvas is scaled down on slow devices
+    ' float dm=sqrt(max(dot(ro,ro)-b*b,0.)),aa=uD/uF*1.2,cov=smoothstep(1.+aa,1.-aa,dm);',
     // background: stars and a faint galactic band
-    ' if(h<=0.){',
+    ' if(cov<1.){',
     '  vec2 sv=lluv(rd)*vec2(6.2831853*uF/(6.*uDpr),3.1415927*uF/(6.*uDpr));vec2 ce=floor(sv);float r=h12(ce);',
     '  if(r>.986){float d=length(fract(sv)-vec2(h12(ce+1.3),h12(ce+7.1))*.8-.1);float tw=.7+.3*sin(uT*(1.+r*3.)+r*40.);',
     '   col+=vec3(.85,.9,1.)*smoothstep(.16,0.,d)*(r-.986)*70.*tw;}',
     '  vec3 bn=normalize(vec3(.35,.86,-.36));float band=exp(-pow(dot(rd,bn)/.2,2.));',
     '  col+=vec3(.35,.42,.7)*band*texture2D(uDet,lluv(rd.zxy)*vec2(2.,1.)).g*.07;',
     ' }',
-    ' if(h>0.){',
-    '  float t=-b-sqrt(h);vec3 n=normalize(ro+rd*t);vec3 q=uR*n;vec2 uv=lluv(q);',
+    ' if(cov>0.){',
+    '  float t=-b-sqrt(max(h,0.));vec3 n=normalize(ro+rd*t);vec3 q=uR*n;vec2 uv=lluv(q);',
     '  vec4 m=texture2D(uMap,uv);vec4 d=texture2D(uDet,uv);vec4 dc=texture2D(uDet,uv+vec2(uCloud,0.));',
     '  float ndl=dot(n,uSun),lam=max(ndl,0.),day=smoothstep(-.1,.2,ndl),lat=asin(clamp(q.y,-1.,1.)),lon=atan(q.x,q.z);',
     '  float land=smoothstep(.4,.6,m.r+(d.b-.5)*.22);',
@@ -203,18 +211,19 @@
     '  vec3 lit=mix(dc3,cc,cl*.9);',
     '  float e=m.b,sp=smoothstep(.5,.85,d.b+e*.18);float li=(e*.12+e*sp*1.5+pow(e,3.)*2.2)*uLife;',
     '  vec3 nt=(vec3(1.,.66,.3)*li*(1.-cl*.7)+mix(vec3(.0007,.0013,.0035),vec3(.0022,.0024,.003),land)+vec3(.0015,.002,.003)*cl)*(1.-day);',
-    '  col=lit*day+nt;',
+    '  vec3 pl=lit*day+nt;',
     '  float fr=pow(1.-max(dot(n,v),0.),2.6);',
-    '  col+=fr*mix(vec3(1.,.42,.16),vec3(.3,.56,1.),smoothstep(.0,.45,ndl))*smoothstep(-.3,.35,ndl)*.95+fr*fr*vec3(.02,.05,.06)*(1.-day);',
+    '  pl+=fr*mix(vec3(1.,.42,.16),vec3(.3,.56,1.),smoothstep(.0,.45,ndl))*smoothstep(-.3,.35,ndl)*.95+fr*fr*vec3(.02,.05,.06)*(1.-day);',
+    '  col=mix(col,pl,cov);',
     ' }',
     // atmosphere halo around the limb, warm toward the sun (forward scattering)
-    ' float dm=sqrt(max(dot(ro,ro)-b*b,0.));vec3 pc=ro-rd*b;float sa=dot(normalize(pc),uSun);',
-    ' float hal=h>0.?exp(-(1.-dm)/.012)*.6:exp(-(dm-1.)/.028);vec2 s2=normalize(uSun.xy+vec2(1e-5));float wv=dot(normalize(pc.xy+vec2(1e-5)),s2);hal*=.1+.9*pow(max(wv*.5+.5,0.),4.);',
+    ' vec3 pc=ro-rd*b;float sa=dot(normalize(pc),uSun);',
+    ' float hal=mix(exp(-max(dm-1.,0.)/.028),exp(-max(1.-dm,0.)/.012)*.6,cov);vec2 s2=normalize(uSun.xy+vec2(1e-5));float wv=dot(normalize(pc.xy+vec2(1e-5)),s2);hal*=.1+.9*pow(max(wv*.5+.5,0.),4.);',
     ' vec3 hc=mix(vec3(1.,.45,.17),vec3(.33,.6,1.),smoothstep(-.05,.45,sa))*smoothstep(-.42,.08,sa);',
     ' float mie=pow(max(sd,0.),40.)*1.8+pow(max(sd,0.),8.)*.12;',
     ' col+=hal*(hc*.9+vec3(1.,.72,.42)*mie);',
     // the sun and its lens streak (hidden when the planet covers it)
-    ' float occ=h>0.?0.:1.,s=max(sd,0.);',
+    ' float occ=1.-cov,s=max(sd,0.);',
     ' col+=vec3(1.,.93,.82)*occ*(pow(s,9000.)*30.+pow(s,500.)*.7+pow(s,60.)*.06);',
     ' vec2 ds=fc-uSunPx.xy;col+=vec3(1.,.78,.5)*uSunPx.z*(exp(-abs(ds.y)/(2.2*uDpr))*exp(-abs(ds.x)/(uRes.x*.22))*.35+exp(-length(ds)/(60.*uDpr))*.22);',
     ' col=aces(col*1.08);col=pow(col,vec3(1./2.2));col+=(h12(fc+fract(uT))-.5)/255.;',
@@ -224,15 +233,17 @@
 
   /* ---------- WebGL engine ---------- */
   var gl, cv, ov, ox, prog, uni = {}, texMap, texDet, raf = 0, last = 0, scale = LOWEND ? 0.62 : 0.85, ftAcc = 0, ftN = 0, ok = false;
+  var SOFT = false, gaps = [], seen = 0, checks = 0;
   function sh(type, src, prec) {
     var s = gl.createShader(type); gl.shaderSource(s, (type === gl.FRAGMENT_SHADER ? 'precision ' + prec + ' float;\n' : '') + src); gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { throw new Error(gl.getShaderInfoLog(s)); }
     return s;
   }
+  // Every status query waits for the GPU to finish compiling, so the program is linked first and asked once;
+  // the shaders' own logs are read only when linking failed.
   function program(fs, prec) {
-    var p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, VS, prec)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs, prec));
-    gl.bindAttribLocation(p, 0, 'p'); gl.linkProgram(p);
-    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+    var v = sh(gl.VERTEX_SHADER, VS, prec), f = sh(gl.FRAGMENT_SHADER, fs, prec), p = gl.createProgram();
+    gl.attachShader(p, v); gl.attachShader(p, f); gl.bindAttribLocation(p, 0, 'p'); gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getShaderInfoLog(f) || gl.getShaderInfoLog(v) || gl.getProgramInfoLog(p));
     return p;
   }
   function tex(w, h, data) {
@@ -248,14 +259,20 @@
     cv = D.createElement('canvas'); cv.className = 'an-globe-gl'; cv.setAttribute('aria-hidden', 'true');
     gl = cv.getContext('webgl', { antialias: false, alpha: false, depth: false, stencil: false, powerPreference: 'high-performance', preserveDrawingBuffer: false });
     if (!gl) return false;
+    // A software renderer (no usable GPU: SwiftShader, llvmpipe, Windows WARP) runs this shader on the CPU at a
+    // few frames a second and holds the rest of the page back with it. There the globe is drawn once, still.
+    var rn = String(gl.getParameter(gl.RENDERER)), dbg = /^webkit webgl$/i.test(rn) && gl.getExtension('WEBGL_debug_renderer_info');
+    if (dbg) rn = String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL));
+    SOFT = AN.gpu === 'soft' || /swiftshader|llvmpipe|softpipe|software|basic render|warp/i.test(rn);
+    if (SOFT) { scale = Math.min(scale, 0.62); goStill(); }
     var hp = gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT), prec = hp && hp.precision > 0 ? 'highp' : 'mediump';
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-    var TW = LOWEND ? 1024 : 2048, TH = TW / 2, mp = packMap(TW, TH);
+    var TW = LOWEND || SOFT ? 1024 : 2048, TH = TW / 2, mp = packMap(TW, TH);
     texMap = tex(0, 0, mp.img);
     // bake procedural clouds/terrain detail once
-    var BW = LOWEND ? 1024 : 2048, BH = BW / 2, bp = program(BAKE, prec);
+    var BW = LOWEND || SOFT ? 1024 : 2048, BH = BW / 2, bp = program(BAKE, prec);
     texDet = tex(BW, BH, null);
     var fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texDet, 0);
@@ -363,8 +380,21 @@
   }
 
   /* ---------- loop, interaction, visibility, adaptivity ---------- */
+  /* The time spent in drawGL is only the CPU side: when the GPU cannot keep up, what grows is the gap
+     between frames. So the gaps are watched too. After a short warm-up (the page is still building),
+     a median gap over 50 ms (under 20 frames a second) first drops the resolution; if the frames stay
+     that slow, the globe keeps a still picture, so scrolling and the rest of the page stay smooth. */
+  function goStill() { RM = true; st.rise = 1; st.alive = 1; host.classList.add('an-globe-still'); }
+  function pace(gap) {
+    if (++seen <= 8 || checks >= 2 || RM) return;
+    gaps.push(gap); if (gaps.length < 16) return;
+    var m = gaps.sort(function (a, b) { return a - b; })[8]; gaps = []; checks++;
+    if (m <= 50) { checks = 2; return; }
+    if (checks === 1 && scale > 0.5) { scale = 0.42; seen = 0; } else goStill();
+  }
   function frame(now) {
     raf = 0; if (!ok || !st.vis || D.hidden) return;
+    if (last) pace(now - last);
     var dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016); last = now;
     st.t += dt;
     if (!RM) {

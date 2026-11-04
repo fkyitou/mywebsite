@@ -19,20 +19,20 @@ const rd = (...p) => fs.readFileSync(path.join(ROOT, ...p), 'utf8');
 const wr = (rel, s) => { const f = path.join(DIST, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
 
 /* ---------- module sets ---------- */
-const CSS_ALL = ['01-base', '02-chrome', '03-home', '04-post', '05-labs', '06-dialogs', '07-responsive'];
+const CSS_ALL = ['01-base', '02-chrome', '03-home', '04-post', '05-labs', '06-dialogs', '07-responsive', '08-sky'];
 const CSS_SETS = {
   post: CSS_ALL,
-  page: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive'],
-  archive: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive']
+  page: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive', '08-sky'],
+  archive: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive', '08-sky']
 };
 const LABS = ['_ui', 'ai', 'iot', 'city', 'security', 'brain', 'space', 'arch', 'algo', 'energy', 'idea'];
 const JS_MODS = {
-  core: ['js/core.js'], covers: ['js/covers.js'], charts: ['js/charts.js'], pages: ['js/pages.js'],
+  core: ['js/core.js'], sky: ['js/sky.js'], sound: ['js/sound.js'], covers: ['js/covers.js'], charts: ['js/charts.js'], pages: ['js/pages.js'],
   globe: ['js/data-geo.js', 'js/globe.js'], labs: LABS.map(l => `js/labs/${l}.js`)
 };
 const VARIANTS = {
-  full: { post: ['core', 'covers', 'charts', 'pages', 'globe', 'labs'], page: ['core', 'charts', 'pages'], archive: ['core'] },
-  lite: { post: ['core', 'covers', 'charts', 'pages', 'labs'], page: ['core', 'charts', 'pages'], archive: ['core'] }
+  full: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'globe', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound'] },
+  lite: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound'] }
 };
 
 /* ---------- Blogfa safety: patterns that must never reach the template ---------- */

@@ -27,7 +27,8 @@
     idea: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
     algo: '<path d="M4 6h7M4 12h11M4 18h5"/><path d="m17 15 3 3-3 3M20 18h-6"/>',
     arch: '<path d="M4 21h16M7 21V9.5L12 4l5 5.5V21"/><path d="M10 21v-5h4v5M9.5 11h5"/>',
-    def: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>'
+    def: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+    cmt: '<path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 3.5v-3.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/>'
   };
   AN.icon = function (k, extra) { return '<svg viewBox="0 0 24 24" aria-hidden="true"' + (extra || '') + '>' + (IC[k] || IC.def) + '</svg>'; };
   // Article topics: key → realm colour, icon and the words that identify the article by its title.
@@ -177,7 +178,7 @@
     $$('[data-an="search"]').forEach(function (b) { b.addEventListener('click', AN.openSearch); });
   }
   function keysDlg() {
-    var html = '<div class="an-dlg-head"><h2>میان‌برهای صفحه‌کلید</h2><button type="button" class="an-dlg-x" aria-label="بستن">✕</button></div><div class="an-dlg-body"><dl class="an-keys-list"><dt><kbd>Ctrl</kbd> + <kbd>K</kbd> یا <kbd>/</kbd></dt><dd>جست‌وجو در مقاله‌ها</dd><dt><kbd>B</kbd></dt><dd>تغییر نسخه‌ی وبلاگ (A شب / B روز)</dd><dt><kbd>T</kbd></dt><dd>بازگشت به بالای صفحه</dd><dt><kbd>?</kbd></dt><dd>نمایش همین راهنما</dd><dt><kbd>Esc</kbd></dt><dd>بستن پنجره‌ها</dd></dl></div>';
+    var html = '<div class="an-dlg-head"><h2>میان‌برهای صفحه‌کلید</h2><button type="button" class="an-dlg-x" aria-label="بستن">✕</button></div><div class="an-dlg-body"><dl class="an-keys-list"><dt><kbd>Ctrl</kbd> + <kbd>K</kbd> یا <kbd>/</kbd></dt><dd>جست‌وجو در مقاله‌ها</dd><dt><kbd>B</kbd></dt><dd>تغییر نسخه‌ی وبلاگ (A شب / B روز)</dd><dt><kbd>T</kbd></dt><dd>بازگشت به بالای صفحه</dd><dt><kbd>M</kbd></dt><dd>روشن یا خاموش کردن صدا</dd><dt><kbd>?</kbd></dt><dd>نمایش همین راهنما</dd><dt><kbd>Esc</kbd></dt><dd>بستن پنجره‌ها</dd></dl></div>';
     var d = AN.dialog('an-keys', html);
     AN.openKeys = function () { AN.openDlg(d, '.an-dlg-x'); };
     $$('[data-an="keys"]').forEach(function (b) { b.addEventListener('click', AN.openKeys); });

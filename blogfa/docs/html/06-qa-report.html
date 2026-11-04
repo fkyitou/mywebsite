@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>گزارش کنترل کیفیت (QA) · آینده‌نگار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&amp;display=swap">
+<style>:root { color-scheme: dark; --bg: #04060D; --surface: #0B1222; --surface-2: #111A2F; --line: #1C2741; --text: #EDF2FA; --muted: #9AA8C0; --link: #8FD3FF; --accent: #FFB36B;
+  --font: Vazirmatn, Tahoma, "Segoe UI", sans-serif; --mono: ui-monospace, "Cascadia Code", Consolas, monospace; }
+@media (prefers-color-scheme: light) { :root { color-scheme: light; --bg: #F6F8FB; --surface: #FFFFFF; --surface-2: #EEF2F8; --line: #D8E0EC; --text: #0E1626; --muted: #4A5872; --link: #0B5CAD; --accent: #A04A00; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.95; direction: rtl; }
+.top { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); font-size: 14px; }
+.top b { font-weight: 800; margin-inline-end: auto; }
+main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 1.9rem; line-height: 1.5; margin: .4em 0 .6em; }
+h2 { font-size: 1.35rem; margin: 2em 0 .6em; padding-top: .6em; border-top: 1px solid var(--line); }
+h3 { font-size: 1.1rem; margin: 1.6em 0 .4em; }
+a { color: var(--link); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+code { font-family: var(--mono); font-size: .88em; padding: 1px 6px; border-radius: 6px; background: var(--surface-2); direction: ltr; unicode-bidi: isolate; }
+pre { direction: ltr; text-align: left; overflow-x: auto; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); line-height: 1.6; }
+pre code { padding: 0; background: none; }
+.tbl { overflow-x: auto; margin: 1em 0; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { padding: 8px 12px; border-bottom: 1px solid var(--line); text-align: right; vertical-align: top; }
+th { background: var(--surface-2); font-weight: 700; }
+tr:last-child td { border-bottom: 0; }
+blockquote { margin: 1em 0; padding: 4px 16px; border-inline-start: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; color: var(--muted); }
+li { margin: .2em 0; }
+nav.docs { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+nav.docs ol { padding-inline-start: 1.4em; }
+nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration: none; }</style>
+</head>
+<body>
+<header class="top"><b>آینده‌نگار · راهنماها</b><a href="../../kit.html">کیت نصب</a><a href="../06-qa-report.md">متن Markdown</a></header>
+<main>
+<h1 id="گزارش-کنترل-کیفیت-qa">گزارش کنترل کیفیت (QA)</h1>
+<p>همه‌ی آزمون‌های زیر روی نسخه‌ی نهایی قالب اجرا شده‌اند، در بامداد ۱۳ آبان ۱۴۰۵ به وقت تهران (۳ نوامبر ۲۰۲۶، ساعت ۲۳:۱۶ تا ۲۳:۲۲ به وقت جهانی). آزمون‌ها روی پیش‌نمایش محلی اجرا شده‌اند که بلاگفا را شبیه‌سازی می‌کند، نه روی خود بلاگفا؛ آنچه فقط در بلاگفای واقعی آزمودنی است، در بخش آخر آمده است.</p>
+<h2 id="خلاصه">خلاصه</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>آزمون</th>
+<th>نتیجه</th>
+<th>ابزار</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>سازگاری قالب با بلاگفا و اجرای همه‌ی صفحه‌ها</td>
+<td>۹۶ از ۹۶</td>
+<td><code>node tools/check.mjs</code></td>
+</tr>
+<tr>
+<td>دسترس‌پذیری (WCAG 2.0 و 2.1، سطح A و AA، و قواعد best-practice)</td>
+<td>۰ خطا در ۲۲ اجرا</td>
+<td><code>node tools/a11y.mjs</code> با axe-core 4.10.2</td>
+</tr>
+<tr>
+<td>صفحه‌کلید و «حرکت کمتر»</td>
+<td>۴ از ۴</td>
+<td>همان</td>
+</tr>
+<tr>
+<td>کیت نصب</td>
+<td>۲۲ از ۲۲</td>
+<td>آزمون Playwright کیت</td>
+</tr>
+<tr>
+<td>پنجره‌ی نظرها، با و بدون اجازه‌ی نمایش در قاب</td>
+<td>۲ از ۲</td>
+<td>آزمون Playwright روی سرور محلی</td>
+</tr>
+<tr>
+<td>کنتراست جفت‌های رنگ</td>
+<td>همه ≥ ۴٫۵ به ۱</td>
+<td>محاسبه با فرمول WCAG</td>
+</tr>
+</tbody></table></div>
+<p>نتیجه‌ی کامل آزمون‌ها در <code>quality/check-results.json</code> و <code>quality/a11y-results.json</code> ذخیره شده است.</p>
+<h2 id="۱-آزمون-سازگاری-و-اجرا-۹۶-آزمون">۱. آزمون سازگاری و اجرا (۹۶ آزمون)</h2>
+<p><strong>آزمون‌های ایستا (۴۶ آزمون).</strong> برای هر کدام از دو فایل <code>template.html</code> و <code>template-lite.html</code>:</p>
+<ul>
+<li>هر سه برچسب نگه‌دارنده‌ی قالب بلاگفا وجود دارد.</li>
+<li>در هر کدام از سه قالب: فقط برچسب‌ها و بلوک‌های مستند بلاگفا به کار رفته؛ بلوک‌ها درست باز و بسته شده‌اند؛ هیچ کد مسدودشدنی یا رشته‌ای که بلاگفا اشتباه بخواند نیست؛ نام سازنده هست؛ هیچ اسکریپت بیرونی نیست؛ زبان و جهت صفحه <code>fa</code> و <code>rtl</code> است.</li>
+<li>اندازه‌ی فایل ثبت می‌شود.</li>
+</ul>
+<p><strong>آزمون‌های مرورگر (۵۰ آزمون).</strong> هر صفحه‌ی پیش‌نمایش در Chromium باز می‌شود، تا پایین پیمایش می‌شود تا همه‌چیز بارگذاری شود، و این‌ها بررسی می‌شود:</p>
+<ul>
+<li>اسکریپت‌های قالب کامل اجرا شده‌اند.</li>
+<li>صفحه از کناره بیرون نمی‌زند (پیمایش افقی ندارد).</li>
+<li>آزمایشگاه مقاله ساخته شده و پیام خطا نشان نمی‌دهد.</li>
+<li>هر جدول داده نمودار دارد.</li>
+<li>نام سازنده دیده می‌شود.</li>
+<li>هیچ خطایی در کنسول مرورگر نیست.</li>
+</ul>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>نما</th>
+<th>نسخه</th>
+<th>صفحه‌ها</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>دسکتاپ ۱۴۴۰×۹۰۰</td>
+<td>A</td>
+<td>۲۱ صفحه: صفحه‌ی اول، ۱۰ مقاله، ۷ موضوع، درباره، آرشیو، فهرست نوشته‌ها</td>
+</tr>
+<tr>
+<td>دسکتاپ ۱۴۴۰×۹۰۰</td>
+<td>B</td>
+<td>۴ صفحه‌ی نمونه: صفحه‌ی اول، مقاله‌ی ۱، درباره، آرشیو</td>
+</tr>
+<tr>
+<td>موبایل ۳۹۰×۸۴۴</td>
+<td>A</td>
+<td>همان ۲۱ صفحه</td>
+</tr>
+<tr>
+<td>موبایل ۳۹۰×۸۴۴</td>
+<td>B</td>
+<td>همان ۴ صفحه‌ی نمونه</td>
+</tr>
+</tbody></table></div>
+<h2 id="۲-دسترسپذیری">۲. دسترس‌پذیری</h2>
+<p><strong>axe-core.</strong> قواعد WCAG 2.0 و 2.1 در سطح A و AA و قواعد best-practice، روی ۹ صفحه در دسکتاپ در هر دو نسخه، و صفحه‌ی اول و مقاله‌ی ۱ در موبایل در هر دو نسخه؛ روی هم ۲۲ اجرا. نتیجه‌ی نهایی: <strong>۰ خطا.</strong></p>
+<p>axe برای بعضی متن‌ها کنتراست را «نیازمند بازبینی» گزارش می‌کند، چون پس‌زمینه‌شان گرادیان، شیشه‌ی مات یا بوم نقاشی است و رنگش را نمی‌تواند حساب کند. این متن‌ها در تصویرهای آزمون با چشم بازبینی شدند، نه یکی‌یکی با ابزار. یک مورد «پیوند داخل متن» هم گزارش می‌شود که لوگوی پانویس است و پیوند داخل متن نیست؛ پیوندهای داخل متن مقاله‌ها زیرخط دارند.</p>
+<p><strong>مشکل‌هایی که پیدا و رفع شد.</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>مشکل</th>
+<th>کجا</th>
+<th>چگونه پیدا شد</th>
+<th>اصلاح</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>پیوندهای نوار بالا روی سرصفحه‌ی تیره تقریباً نامرئی (۱٫۵۷ به ۱)</td>
+<td>صفحه‌ی اول، نسخه‌ی B</td>
+<td>axe</td>
+<td>نوار تا وقتی روی سرصفحه است رنگ‌های نسخه‌ی شب را می‌گیرد</td>
+</tr>
+<tr>
+<td>نوشته‌ی انگلیسی کوچک لوگو روی سرصفحه (۲٫۸۲ به ۱)</td>
+<td>صفحه‌ی اول، نسخه‌ی B</td>
+<td>axe</td>
+<td>همان اصلاح</td>
+</tr>
+<tr>
+<td>نوشته‌ی انگلیسی کم‌رنگ زیر نام وبلاگ (۳٫۲۱ به ۱)</td>
+<td>صفحه‌ی اول، هر دو نسخه</td>
+<td>axe</td>
+<td>پررنگ‌تر شد (۵٫۸۶ به ۱)</td>
+</tr>
+<tr>
+<td>متن آبی روی دکمه‌ی نارنجی</td>
+<td>همه‌ی صفحه‌ها، نسخه‌ی B</td>
+<td>بازبینی تصویرها</td>
+<td>قاعده‌ی رنگ پیوندهای نسخه‌ی B با <code>:where()</code> سبک شد تا دکمه‌ها رنگ خودشان را نگه دارند؛ رنگ همه‌ی پیوندها و دکمه‌ها پیش و پس از اصلاح مقایسه شد و فقط در نسخه‌ی B عوض شد</td>
+</tr>
+<tr>
+<td>خط نویسنده و تاریخ روی گرادیان خاکستری</td>
+<td>سرصفحه‌ی مقاله‌ها، نسخه‌ی B</td>
+<td>بازبینی تصویرها</td>
+<td>محو شدن به رنگ روشن صفحه فقط در ۲۸ پیکسل پایانی، زیر خط نویسنده</td>
+</tr>
+<tr>
+<td>برچسب سبز «اندازه‌گیری‌شده» (۴٫۱۶ به ۱)</td>
+<td>مقاله‌ها، نسخه‌ی B</td>
+<td>axe</td>
+<td>سبز تیره‌تر (دست‌کم ۵٫۰۶ به ۱)</td>
+</tr>
+<tr>
+<td>نوشته‌ی کوچک لوگو روی نوار روشن بالای تصویر مقاله (۴٫۰۶ به ۱)</td>
+<td>مقاله‌ها، نسخه‌ی B</td>
+<td>axe، پس از اصلاح اول</td>
+<td>شیشه‌ی نوار در نسخه‌ی B متراکم‌تر شد (۵٫۶۸ به ۱)</td>
+</tr>
+<tr>
+<td>راهنمای واژه‌نامه برای صفحه‌خوان نام نداشت</td>
+<td>مقاله‌ها، هر دو نسخه</td>
+<td>axe</td>
+<td>هر واژه توضیح پنهان خودش را دارد و راهنمای شناور فقط تصویری است</td>
+</tr>
+<tr>
+<td>پنل آمار زنده نشانه‌ی «مکمل» تودرتو بود</td>
+<td>صفحه‌ی اول</td>
+<td>axe best-practice</td>
+<td>به گروه با برچسب تبدیل شد</td>
+</tr>
+<tr>
+<td>تیتر کارت‌ها در صفحه‌های فهرست از h1 به h3 می‌پرید</td>
+<td>فهرست نوشته‌ها و موضوع‌ها</td>
+<td>axe best-practice</td>
+<td>در این صفحه‌ها تیتر کارت h2 است</td>
+</tr>
+</tbody></table></div>
+<p><strong>صفحه‌کلید.</strong> در صفحه‌ی اول و مقاله‌ی ۱، اولین Tab پیوند «پرش به محتوای اصلی» را با حلقه‌ی تمرکز ۲ پیکسلی نشان می‌دهد و Enter به <code>#an-main</code> می‌رود. ۶۰ بار Tab به ترتیب از ۴۴ و ۴۹ عنصر متفاوت می‌گذرد، پس تمرکز جایی گیر نمی‌کند.</p>
+<p><strong>حرکت کمتر.</strong> با تنظیم «حرکت کمتر»، روی صفحه‌ی اول و مقاله‌ی ۶ هیچ انیمیشن CSS در حال اجرا نیست؛ در حالت عادی صفحه‌ی اول ده‌ها انیمیشن دارد. کره‌ی زمین هم نمی‌چرخد.</p>
+<p><strong>ساختار تیترها.</strong> هر صفحه دقیقاً یک h1 دیدنی دارد و تیترها پله‌ای پایین می‌آیند؛ مثلاً در مقاله‌ی ۱: یک h1، بخش‌ها با h2 و زیربخش‌ها با h3.</p>
+<h2 id="۳-کیت-نصب-۲۲-آزمون">۳. کیت نصب (۲۲ آزمون)</h2>
+<ul>
+<li>متنی که هر دکمه کپی می‌کند دقیقاً برابر فایل است: قالب کامل، قالب سبک، تکه‌ی ۲ کامل، تکه‌ی ۱ سبک، متن مقاله‌ی ۹ بدون سرآیند، عنوان و برچسب آن، و متن صفحه‌ی درباره با نام سازنده.</li>
+<li>تیک گام‌ها بعد از بارگذاری دوباره می‌ماند، شمارنده «۳ از ۱۵ گام» را درست نشان می‌دهد، وضعیت‌ها درست روشن می‌شوند و دکمه‌ی «شروع دوباره» همه را پاک می‌کند.</li>
+<li>در موبایل ۳۹۰ پیکسلی در حالت روشن و تیره پیمایش افقی و خطا ندارد.</li>
+<li>اگر مرورگر اجازه‌ی کپی ندهد، پنجره‌ای با متن انتخاب‌شده باز می‌شود تا با Ctrl+C کپی شود.</li>
+</ul>
+<h2 id="۴-پنجرهی-نظرها-۲-آزمون">۴. پنجره‌ی نظرها (۲ آزمون)</h2>
+<p>پیش‌نمایش روی یک سرور محلی اجرا شد و صفحه‌ی نظرها شبیه‌سازی شد:</p>
+<ul>
+<li>اگر صفحه‌ی نظرها اجازه‌ی نمایش در قاب بدهد، داخل پنجره دیده می‌شود.</li>
+<li>اگر اجازه ندهد (<code>X-Frame-Options: DENY</code>)، به‌جای کادر سفید خالی، پیام «صفحه‌ی نظرها داخل این پنجره باز نشد» و پیوند باز کردن نظرها در صفحه‌ی جدید نشان داده می‌شود.</li>
+</ul>
+<h2 id="۵-کنتراست-رنگها">۵. کنتراست رنگ‌ها</h2>
+<p>نسبت کنتراست جفت‌های اصلی رنگ، با فرمول WCAG. حداقل لازم برای متن معمولی ۴٫۵ به ۱ است.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>جفت رنگ</th>
+<th>نسخه‌ی A «شب»</th>
+<th>نسخه‌ی B «روز»</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>متن اصلی روی پس‌زمینه</td>
+<td>۱۸٫۰۲</td>
+<td>۱۷٫۲۸</td>
+</tr>
+<tr>
+<td>متن دوم روی پس‌زمینه</td>
+<td>۱۳٫۴۱</td>
+<td>۱۲٫۰۵</td>
+</tr>
+<tr>
+<td>متن کم‌رنگ روی پس‌زمینه</td>
+<td>۸٫۴۲</td>
+<td>۶٫۷۴</td>
+</tr>
+<tr>
+<td>متن کم‌رنگ روی کارت</td>
+<td>۷٫۷۷</td>
+<td>۷٫۱۷</td>
+</tr>
+<tr>
+<td>متن کم‌رنگ‌تر روی پس‌زمینه</td>
+<td>۶٫۳۷</td>
+<td>۵٫۳۴</td>
+</tr>
+<tr>
+<td>متن کم‌رنگ‌تر روی سطح دوم</td>
+<td>۵٫۴۵</td>
+<td>۵٫۲۴</td>
+</tr>
+<tr>
+<td>فیروزه‌ای روی پس‌زمینه</td>
+<td>۱۲٫۶۴</td>
+<td>۵٫۵۴</td>
+</tr>
+<tr>
+<td>نارنجی روی پس‌زمینه</td>
+<td>۱۱٫۴۹</td>
+<td>۴٫۷۲</td>
+</tr>
+<tr>
+<td>متن روی دکمه‌ی نارنجی</td>
+<td>۱۰٫۷۵</td>
+<td>۵٫۰۲</td>
+</tr>
+<tr>
+<td>رنگ پیوند روی پس‌زمینه</td>
+<td>۹٫۵۷</td>
+<td>۵٫۴۶</td>
+</tr>
+<tr>
+<td>رنگ پیوند روی کارت</td>
+<td>۸٫۸۳</td>
+<td>۵٫۸۱</td>
+</tr>
+<tr>
+<td>برچسب‌های سطح شاهد روی زمینه‌ی خودشان (کمترین)</td>
+<td>۶٫۵۴</td>
+<td>۴٫۵۳</td>
+</tr>
+</tbody></table></div>
+<h2 id="۶-بازبینی-ششمرحلهای">۶. بازبینی شش‌مرحله‌ای</h2>
+<p><strong>مرحله‌ی ۱، فنی.</strong> ساختار HTML با نشانه‌های <code>header</code>، <code>nav</code>، <code>main</code>، <code>article</code> و <code>footer</code>؛ CSS در هفت فایل جدا که با csso فشرده می‌شوند؛ اسکریپت‌ها در ماژول‌های جدا که با terser فشرده می‌شوند. اسکریپت ساخت هر کدی را که بلاگفا ممکن است مسدود کند یا اشتباه بخواند رد می‌کند. در ۵۰ بار باز شدن صفحه‌ها هیچ خطای کنسول دیده نشد.</p>
+<p><strong>مرحله‌ی ۲، بصری.</strong> ۵۸ تصویر از صفحه‌ها و آزمایشگاه‌ها در دسکتاپ و موبایل و هر دو نسخه، و ۷ تصویر از کیت نصب، گرفته و بازبینی شد. سه مشکل بصری نسخه‌ی B از همین راه پیدا شد (جدول بخش ۲).</p>
+<p><strong>مرحله‌ی ۳، تجربه‌ی کاربر.</strong> پیمایش با نوار بالا، فهرست «قلمروها»، جست‌وجو (Ctrl+K)، دکمه‌ی A/B، فهرست مطالب با «کپی پیوند»، مقاله‌ی قبلی و بعدی، روایت‌های مرتبط و دکمه‌ی بازگشت به بالا. صفحه‌کلید و «حرکت کمتر» آزموده شد (بخش ۲). در موبایل هیچ صفحه‌ای پیمایش افقی ندارد و همه‌ی آزمایشگاه‌ها ساخته می‌شوند.</p>
+<p><strong>مرحله‌ی ۴، محتوا.</strong> ده مقاله با ۵۷ منبع، و صفحه‌ی درباره با ۷ منبع؛ ۳۳ برچسب سطح شاهد؛ ۱۲ نمودار که منبع هر کدام در توضیح جدولش آمده است. عددهای حساس دوباره با منبع اصلی مقایسه شد و چهار عدد اصلاح شد. جزئیات در <a href="04-sources-report.html">گزارش منابع</a>.</p>
+<p><strong>مرحله‌ی ۵، عملکرد.</strong></p>
+<ul>
+<li>همه‌ی سبک‌ها و اسکریپت‌ها داخل خود صفحه‌اند. جز صفحه و فایل قلم، چیزی بارگذاری نمی‌شود.</li>
+<li>هیچ عکسی دانلود نمی‌شود. تصویر سرصفحه‌ها با کد کشیده می‌شوند و فقط وقتی به ۲۰۰ پیکسلی صفحه‌نما برسند.</li>
+<li>آزمایشگاه‌ها وقتی به ۴۰۰ پیکسلی صفحه‌نما برسند ساخته می‌شوند. وقتی از صفحه بیرون بروند یا زبانه پنهان شود، می‌خوابند. کره‌ی زمین و پنل آمار زنده هم همین‌طورند.</li>
+<li>برای دستگاه‌های ضعیف یا وقتی قالب کامل ذخیره نشود، نسخه‌ی سبک بدون کره‌ی زمین سه‌بعدی هست.</li>
+<li>سرعت در شبکه‌ی واقعی و امتیاز Lighthouse اندازه‌گیری نشده است.</li>
+</ul>
+<p><strong>مرحله‌ی ۶، پرداخت نهایی.</strong> همه‌ی اصلاح‌های بخش ۲ انجام شد و بعد همه‌ی آزمون‌ها روی نسخه‌ی نهایی دوباره اجرا شد. نتیجه‌ها همان است که در خلاصه آمده است.</p>
+<h2 id="۷-اندازهی-فایلها">۷. اندازه‌ی فایل‌ها</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>فایل</th>
+<th>اندازه</th>
+<th>CSS</th>
+<th>JavaScript</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>dist/template.html</code> (هر سه قالب)</td>
+<td>۴۶۵ کیلوبایت</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>قالب صفحه‌های اصلی و مقاله‌ها</td>
+<td>۲۸۹ کیلوبایت</td>
+<td>۶۸ کیلوبایت</td>
+<td>۱۸۶ کیلوبایت</td>
+</tr>
+<tr>
+<td>قالب آرشیو</td>
+<td>۷۶ کیلوبایت</td>
+<td>۵۳ کیلوبایت</td>
+<td>۱۶ کیلوبایت</td>
+</tr>
+<tr>
+<td>قالب صفحه‌های جداگانه</td>
+<td>۹۹ کیلوبایت</td>
+<td>۵۳ کیلوبایت</td>
+<td>۳۶ کیلوبایت</td>
+</tr>
+<tr>
+<td><code>dist/template-lite.html</code> (هر سه قالب)</td>
+<td>۴۰۹ کیلوبایت</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>قالب صفحه‌های اصلی و مقاله‌ها، نسخه‌ی سبک</td>
+<td>۲۳۴ کیلوبایت</td>
+<td>۶۸ کیلوبایت</td>
+<td>۱۳۱ کیلوبایت</td>
+</tr>
+</tbody></table></div>
+<h2 id="۸-تصویرهای-آزمون">۸. تصویرهای آزمون</h2>
+<p>در پوشه‌ی <code>quality/screenshots/</code> بسته:</p>
+<ul>
+<li><code>desktop-a-…</code> و <code>mobile-a-…</code>: صفحه‌ی اول، آرشیو، درباره، فهرست نوشته‌ها و هر ۱۰ مقاله، همراه با تصویر آزمایشگاه هر مقاله (<code>…-lab.png</code>).</li>
+<li><code>desktop-b-…</code> و <code>mobile-b-…</code>: صفحه‌ی اول، آرشیو، درباره و مقاله‌ی ۱ و آزمایشگاهش در نسخه‌ی B.</li>
+<li><code>kit/</code>: کیت نصب در دسکتاپ، موبایل روشن و تیره، و پنجره‌ی کپی دستی.</li>
+</ul>
+<h2 id="۹-آنچه-آزموده-نشد">۹. آنچه آزموده نشد</h2>
+<ul>
+<li><strong>بلاگفای واقعی.</strong> بدون حساب کاربری نمی‌شد آزمود: سقف اندازه‌ی قالب، رفتار ویرایشگر مطلب با کلاس‌ها و ویژگی‌های <code>data-</code>، نشانی <code>/page/about</code>، نمایش صفحه‌ی نظرها در قاب، و جای تبلیغ‌هایی که بلاگفا اضافه می‌کند. راهنمای نصب برای هر کدام راه بررسی و جایگزین دارد.</li>
+<li><strong>مرورگرها و دستگاه‌ها.</strong> فقط Chromium آزموده شد. Safari، Firefox و گوشی واقعی آزموده نشد؛ موبایل با شبیه‌ساز ۳۹۰×۸۴۴ آزموده شد. WebGL با پردازش نرم‌افزاری آزموده شد و روی کارت گرافیک واقعی ممکن است کمی فرق کند.</li>
+<li><strong>صفحه‌خوان.</strong> آزمون خودکار همه‌ی مشکلات دسترس‌پذیری را پیدا نمی‌کند. آزمون دستی با صفحه‌خوان انجام نشده است.</li>
+<li><strong>شبکه.</strong> سرعت بارگذاری در اینترنت ایران و دسترس‌پذیری Google Fonts اندازه‌گیری نشد. اگر قلم بارگذاری نشود، متن با Tahoma نمایش داده می‌شود.</li>
+</ul>
+<h2 id="اجرای-دوبارهی-آزمونها">اجرای دوباره‌ی آزمون‌ها</h2>
+<pre><code class="language-bash">cd blogfa
+npm install
+node tools/build.mjs        # ساخت قالب‌ها در dist/
+node tools/preview.mjs      # ساخت پیش‌نمایش در preview/
+node tools/check.mjs        # ۹۶ آزمون سازگاری و اجرا
+node tools/a11y.mjs         # آزمون دسترس‌پذیری
+</code></pre>
+<p>آزمون‌های مرورگر به Playwright نیاز دارند. اگر Playwright جهانی نصب شده است، فرمان را با <code>NODE_PATH=$(npm root -g)</code> اجرا کنید.</p>
+
+<nav class="docs" aria-label="همه‌ی راهنماها"><ol><li><a href="01-install-guide.html">راهنمای نصب گام‌به‌گام آینده‌نگار روی بلاگفا</a></li><li><a href="02-settings-guide.html">تنظیمات پیشنهادی وبلاگ</a></li><li><a href="03-publishing-guide.html">راهنمای انتشار مقاله‌ها</a></li><li><a href="04-sources-report.html">گزارش پژوهش و منابع</a></li><li><a href="05-decision-log.html">دفتر تصمیم‌ها (Decision Log)</a></li><li><a href="06-qa-report.html" aria-current="page">گزارش کنترل کیفیت (QA)</a></li></ol></nav>
+</main>
+</body>
+</html>

@@ -1,0 +1,76 @@
+/* ==========================================================================
+   Sky — the site-wide background
+   One fixed stack of layers behind every page, so the whole blog continues the hero's scene (the
+   Earth seen from orbit at sunrise) instead of sitting on a flat colour. Back to front:
+   base → dawn wash → far stars → near stars → sparkles → aurora → orbits → pointer light → grain → vignette.
+   Only transform and opacity ever change (js/sky.js drives scroll and pointer), so scrolling stays on the
+   compositor. Every glow is capped so small grey text keeps ≥ 4.5:1 wherever it lands (docs/06-qa-report.md).
+   Reduced motion: static. Article pages: dimmer, with stars kept to the margins so they never sit behind text.
+   ========================================================================== */
+.an-sky { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; background: var(--bg); }
+.an-sky > * { position: absolute; inset: 0; }
+.an-sky-base { background: radial-gradient(110% 70% at 88% -12%, rgba(255, 138, 76, .09), transparent 62%), radial-gradient(80% 70% at -5% 30%, rgba(91, 155, 255, .07), transparent 64%), linear-gradient(180deg, #04060D 0%, #050815 58%, #070B18 100%); }
+/* the dawn wash rises from the bottom of the screen as the reader travels down the page (opacity set by sky.js) */
+.an-sky-dawn { opacity: .3; background: radial-gradient(130% 55% at 50% 118%, rgba(255, 138, 76, .15), rgba(242, 95, 58, .05) 45%, transparent 72%), radial-gradient(55% 38% at 92% 108%, rgba(255, 179, 107, .12), transparent 70%); }
+/* stars: a plain CSS field first (works without JS); sky.js swaps in denser, seeded canvas tiles */
+.an-sky-stars { bottom: auto; height: calc(100% + var(--tile, 300px)); background-repeat: repeat; will-change: transform; }
+.an-sky-far { --tile: 240px; opacity: .55; background-size: 240px 240px; background-image: radial-gradient(1px 1px at 18px 32px, #fff, transparent), radial-gradient(1px 1px at 92px 140px, #dbe6ff, transparent), radial-gradient(1px 1px at 161px 66px, #fff, transparent), radial-gradient(1px 1px at 204px 191px, #ffe8cc, transparent), radial-gradient(1px 1px at 57px 211px, #fff, transparent), radial-gradient(1px 1px at 130px 22px, #cfdcff, transparent); }
+.an-sky-near { --tile: 420px; opacity: .8; background-size: 420px 420px; background-image: radial-gradient(1.4px 1.4px at 66px 88px, #fff, transparent), radial-gradient(1.6px 1.6px at 301px 52px, #ffd9ad, transparent), radial-gradient(1.3px 1.3px at 214px 270px, #fff, transparent), radial-gradient(1.5px 1.5px at 371px 361px, #c9d9ff, transparent), radial-gradient(1.2px 1.2px at 118px 352px, #fff, transparent); }
+.an-sky-spark { inset: auto; width: 14px; height: 14px; margin: -7px; opacity: 0; background: radial-gradient(closest-side, #fff, rgba(255, 226, 184, .5) 30%, transparent), linear-gradient(90deg, transparent 46%, rgba(255, 255, 255, .55) 50%, transparent 54%), linear-gradient(0deg, transparent 46%, rgba(255, 255, 255, .55) 50%, transparent 54%); animation: an-spark 9s ease-in-out infinite; }
+.an-sky-spark:nth-of-type(1) { top: 14%; left: 8%; animation-delay: -1s; }
+.an-sky-spark:nth-of-type(2) { top: 38%; left: 93%; animation-delay: -4s; animation-duration: 11s; }
+.an-sky-spark:nth-of-type(3) { top: 71%; left: 4%; animation-delay: -7s; animation-duration: 13s; }
+.an-sky-spark:nth-of-type(4) { top: 86%; left: 78%; animation-delay: -2.5s; animation-duration: 10s; }
+.an-sky-spark:nth-of-type(5) { top: 23%; left: 61%; animation-delay: -9s; animation-duration: 14s; }
+@keyframes an-spark { 0%, 70%, 100% { opacity: 0; transform: scale(.4) rotate(0); } 82% { opacity: .9; transform: scale(1) rotate(45deg); } }
+/* aurora: two slow ribbons of light in the site's two colours (atmosphere blue-cyan, sunrise orange) */
+.an-sky-aurora::before, .an-sky-aurora::after { content: ""; position: absolute; border-radius: 50%; will-change: transform; }
+.an-sky-aurora::before { width: 95vmax; height: 46vmax; top: -16vmax; left: -28vmax; background: radial-gradient(closest-side, rgba(83, 224, 224, .085), rgba(91, 155, 255, .05) 48%, transparent 100%); transform: rotate(-14deg); animation: an-aur-a 80s ease-in-out infinite alternate; }
+.an-sky-aurora::after { width: 80vmax; height: 40vmax; bottom: -18vmax; right: -24vmax; background: radial-gradient(closest-side, rgba(255, 138, 76, .075), rgba(232, 155, 255, .035) 52%, transparent 100%); transform: rotate(10deg); animation: an-aur-b 96s ease-in-out infinite alternate; }
+@keyframes an-aur-a { to { transform: translate3d(14vw, 10vh, 0) rotate(-4deg) scale(1.12); } }
+@keyframes an-aur-b { to { transform: translate3d(-12vw, -14vh, 0) rotate(16deg) scale(1.18); } }
+/* orbits: three tilted orbital planes around the sunrise corner; they turn slowly with scroll */
+.an-sky-orbits { inset: auto; top: -38vmax; right: -38vmax; width: 110vmax; height: 110vmax; opacity: .5; will-change: transform; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cg fill='none' stroke-width='1.2' vector-effect='non-scaling-stroke'%3E%3Cellipse cx='500' cy='500' rx='470' ry='150' transform='rotate(-24 500 500)' stroke='%2382B4FF' stroke-opacity='.16'/%3E%3Cellipse cx='500' cy='500' rx='380' ry='110' transform='rotate(-8 500 500)' stroke='%23FFB36B' stroke-opacity='.14' stroke-dasharray='2 9'/%3E%3Cellipse cx='500' cy='500' rx='300' ry='210' transform='rotate(31 500 500)' stroke='%2353E0E0' stroke-opacity='.1'/%3E%3C/g%3E%3Cg%3E%3Ccircle cx='72' cy='668' r='3.2' fill='%23FFB36B' fill-opacity='.7'/%3E%3Ccircle cx='846' cy='389' r='2.4' fill='%2382B4FF' fill-opacity='.7'/%3E%3Ccircle cx='303' cy='256' r='2' fill='%2353E0E0' fill-opacity='.6'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat; }
+/* pointer light (fine pointers only; sky.js moves it) */
+.an-sky-light { inset: auto; top: 0; left: 0; width: 64vmax; height: 64vmax; margin: -32vmax 0 0 -32vmax; opacity: 0; transition: opacity .8s var(--ease); background: radial-gradient(closest-side, rgba(255, 179, 107, .065), rgba(91, 155, 255, .03) 55%, transparent 100%); will-change: transform; }
+.an-sky-light.on { opacity: 1; }
+/* film grain: one small SVG noise tile, so flat areas read as a lit surface rather than empty pixels */
+.an-sky-grain { opacity: .055; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); }
+.an-sky-vignette { background: radial-gradient(130% 95% at 50% 38%, transparent 58%, rgba(0, 0, 0, .42) 100%); }
+
+/* the hero dissolves into the sky instead of ending on a hard edge */
+[data-page="home"] .an-hero { background: transparent; }
+.an-hero .an-globe, .an-hero-veil { -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 150px), transparent); mask-image: linear-gradient(180deg, #000 calc(100% - 150px), transparent); }
+
+/* article banners end the same way: art and shade fade out over the bottom padding (below the byline),
+   so the stars continue instead of stopping at a flat band */
+.an-banner { background: transparent; }
+.an-banner-art, .an-banner::after { -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 64px), transparent); mask-image: linear-gradient(180deg, #000 calc(100% - 64px), transparent); }
+
+/* reading pages: calmer sky, stars only in the margins */
+[data-page="post"] .an-sky-aurora, [data-page="page"] .an-sky-aurora { opacity: .6; }
+[data-page="post"] .an-sky-orbits { opacity: .3; }
+[data-page="post"] .an-sky-stars, [data-page="post"] .an-sky-spark { -webkit-mask-image: linear-gradient(90deg, #000 0, #000 12%, transparent 24%, transparent 76%, #000 88%); mask-image: linear-gradient(90deg, #000 0, #000 12%, transparent 24%, transparent 76%, #000 88%); }
+[data-page="post"] .an-sky-light { display: none; }
+
+/* version B «روز»: a morning sky — pale blue above, warm light at the sunrise corner, no stars */
+[data-v="b"] .an-sky-base { background: radial-gradient(110% 70% at 88% -12%, rgba(255, 179, 107, .2), transparent 62%), radial-gradient(80% 70% at -5% 30%, rgba(91, 155, 255, .1), transparent 64%), linear-gradient(180deg, #EEF3FA 0%, #F6F8FB 42%, #F8F6F3 100%); }
+[data-v="b"] .an-sky-dawn { background: radial-gradient(130% 55% at 50% 118%, rgba(255, 179, 107, .18), transparent 72%); }
+[data-v="b"] .an-sky-stars, [data-v="b"] .an-sky-spark, [data-v="b"] .an-sky-vignette { display: none; }
+[data-v="b"] .an-sky-aurora { opacity: .7; }
+[data-v="b"] .an-sky-orbits { opacity: .9; filter: saturate(1.6) brightness(.55); }
+[data-v="b"] .an-sky-grain { opacity: .03; }
+[data-v="b"] .an-sky-light { background: radial-gradient(closest-side, rgba(255, 179, 107, .12), rgba(91, 155, 255, .05) 55%, transparent 100%); }
+
+/* reduced motion: a still sky */
+[data-motion="reduce"] .an-sky *, [data-motion="reduce"] .an-sky *::before, [data-motion="reduce"] .an-sky *::after { animation: none !important; transition: none !important; }
+[data-motion="reduce"] .an-sky-spark { display: none; }
+@media (prefers-reduced-motion: reduce) { .an-sky *, .an-sky *::before, .an-sky *::after { animation: none !important; } .an-sky-spark { display: none; } }
+/* software rendering (no hardware GPU; js/sky.js sets data-gpu): the endless animations pause, since each one
+   makes the browser redraw the whole screen every frame. Entrance animations are left alone. */
+[data-gpu="soft"] .an-sky *, [data-gpu="soft"] .an-sky *::before, [data-gpu="soft"] .an-sky *::after,
+[data-gpu="soft"] .an-hud-dot, [data-gpu="soft"] .an-ht, [data-gpu="soft"] .an-rec, [data-gpu="soft"] .an-scroll-cue span,
+[data-gpu="soft"] .an-creator-mono circle, [data-gpu="soft"] .an-lab-badge i, [data-gpu="soft"] .an-snd-w { animation-play-state: paused !important; }
+/* small screens: fewer layers to composite */
+@media (max-width: 700px) { .an-sky-orbits { opacity: .32; } .an-sky-far { display: none; } .an-sky-light { display: none; } }
+@media print { .an-sky { display: none; } }

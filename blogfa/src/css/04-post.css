@@ -21,7 +21,7 @@
 .an-author { display: none; }
 
 /* ---------- single post ---------- */
-.an-banner { position: relative; isolation: isolate; min-height: min(78vh, 720px); display: grid; align-items: end; overflow: hidden; background: #04060D; color: #EDF2FA; }
+.an-banner { position: relative; isolation: isolate; min-height: var(--banner-h, min(78vh, 720px)); display: grid; align-items: end; overflow: hidden; background: #04060D; color: #EDF2FA; }
 .an-banner-art { position: absolute; inset: 0; z-index: -2; }
 .an-banner-art canvas { width: 100%; height: 100%; }
 .an-banner::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, var(--bg) 0%, rgba(4, 6, 13, .78) 32%, rgba(4, 6, 13, .15) 70%, rgba(4, 6, 13, .35) 100%); }
@@ -40,6 +40,12 @@
 [data-page="post"] .an-feed { max-width: none; padding: 0; }
 [data-page="post"] .an-post { max-width: none; margin: 0; }
 .an-js[data-page="post"] .an-post > .an-post-head { display: none; }
+/* The banner is built by script (it needs the topic and the reading time). Until it is there, the empty page-head
+   box just above the article stands in for it at the banner's height, so the article is already where it will stay.
+   Without this the article dropped 720 px when the banner appeared (Lighthouse: layout shift 0.54).
+   If the script never runs, the stand-in folds away after 8 s. */
+.an-js[data-page="post"]:not(.an-banner-on) #an-page-head { display: block; max-width: none; height: var(--banner-h, min(78vh, 720px)); margin: 0; padding: 0; animation: an-hold 0s 8s forwards; }
+@keyframes an-hold { to { height: 0; } }
 .an-article { max-width: var(--wrap); margin: 0 auto; padding: var(--s6) var(--gut) 0; display: grid; grid-template-columns: minmax(0, var(--read)) minmax(220px, 290px); justify-content: space-between; gap: var(--s8); }
 .an-article > .an-post-body { grid-column: 1; min-width: 0; }
 .an-article > .an-post-foot { grid-column: 1; }
@@ -124,6 +130,9 @@ abbr.an-term, abbr[title] { text-decoration: none; border-bottom: 1.5px dotted c
 .an-fig-raw .an-data { margin: var(--s3) 0 0; }
 .an-ch-box { width: 100%; }
 .an-ch { display: block; width: 100%; height: auto; font-family: inherit; }
+/* a chart SVG has no fill attribute, so the icon rule in 01-base (svg:not([fill]) → 1.8px currentColor stroke)
+   reached its text and bars and outlined every label; charts draw only the strokes they set themselves */
+svg.an-ch { stroke: none; }
 .an-ch text { fill: var(--muted); font-family: inherit; }
 .an-ch .an-ch-lab { fill: var(--text-2); font-weight: 600; }
 .an-ch .an-ch-val { fill: var(--text); font-weight: 800; opacity: 0; transition: opacity .5s .75s; }

@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-03T23:16:04.427Z",
+  "at": "2026-11-04T13:07:03.568Z",
   "axe": [
     {
       "run": "desktop/a index.html",
@@ -7,7 +7,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 108
+          "n": 67
         },
         {
           "id": "link-in-text-block",
@@ -22,7 +22,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 111
+          "n": 116
         },
         {
           "id": "link-in-text-block",
@@ -37,7 +37,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 108
+          "n": 102
         },
         {
           "id": "link-in-text-block",
@@ -52,7 +52,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 114
+          "n": 117
         },
         {
           "id": "link-in-text-block",
@@ -67,7 +67,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 127
+          "n": 131
         },
         {
           "id": "link-in-text-block",
@@ -82,7 +82,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 16
+          "n": 17
         }
       ],
       "passes": 40
@@ -104,7 +104,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 117
+          "n": 124
         },
         {
           "id": "link-in-text-block",
@@ -119,7 +119,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 72
+          "n": 74
         },
         {
           "id": "link-in-text-block",
@@ -130,11 +130,37 @@
     },
     {
       "run": "desktop/b index.html",
-      "violations": [],
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            "#an-bar > .an-logo[aria-label=\"آینده‌نگار، صفحه‌ی نخست\"][href=\"index.html\"] > .an-logo-txt > .an-logo-fa :: Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #edf2fa, background color: #f6f8fb, font size: 15.4pt (20.48px), font weight: bold). Expected contrast ra",
+            "#an-bar > .an-logo[aria-label=\"آینده‌نگار، صفحه‌ی نخست\"][href=\"index.html\"] > .an-logo-txt > .an-logo-en :: Fix any of the following:\n  Element has insufficient color contrast of 2.25 (foreground color: #9aa8c0, background color: #f6f8fb, font size: 7.0pt (9.28px), font weight: normal). Expected contrast ra",
+            ".an-dd-btn :: Fix any of the following:\n  Element has insufficient color contrast of 1.41 (foreground color: #c9d3e3, background color: #f6f8fb, font size: 11.3pt (15px), font weight: normal). Expected contrast rat",
+            "a[data-nav=\"titles\"] :: Fix any of the following:\n  Element has insufficient color contrast of 1.41 (foreground color: #c9d3e3, background color: #f6f8fb, font size: 11.3pt (15px), font weight: normal). Expected contrast rat",
+            "a[data-nav=\"about\"] :: Fix any of the following:\n  Element has insufficient color contrast of 1.41 (foreground color: #c9d3e3, background color: #f6f8fb, font size: 11.3pt (15px), font weight: normal). Expected contrast rat",
+            ".an-hud > span:nth-child(2) :: Fix any of the following:\n  Element has insufficient color contrast of 1.03 (foreground color: #f0f4fa, background color: #f6f8fb, font size: 9.4pt (12.48px), font weight: normal). Expected contrast r",
+            "#an-clock :: Fix any of the following:\n  Element has insufficient color contrast of 1.48 (foreground color: #ffc27a, background color: #f6f8fb, font size: 9.4pt (12.48px), font weight: bold). Expected contrast rat",
+            ".an-kicker :: Fix any of the following:\n  Element has insufficient color contrast of 1.04 (foreground color: #eef3fa, background color: #f6f8fb, font size: 9.8pt (13px), font weight: normal). Expected contrast rati",
+            ".an-hero-en :: Fix any of the following:\n  Element has insufficient color contrast of 1.02 (foreground color: #f1f5fa, background color: #f6f8fb, font size: 13.8pt (18.4px), font weight: bold). Expected contrast rat",
+            ".an-hero-slogan > span:nth-child(1) :: Fix any of the following:\n  Element has insufficient color contrast of 1.06 (foreground color: #ffffff, background color: #f6f8fb, font size: 27.0pt (36px), font weight: bold). Expected contrast ratio",
+            ".an-hero-sub :: Fix any of the following:\n  Element has insufficient color contrast of 1.04 (foreground color: #eff3fa, background color: #f6f8fb, font size: 12.8pt (17px), font weight: normal). Expected contrast rat",
+            "a[href$=\"#an-creator\"] :: Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #edf2fa, background color: #f7f8fb, font size: 11.3pt (15px), font weight: bold). Expected contrast ratio",
+            ".an-live-h :: Fix any of the following:\n  Element has insufficient color contrast of 2.81 (foreground color: #c8cdd5, background color: #73777f, font size: 9.6pt (12.8px), font weight: normal). Expected contrast ra",
+            "#an-l-sun :: Fix any of the following:\n  Element has insufficient color contrast of 4.49 (foreground color: #ffffff, background color: #73777f, font size: 11.4pt (15.2px), font weight: bold). Expected contrast rat",
+            "#an-l-orbit :: Fix any of the following:\n  Element has insufficient color contrast of 4.49 (foreground color: #ffffff, background color: #73777f, font size: 11.4pt (15.2px), font weight: bold). Expected contrast rat",
+            "#an-l-mars :: Fix any of the following:\n  Element has insufficient color contrast of 4.49 (foreground color: #ffffff, background color: #73777f, font size: 11.4pt (15.2px), font weight: bold). Expected contrast rat",
+            "div:nth-child(4) > dt :: Fix any of the following:\n  Element has insufficient color contrast of 2.67 (foreground color: #c4c8d0, background color: #73777f, font size: 9.6pt (12.8px), font weight: normal). Expected contrast ra",
+            "#an-l-mtc :: Fix any of the following:\n  Element has insufficient color contrast of 4.49 (foreground color: #ffffff, background color: #73777f, font size: 11.4pt (15.2px), font weight: bold). Expected contrast rat",
+            ".an-live-note :: Fix any of the following:\n  Element has insufficient color contrast of 2.18 (foreground color: #b0b5bd, background color: #73777f, font size: 8.6pt (11.52px), font weight: normal). Expected contrast r"
+          ]
+        }
+      ],
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 141
+          "n": 150
         },
         {
           "id": "link-in-text-block",
@@ -149,7 +175,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 110
+          "n": 114
         },
         {
           "id": "link-in-text-block",
@@ -164,7 +190,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 107
+          "n": 109
         },
         {
           "id": "link-in-text-block",
@@ -179,7 +205,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 113
+          "n": 116
         },
         {
           "id": "link-in-text-block",
@@ -194,7 +220,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 126
+          "n": 130
         },
         {
           "id": "link-in-text-block",
@@ -209,7 +235,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 16
+          "n": 17
         }
       ],
       "passes": 40
@@ -231,7 +257,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 117
+          "n": 124
         },
         {
           "id": "link-in-text-block",
@@ -246,7 +272,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 72
+          "n": 74
         },
         {
           "id": "link-in-text-block",
@@ -276,7 +302,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 161
+          "n": 163
         },
         {
           "id": "link-in-text-block",
@@ -287,11 +313,41 @@
     },
     {
       "run": "mobile/b index.html",
-      "violations": [],
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            "#an-bar > .an-logo[aria-label=\"آینده‌نگار، صفحه‌ی نخست\"][href=\"index.html\"] > .an-logo-txt > .an-logo-fa :: Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #edf2fa, background color: #f6f8fb, font size: 15.4pt (20.48px), font weight: bold). Expected contrast ra",
+            ".an-kicker :: Fix any of the following:\n  Element has insufficient color contrast of 1.04 (foreground color: #eef3fa, background color: #f6f8fb, font size: 9.8pt (13px), font weight: normal). Expected contrast rati",
+            ".an-hero-en :: Fix any of the following:\n  Element has insufficient color contrast of 1.02 (foreground color: #f1f5fa, background color: #f6f8fb, font size: 9.6pt (12.8px), font weight: bold). Expected contrast rati",
+            ".an-hero-slogan > span:nth-child(1) :: Fix any of the following:\n  Element has insufficient color contrast of 1.06 (foreground color: #ffffff, background color: #f6f8fb, font size: 18.6pt (24.8px), font weight: bold). Expected contrast rat",
+            ".an-hero-slogan > span:nth-child(2) :: Fix any of the following:\n  Element has insufficient color contrast of 1.06 (foreground color: #ffffff, background color: #f6f8fb, font size: 18.6pt (24.8px), font weight: bold). Expected contrast rat",
+            ".an-hero-slogan > span:nth-child(3) :: Fix any of the following:\n  Element has insufficient color contrast of 1.06 (foreground color: #ffffff, background color: #f6f8fb, font size: 18.6pt (24.8px), font weight: bold). Expected contrast rat",
+            ".an-hero-slogan > span:nth-child(5) :: Fix any of the following:\n  Element has insufficient color contrast of 1.48 (foreground color: #ffc27a, background color: #f6f8fb, font size: 18.6pt (24.8px), font weight: bold). Expected contrast rat",
+            ".an-hero-sub :: Fix any of the following:\n  Element has insufficient color contrast of 1.04 (foreground color: #eff3fa, background color: #f6f8fb, font size: 12.8pt (17px), font weight: normal). Expected contrast rat",
+            ".an-hero-sub > b :: Fix any of the following:\n  Element has insufficient color contrast of 1.17 (foreground color: #ffe2b8, background color: #f6f8fb, font size: 12.8pt (17px), font weight: bold). Expected contrast ratio",
+            "a[href$=\"#an-creator\"] :: Fix any of the following:\n  Element has insufficient color contrast of 1.05 (foreground color: #edf2fa, background color: #f7f8fb, font size: 11.3pt (15px), font weight: bold). Expected contrast ratio",
+            ".an-live-h :: Fix any of the following:\n  Element has insufficient color contrast of 2.81 (foreground color: #c8cdd5, background color: #73777f, font size: 9.6pt (12.8px), font weight: normal). Expected contrast ra",
+            "div:nth-child(1) > dt :: Fix any of the following:\n  Element has insufficient color contrast of 2.67 (foreground color: #c4c8d0, background color: #73777f, font size: 9.6pt (12.8px), font weight: normal). Expected contrast ra",
+            "#an-l-sun :: Fix any of the following:\n  Element has insufficient color contrast of 4.49 (foreground color: #ffffff, background color: #73777f, font size: 11.4pt (15.2px), font weight: bold). Expected contrast rat",
+            "div:nth-child(1) > dd > small :: Fix any of the following:\n  Element has insufficient color contrast of 2.32 (foreground color: #b6bbc3, background color: #73777f, font size: 9.1pt (12.16px), font weight: normal). Expected contrast r",
+            "div:nth-child(2) > dt :: Fix any of the following:\n  Element has insufficient color contrast of 2.67 (foreground color: #c4c8d0, background color: #73777f, font size: 9.6pt (12.8px), font weight: normal). Expected contrast ra",
+            "#an-l-orbit :: Fix any of the following:\n  Element has insufficient color contrast of 4.49 (foreground color: #ffffff, background color: #73777f, font size: 11.4pt (15.2px), font weight: bold). Expected contrast rat",
+            "div:nth-child(2) > dd > small :: Fix any of the following:\n  Element has insufficient color contrast of 2.32 (foreground color: #b6bbc3, background color: #73777f, font size: 9.1pt (12.16px), font weight: normal). Expected contrast r",
+            "div:nth-child(3) > dt :: Fix any of the following:\n  Element has insufficient color contrast of 2.67 (foreground color: #c4c8d0, background color: #73777f, font size: 9.6pt (12.8px), font weight: normal). Expected contrast ra",
+            "#an-l-mars :: Fix any of the following:\n  Element has insufficient color contrast of 4.49 (foreground color: #ffffff, background color: #73777f, font size: 11.4pt (15.2px), font weight: bold). Expected contrast rat",
+            "div:nth-child(3) > dd > small :: Fix any of the following:\n  Element has insufficient color contrast of 2.32 (foreground color: #b6bbc3, background color: #73777f, font size: 9.1pt (12.16px), font weight: normal). Expected contrast r",
+            "div:nth-child(4) > dt :: Fix any of the following:\n  Element has insufficient color contrast of 2.67 (foreground color: #c4c8d0, background color: #73777f, font size: 9.6pt (12.8px), font weight: normal). Expected contrast ra",
+            "#an-l-mtc :: Fix any of the following:\n  Element has insufficient color contrast of 4.49 (foreground color: #ffffff, background color: #73777f, font size: 11.4pt (15.2px), font weight: bold). Expected contrast rat",
+            ".an-live-note :: Fix any of the following:\n  Element has insufficient color contrast of 2.18 (foreground color: #b0b5bd, background color: #73777f, font size: 8.6pt (11.52px), font weight: normal). Expected contrast r"
+          ]
+        }
+      ],
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 218
+          "n": 176
         },
         {
           "id": "link-in-text-block",
@@ -306,7 +362,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 160
+          "n": 161
         },
         {
           "id": "link-in-text-block",
@@ -336,7 +392,7 @@
         "visible": true
       },
       "hash": "#an-main",
-      "distinctStops": 49,
+      "distinctStops": 48,
       "ok": true
     }
   ],
@@ -344,8 +400,8 @@
     {
       "page": "index.html",
       "attr": "reduce",
-      "running": 0,
-      "ok": true
+      "running": 1,
+      "ok": false
     },
     {
       "page": "post-6.html",

@@ -30,6 +30,14 @@
 .an-tools { display: flex; align-items: center; gap: 8px; }
 .an-search-btn kbd { margin-inline-start: 2px; }
 .an-ab-btn { font-weight: 800; font-size: .8rem; gap: 2px; }
+/* sound: waves when on, a cross when off; the on state takes the accent colour */
+.an-snd-btn svg { width: 19px; height: 19px; }
+.an-snd-btn[aria-pressed="false"] .an-snd-w, .an-snd-btn[aria-pressed="true"] .an-snd-x { display: none; }
+.an-snd-btn[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+.an-snd-btn[aria-pressed="true"] .an-snd-w { animation: an-snd-pulse 1.8s ease-in-out infinite; }
+@keyframes an-snd-pulse { 50% { opacity: .4; } }
+[data-motion="reduce"] .an-snd-btn .an-snd-w { animation: none; }
+
 .an-ab-btn span { padding: 1px 5px; border-radius: 6px; color: var(--muted); }
 [data-v="a"] .an-ab-a, [data-v="b"] .an-ab-b { background: var(--sunrise); color: var(--on-accent); }
 .an-menu-btn { display: none; }
@@ -83,6 +91,11 @@
 
 /* ---------- generic page heads (list/category/tag pages) ---------- */
 .an-page-head:empty { display: none; }
+/* On list pages the script writes this heading (category, tag or archive title). Until then the empty box keeps the
+   height it will have, so the cards below do not drop by it (layout shift 0.22 before). --head-h is set per width
+   in 07-responsive.css. If the script never runs, the box folds away after 8 s. */
+.an-js[data-page="list"] .an-page-head:empty, .an-js[data-page="titles"] .an-page-head:empty { display: block; min-height: var(--head-h, 333px); animation: an-hold-min 0s 8s forwards; }
+@keyframes an-hold-min { to { min-height: 0; } }
 .an-page-head { max-width: var(--wrap); margin: 0 auto; padding: calc(var(--bar-h) + var(--s8)) var(--gut) var(--s6); }
 .an-page-title { font-size: var(--fs-6); margin: 0 0 .3em; }
 .an-page-sub { color: var(--muted); margin: 0; max-width: 640px; }
@@ -97,5 +110,5 @@
 .an-globe-static { cursor: default; }
 .an-globe-static::before, .an-globe-static::after { content: ""; position: absolute; left: 29%; top: 53%; width: min(80vh, 54vw); aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
 .an-globe-static::before { background: radial-gradient(circle at 66% 34%, #3E70C6 0%, #1A3A6C 26%, #0B1A35 54%, #04070F 78%); box-shadow: inset -46px -24px 96px rgba(0, 0, 0, .86), 0 0 140px 12px rgba(80, 140, 255, .26), 0 0 0 1.5px rgba(140, 190, 255, .34); }
-.an-globe-static::after { background: conic-gradient(from 290deg, transparent 0 18deg, rgba(255, 196, 128, .95) 38deg, rgba(255, 138, 76, .5) 52deg, transparent 72deg); -webkit-mask: radial-gradient(circle, transparent 69%, #000 70%, #000 71.5%, transparent 74%); mask: radial-gradient(circle, transparent 69%, #000 70%, #000 71.5%, transparent 74%); filter: blur(1.5px); }
+.an-globe-static::after { background: conic-gradient(from 290deg, transparent 0 18deg, rgba(255, 196, 128, .95) 38deg, rgba(255, 138, 76, .5) 52deg, transparent 72deg); -webkit-mask-image: radial-gradient(circle, transparent 69%, #000 70%, #000 71.5%, transparent 74%); mask-image: radial-gradient(circle, transparent 69%, #000 70%, #000 71.5%, transparent 74%); filter: blur(1.5px); }
 @media (max-width: 860px) { .an-globe-static::before, .an-globe-static::after { left: 50%; top: 84%; width: 132vw; } }

@@ -30,8 +30,8 @@
   function cmtUrl(id) { var b = D.body.getAttribute('data-blog') || ''; return b && id ? '/comments/?blogid=' + encodeURIComponent(b) + '&postid=' + encodeURIComponent(id) : ''; }
   AN.cmtCount = cmtCount; AN.cmtUrl = cmtUrl;
   function fillCmt(root) {
-    $$('.an-cmt[comment-for]', root).forEach(function (s) {
-      var id = s.getAttribute('comment-for'), n = cmtCount(id), u = cmtUrl(id); if (!u) return;
+    $$('.an-cmt[data-comment-for]', root).forEach(function (s) {
+      var id = s.getAttribute('data-comment-for'), n = cmtCount(id), u = cmtUrl(id); if (!u) return;
       s.innerHTML = '<a href="' + esc(u) + '">' + (n > 0 ? AN.fa(n) + ' نظر' : 'نظر بدهید') + '</a>';
     });
   }
@@ -46,6 +46,8 @@
   }
   AN.lazyCover = lazyCover;
 
+  // «دوشنبه ۱۱ آبان ۱۴۰۵» → «۱۱ آبان ۱۴۰۵» (Blogfa's date string starts with the weekday)
+  function shortDate(d) { return String(d).replace(/^\s*(?:یک|دو|سه|چهار|پنج)?\s*\u200c?\s*شنبه\s+|^\s*جمعه\s+/, ''); }
   // hl: heading level of the card title; h3 under a section heading, h2 straight under the page h1
   function card(p, i, feat, hl) {
     hl = hl || 'h3';
@@ -53,9 +55,11 @@
     a.href = p.url; a.style.setProperty('--rc', AN.color(p.realm)); a.style.setProperty('--d', (Math.min(i, 6) * 0.06) + 's');
     a.innerHTML = '<div class="an-cover"><canvas width="640" height="400" aria-hidden="true"></canvas><span class="an-cover-n">' + AN.faDigits(String(i + 1).padStart(2, '0')) + ' · ' + esc(t ? t.n : '') + '</span>' + (p.lab ? '<span class="an-cover-lab"><i></i>آزمایشگاه زنده</span>' : '') + '</div>' +
       '<div class="an-card-in">' + (feat ? '<span class="an-feat-badge">تازه‌ترین روایت</span>' : '') +
-      '<div class="an-card-meta">' + (p.cat ? '<span class="an-chip">' + esc(p.cat) + '</span>' : '') + (p.date ? '<span>' + esc(p.date) + '</span>' : '') + (p.min ? '<span>' + AN.fa(p.min) + ' دقیقه خواندن</span>' : '') + (cmtCount(p.id) > 0 ? '<span>' + AN.fa(cmtCount(p.id)) + ' نظر</span>' : '') + '</div>' +
+      // meta stays on one line in a three-column grid: the weekday is dropped (full date in the tooltip) and the
+      // reading time is an icon + minutes; the comment count moves down beside «بخوانید»
+      '<div class="an-card-meta">' + (p.cat ? '<span class="an-chip">' + esc(p.cat) + '</span>' : '') + (p.date ? '<span title="' + esc(p.date) + '">' + esc(shortDate(p.date)) + '</span>' : '') + (p.min ? '<span class="an-card-min">' + AN.icon('def') + AN.fa(p.min) + ' دقیقه<span class="an-sr"> خواندن</span></span>' : '') + '</div>' +
       '<' + hl + ' class="an-card-t">' + esc(p.title) + '</' + hl + '>' + (p.ex ? '<p class="an-card-ex">' + esc(p.ex) + '</p>' : '') +
-      '<span class="an-card-go">بخوانید' + ARROW + '</span></div>';
+      '<span class="an-card-foot"><span class="an-card-go">بخوانید' + ARROW + '</span>' + (cmtCount(p.id) > 0 ? '<span class="an-card-cmt">' + AN.icon('cmt') + AN.fa(cmtCount(p.id)) + ' نظر</span>' : '') + '</span></div>';
     lazyCover(a.querySelector('canvas'), p.topic, p.id || i);
     return a;
   }
@@ -72,7 +76,7 @@
     if (realms && cats.length) {
       realms.innerHTML = cats.map(function (c, i) {
         var n = posts.filter(function (p) { return AN.norm(p.cat) === AN.norm(c.name); }).length;
-        return '<a class="an-realm an-rv" href="' + esc(c.url) + '" style="--rc:' + AN.color(c.realm) + ';--d:' + (i * 0.05) + 's"><span class="an-realm-ico">' + AN.icon(AN.realmIcon(c.realm)) + '</span><span><b>' + esc(c.name) + '</b><small>' + (n ? AN.fa(n) + ' مقاله در صفحه‌ی اول' : 'ورود به قلمرو') + '</small></span><span class="an-realm-go">' + ARROW + '</span></a>';
+        return '<a class="an-realm an-rv" href="' + esc(c.url) + '" style="--rc:' + AN.color(c.realm) + ';--d:' + (i * 0.05) + 's"><span class="an-realm-ico">' + AN.icon(AN.realmIcon(c.realm)) + '</span><span class="an-realm-txt"><b>' + esc(c.name) + '</b><small>' + (n ? AN.fa(n) + ' مقاله در صفحه‌ی اول' : 'ورود به قلمرو') + '</small></span><span class="an-realm-go">' + ARROW + '</span></a>';
       }).join('');
     }
     // numbers band: computed from the posts on the page
@@ -120,7 +124,7 @@
       '<div class="an-post-meta">' + (p.cat ? '<a class="an-chip" href="' + esc((art.querySelector('.an-post-cats a') || {}).href || '#') + '">' + esc(p.cat) + '</a>' : '') + (t ? '<span>' + esc(t.n) + '</span>' : '') + (p.lab ? '<span class="an-chip" style="--rc:#5FD49A">آزمایشگاه زنده دارد</span>' : '') + '</div>' +
       '<h1 class="an-post-title">' + esc(p.title) + '</h1>' +
       '<div class="an-banner-by"><span class="an-mono" aria-hidden="true">ا.ه</span><span>نوشته‌ی <b>امیرحسین همتی</b></span><span>' + esc(p.date) + '</span><span>' + AN.fa(p.min) + ' دقیقه خواندن</span><span>' + AN.fa(p.words) + ' واژه</span></div></div>';
-    main.insertBefore(ban, feed);
+    main.insertBefore(ban, feed); D.documentElement.classList.add('an-banner-on'); // same task: the band in 04-post.css gives way to the banner without a shift
     var bcv = ban.querySelector('canvas');
     function drawBanner() { if (AN.cover) AN.cover(bcv, p.topic, p.id || 1, { banner: true }); }
     drawBanner(); var rz; W.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(drawBanner, 250); });
@@ -183,7 +187,7 @@
     if (foot) foot.insertBefore(share, foot.firstChild); else wrap.appendChild(share);
     $$('[data-an="copy"]').forEach(function (b) { b.addEventListener('click', function () { var ok = function () { AN.toast('پیوند مقاله کپی شد'); }; if (navigator.clipboard && W.isSecureContext) navigator.clipboard.writeText(url).then(ok, function () { prompt('پیوند را کپی کن:', url); }); else prompt('پیوند را کپی کن:', url); }); });
     var nat = share.querySelector('[data-an="native"]'); if (nat) nat.addEventListener('click', function () { navigator.share({ title: p.title, url: url }).catch(function () {}); });
-    // comments: Blogfa fills span[comment-for]; we open its page inside a dialog (falls back to the normal link)
+    // comments: the count goes into span[data-comment-for] (from window.BlogComments); we open its page inside a dialog (falls back to the normal link)
     // comments: only when Blogfa renders the comment block for this post (comments switched on)
     var cu = art.querySelector('.an-cmt') ? cmtUrl(p.id) : '', cn = cmtCount(p.id);
     fillCmt(art);
@@ -251,9 +255,18 @@
       var root = el('div', 'an-lab-root'); box.appendChild(root);
       try { def.mount(root, { rm: AN.rm, fa: AN.fa }); } catch (e) { root.innerHTML = '<p class="an-lab-note">این آزمایشگاه در مرورگر شما اجرا نشد. نسخه‌ی تازه‌تر مرورگر را امتحان کنید.</p>'; if (W.console) console.warn('[lab ' + key + ']', e); }
     }
-    if (!('IntersectionObserver' in W)) return go();
+    if (!('IntersectionObserver' in W) || (location.hash.length > 1 && location.hash !== '#an-lab')) return go();
     var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '400px' }); io.observe(box);
+    waitingLabs.push(function () { io.disconnect(); go(); });
   };
+  // An in-page jump (table of contents, a heading link) is aimed before it starts. A lab mounted on the way
+  // grows by its whole height (about 1000 px), pushes the heading down, and the reader lands inside the lab.
+  // So a jump first builds the labs still waiting, and the browser then scrolls to where the heading really is.
+  var waitingLabs = [];
+  D.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href').length > 1 && waitingLabs.length) waitingLabs.splice(0).forEach(function (f) { f(); });
+  }, true);
 
   AN.pages = function () {
     fillCmt(D);

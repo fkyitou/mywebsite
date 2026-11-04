@@ -24,6 +24,7 @@
   .an-creator-mono { width: 140px; }
 }
 @media (max-width: 860px) {
+  :root { --head-h: 309px; }
   .an-menu-btn { display: inline-grid; }
   .an-search-btn kbd { display: none; }
   .an-nav { position: fixed; inset: var(--bar-h) 0 auto 0; flex-direction: column; align-items: stretch; gap: 2px; padding: 12px var(--gut) 20px; background: var(--surface-2); border-bottom: 1px solid var(--border-2); box-shadow: var(--shadow); transform: translateY(-12px); opacity: 0; visibility: hidden; transition: opacity var(--t-fast), transform var(--t-fast), visibility var(--t-fast); max-height: calc(100vh - var(--bar-h)); overflow: auto; }
@@ -55,7 +56,7 @@
   .an-foot-grid { grid-template-columns: 1fr; }
   .an-post-body { font-size: 1.0625rem; line-height: 2.05; }
   .an-simple, .an-myth, .an-fact, .an-keys, .an-info, .an-sources { padding: var(--s4); }
-  .an-banner { min-height: 72vh; }
+  :root { --banner-h: 72vh; --head-h: 311px; } /* stand-ins for what the script builds: 04-post.css, 02-chrome.css */
   .an-ab-btn { min-width: 36px; padding: 0 6px; }
   .an-ico-btn { height: 38px; min-width: 38px; }
   .an-lab-body { padding: var(--s4); }

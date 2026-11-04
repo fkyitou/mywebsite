@@ -19,7 +19,11 @@
   h.setAttribute('data-v', v);
   var rm = !!(w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches);
   if (rm) h.setAttribute('data-motion', 'reduce');
-  w.AN = { page: t, v: v, rm: rm, t0: Date.now() };
+  // software rendering (no hardware GPU): probed once per session by sky.js, known here from the second page on
+  var gpu = '';
+  try { gpu = sessionStorage.getItem('an-gpu') || ''; } catch (e) {}
+  if (gpu === 'soft') h.setAttribute('data-gpu', 'soft');
+  w.AN = { page: t, v: v, rm: rm, gpu: gpu, t0: Date.now() };
   // Self-check: if the end of the template never ran (e.g. Blogfa saved it cut short), say so instead of failing silently.
   w.addEventListener('load', function () {
     setTimeout(function () {

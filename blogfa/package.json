@@ -8,16 +8,24 @@
     "build": "node tools/build.mjs",
     "preview": "node tools/preview.mjs",
     "test": "node tools/check.mjs",
-    "a11y": "node tools/a11y.mjs"
+    "validate": "node tools/validate.mjs",
+    "a11y": "node tools/a11y.mjs",
+    "interact": "node tools/interact.mjs",
+    "links": "node tools/links.mjs",
+    "links:external": "node tools/links.mjs --external",
+    "qa": "npm run build && npm run preview && npm test && npm run validate && npm run a11y && npm run interact && npm run links"
   },
   "devDependencies": {
     "all-the-cities": "^3.1.0",
     "axe-core": "^4.10.2",
     "csso": "^5.0.5",
+    "csstree-validator": "^4.0.1",
     "d3-geo": "^3.1.1",
+    "marked": "18.1.1",
     "terser": "^5.51.2",
     "topojson-client": "^3.1.0",
     "vazirmatn": "^33.0.3",
+    "vnu-jar": "^26.11.4",
     "world-atlas": "^2.0.2"
   }
 }
