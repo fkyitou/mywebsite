@@ -11,7 +11,9 @@
    node tools/check.mjs --preview DIR   browser checks on another preview folder (default: preview/)
    node tools/check.mjs --cdn           the preview was made from a CDN template: serve dist/cdn/ for the CDN
                                         addresses (tools/cdnroute.mjs) and require the first address to serve both
-   node tools/check.mjs --shots DIR     where screenshots go (default: quality/screenshots) */
+   node tools/check.mjs --shots DIR     where screenshots go (default: quality/screenshots)
+   Results: quality/check-results.json (static + browser on preview/), check-cdn-results.json (with --cdn),
+   check-static-results.json (with --static), so a partial run never replaces a full one. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -57,11 +59,30 @@ function cdnTags(name, t, body) {
   ok(`${name} ${t}: loader lists the same pinned address and three backups`, !!loader && pin.test(loader[1] + 'x.js'));
 }
 
+// A CDN template must be its inline template with only the stylesheet and the script moved out: the same markup,
+// and files on jsDelivr that hold exactly the inline CSS and JS. Then what the browser, validation, accessibility
+// and link tests found on the inline preview also holds for the template that gets installed.
+const stripCode = b => b.replace(/<script\b[^>]*>[\s\S]*?<\/script>|<style\b[^>]*>[\s\S]*?<\/style>|<link\b[^>]*\bid="an-css"[^>]*>/g, '');
+const cdnText = f => fs.readFileSync(path.join(ROOT, 'dist', 'cdn', f), 'utf8').replace(/^@charset "UTF-8";/, '');
+function sameAsInline(name, t, body, inline) {
+  if (!inline) return ok(`${name} ${t}: inline counterpart found`, false);
+  ok(`${name} ${t}: markup outside the CSS and JS identical to the inline template`, stripCode(body) === stripCode(inline));
+  const fileOf = re => { const tag = (body.match(re) || [''])[0]; return path.basename((tag.match(/(?:src|href)="([^"]+)"/) || ['', ''])[1]); };
+  const css = fileOf(/<link\b[^>]*\bid="an-css"[^>]*>/), js = fileOf(/<script\b[^>]*\bid="an-main"[^>]*>/);
+  const style = (inline.match(/<style\b[^>]*>([\s\S]*?)<\/style>/) || [])[1];
+  const script = [...inline.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]).sort((a, b) => b.length - a.length)[0];
+  const has = f => f && fs.existsSync(path.join(ROOT, 'dist', 'cdn', f));
+  ok(`${name} ${t}: ${css || 'stylesheet'} holds the inline stylesheet byte for byte`, has(css) && cdnText(css) === style);
+  ok(`${name} ${t}: ${js || 'script'} holds the inline script byte for byte`, has(js) && cdnText(js) === script);
+}
+
 function staticChecks(file, cdn) {
   const name = path.basename(file);
   if (!fs.existsSync(file)) return ok(`${name} exists`, false, cdn ? 'the cdn templates are written once cdn.json names a pushed commit holding dist/cdn (see tools/build.mjs)' : 'run: node tools/build.mjs');
   const s = fs.readFileSync(file, 'utf8');
   const holders = ['PostTemplate', 'ArchiveTemplate', 'PageTemplate'].map(t => ({ t, m: s.match(new RegExp(`<blog:${t}>([\\s\\S]*?)</blog:${t}>`)) }));
+  const twin = cdn && path.join(path.dirname(file), name.replace('template-cdn', 'template'));
+  const inlineText = twin && fs.existsSync(twin) ? fs.readFileSync(twin, 'utf8') : '';
   ok(`${name}: three template holders`, holders.every(h => h.m));
   for (const { t, m } of holders) {
     if (!m) continue;
@@ -81,6 +102,7 @@ function staticChecks(file, cdn) {
     ok(`${name} ${t}: creator credit present`, credit >= 1, credit + '×');
     if (cdn) {
       cdnTags(name, t, body);
+      sameAsInline(name, t, body, (inlineText.match(new RegExp(`<blog:${t}>([\\s\\S]*?)</blog:${t}>`)) || [])[1]);
       const bytes = Buffer.byteLength(body.trim() + '\n');
       ok(`${name} ${t}: part within the ${PART_BUDGET / 1024} KB budget`, bytes <= PART_BUDGET, (bytes / 1024).toFixed(1) + ' KB');
     } else ok(`${name} ${t}: no external scripts`, !/<script[^>]+src=/i.test(body));
@@ -95,6 +117,9 @@ for (const f of ['template-cdn.html', 'template-cdn-lite.html']) staticChecks(pa
   ok('cdn: the commit in cdn.json holds every dist/cdn file byte for byte', !!c.ok, c.ok ? c.ref.slice(0, 12) : (c.missing || []).length + ' file(s) missing at ' + (c.ref || 'no ref'));
   ok('cdn: that commit is on a remote branch, so jsDelivr can read it', !!c.pushed);
   ok('cdn: no unverified templates in dist/', !c.unverifiedTemplates, c.unverifiedTemplates ? 'built with --unverified: for offline tests only' : '');
+  const files = fs.existsSync(path.join(ROOT, 'dist', 'cdn')) ? fs.readdirSync(path.join(ROOT, 'dist', 'cdn')) : [];
+  const hits = files.flatMap(f => FORBIDDEN.filter(([re]) => re.test(cdnText(f))).map(x => `${f}: ${x[1]}`));
+  ok(`cdn: none of the ${files.length} files in dist/cdn holds code Blogfa blocks`, files.length > 0 && !hits.length, hits.join(', '));
 }
 
 /* ---------- browser ---------- */
@@ -160,6 +185,7 @@ async function browserChecks() {
 }
 if (!arg('static', false)) await browserChecks();
 fs.mkdirSync(path.join(ROOT, 'quality'), { recursive: true });
-fs.writeFileSync(path.join(ROOT, 'quality', 'check-results.json'), JSON.stringify({ at: new Date().toISOString(), failed, results }, null, 2));
+const OUT = CDN_MODE ? 'check-cdn-results.json' : arg('static', false) ? 'check-static-results.json' : 'check-results.json';
+fs.writeFileSync(path.join(ROOT, 'quality', OUT), JSON.stringify({ at: new Date().toISOString(), preview: path.relative(ROOT, PREVIEW), cdn: CDN_MODE, failed, results }, null, 2));
 console.log(`\n${results.length - failed}/${results.length} checks passed`);
 process.exitCode = failed ? 1 : 0;

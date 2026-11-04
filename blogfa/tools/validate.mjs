@@ -13,6 +13,8 @@
      purpose for older Safari. Those are listed separately so nothing is hidden.
 
    node tools/validate.mjs           → quality/validation.json, exit 1 on any HTML error or real CSS error
+   node tools/validate.mjs --cdn     HTML of preview-cdn/ (made from a CDN template) and the minified stylesheets
+                                     in dist/cdn/ that jsDelivr serves → quality/validation-cdn.json
    ========================================================================== */
 import fs from 'fs';
 import path from 'path';
@@ -21,7 +23,8 @@ import { fileURLToPath } from 'url';
 import { validate } from 'csstree-validator';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PREVIEW = path.join(ROOT, 'preview');
+const CDN = process.argv.includes('--cdn');
+const PREVIEW = path.join(ROOT, CDN ? 'preview-cdn' : 'preview');
 const JAR = path.join(ROOT, 'node_modules/vnu-jar/build/dist/vnu.jar');
 const rel = f => path.relative(ROOT, f);
 
@@ -50,8 +53,9 @@ const html = { pages: pages.length, errors: msgs.filter(m => m.type === 'error')
 // -webkit-text-fill-color / -webkit-background-clip (gradient text), -webkit-font-smoothing, -webkit-tap-highlight-color
 const PREFIXED = /^-(webkit|moz)-/;
 const css = { files: 0, errors: [], prefixed: [] };
-for (const f of fs.readdirSync(path.join(ROOT, 'src/css')).filter(f => f.endsWith('.css')).sort()) {
-  const file = path.join(ROOT, 'src/css', f), src = fs.readFileSync(file, 'utf8');
+const CSS_DIR = path.join(ROOT, CDN ? 'dist/cdn' : 'src/css');
+for (const f of fs.readdirSync(CSS_DIR).filter(f => f.endsWith('.css')).sort()) {
+  const file = path.join(CSS_DIR, f), src = fs.readFileSync(file, 'utf8');
   css.files++;
   for (const e of validate(src, rel(file))) {
     const item = { file: rel(file), line: e.line, property: e.property || '', message: e.message, value: (e.css || '').slice(0, 120) };
@@ -62,7 +66,7 @@ for (const f of fs.readdirSync(path.join(ROOT, 'src/css')).filter(f => f.endsWit
 /* ---------- report ---------- */
 const out = { generated: new Date().toISOString(), validator: { html: 'vnu.jar ' + JSON.parse(fs.readFileSync(path.join(ROOT, 'node_modules/vnu-jar/package.json'), 'utf8')).version, css: 'csstree-validator ' + JSON.parse(fs.readFileSync(path.join(ROOT, 'node_modules/csstree-validator/package.json'), 'utf8')).version }, html, css };
 fs.mkdirSync(path.join(ROOT, 'quality'), { recursive: true });
-fs.writeFileSync(path.join(ROOT, 'quality/validation.json'), JSON.stringify(out, null, 1));
+fs.writeFileSync(path.join(ROOT, CDN ? 'quality/validation-cdn.json' : 'quality/validation.json'), JSON.stringify(out, null, 1));
 
 console.log(`HTML (${out.validator.html}): ${html.pages} pages · ${html.errors} errors · ${html.warnings} warnings · ${html.info} info`);
 for (const g of html.groups.filter(g => g.type !== 'info')) console.log(`  ${g.type === 'error' ? '✗' : '!'} ${g.message}  ×${g.count} on ${g.pages} page(s) — e.g. ${g.example.file}:${g.example.line}  ${g.example.extract}`);

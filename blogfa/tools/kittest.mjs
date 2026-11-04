@@ -1,6 +1,8 @@
 /* آینده‌نگار · kittest — behaviour tests of the install kit (kit.html) in a real browser (Chromium via Playwright).
    Every copy button must put exactly the right text on the clipboard (the three template parts in both versions, the
-   combined templates, the seven category names, the About page and each post), «کپی همه» must join at most four tags
+   combined templates, the seven category names, the About page and each post), every template part offered must fit
+   the 60 KB budget (the kit offers the CDN build only), the version notice and the jsDelivr test link must be there
+   and point at a real file of the pinned commit, «کپی همه» must join at most four tags
    with the ASCII comma Blogfa splits on, ticks and the version choice must survive a reload, axe must find no WCAG A/AA
    violation, and the page must not scroll sideways at phone width. The clipboard is replaced by a recorder, so the
    test reads exactly what a click would have copied.
@@ -15,6 +17,8 @@ const require = createRequire(import.meta.url);
 let chromium;
 try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require(path.join(process.env.NODE_PATH || '', 'playwright'))); }
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
+const num = t => +String(t).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/\D/g, '');
+const CDN = JSON.parse(read('dist/build-report.json')).cdn || {};
 const body = f => { const s = read(f); const i = s.indexOf('-->'); return s.slice(i + 3).trim() + '\n'; };
 let pass = 0, fail = 0;
 const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((cond ? '✓ ' : '✗ ') + name + (cond || !info ? '' : '  — ' + info)); };
@@ -34,14 +38,22 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   ok('no JS or console errors on load', errs.length === 0, errs.join(' | '));
   ok('16 steps to tick', (await p.$$('input[data-step]')).length === 16);
   const parts = [[1, '1-main-and-posts.html'], [2, '2-archive.html'], [3, '3-pages.html']];
-  for (const [part, file] of parts) ok(`full part ${part} copies dist/split/${file}`, (await click(`[data-copy="split"][data-part="${part}"]`)) === read('dist/split/' + file));
+  const version = (await p.textContent('#kit-version')) || '';
+  ok('version notice names kit 2 and the old part sizes', /نسخه‌ی ۲ کیت/.test(version) && /۲۵۳ تا ۳۰۹ کیلوبایت/.test(version), version.slice(0, 80));
+  const sizes = await p.evaluate(() => { const K = JSON.parse(document.getElementById('kit-data').textContent); return ['full', 'lite'].flatMap(v => [1, 2, 3].map(n => new Blob([K.split[v][n]]).size)); });
+  ok('every template part offered fits the 60 KB budget', sizes.every(n => n > 0 && n <= 60 * 1024), sizes.join(','));
+  for (const [part, file] of parts) ok(`full part ${part} copies dist/split-cdn/${file}`, (await click(`[data-copy="split"][data-part="${part}"]`)) === read('dist/split-cdn/' + file));
+  const sizeFull = await p.textContent('[data-size-part="1"]');
   await p.click('label:has(input[name="split-v"][value="lite"])');
-  for (const [part, file] of parts) ok(`lite part ${part} copies dist/split-lite/${file}`, (await click(`[data-copy="split"][data-part="${part}"]`)) === read('dist/split-lite/' + file));
+  for (const [part, file] of parts) ok(`lite part ${part} copies dist/split-cdn-lite/${file}`, (await click(`[data-copy="split"][data-part="${part}"]`)) === read('dist/split-cdn-lite/' + file));
   const sizeLite = await p.textContent('[data-size-part="1"]');
-  ok('size beside part 1 follows the lite choice', /۲۵/.test(sizeLite), sizeLite);
-  await p.click('details.alt summary');
-  ok('combined full copies dist/template.html', (await click('[data-copy="tpl.full"]')) === read('dist/template.html'));
-  ok('combined lite copies dist/template-lite.html', (await click('[data-copy="tpl.lite"]')) === read('dist/template-lite.html'));
+  ok('size beside part 1 is shown for both choices and within 60 KB', num(sizeFull) > 0 && num(sizeFull) <= 60 && num(sizeLite) > 0 && num(sizeLite) <= 60, sizeFull + ' / ' + sizeLite);
+  const probe = await p.getAttribute('#trouble a[href*="jsdelivr"]', 'href');
+  const pm = String(probe).match(new RegExp(`^https://cdn\\.jsdelivr\\.net/gh/${CDN.repo}@${CDN.ref}/${CDN.dir}/(an-base\\.\\w+\\.css)$`));
+  ok('troubleshooting test link is a stylesheet of the pinned commit', !!pm && fs.existsSync(path.join(ROOT, 'dist', 'cdn', pm[1])), probe);
+  await p.click('details.alt:not(#trouble) summary');
+  ok('combined full copies dist/template-cdn.html', (await click('[data-copy="tpl.full"]')) === read('dist/template-cdn.html'));
+  ok('combined lite copies dist/template-cdn-lite.html', (await click('[data-copy="tpl.lite"]')) === read('dist/template-cdn-lite.html'));
   ok('category 1 copies its exact name', (await click('[data-copy="cats.0"]')) === 'هوش مصنوعی و داده');
   ok('category 7 copies its exact name', (await click('[data-copy="cats.6"]')) === 'ایده و خلاقیت');
   ok('about page slug copies "about"', (await click('[data-copy="page.slug"]')) === 'about');

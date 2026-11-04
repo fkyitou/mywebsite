@@ -3,14 +3,18 @@
    Runs axe-core (WCAG 2.0/2.1 A and AA rules plus axe best practices) on the preview in both versions, then checks the skip
    link, keyboard flow and reduced motion. Writes quality/a11y-results.json; exits 1 on any violation.
 
-   node tools/preview.mjs && node tools/a11y.mjs        (needs Playwright, like tools/check.mjs) */
+   node tools/preview.mjs && node tools/a11y.mjs        (needs Playwright, like tools/check.mjs)
+   node tools/a11y.mjs --cdn    on preview-cdn/ (made from a CDN template), the CDN addresses answered from dist/cdn/
+                                by tools/cdnroute.mjs; writes quality/a11y-cdn-results.json */
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { routeCdn } from './cdnroute.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PREVIEW = path.join(ROOT, 'preview');
+const CDN = process.argv.includes('--cdn');
+const PREVIEW = path.join(ROOT, CDN ? 'preview-cdn' : 'preview');
 const require = createRequire(import.meta.url);
 let chromium;
 try { chromium = require('playwright').chromium; } catch (e) { console.log('Playwright not found; run with NODE_PATH=$(npm root -g)'); process.exit(1); }
@@ -29,6 +33,7 @@ let problems = 0;
 
 for (const [vn, vp, mobile, v, f] of RUNS) {
   const ctx = await browser.newContext({ viewport: vp, isMobile: mobile, hasTouch: mobile, locale: 'fa-IR' });
+  if (CDN) await routeCdn(ctx);
   await ctx.addInitScript(ver => { try { localStorage.setItem('an-v', ver); } catch (e) {} }, v);
   const p = await ctx.newPage();
   await p.goto(url(f), { waitUntil: 'load' }); await p.waitForTimeout(600);
@@ -52,6 +57,7 @@ for (const [vn, vp, mobile, v, f] of RUNS) {
 // keyboard: the first Tab shows the skip link, Enter jumps to main, Tab keeps moving (no trap)
 for (const f of ['index.html', 'post-1.html']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  if (CDN) await routeCdn(ctx);
   const p = await ctx.newPage(); await p.goto(url(f)); await p.waitForTimeout(500);
   await p.keyboard.press('Tab'); await p.waitForTimeout(350);
   const first = await p.evaluate(() => { const a = document.activeElement, cs = getComputedStyle(a), r = a.getBoundingClientRect(); return { cls: a.className, outline: cs.outlineStyle + ' ' + cs.outlineWidth, visible: r.width > 0 && r.height > 0 && r.top >= 0 && r.top < innerHeight }; });
@@ -69,6 +75,7 @@ for (const f of ['index.html', 'post-1.html']) {
 // reduced motion: the flag is set and no CSS animation keeps running
 for (const f of ['index.html', 'post-6.html']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+  if (CDN) await routeCdn(ctx);
   const p = await ctx.newPage(); await p.goto(url(f)); await p.waitForTimeout(1200);
   const m = await p.evaluate(() => ({ attr: document.documentElement.getAttribute('data-motion'), running: document.getAnimations().filter(a => a.playState === 'running').length }));
   const ok = m.attr === 'reduce' && m.running === 0;
@@ -80,6 +87,6 @@ for (const f of ['index.html', 'post-6.html']) {
 
 await browser.close();
 fs.mkdirSync(path.join(ROOT, 'quality'), { recursive: true });
-fs.writeFileSync(path.join(ROOT, 'quality', 'a11y-results.json'), JSON.stringify(report, null, 2));
+fs.writeFileSync(path.join(ROOT, 'quality', CDN ? 'a11y-cdn-results.json' : 'a11y-results.json'), JSON.stringify(report, null, 2));
 console.log(problems ? `\n${problems} problem(s)` : `\nall ${RUNS.length} axe runs clean; keyboard and reduced-motion checks passed`);
 process.exit(problems ? 1 : 0);

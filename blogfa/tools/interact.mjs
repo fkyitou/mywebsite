@@ -12,14 +12,18 @@
    Safari are not installed here.
 
    node tools/interact.mjs            → quality/interact-results.json, exit 1 on any failure
+   node tools/interact.mjs --cdn      the same on preview-cdn/ (made from a CDN template), the CDN addresses answered
+                                      from dist/cdn/ by tools/cdnroute.mjs → quality/interact-cdn-results.json
    ========================================================================== */
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
+import { routeCdn } from './cdnroute.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PREVIEW = path.join(ROOT, 'preview');
+const CDN = process.argv.includes('--cdn');
+const PREVIEW = path.join(ROOT, CDN ? 'preview-cdn' : 'preview');
 const require = createRequire(import.meta.url);
 let chromium;
 try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require(path.join(process.env.NODE_PATH || '', 'playwright'))); }
@@ -41,6 +45,7 @@ async function settle(page) {
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 async function open(file, o = {}) {
   const ctx = await browser.newContext({ viewport: o.viewport || { width: 1366, height: 768 }, isMobile: !!o.mobile, hasTouch: !!o.mobile, locale: 'fa-IR', reducedMotion: o.reduce ? 'reduce' : 'no-preference' });
+  if (CDN) await routeCdn(ctx);
   if (o.v) await ctx.addInitScript(v => { try { localStorage.setItem('an-v', v); } catch (e) {} }, o.v);
   const page = await ctx.newPage(), errors = [], failedLocal = [];
   page.on('pageerror', e => errors.push('pageerror: ' + String(e).slice(0, 200)));
@@ -240,6 +245,6 @@ if (all.length) ok('pages', `all ${all.length} preview pages open with no JS err
 
 await browser.close();
 fs.mkdirSync(path.join(ROOT, 'quality'), { recursive: true });
-fs.writeFileSync(path.join(ROOT, 'quality/interact-results.json'), JSON.stringify({ generated: new Date().toISOString(), browser: 'Chromium (Playwright), software WebGL', passed: results.length - failed, failed, results, labs: labDetail }, null, 1));
+fs.writeFileSync(path.join(ROOT, CDN ? 'quality/interact-cdn-results.json' : 'quality/interact-results.json'), JSON.stringify({ generated: new Date().toISOString(), browser: 'Chromium (Playwright), software WebGL', passed: results.length - failed, failed, results, labs: labDetail }, null, 1));
 console.log(`\n${results.length - failed}/${results.length} passed`);
 process.exit(failed ? 1 : 0);

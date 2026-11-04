@@ -1,21 +1,19 @@
 {
-  "builtAt": "2026-11-04T21:33:24.309Z",
+  "builtAt": "2026-11-04T21:33:57.809Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
-    "ref": "",
+    "ref": "84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71",
     "dir": "blogfa/dist/cdn",
-    "ok": false,
-    "pushed": false,
-    "missing": [
-      "an-full.77c5d57a9a.css",
-      "an-post.49af38ceca.js",
-      "an-base.39d9b58a0c.css",
-      "an-archive.8e1e5d27c6.js",
-      "an-page.7682a6c084.js",
-      "an-post-lite.5b4905abe9.js"
-    ],
+    "ok": true,
+    "pushed": true,
+    "missing": [],
     "unverifiedTemplates": false,
-    "mirrors": [],
+    "mirrors": [
+      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71/blogfa/dist/cdn/",
+      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71/blogfa/dist/cdn/",
+      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71/blogfa/dist/cdn/",
+      "https://rawcdn.githack.com/fkyitou/mywebsite/84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71/blogfa/dist/cdn/"
+    ],
     "files": [
       {
         "file": "an-full.77c5d57a9a.css",
@@ -109,28 +107,28 @@
     {
       "variant": "cdn",
       "cdn": true,
-      "bytes": 47254,
+      "bytes": 47776,
       "parts": {
         "post": {
           "cssFile": "an-full.77c5d57a9a.css",
           "jsFile": "an-post.49af38ceca.js",
           "css": 77806,
           "js": 201332,
-          "html": 24977
+          "html": 25151
         },
         "archive": {
           "cssFile": "an-base.39d9b58a0c.css",
           "jsFile": "an-archive.8e1e5d27c6.js",
           "css": 62397,
           "js": 25819,
-          "html": 9979
+          "html": 10153
         },
         "page": {
           "cssFile": "an-base.39d9b58a0c.css",
           "jsFile": "an-page.7682a6c084.js",
           "css": 62397,
           "js": 46987,
-          "html": 12169
+          "html": 12343
         }
       },
       "facts": {
@@ -143,28 +141,28 @@
     {
       "variant": "cdn-lite",
       "cdn": true,
-      "bytes": 47280,
+      "bytes": 47802,
       "parts": {
         "post": {
           "cssFile": "an-full.77c5d57a9a.css",
           "jsFile": "an-post-lite.5b4905abe9.js",
           "css": 77806,
           "js": 143746,
-          "html": 25003
+          "html": 25177
         },
         "archive": {
           "cssFile": "an-base.39d9b58a0c.css",
           "jsFile": "an-archive.8e1e5d27c6.js",
           "css": 62397,
           "js": 25819,
-          "html": 9979
+          "html": 10153
         },
         "page": {
           "cssFile": "an-base.39d9b58a0c.css",
           "jsFile": "an-page.7682a6c084.js",
           "css": 62397,
           "js": 46987,
-          "html": 12169
+          "html": 12343
         }
       },
       "facts": {

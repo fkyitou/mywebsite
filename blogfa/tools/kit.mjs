@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 /* آینده‌نگار · install and publishing kit.
    Writes kit.html at the package root: one page with a copy button for everything that has to be pasted into
-   Blogfa (the template in full, lite and three-part form, the About page, and each post's title, category, tags
-   and HTML body), plus a checklist that is kept only in the browser that opens the page.
+   Blogfa (the template in three parts or as one paste, each in full and lite form, the About page, and each post's
+   title, category, tags and HTML body), plus a checklist that is kept only in the browser that opens the page.
+   The template text is the CDN build (dist/template-cdn[-lite].html, dist/split-cdn[-lite]/), whose CSS and JS come
+   from jsDelivr: the inline build is several times larger than a part Blogfa accepts, so the kit never offers it,
+   and it refuses to run on CDN templates that were not verified against a pushed commit.
      node tools/kit.mjs                    → kit.html, a complete document to open from the package folder
      node tools/kit.mjs --fragment <file>  → the same page without <!doctype>, <html>, <head> and <body>,
                                              for a host that adds its own document skeleton
@@ -23,9 +26,16 @@ const kb = s => fa(Math.max(1, Math.round(Buffer.byteLength(s, 'utf8') / 1024)))
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const words = html => (html.replace(/<[^>]+>/g, ' ').match(/\S+/g) || []).length;
 
-for (const f of ['dist/template.html', 'dist/template-lite.html', 'dist/split/1-main-and-posts.html', 'dist/split-lite/1-main-and-posts.html']) {
-  if (!fs.existsSync(path.join(ROOT, f))) { console.error(`${f} is missing. Run: node tools/build.mjs`); process.exit(1); }
+for (const f of ['dist/build-report.json', 'dist/template-cdn.html', 'dist/template-cdn-lite.html', 'dist/split-cdn/1-main-and-posts.html', 'dist/split-cdn-lite/1-main-and-posts.html']) {
+  if (!fs.existsSync(path.join(ROOT, f))) { console.error(`${f} is missing. Run: node tools/build.mjs (the CDN templates are written once cdn.json names a pushed commit that holds dist/cdn/)`); process.exit(1); }
 }
+// A template whose jsDelivr addresses name a commit without the files would install a page with no styles or scripts.
+const CDN = JSON.parse(read('dist/build-report.json')).cdn || {};
+if (!CDN.ok || !CDN.pushed || CDN.unverifiedTemplates || !CDN.mirrors) { console.error('the CDN templates in dist/ were not verified against a pushed commit (see tools/build.mjs); no kit written'); process.exit(1); }
+// Bump when what has to be pasted changes, so an owner holding an older kit.html can tell the two apart.
+const KIT_VERSION = 2;
+// One stylesheet on the main jsDelivr address: opening it shows whether jsDelivr is reachable from the owner's connection.
+const PROBE = CDN.mirrors[0] + ((CDN.files || []).find(f => /^an-base\.[\w]+\.css$/.test(f.file)) || { file: '' }).file;
 
 function source(rel) {
   const raw = read(rel), m = raw.match(/^<!--([\s\S]*?)-->\s*/), meta = {};
@@ -51,8 +61,8 @@ const posts = fs.readdirSync(path.join(ROOT, 'posts')).filter(f => /^\d\d-[\w-]+
 const cats = [...new Set(posts.map(p => p.cat).filter(Boolean))];
 const about = source('pages/about.html');
 const DATA = {
-  tpl: { full: read('dist/template.html'), lite: read('dist/template-lite.html') },
-  split: { full: split('dist/split/'), lite: split('dist/split-lite/') },
+  tpl: { full: read('dist/template-cdn.html'), lite: read('dist/template-cdn-lite.html') },
+  split: { full: split('dist/split-cdn/'), lite: split('dist/split-cdn-lite/') },
   blog: BLOG,
   page: { title: about.meta.title || 'درباره‌ی آینده‌نگار', slug: 'about', body: about.body },
   cats,
@@ -301,6 +311,7 @@ const body = `
   <h1 id="kit-h">کیت نصب و انتشار</h1>
   <p>هر چیزی که باید در بلاگفا جای‌گذاری شود، این‌جا با یک دکمه‌ی کپی آمده است: قالب، صفحه‌ی «درباره» و ده مقاله. گام‌ها را به همین ترتیب انجام دهید و هر کدام را که تمام شد تیک بزنید.</p>
   <p class="credit">طراحی، مدیریت و نویسندگی: امیرحسین همتی</p>
+  <p class="warn" id="kit-version"><b>نسخه‌ی ${fa(KIT_VERSION)} کیت.</b> تکه‌های قالب در نسخه‌ی قبلی ۲۵۳ تا ۳۰۹ کیلوبایت بودند و بلاگفا آن‌ها را با پیام «حجم قالب بسیار بالا است» نمی‌پذیرفت. در این نسخه تکه‌ها ${kb(DATA.split.full[1]).replace(' کیلوبایت', '')}، ${kb(DATA.split.full[2]).replace(' کیلوبایت', '')} و ${kb(DATA.split.full[3])} هستند. اگر فایل کیت قبلی را دارید، آن را کنار بگذارید و فقط از همین صفحه کپی کنید.</p>
   <ol class="status" aria-label="وضعیت کار">
     <li class="st on" id="st-1"><span class="dot" aria-hidden="true">✓</span><div><b>فایل آماده</b><small>قالب، ۱۰ مقاله، صفحه‌ی درباره، تصویرها و راهنماها ساخته و با آزمون خودکار بررسی شده‌اند.</small></div></li>
     <li class="st" id="st-2"><span class="dot" aria-hidden="true">✓</span><div><b>قالب نصب‌شده</b><small>با تیک گام ۲ روشن می‌شود: قالب در بلاگفا ذخیره شده و صفحه‌ی اول با ظاهر آینده‌نگار باز می‌شود.</small></div></li>
@@ -327,7 +338,9 @@ const body = `
 <section class="step" aria-labelledby="h2">
   <div class="step-h"><span class="step-n">۲</span><h2 id="h2">نصب قالب</h2></div>
   <p>در پنل به <span class="path">«تنظیمات و دیگر امکانات» ← «ویرایش قالب وبلاگ»</span> بروید. این صفحه سه زبانه دارد: «صفحات اصلی»، «آرشیو» و «صفحات جداگانه»، و هر زبانه کادر کد و دکمه‌ی «ثبت و بازسازی وبلاگ» خودش را دارد. قالب آینده‌نگار هم سه تکه است، یکی برای هر زبانه.</p>
+  <p class="note">هر تکه فقط ساختار صفحه را دارد. ظاهر و امکانات قالب (CSS و JavaScript) در فایل‌های جداگانه‌ای روی <a href="https://www.jsdelivr.com/">jsDelivr</a> است، شبکه‌ی توزیع رایگانی که فایل‌ها را از مخزن GitHub همین پروژه می‌خواند. نشانی هر فایل به یک نسخه‌ی ثابت قفل شده و «کد یکپارچگی» (SRI) دارد، پس مرورگر فایلی را که حتی یک بایتش عوض شده باشد اجرا نمی‌کند. اگر نشانی اصلی در دسترس نباشد، همان فایل از سه نشانی پشتیبان گرفته می‌شود.</p>
   <div class="seg" role="radiogroup" aria-label="نسخه‌ی قالب"><label><input type="radio" name="split-v" value="full" checked>کامل (پیشنهادی)</label><label><input type="radio" name="split-v" value="lite">سبک، بدون کره‌ی سه‌بعدی</label></div>
+  <p class="note">نسخه‌ی سبک برای گوشی‌ها و رایانه‌های کم‌توان است و اندازه‌ی تکه‌هایش تقریباً همان نسخه‌ی کامل است.</p>
   <div class="rows">
     ${[['1', 'برای زبانه‌ی «صفحات اصلی»'], ['2', 'برای زبانه‌ی «آرشیو»'], ['3', 'برای زبانه‌ی «صفحات جداگانه»']].map(([p, t]) => `<div class="field"><div class="field-k">تکه‌ی ${fa(p)}</div><div class="field-v">${t} <span class="size" data-size-part="${p}"></span></div><button type="button" class="btn${p === '1' ? ' primary' : ''}" data-copy="split" data-part="${p}" data-label="تکه‌ی ${fa(p)} قالب">کپی تکه‌ی ${fa(p)}</button></div>`).join('')}
   </div>
@@ -335,13 +348,20 @@ const body = `
     <li>در زبانه‌ی «صفحات اصلی» داخل کادر کد کلیک کنید و با <kbd>Ctrl</kbd>+<kbd>A</kbd> و سپس <kbd>Delete</kbd> کد قبلی را پاک کنید.</li>
     <li>«کپی تکه‌ی ۱» را بزنید، با <kbd>Ctrl</kbd>+<kbd>V</kbd> در همان کادر جای‌گذاری کنید و «ثبت و بازسازی وبلاگ» را بزنید.</li>
     <li>همین کار را در زبانه‌ی «آرشیو» با تکه‌ی ۲ و در زبانه‌ی «صفحات جداگانه» با تکه‌ی ۳ تکرار کنید.</li>
-    <li>صفحه‌ی اول وبلاگ را در زبانه‌ی تازه‌ی مرورگر باز کنید و با <kbd>Ctrl</kbd>+<kbd>F5</kbd> از نو بارگیری کنید. اگر بعد از چند ثانیه نوار «بخشی از امکانات این صفحه بارگذاری نشد» دیدید، تکه‌ی ۱ کامل ذخیره نشده است: یک بار دیگر کپی و ذخیره کنید، و اگر تکرار شد نسخه‌ی سبک را بگذارید.</li>
+    <li>صفحه‌ی اول وبلاگ را در زبانه‌ی تازه‌ی مرورگر باز کنید و با <kbd>Ctrl</kbd>+<kbd>F5</kbd> از نو بارگیری کنید. باید ظاهر آینده‌نگار را ببینید.</li>
   </ol>
+  <details class="alt" id="trouble"><summary>اگر چیزی درست پیش نرفت</summary><div class="alt-body">
+    <ul>
+      <li><b>پیام «حجم قالب بسیار بالا است»:</b> تکه از فایل قدیمی کیت کپی شده است. بالای همین صفحه باید «نسخه‌ی ${fa(KIT_VERSION)} کیت» را ببینید و کنار دکمه‌ها اندازه‌ی تکه‌ها را، که هیچ‌کدام از ${kb(DATA.split.full[1])} بیشتر نیست.</li>
+      <li><b>نوار «بخشی از امکانات این صفحه بارگذاری نشد»، یا صفحه‌ای ساده و بی‌رنگ:</b> مرورگر CSS یا JavaScript قالب را نگرفته است. صفحه را با <kbd>Ctrl</kbd>+<kbd>F5</kbd> دوباره بارگیری کنید. اگر ماند، <a href="${esc(PROBE)}" rel="noopener">این فایل آزمایشی روی jsDelivr</a> را باز کنید. اگر متن کد دیدید، jsDelivr در دسترس است و یکی از تکه‌ها ناقص ذخیره شده است: آن تکه را دوباره از همین صفحه کپی و ذخیره کنید. اگر باز نشد، اینترنت، فیلترشکن یا ضدویروس شما دسترسی به jsDelivr را بسته است؛ با اینترنت دیگری امتحان کنید. متن نوشته‌ها و نام سازنده در این حالت هم خوانا می‌مانند.</li>
+      <li><b>کره‌ی زمین صفحه‌ی اول نمی‌چرخد و با موس جابه‌جا نمی‌شود:</b> اگر نسخه‌ی سبک را گذاشته‌اید عادی است؛ در این نسخه جای کره‌ی سه‌بعدی یک کره‌ی ساده‌ی بی‌حرکت است.</li>
+    </ul>
+  </div></details>
   <details class="alt"><summary>روش دیگر: کل قالب یک‌جا در زبانه‌ی «صفحات اصلی»</summary><div class="alt-body">
     <p class="note">راهنمای رسمی قالب‌های بلاگفا می‌گوید کدی که سه بخشش داخل برچسب‌های <code>&lt;blog:PostTemplate&gt;</code>، <code>&lt;blog:ArchiveTemplate&gt;</code> و <code>&lt;blog:PageTemplate&gt;</code> باشد، خودش بین سه زبانه پخش می‌شود. این روش در پنل واقعی آزموده نشده است؛ اگر بعد از ذخیره، زبانه‌های «آرشیو» و «صفحات جداگانه» عوض نشدند، از روش سه‌تکه‌ی بالا استفاده کنید.</p>
     <div class="opts">
       <div class="opt"><h3>قالب کامل</h3><p>همه‌ی امکانات، از جمله کره‌ی زمین سه‌بعدی صفحه‌ی اول.</p><span class="size">${kb(DATA.tpl.full)}</span><button type="button" class="btn" data-copy="tpl.full" data-label="قالب کامل">کپی قالب کامل</button></div>
-      <div class="opt"><h3>قالب سبک</h3><p>همان قالب، بدون کره‌ی زمین سه‌بعدی.</p><span class="size">${kb(DATA.tpl.lite)}</span><button type="button" class="btn" data-copy="tpl.lite" data-label="قالب سبک">کپی قالب سبک</button></div>
+      <div class="opt"><h3>قالب سبک</h3><p>همان قالب، بدون کره‌ی زمین سه‌بعدی، برای دستگاه‌های کم‌توان.</p><span class="size">${kb(DATA.tpl.lite)}</span><button type="button" class="btn" data-copy="tpl.lite" data-label="قالب سبک">کپی قالب سبک</button></div>
     </div>
   </div></details>
   ${tick('s-tpl', 'هر سه تکه ذخیره شد و صفحه‌ی اول وبلاگ با ظاهر آینده‌نگار باز شد.')}
@@ -424,6 +444,7 @@ ${FRAGMENT ? '' : `<section class="step" aria-labelledby="h7">
 <footer class="foot wrap">
   <p>آینده‌نگار · طراحی، مدیریت و نویسندگی: امیرحسین همتی</p>
   <p>این صفحه چیزی به جایی نمی‌فرستد. اگر دکمه‌ی کپی کار نکرد، متن در پنجره‌ای باز می‌شود تا خودتان آن را کپی کنید.</p>
+  <p>نسخه‌ی ${fa(KIT_VERSION)} کیت · فایل‌های CSS و JavaScript از نسخه‌ی <code class="ltr">${esc(CDN.ref.slice(0, 7))}</code> مخزن <code class="ltr">${esc(CDN.repo)}</code></p>
   <button type="button" class="reset" id="reset">پاک کردن همه‌ی تیک‌ها</button>
 </footer>
 
