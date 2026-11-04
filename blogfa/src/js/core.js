@@ -241,7 +241,9 @@
     W.addEventListener('scroll', function () { var y = W.scrollY, h = D.documentElement.scrollHeight - W.innerHeight; b.classList.toggle('on', y > 900); b.style.setProperty('--p', h > 0 ? Math.min(1, y / h) : 0); }, { passive: true });
   }
 
-  AN.ready = function (fn) { if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', fn); else fn(); };
+  // After the page has been parsed (the CDN build's backup script arrives late), wait one task so the rest of the
+  // bundle, which defines AN.pages and the labs, has run before the page is set up.
+  AN.ready = function (fn) { if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', fn); else setTimeout(fn, 0); };
   AN.ready(function () {
     var steps = [header, versions, search, keysDlg, shortcuts, pointerFx, live, fab];
     steps.forEach(function (f) { try { f(); } catch (e) { if (W.console) console.warn('[آینده‌نگار]', f.name, e); } });

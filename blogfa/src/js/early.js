@@ -24,15 +24,21 @@
   try { gpu = sessionStorage.getItem('an-gpu') || ''; } catch (e) {}
   if (gpu === 'soft') h.setAttribute('data-gpu', 'soft');
   w.AN = { page: t, v: v, rm: rm, gpu: gpu, t0: Date.now() };
-  // Self-check: if the end of the template never ran (e.g. Blogfa saved it cut short), say so instead of failing silently.
+  // Self-check: if the end of the template never ran (e.g. Blogfa saved it cut short), or the CDN build could not get
+  // its stylesheet or script from any address, say so instead of failing silently.
   w.addEventListener('load', function () {
-    setTimeout(function () {
-      if (w.AN.ok || !d.body) return;
+    var n = 0;
+    function check() {
+      var A = w.AN;
+      if ((A.ok && !A.fail) || !d.body) return;
+      // a file still on its way from a backup address (CDN build): give it up to ten more seconds
+      if (A.wait > 0 && n++ < 20) { setTimeout(check, 500); return; }
       var b = d.createElement('div');
       b.setAttribute('role', 'alert');
       b.style.cssText = 'position:relative;z-index:99;margin:0;padding:12px 16px;background:#FFB36B;color:#1A0E04;font:600 14px/1.8 Tahoma,sans-serif;text-align:center';
       b.textContent = 'بخشی از امکانات این صفحه بارگذاری نشد. اگر مدیر وبلاگ هستید، بخش «عیب‌یابی» راهنمای نصب قالب را ببینید.';
       d.body.insertBefore(b, d.body.firstChild);
-    }, 2500);
+    }
+    setTimeout(check, 2500);
   });
 })(document, window);

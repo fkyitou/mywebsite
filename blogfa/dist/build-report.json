@@ -1,24 +1,74 @@
 {
-  "builtAt": "2026-11-04T16:11:05.500Z",
+  "builtAt": "2026-11-04T21:33:24.309Z",
+  "cdn": {
+    "repo": "fkyitou/mywebsite",
+    "ref": "",
+    "dir": "blogfa/dist/cdn",
+    "ok": false,
+    "pushed": false,
+    "missing": [
+      "an-full.77c5d57a9a.css",
+      "an-post.49af38ceca.js",
+      "an-base.39d9b58a0c.css",
+      "an-archive.8e1e5d27c6.js",
+      "an-page.7682a6c084.js",
+      "an-post-lite.5b4905abe9.js"
+    ],
+    "unverifiedTemplates": false,
+    "mirrors": [],
+    "files": [
+      {
+        "file": "an-full.77c5d57a9a.css",
+        "bytes": 77830,
+        "sri": "sha384-tsMmJh3Z+XWnvAM3YpVtVTb19yMaWTF6JP+kK4lCJjbTJc1vn/zmmBguMFk/TFYf"
+      },
+      {
+        "file": "an-post.49af38ceca.js",
+        "bytes": 215891,
+        "sri": "sha384-TfQK2GYe7Xdztn+U8K5tBT1Qpy8ZQ9o+HvT7i69l5zZqZx4dohfOZmoWe3ZXShfR"
+      },
+      {
+        "file": "an-base.39d9b58a0c.css",
+        "bytes": 62417,
+        "sri": "sha384-Evk8kykrCMM/jGX0uam+wpqd5EP4l1pOfb/p2iaPEv/M26jsmZV8BAu/SkpDHtzG"
+      },
+      {
+        "file": "an-archive.8e1e5d27c6.js",
+        "bytes": 26835,
+        "sri": "sha384-ZH4/xLu1w8pSATxixm1XL/QqWO7Y0RTmDDDSTTSSVeul92ULa/HzKmdyT5lWjbFp"
+      },
+      {
+        "file": "an-page.7682a6c084.js",
+        "bytes": 48907,
+        "sri": "sha384-F166q5MpzBkIM5mHoND+ABhYeSCq/2Bcoj7MKj9GdfzGqpwOwLvHrdyxV+kxqJdo"
+      },
+      {
+        "file": "an-post-lite.5b4905abe9.js",
+        "bytes": 158300,
+        "sri": "sha384-jLJB2EtIFS+y1mvhcOwAz8FK5LETB+LbOg2DB5GIb957CDmr2i6l37+lAMmJl9q5"
+      }
+    ]
+  },
   "reports": [
     {
       "variant": "full",
-      "bytes": 534807,
+      "cdn": false,
+      "bytes": 535053,
       "parts": {
         "post": {
           "css": 77806,
-          "js": 201320,
-          "html": 316452
+          "js": 201332,
+          "html": 316534
         },
         "archive": {
           "css": 62397,
-          "js": 25807,
-          "html": 96979
+          "js": 25819,
+          "html": 97061
         },
         "page": {
           "css": 62397,
-          "js": 46975,
-          "html": 121247
+          "js": 46987,
+          "html": 121329
         }
       },
       "facts": {
@@ -30,22 +80,91 @@
     },
     {
       "variant": "lite",
-      "bytes": 477232,
+      "cdn": false,
+      "bytes": 477478,
       "parts": {
         "post": {
           "css": 77806,
-          "js": 143734,
-          "html": 258877
+          "js": 143746,
+          "html": 258959
         },
         "archive": {
           "css": 62397,
-          "js": 25807,
-          "html": 96979
+          "js": 25819,
+          "html": 97061
         },
         "page": {
           "css": 62397,
-          "js": 46975,
-          "html": 121247
+          "js": 46987,
+          "html": 121329
+        }
+      },
+      "facts": {
+        "posts": 10,
+        "labs": 10,
+        "sources": 57,
+        "minutes": 57
+      }
+    },
+    {
+      "variant": "cdn",
+      "cdn": true,
+      "bytes": 47254,
+      "parts": {
+        "post": {
+          "cssFile": "an-full.77c5d57a9a.css",
+          "jsFile": "an-post.49af38ceca.js",
+          "css": 77806,
+          "js": 201332,
+          "html": 24977
+        },
+        "archive": {
+          "cssFile": "an-base.39d9b58a0c.css",
+          "jsFile": "an-archive.8e1e5d27c6.js",
+          "css": 62397,
+          "js": 25819,
+          "html": 9979
+        },
+        "page": {
+          "cssFile": "an-base.39d9b58a0c.css",
+          "jsFile": "an-page.7682a6c084.js",
+          "css": 62397,
+          "js": 46987,
+          "html": 12169
+        }
+      },
+      "facts": {
+        "posts": 10,
+        "labs": 10,
+        "sources": 57,
+        "minutes": 57
+      }
+    },
+    {
+      "variant": "cdn-lite",
+      "cdn": true,
+      "bytes": 47280,
+      "parts": {
+        "post": {
+          "cssFile": "an-full.77c5d57a9a.css",
+          "jsFile": "an-post-lite.5b4905abe9.js",
+          "css": 77806,
+          "js": 143746,
+          "html": 25003
+        },
+        "archive": {
+          "cssFile": "an-base.39d9b58a0c.css",
+          "jsFile": "an-archive.8e1e5d27c6.js",
+          "css": 62397,
+          "js": 25819,
+          "html": 9979
+        },
+        "page": {
+          "cssFile": "an-base.39d9b58a0c.css",
+          "jsFile": "an-page.7682a6c084.js",
+          "css": 62397,
+          "js": 46987,
+          "html": 12169
         }
       },
       "facts": {

@@ -1,14 +1,24 @@
 #!/usr/bin/env node
 /* آینده‌نگار · build
-   Assembles the three Blogfa templates (main/posts, archive, separate pages) from src/, inlines
-   minified CSS and JS, refuses output that Blogfa could misread or block, and writes paste-ready
-   files plus a size report to dist/.
+   Assembles the three Blogfa templates (main/posts, archive, separate pages) from src/, minifies the CSS and JS,
+   refuses output that Blogfa could misread or block, and writes paste-ready files plus a size report to dist/.
 
    node tools/build.mjs            → dist/
-   Variants: "full" (everything, the default install) and "lite" (no WebGL globe or geodata;
-   a fallback in case Blogfa rejects a template this large — its size limit is not documented). */
+   Variants:
+     cdn, cdn-lite   the templates to install. Only markup stays in the template (about 25 KB per part); the
+                     minified CSS and JS are files in dist/cdn/ that jsDelivr serves from this public repo, pinned
+                     to the commit named in cdn.json and checked with Subresource Integrity (src/js/loader.js).
+                     Blogfa refused the inlined parts below as too large («حجم قالب بسیار بالا است»).
+     full, lite      the same templates with the CSS and JS inlined (about 250 to 310 KB per part). Blogfa does not
+                     accept parts this large, so these are only the base of the local preview and its tests.
+   "lite" leaves out the WebGL globe and its geodata.
+
+   CDN workflow: build, commit dist/cdn/ and push, put that commit's full hash in cdn.json as "ref", build again.
+   The cdn templates are written only when the ref holds every asset byte for byte. */
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { minify as terser } from 'terser';
 import { minify as csso } from 'csso';
@@ -30,10 +40,52 @@ const JS_MODS = {
   core: ['js/core.js'], sky: ['js/sky.js'], sound: ['js/sound.js'], covers: ['js/covers.js'], charts: ['js/charts.js'], pages: ['js/pages.js'],
   globe: ['js/data-geo.js', 'js/globe.js'], labs: LABS.map(l => `js/labs/${l}.js`)
 };
-const VARIANTS = {
+const MODS = {
   full: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'globe', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound'] },
   lite: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound'] }
 };
+const VARIANTS = {
+  full: { mods: 'full', cdn: false }, lite: { mods: 'lite', cdn: false },
+  cdn: { mods: 'full', cdn: true }, 'cdn-lite': { mods: 'lite', cdn: true }
+};
+
+/* ---------- CDN delivery ---------- */
+// The largest part Blogfa accepted so far is a 105 KB template; 253 KB and 309 KB were refused. 60 KB leaves room.
+const PART_BUDGET = 60 * 1024;
+const git = (...a) => execFileSync('git', a, { cwd: ROOT, maxBuffer: 64 << 20 });
+const REPO_ROOT = git('rev-parse', '--show-toplevel').toString().trim();
+const CDN_DIR = path.relative(REPO_ROOT, path.join(DIST, 'cdn')).split(path.sep).join('/');
+const CDN = JSON.parse(rd('cdn.json'));
+if (!/^[\w.-]+\/[\w.-]+$/.test(CDN.repo || '')) throw new Error('cdn.json: "repo" must be "owner/name"');
+const REF = /^[0-9a-f]{40}$/.test(CDN.ref || '') ? CDN.ref : '';
+// In order: jsDelivr (its main address, then two of its CDN networks by name), then raw.githack's CDN.
+const mirrorsAt = ref => [
+  `https://cdn.jsdelivr.net/gh/${CDN.repo}@${ref}/${CDN_DIR}/`,
+  `https://fastly.jsdelivr.net/gh/${CDN.repo}@${ref}/${CDN_DIR}/`,
+  `https://gcore.jsdelivr.net/gh/${CDN.repo}@${ref}/${CDN_DIR}/`,
+  `https://rawcdn.githack.com/${CDN.repo}/${ref}/${CDN_DIR}/`
+];
+const MIRRORS = REF ? mirrorsAt(REF) : [];
+const assets = new Map();   // file name → bytes, written to dist/cdn/
+function asset(base, ext, code) {
+  const buf = Buffer.from(code, 'utf8');
+  const file = `${base}.${crypto.createHash('sha256').update(buf).digest('hex').slice(0, 10)}.${ext}`;
+  assets.set(file, buf);
+  return { file, sri: 'sha384-' + crypto.createHash('sha384').update(buf).digest('base64'), bytes: buf.length };
+}
+// Does the commit in cdn.json hold every asset byte for byte, and is it on a remote branch jsDelivr can read?
+function verifyRef() {
+  const missing = [];
+  if (!REF) return { ok: false, missing: [...assets.keys()], pushed: false, why: 'cdn.json has no full commit hash in "ref"' };
+  for (const [file, buf] of assets) {
+    let got = null;
+    try { got = git('show', `${REF}:${CDN_DIR}/${file}`); } catch (e) { /* not in that commit */ }
+    if (!got || !got.equals(buf)) missing.push(file);
+  }
+  let pushed = false;
+  try { pushed = git('branch', '-r', '--contains', REF).toString().trim().length > 0; } catch (e) { /* unknown commit */ }
+  return { ok: !missing.length, missing, pushed, why: missing.length ? `commit ${REF.slice(0, 12)} lacks ${missing.length} asset(s)` : '' };
+}
 
 /* ---------- Blogfa safety: patterns that must never reach the template ---------- */
 // Blogfa tags look like <-Name-> and blocks like <BlogX>/<BLOGFA>; a stray "<-" or "<Blog" inside JS/CSS could be
@@ -56,8 +108,8 @@ function guard(name, code) {
 }
 
 /* ---------- minifiers ---------- */
-async function js(files, name) {
-  const src = files.map(f => rd('src', f)).join('\n;\n');
+const js = (files, name) => jsSource(files.map(f => rd('src', f)).join('\n;\n'), name);
+async function jsSource(src, name) {
   const out = await terser(src, {
     ecma: 2015, compress: { passes: 2, pure_getters: false, unsafe: false, keep_infinity: true }, mangle: true,
     format: { comments: false, ascii_only: false, semicolons: true }
@@ -111,7 +163,7 @@ const faNum = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 
 /* ---------- assemble ---------- */
 async function build(variant) {
-  const V = VARIANTS[variant];
+  const { mods, cdn } = VARIANTS[variant], V = MODS[mods];
   logoN = 0;
   const early = await js(['js/early.js'], 'early.js');
   const facts = postFacts();
@@ -128,16 +180,31 @@ async function build(variant) {
     const cssCode = css(CSS_SETS[key], `${key} css`);
     const jsCode = await js(V[key].flatMap(k => JS_MODS[k]), `${key} js (${V[key].join('+')})`);
     const map = {
-      HEAD: () => P('head'), EARLY_JS: early, CSS: cssCode,
+      HEAD: () => P('head'), EARLY_JS: early, STYLE: `<style>${cssCode}</style>`,
       CHROME_TOP: () => P('chrome_top'), LOGO: logo, HERO: () => P('hero'), HOME_TOP: () => P('home_top'),
       HOME_BOTTOM: homeBottom, AUTHOR_BOX: () => P('author_box'), FOOT_BOTTOM: () => P('foot_bottom'),
       CREATOR: () => P('creator'), BODY_END: `<script>${jsCode}</script>`
     };
+    if (cdn) {
+      // the same CSS and JS as files; the stylesheet says it is UTF-8 in case a mirror sends no charset
+      const cssA = asset(key === 'post' ? 'an-full' : 'an-base', 'css', (/[^\x00-\x7f]/.test(cssCode) ? '@charset "UTF-8";' : '') + cssCode);
+      const jsA = asset(key === 'post' ? (mods === 'lite' ? 'an-post-lite' : 'an-post') : 'an-' + key, 'js', jsCode);
+      const M = mirrorsAt(REF || 'REF-NOT-SET');
+      // the names and hashes go into the loader's source before minifying, so terser sees real constants
+      const loader = await jsSource(rd('src', 'js', 'loader.js')
+        .replace("'@MIRRORS@'", JSON.stringify(M)).replace("'@CSSFILE@'", JSON.stringify([cssA.file, cssA.sri]))
+        .replace("'@JSFILE@'", JSON.stringify([jsA.file, jsA.sri])), `${key} loader`);
+      map.EARLY_JS = early + loader;
+      map.STYLE = `<link rel="stylesheet" id="an-css" href="${M[0]}${cssA.file}" integrity="${cssA.sri}" crossorigin="anonymous">`;
+      map.BODY_END = `<script src="${M[0]}${jsA.file}" id="an-main" integrity="${jsA.sri}" crossorigin="anonymous"></script>`;
+      parts[key] = { cssFile: cssA.file, jsFile: jsA.file };
+    }
     let html = fill(m[1], map);
-    if (variant === 'lite' && key === 'post') html = html.replace('<div class="an-globe" id="an-globe" aria-hidden="true"></div>', '<div class="an-globe an-globe-static" id="an-globe" aria-hidden="true"></div>');
+    if (mods === 'lite' && key === 'post') html = html.replace('<div class="an-globe" id="an-globe" aria-hidden="true"></div>', '<div class="an-globe an-globe-static" id="an-globe" aria-hidden="true"></div>');
     html = html.replace(/^\s*\n/, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n');
     sections[key] = html.trim() + '\n';
-    parts[key] = { css: cssCode.length, js: jsCode.length, html: Buffer.byteLength(sections[key]) };
+    parts[key] = { ...parts[key], css: cssCode.length, js: jsCode.length, html: Buffer.byteLength(sections[key]) };
+    if (cdn && parts[key].html > PART_BUDGET) throw new Error(`${variant} ${key} part is ${parts[key].html} bytes, over the ${PART_BUDGET}-byte budget`);
   }
   // required credit must survive in every template
   for (const [k, s] of Object.entries(sections)) {
@@ -145,23 +212,34 @@ async function build(variant) {
   }
   const all = `<blog:PostTemplate>\n${sections.post}</blog:PostTemplate>\n<blog:ArchiveTemplate>\n${sections.archive}</blog:ArchiveTemplate>\n<blog:PageTemplate>\n${sections.page}</blog:PageTemplate>\n`;
   const suffix = variant === 'full' ? '' : '-' + variant;
-  wr(`template${suffix}.html`, all);
-  wr(`split${suffix}/1-main-and-posts.html`, sections.post);
-  wr(`split${suffix}/2-archive.html`, sections.archive);
-  wr(`split${suffix}/3-pages.html`, sections.page);
-  return { variant, bytes: Buffer.byteLength(all), parts, facts };
+  const out = { [`template${suffix}.html`]: all, [`split${suffix}/1-main-and-posts.html`]: sections.post, [`split${suffix}/2-archive.html`]: sections.archive, [`split${suffix}/3-pages.html`]: sections.page };
+  return { variant, cdn, bytes: Buffer.byteLength(all), parts, facts, out };
 }
 
 const t0 = Date.now();
 fs.rmSync(DIST, { recursive: true, force: true });
 const reports = [];
 for (const v of Object.keys(VARIANTS)) reports.push(await build(v));
+for (const [file, buf] of assets) wr('cdn/' + file, buf);
+const ref = verifyRef();
+// --unverified writes the cdn templates anyway, for the offline tests (they serve dist/cdn/ themselves); such
+// templates must not be installed, and tools/check.mjs fails while build-report.json says the ref is not verified
+const UNVERIFIED = process.argv.includes('--unverified');
+for (const r of reports) if (!r.cdn || ref.ok || UNVERIFIED) for (const [rel, s] of Object.entries(r.out)) wr(rel, s);
 const kb = n => (n / 1024).toFixed(1) + ' KB';
 console.log('\nآینده‌نگار · build OK in ' + (Date.now() - t0) + ' ms');
 for (const r of reports) {
-  console.log(`\n${r.variant.toUpperCase()}  template${r.variant === 'full' ? '' : '-' + r.variant}.html  ${kb(r.bytes)}`);
-  for (const [k, p] of Object.entries(r.parts)) console.log(`  ${k.padEnd(8)} html ${kb(p.html).padStart(9)}   (css ${kb(p.css)}, js ${kb(p.js)})`);
+  console.log(`\n${r.variant.toUpperCase()}  template${r.variant === 'full' ? '' : '-' + r.variant}.html  ${kb(r.bytes)}${r.cdn && !ref.ok ? (UNVERIFIED ? '  (UNVERIFIED: for offline tests only)' : '  (NOT WRITTEN, see below)') : ''}`);
+  for (const [k, p] of Object.entries(r.parts)) console.log(`  ${k.padEnd(8)} html ${kb(p.html).padStart(9)}   (css ${kb(p.css)}, js ${kb(p.js)})${p.jsFile ? '   → ' + p.cssFile + ', ' + p.jsFile : ''}`);
 }
+console.log(`\ndist/cdn: ${assets.size} files, ${kb([...assets.values()].reduce((a, b) => a + b.length, 0))}`);
+if (ref.ok) console.log(`cdn ref ${REF}: holds every asset${ref.pushed ? ', and is on a remote branch' : '. WARNING: no remote branch contains it yet; push before installing'}`);
+else console.log(`cdn templates ${UNVERIFIED ? 'written UNVERIFIED (offline tests only, do not install)' : 'NOT written'}: ${ref.why}.\n  Commit dist/cdn/, push, set "ref" in cdn.json to that commit's full hash, and run the build again.`);
 const f = reports[0].facts;
 console.log(`\nposts: ${f.posts}  labs: ${f.labs}  sources: ${f.sources}  reading minutes: ${f.minutes}`);
-wr('build-report.json', JSON.stringify({ builtAt: new Date().toISOString(), reports }, null, 2));
+const files = [...assets].map(([file, buf]) => ({ file, bytes: buf.length, sri: 'sha384-' + crypto.createHash('sha384').update(buf).digest('base64') }));
+wr('build-report.json', JSON.stringify({
+  builtAt: new Date().toISOString(),
+  cdn: { repo: CDN.repo, ref: REF, dir: CDN_DIR, ok: ref.ok, pushed: ref.pushed, missing: ref.missing, unverifiedTemplates: !ref.ok && UNVERIFIED, mirrors: MIRRORS, files },
+  reports: reports.map(({ out, ...r }) => r)
+}, null, 2));
