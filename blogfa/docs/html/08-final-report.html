@@ -148,16 +148,24 @@ nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration:
 </tr>
 </thead>
 <tbody><tr>
-<td><code>dist/template.html</code></td>
-<td>قالب کامل، هر سه قالب بلاگفا در یک کد؛ همین را جای‌گذاری می‌کنید</td>
+<td><code>dist/split-cdn/</code></td>
+<td>قالب در سه تکه، یکی برای هر زبانه‌ی ویرایش قالب (حدود ۲۵، ۱۰ و ۱۲ کیلوبایت)؛ همین را جای‌گذاری می‌کنید</td>
 </tr>
 <tr>
-<td><code>dist/template-lite.html</code></td>
-<td>همان قالب بدون کره‌ی سه‌بعدی</td>
+<td><code>dist/split-cdn-lite/</code></td>
+<td>همان سه تکه بدون کره‌ی سه‌بعدی</td>
 </tr>
 <tr>
-<td><code>dist/split/</code>، <code>dist/split-lite/</code></td>
-<td>قالب در سه تکه، اگر بلاگفا یک‌جا نپذیرفت</td>
+<td><code>dist/template-cdn.html</code>، <code>dist/template-cdn-lite.html</code></td>
+<td>هر سه قالب بلاگفا در یک کد (روش دوم)</td>
+</tr>
+<tr>
+<td><code>dist/cdn/</code></td>
+<td>CSS و JavaScript قالب که jsDelivr از GitHub می‌دهد، با کد یکپارچگی</td>
+</tr>
+<tr>
+<td><code>dist/template.html</code>، <code>dist/split/</code> و نسخه‌های سبکشان</td>
+<td>همان قالب با CSS و JavaScript درون‌خطی، فقط برای پیش‌نمایش و آزمون؛ بلاگفا آن‌ها را بزرگ می‌داند</td>
 </tr>
 <tr>
 <td><code>kit.html</code></td>
@@ -232,12 +240,12 @@ nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration:
 </tbody></table></div>
 <h2 id="۶-محدودیتهای-بلاگفا">۶. محدودیت‌های بلاگفا</h2>
 <ul>
-<li><strong>سقف اندازه‌ی قالب</strong> جایی اعلام نشده است. قالب کامل حدود ۵۱۹ کیلوبایت است. اگر پذیرفته نشد: قالب سبک، یا قالب سه‌تکه.</li>
+<li><strong>سقف اندازه‌ی قالب</strong> جایی اعلام نشده است. بلاگفا تکه‌های ۳۰۹ و ۲۵۳ کیلوبایتی قالب درون‌خطی را با پیام «حجم قالب بسیار بالا است» رد کرد (۱۳ آبان ۱۴۰۵). تکه‌های نسخه‌ی ۲ حدود ۲۵، ۱۰ و ۱۲ کیلوبایت‌اند و هنوز روی خود بلاگفا ذخیره نشده‌اند.</li>
 <li><strong>ویرایشگر مطلب</strong> ممکن است کلاس‌ها یا ویژگی‌های <code>data-</code> را حذف کند. برای همین بعد از انتشار مقاله‌ی ۱ یک بررسی کوتاه در راهنمای انتشار آمده است.</li>
 <li><strong>نشانی صفحه‌ی درباره</strong> باید <code>/page/about</code> باشد؛ در وبلاگ شما امتحان شود.</li>
 <li><strong>نظرها</strong> صفحه‌ی خود بلاگفا را باز می‌کنند. اگر بلاگفا اجازه‌ی نمایش در قاب ندهد، پیوند جایگزین نشان داده می‌شود.</li>
 <li><strong>تبلیغ بلاگفا</strong> دست‌نخورده می‌ماند. حذفش خدمت پولی بلاگفاست و بدون تأیید شما انجام نمی‌شود.</li>
-<li><strong>فایل بیرونی:</strong> قالب به هیچ فایل یا اسکریپت بیرونی جز قلم Google Fonts وابسته نیست. اگر قلم بارگذاری نشود، متن با Tahoma نمایش داده می‌شود.</li>
+<li><strong>فایل بیرونی:</strong> CSS و JavaScript قالب از jsDelivr می‌آیند، قفل‌شده به یک commit و با کد یکپارچگی، و سه نشانی پشتیبان دارند (<a href="../../DECISION_LOG.md">تصمیم ۴۰</a>). اگر هیچ‌کدام در دسترس نباشد، صفحه بی‌رنگ ولی خوانا می‌ماند و نوار هشدار نشان می‌دهد. قلم وزیرمتن از Google Fonts می‌آید؛ اگر نرسد، متن با Tahoma نمایش داده می‌شود.</li>
 </ul>
 <h2 id="۷-مسیر-فایلها">۷. مسیر فایل‌ها</h2>
 <p>همه‌ی فایل‌ها در پوشه‌ی تحویل پروژه و در شاخه‌ی <code>claude/project-thread-if9pap</code> مخزن GitHub هستند. کیت نصب (<code>kit.html</code>) نقطه‌ی شروع است.</p>

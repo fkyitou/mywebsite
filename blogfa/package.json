@@ -14,7 +14,9 @@
     "links": "node tools/links.mjs",
     "links:external": "node tools/links.mjs --external",
     "kittest": "node tools/kit.mjs && node tools/kittest.mjs",
-    "qa": "npm run build && npm run preview && npm test && npm run validate && npm run a11y && npm run interact && npm run links && npm run kittest"
+    "preview:cdn": "node tools/preview.mjs --template dist/template-cdn.html --out preview-cdn",
+    "qa:cdn": "npm run preview:cdn && node tools/check.mjs --preview preview-cdn --cdn && node tools/cdntest.mjs && node tools/validate.mjs --cdn && node tools/a11y.mjs --cdn && node tools/interact.mjs --cdn",
+    "qa": "npm run build && npm run preview && npm test && npm run validate && npm run a11y && npm run interact && npm run links && npm run qa:cdn && npm run kittest"
   },
   "devDependencies": {
     "all-the-cities": "^3.1.0",

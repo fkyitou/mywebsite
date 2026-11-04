@@ -22,7 +22,7 @@ const require = createRequire(import.meta.url);
 let chromium;
 try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require(path.join(process.env.NODE_PATH || '', 'playwright'))); }
 if (!fs.existsSync(path.join(PREVIEW, 'index.html'))) { console.error(`${path.relative(ROOT, PREVIEW)}/ is missing. Run: node tools/preview.mjs --template dist/template-cdn.html --out preview-cdn`); process.exit(1); }
-if (!/an-main/.test(fs.readFileSync(path.join(PREVIEW, 'index.html'), 'utf8'))) { console.error('that preview was not made from a CDN template'); process.exit(1); }
+if (!/<script\b[^>]*\bid="an-script"/.test(fs.readFileSync(path.join(PREVIEW, 'index.html'), 'utf8'))) { console.error('that preview was not made from a CDN template'); process.exit(1); }
 
 let pass = 0, fail = 0;
 const results = [];
@@ -33,7 +33,7 @@ const STRIPPED = [];
 function stripped(file, what) {
   const name = `_strip-${what}-${file}`;
   let s = fs.readFileSync(path.join(PREVIEW, file), 'utf8');
-  s = s.replace(/(<(?:link|script)[^>]*\bid="an-(?:css|main)"[^>]*>)/g, tag => {
+  s = s.replace(/(<(?:link|script)[^>]*\bid="an-(?:css|script)"[^>]*>)/g, tag => {
     if (what === 'tags') return '';
     let t = tag.replace(/\scrossorigin="anonymous"/, '');
     if (what === 'both') t = t.replace(/\sintegrity="[^"]*"/, '');

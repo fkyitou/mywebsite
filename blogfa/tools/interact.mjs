@@ -41,6 +41,14 @@ async function settle(page) {
   while (Date.now() - t0 < 10000) { const y = await page.evaluate(() => scrollY); still = y === last ? still + 1 : 0; if (still >= 3) break; last = y; await sleep(200); }
   return Date.now() - t0;
 }
+// Waits until fn(arg) holds in the page, at most 10 s. Used after a smooth scroll instead of settle(): in this
+// environment's software renderer a smooth scroll can pause for seconds while the page's main thread is idle, and
+// settle() reads that pause as the end of the scroll (seen on both previews, 2026-11-04).
+async function until(page, fn, arg) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < 10000) { if (await page.evaluate(fn, arg)) break; await sleep(100); }
+  return Date.now() - t0;
+}
 
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 async function open(file, o = {}) {
@@ -176,8 +184,8 @@ if (run('features')) {
   // back to top
   await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; scrollTo(0, document.documentElement.scrollHeight); document.documentElement.style.scrollBehavior = ''; }); await settle(page); await sleep(400);
   const yBottom = await page.evaluate(() => scrollY);
-  await page.click('.an-fab'); const tTop = await settle(page);
-  ok('feature', 'back-to-top button returns to the top', await page.evaluate(() => scrollY < 5), `from ${yBottom}px, settled after ${tTop} ms`);
+  await page.click('.an-fab'); const tTop = await until(page, () => scrollY < 5);
+  ok('feature', 'back-to-top button returns to the top', await page.evaluate(() => scrollY < 5), `from ${yBottom}px, at the top after ${tTop} ms`);
   ok('feature', 'home: no errors during the feature tests', errors.length === 0, errors.slice(0, 3).join(' | '));
   await ctx.close();
 }
@@ -185,9 +193,10 @@ if (run('features')) {
   const { ctx, page, errors } = await open('post-1.html', { wait: 700 });
   const t = await page.evaluate(() => [...document.querySelectorAll('.an-toc a[href^="#"]')].map(a => a.getAttribute('href')).filter(h => h.length > 1));
   const target = t[Math.min(2, t.length - 1)];
-  await page.click(`.an-toc a[href="${target}"]`); const tToc = await settle(page);
+  await page.click(`.an-toc a[href="${target}"]`);
+  const tToc = await until(page, h => { const e = document.querySelector(h); if (!e) return false; const y = e.getBoundingClientRect().top; return y > -5 && y < 220; }, target);
   const pos = await page.evaluate(h => { const e = document.querySelector(h); return e ? Math.round(e.getBoundingClientRect().top) : null; }, target);
-  ok('feature', 'table of contents: a link scrolls its heading to the top of the screen', pos !== null && pos > -5 && pos < 220, `${t.length} entries, heading at ${pos}px, settled after ${tToc} ms`);
+  ok('feature', 'table of contents: a link scrolls its heading to the top of the screen', pos !== null && pos > -5 && pos < 220, `${t.length} entries, heading at ${pos}px after ${tToc} ms`);
   const cm = await page.evaluate(() => { const a = document.querySelector('.an-cmt a'); return a ? a.getAttribute('href') : null; });
   ok('feature', 'comments: each article links to its Blogfa comments page', !!cm && /comments/.test(cm), cm || 'missing');
   const prog = await page.evaluate(async () => { const b = document.querySelector('#an-progress i'); const r0 = b.getBoundingClientRect().width; scrollTo(0, document.documentElement.scrollHeight / 2); await new Promise(r => setTimeout(r, 400)); return [r0, b.getBoundingClientRect().width]; });

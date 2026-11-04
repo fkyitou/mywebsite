@@ -196,7 +196,8 @@ async function build(variant) {
         .replace("'@JSFILE@'", JSON.stringify([jsA.file, jsA.sri])), `${key} loader`);
       map.EARLY_JS = early + loader;
       map.STYLE = `<link rel="stylesheet" id="an-css" href="${M[0]}${cssA.file}" integrity="${cssA.sri}" crossorigin="anonymous">`;
-      map.BODY_END = `<script src="${M[0]}${jsA.file}" id="an-main" integrity="${jsA.sri}" crossorigin="anonymous"></script>`;
+      // id "an-script", not "an-main": that id belongs to <main> (the skip link's target)
+      map.BODY_END = `<script src="${M[0]}${jsA.file}" id="an-script" integrity="${jsA.sri}" crossorigin="anonymous"></script>`;
       parts[key] = { cssFile: cssA.file, jsFile: jsA.file };
     }
     let html = fill(m[1], map);

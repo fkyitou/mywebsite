@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-11-04T21:33:57.809Z",
+  "builtAt": "2026-11-04T21:53:38.476Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
     "ref": "84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71",
@@ -107,28 +107,28 @@
     {
       "variant": "cdn",
       "cdn": true,
-      "bytes": 47776,
+      "bytes": 47782,
       "parts": {
         "post": {
           "cssFile": "an-full.77c5d57a9a.css",
           "jsFile": "an-post.49af38ceca.js",
           "css": 77806,
           "js": 201332,
-          "html": 25151
+          "html": 25153
         },
         "archive": {
           "cssFile": "an-base.39d9b58a0c.css",
           "jsFile": "an-archive.8e1e5d27c6.js",
           "css": 62397,
           "js": 25819,
-          "html": 10153
+          "html": 10155
         },
         "page": {
           "cssFile": "an-base.39d9b58a0c.css",
           "jsFile": "an-page.7682a6c084.js",
           "css": 62397,
           "js": 46987,
-          "html": 12343
+          "html": 12345
         }
       },
       "facts": {
@@ -141,28 +141,28 @@
     {
       "variant": "cdn-lite",
       "cdn": true,
-      "bytes": 47802,
+      "bytes": 47808,
       "parts": {
         "post": {
           "cssFile": "an-full.77c5d57a9a.css",
           "jsFile": "an-post-lite.5b4905abe9.js",
           "css": 77806,
           "js": 143746,
-          "html": 25177
+          "html": 25179
         },
         "archive": {
           "cssFile": "an-base.39d9b58a0c.css",
           "jsFile": "an-archive.8e1e5d27c6.js",
           "css": 62397,
           "js": 25819,
-          "html": 10153
+          "html": 10155
         },
         "page": {
           "cssFile": "an-base.39d9b58a0c.css",
           "jsFile": "an-page.7682a6c084.js",
           "css": 62397,
           "js": 46987,
-          "html": 12343
+          "html": 12345
         }
       },
       "facts": {

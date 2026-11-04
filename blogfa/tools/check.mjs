@@ -68,7 +68,7 @@ function sameAsInline(name, t, body, inline) {
   if (!inline) return ok(`${name} ${t}: inline counterpart found`, false);
   ok(`${name} ${t}: markup outside the CSS and JS identical to the inline template`, stripCode(body) === stripCode(inline));
   const fileOf = re => { const tag = (body.match(re) || [''])[0]; return path.basename((tag.match(/(?:src|href)="([^"]+)"/) || ['', ''])[1]); };
-  const css = fileOf(/<link\b[^>]*\bid="an-css"[^>]*>/), js = fileOf(/<script\b[^>]*\bid="an-main"[^>]*>/);
+  const css = fileOf(/<link\b[^>]*\bid="an-css"[^>]*>/), js = fileOf(/<script\b[^>]*\bid="an-script"[^>]*>/);
   const style = (inline.match(/<style\b[^>]*>([\s\S]*?)<\/style>/) || [])[1];
   const script = [...inline.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]).sort((a, b) => b.length - a.length)[0];
   const has = f => f && fs.existsSync(path.join(ROOT, 'dist', 'cdn', f));
