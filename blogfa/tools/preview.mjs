@@ -51,8 +51,9 @@ const posts = postFiles.map((f, i) => {
   const day = 4 + i; // 1405/08/04 … : one post a day
   const wd = DAYS[(1 + i) % 7];
   return { id, file: f, title: meta.title || f, cats: pc, tags: pt, main, extended: extended || '', comments: meta.comments !== 'off',
-    // the live blog writes the time in Latin digits ("5:49", seen 2026-11-05); the template turns them Persian
-    date: `${wd} ${fa(day)} آبان ${fa(1405)}`, time: `${9 + (i % 9)}:${(i * 7) % 60 < 10 ? '0' : ''}${(i * 7) % 60}`, ncmt: [3, 0, 7, 1, 0, 12, 2, 0, 5, 4][i % 10] };
+    // the live blog writes the time in Latin digits with no leading zero on the minutes ("5:49", "6:1", seen
+    // 2026-11-05); the template shows them as ۵:۴۹ and ۶:۰۱
+    date: `${wd} ${fa(day)} آبان ${fa(1405)}`, time: `${9 + (i % 9)}:${(i * 7) % 60}`, ncmt: [3, 0, 7, 1, 0, 12, 2, 0, 5, 4][i % 10] };
 }).reverse(); // newest first, like Blogfa
 const pages = fs.existsSync(PAGES) ? fs.readdirSync(PAGES).filter(f => f.endsWith('.html')).map(f => { const { meta, body } = front(path.join(PAGES, f)); return { slug: f.replace(/\.html$/, ''), id: 1, title: meta.title || f, body }; }) : [];
 
@@ -69,6 +70,10 @@ const BLOG = {
   BlogArchiveLink: U.archive, BlogAbout: 'آینده‌نگار، پروژه‌ی کارگاهی درس تجارت الکترونیک و امنیت شبکه.', BlogPhotoLink: '', BlogEmail: '', BlogProfileLink: '#', BlogCustomHtml: '', BlogTimeZone: '+03:30'
 };
 const allTags = [...tags].map(([name, count]) => ({ TagName: name, TagLink: U.tag(name), TagCount: fa(count) }));
+// The live tag cloud listed post 4's tag «هش» with 48 kashidas (2026-11-05): Blogfa's tag table kept an earlier
+// spelling, and that spelling's tag page lists the same post. The preview's cloud does the same.
+const STRETCHED = 'هش', STRETCHED_AS = STRETCHED + 'ـ'.repeat(48);
+const cloudTags = allTags.map(t => t.TagName === STRETCHED ? Object.assign({}, t, { TagName: STRETCHED_AS, TagLink: U.tag(STRETCHED_AS) }) : t);
 const postCtx = p => ({
   PostId: String(p.id), PostTitle: p.title, PostContent: p.main, PostDate: p.date, PostTime: p.time, PostLink: U.post(p.id),
   // The live blog leaves these two tags as they are (seen 2026-11-05), so the preview does too: a template that
@@ -82,7 +87,7 @@ const BLOCKS = {
   BLOGFA: { loop: c => c._feed.map(postCtx) },
   BlogPreviousItems: { loop: (c, a) => posts.slice(0, Math.min(30, +a.items || 10)).map(postCtx) },
   BlogCategories: { loop: () => cats.map(x => ({ CategoryName: x.name, CategoryLink: U.cat(x.id), CategoryId: String(x.id), CategoryCount: fa(x.count) })) },
-  BlogTags: { loop: () => allTags },
+  BlogTags: { loop: () => cloudTags },
   BlogArchive: { loop: () => posts.length ? [{ ArchiveTitle: 'آبان ۱۴۰۵', ArchiveLink: U.month }] : [] },
   BlogLinks: { loop: () => [] }, BlogLinkDump: { loop: () => [] }, BlogAuthors: { loop: () => [] },
   BlogPostCategories: { loop: (c, a) => c._post.cats.map(x => ({ CategoryName: x.name, CategoryLink: U.cat(x.id), CategoryId: String(x.id) })), sep: true },
@@ -153,6 +158,7 @@ for (const p of posts) emit(U.post(p.id), finish(render(T.post, ctxFor({ _feed: 
 // categories and tags
 for (const c of cats) emit(U.cat(c.id), finish(render(T.post, ctxFor({ _feed: posts.filter(p => p.cats.includes(c)), BlogAndPostTitle: `${BLOG.BlogTitle} - ${c.name}`, AutoPageTitle: c.name })), 'list'));
 for (const t of allTags) emit(t.TagLink, finish(render(T.post, ctxFor({ _feed: posts.filter(p => p.tags.includes(t.TagName)), BlogAndPostTitle: `${BLOG.BlogTitle} - ${t.TagName}`, AutoPageTitle: t.TagName })), 'list'));
+for (const t of cloudTags.filter(t => !allTags.includes(t))) emit(t.TagLink, finish(render(T.post, ctxFor({ _feed: posts.filter(p => p.tags.includes(STRETCHED)), BlogAndPostTitle: `${BLOG.BlogTitle} - ${t.TagName}`, AutoPageTitle: t.TagName })), 'list'));
 // /posts/ is a page of Blogfa's own that no template reaches (seen 2026-11-05): a plain list of links and dates.
 // The archive page reads it and shows it in the blog's design, so the preview carries the same plain page.
 emit(U.titles, `<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>${BLOG.BlogTitle} - فهرست مطالب</title><style>body{font:12px Tahoma;margin:0;background:#fff;color:#222}#titlebox{padding:10px;border-bottom:1px solid #ddd}#result{padding:10px;line-height:2}.d{color:#888}.pagination a{margin:0 4px}</style></head><body><div id="titlebox"><a href="${U.home}">${BLOG.BlogTitle}</a> - فهرست مطالب</div><div id="result">${posts.map(p => `<a href="${U.post(p.id)}">${p.title}</a> - <span class="d">${p.date}</span><br>`).join('\n')}</div><div class="pagination"></div><p>Powered by BLOGFA.COM</p></body></html>`);

@@ -80,17 +80,34 @@
 
   /* ---------- what Blogfa fills differently from its documentation ---------- */
   // Blogfa leaves <-PostCategory-> unfilled (seen on the live blog, 2026-11-05), while it does fill the
-  // BlogPostCategories block. Each post takes its category name and number from that block, and the time Blogfa
-  // writes in Latin digits is shown in Persian digits.
+  // BlogPostCategories block. Each post takes its category name and number from that block. The time Blogfa
+  // writes in Latin digits, with no leading zero on the minutes ("6:1" for 6:01), is shown as ۶:۰۱.
   function postFix() {
     $$('article.an-post').forEach(function (a) {
       var c = a.querySelector('.an-post-cats a'), chip = a.querySelector('.an-cat'), name = c ? c.textContent.trim() : '';
       if (name) { a.setAttribute('data-cat', name); a.setAttribute('data-catid', c.getAttribute('data-catid') || ''); }
       if (chip) { if (name) chip.textContent = name; else chip.hidden = true; }
       $$('.an-post-by', a).forEach(function (b) {
-        var w = D.createTreeWalker(b, 4, null), n; while ((n = w.nextNode())) if (/\d/.test(n.nodeValue)) n.nodeValue = AN.faDigits(n.nodeValue);
+        var w = D.createTreeWalker(b, 4, null), n;
+        while ((n = w.nextNode())) if (/\d/.test(n.nodeValue)) n.nodeValue = AN.faDigits(n.nodeValue.replace(/(\d):(\d)(?!\d)/g, '$1:0$2'));
       });
     });
+  }
+
+  // Blogfa's tag cloud can keep an earlier spelling of a tag: on the live blog post 4's tag «هش» was listed with
+  // 48 kashidas (2026-11-05), and its tag page matches both spellings. A kashida only stretches a word, so tag names
+  // are shown without it, and a name the cloud already shows is not shown twice.
+  AN.untatweel = function (s) { return String(s).replace(/ـ+/g, ''); };
+  function tagFix() {
+    var seen = {};
+    $$('#an-tagcloud a, .an-tags a').forEach(function (a) {
+      var t = a.textContent, u = AN.untatweel(t), li = a.parentNode;
+      if (u !== t) a.textContent = u;
+      if (!li || li.tagName !== 'LI') return;
+      var k = AN.norm(u);
+      if (seen[k]) li.hidden = true; else seen[k] = 1;
+    });
+    if (/\/tag\//i.test(location.pathname) && /ـ/.test(D.title)) D.title = AN.untatweel(D.title);
   }
 
   // Blogfa adds a fixed ad bar along the bottom of every page. The page keeps that much room under its footer
@@ -297,7 +314,7 @@
     if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', go); else setTimeout(go, 0);
   };
   AN.ready(function () {
-    var steps = [postFix, adRoom, header, versions, search, keysDlg, shortcuts, pointerFx, live, fab];
+    var steps = [postFix, tagFix, adRoom, header, versions, search, keysDlg, shortcuts, pointerFx, live, fab];
     steps.forEach(function (f) { try { f(); } catch (e) { if (W.console) console.warn('[آینده‌نگار]', f.name, e); } });
     try { if (AN.pages) AN.pages(); } catch (e) { if (W.console) console.warn('[آینده‌نگار] pages', e); }
     AN.reveal(); H.classList.add('an-ready'); AN.ok = true;

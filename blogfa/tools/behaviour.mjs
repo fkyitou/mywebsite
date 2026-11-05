@@ -12,6 +12,8 @@
    6. The About page after Blogfa's page editor has no extra line breaks.
    7. CDN build only: when the stylesheet's first address fails and a backup answers seconds later, the page is set
       up once the styles are in, so the banner, the cards and the globe are drawn at their real size, not stretched.
+   8. Blogfa's own spellings: a tag the cloud lists with a run of kashidas shows plainly and once, the minutes of a
+      post's time keep two digits, and a month of the archive is titled with its month.
 
    node tools/behaviour.mjs          → preview/,     quality/behaviour-results.json, exit 1 on any failure
    node tools/behaviour.mjs --cdn    → preview-cdn/ (CDN addresses answered from dist/cdn/), quality/behaviour-cdn-results.json
@@ -50,7 +52,8 @@ const server = http.createServer((req, res) => {
     const html = fs.readFileSync(path.join(PREVIEW, 'page-about.html'), 'utf8').replace(/(<div class="an-post-body">)([\s\S]*?)(<\/div>\s*<\/article>)/, (m, a, b, c) => a + editorize(b) + c);
     res.writeHead(200, { 'Content-Type': TYPES['.html'] }); res.end(html); return;
   }
-  const file = path.join(PREVIEW, rel);
+  // a tag page at its Blogfa address (/tag/<name>) is the preview's flat tag file, so the page sees a Blogfa path
+  const file = path.join(PREVIEW, /^tag\//.test(rel) ? 'tag-' + encodeURIComponent(rel.slice(4)).replace(/%/g, '') + '.html' : rel);
   if (!file.startsWith(PREVIEW + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end(); return; }
   res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
   fs.createReadStream(file).pipe(res);
@@ -112,6 +115,7 @@ for (const f of ['index.html', 'post-1.html', 'cat-1.html']) {
       chips: [...document.querySelectorAll('.an-cat')].filter(x => x.textContent.trim() && !x.hidden).length,
       raw: /<-\w+->/.test(document.body.innerHTML.replace(/<script[\s\S]*?<\/script>/g, '')),
       latin: [...document.querySelectorAll('.an-post-by')].filter(b => /[0-9]/.test(b.textContent)).length,
+      times: [...document.querySelectorAll('.an-post-by')].map(b => (/ساعت\s*([۰-۹]+:[۰-۹]+)/.exec(b.textContent) || [])[1] || ''),
       title: (document.querySelector('.an-page-title') || {}).textContent || '',
       firstCat: ((document.querySelector('article.an-post .an-post-cats a') || {}).textContent || '').trim()
     };
@@ -119,6 +123,7 @@ for (const f of ['index.html', 'post-1.html', 'cat-1.html']) {
   ok('posts', `${f}: every post carries its category`, c.n > 0 && c.cats === c.n, `${c.cats} of ${c.n}`);
   ok('posts', `${f}: no Blogfa tag shows as raw text`, !c.raw);
   ok('posts', `${f}: the time is in Persian digits`, c.latin === 0, `${c.latin} with Latin digits`);
+  ok('posts', `${f}: the minutes of the time have two digits`, c.times.length === c.n && c.times.every(t => /^[۰-۹]{1,2}:[۰-۹]{2}$/.test(t)), c.times.join(' '));
   if (f === 'cat-1.html') ok('posts', 'category page is titled with its category', !!c.firstCat && c.title.trim() === c.firstCat, `«${c.title.trim()}»`);
   if (f === 'post-1.html') {
     const chip = await page.evaluate(() => { const b = document.querySelector('.an-banner .an-chip[href]'); return b ? { t: b.textContent.trim(), h: b.getAttribute('href') } : null; });
@@ -187,6 +192,32 @@ for (const [name, vp] of [['desktop', { width: 1366, height: 900 }], ['phone', {
   ok('about', `${name}: the page is as tall as the clean one`, Math.abs(hc - hl) <= 4, `clean ${hc}px, after the editor ${hl}px`);
   ok('about', `${name}: no console error`, live.errors.length === 0, live.errors.slice(0, 2).join(' | '));
   await clean.ctx.close(); await live.ctx.close();
+}
+
+/* ---------- 8. Blogfa's own spellings: tag cloud, tag and month pages ---------- */
+// On the live blog the tag cloud listed post 4's tag «هش» with 48 kashidas (2026-11-05); the preview does the same.
+{
+  const errs = [];
+  let { ctx, page, errors } = await open(BASE + 'index.html');
+  const t = await page.evaluate(() => {
+    const shown = [...document.querySelectorAll('#an-tagcloud li')].filter(li => !li.hidden).map(li => li.querySelector('a'));
+    const names = shown.map(a => a.textContent.trim()), key = s => s.replace(/[\u0640\u200c\s]/g, '');
+    const hash = shown.find(a => a.textContent.trim() === 'هش');
+    return { n: names.length, kashida: names.filter(x => /\u0640/.test(x)).length, dupes: names.length - new Set(names.map(key)).size, href: hash ? hash.getAttribute('href') : '' };
+  });
+  ok('spelling', 'tag cloud: names show without kashida', t.n > 0 && t.kashida === 0, `${t.kashida} of ${t.n} with kashida`);
+  ok('spelling', 'tag cloud: each tag is named once', t.dupes === 0, `${t.dupes} repeated`);
+  ok('spelling', 'tag cloud: the stretched tag keeps the address Blogfa gave it', /(%D9%80|D980){48}/i.test(t.href), t.href.slice(0, 40) + '…');
+  errs.push(...errors); await ctx.close();
+  ({ ctx, page, errors } = await open(BASE + 'month-1405-08.html'));
+  const m = await page.evaluate(() => (document.querySelector('.an-page-title') || {}).textContent || '');
+  ok('spelling', 'month page is titled with its month', m.trim() === 'آبان ۱۴۰۵', `«${m.trim()}»`);
+  errs.push(...errors); await ctx.close();
+  ({ ctx, page, errors } = await open(BASE + 'tag/' + encodeURIComponent('هش' + '\u0640'.repeat(48))));
+  const g = await page.evaluate(() => ({ h: ((document.querySelector('.an-page-title') || {}).textContent || '').trim(), title: document.title, posts: document.querySelectorAll('#an-feed > .an-post').length }));
+  ok('spelling', 'tag page at its Blogfa address: titled without kashida', g.posts > 0 && g.h === 'برچسب: هش' && !/\u0640/.test(g.title), `«${g.h}», ${g.posts} post(s), title «${g.title.slice(0, 30)}»`);
+  errs.push(...errors); await ctx.close();
+  ok('spelling', 'no console error', errs.length === 0, errs.slice(0, 2).join(' | '));
 }
 
 /* ---------- 7. a stylesheet that arrives late (CDN build) ---------- */

@@ -99,13 +99,17 @@
     $$('.an-numbers .an-num').forEach(function (n, i) { n.classList.add('an-rv'); n.style.setProperty('--d', (i * 0.07) + 's'); });
   }
 
-  /* ---------- category / tag / older-page lists ---------- */
+  /* ---------- category / tag / month / older-page lists ---------- */
+  var MONTHS = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
   function list() {
     var posts = $$('#an-feed > .an-post').map(readPost), feed = $('#an-feed'), head = $('#an-page-head');
     if (!posts.length || !feed) return;
     var cat = posts[0].cat, same = posts.every(function (p) { return p.cat === cat; }), path = decodeURIComponent(location.pathname);
     var isCat = /\/category\/|\/cat-\d+\.html$/i.test(path);
-    var title = /\/tag\//i.test(path) ? 'برچسب: ' + path.split('/').filter(Boolean).pop().replace(/[-_]/g, ' ') : (isCat && same && cat ? cat : 'نوشته‌ها');
+    // a month of the archive: /1405/08 on Blogfa, month-1405-08.html in the preview
+    var mon = path.match(/\/(1[34]\d\d)\/(\d{1,2})\/?$/) || path.match(/\/month-(1[34]\d\d)-(\d{1,2})\.html$/i), mname = mon && MONTHS[+mon[2] - 1];
+    var title = /\/tag\//i.test(path) ? 'برچسب: ' + AN.untatweel(path.split('/').filter(Boolean).pop().replace(/[-_]/g, ' ')) :
+      isCat && same && cat ? cat : mname ? mname + ' ' + AN.faDigits(mon[1]) : 'نوشته‌ها';
     if (head) {
       var realm = AN.realmOf(title);
       head.style.setProperty('--rc', AN.color(realm));
