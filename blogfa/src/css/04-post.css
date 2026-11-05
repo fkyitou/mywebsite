@@ -185,3 +185,25 @@ svg.an-ch { stroke: none; }
 .an-page-head-static { padding-top: calc(var(--bar-h) + var(--s8)); }
 [data-page="page"] .an-post { padding-top: calc(var(--bar-h) + var(--s7)); }
 [data-page="page"] .an-creator { padding-top: var(--s6); }
+
+/* the category chip stays out until a category name arrives */
+.an-cat:empty, .an-cat[hidden] { display: none !important; }
+/* line breaks and empty paragraphs that Blogfa's editor adds around block elements */
+.an-post-body ul > br, .an-post-body ol > br { display: none; }
+.an-post-body :is(h2, h3, h4, ul, ol, figure, table, blockquote, pre, section, div) + br { display: none; }
+.an-post-body > p:empty { display: none; }
+
+/* «همه‌ی مقاله‌ها» on the archive page */
+.an-all { max-width: var(--read); margin: 0 auto var(--s7); padding: 0 var(--gut); }
+.an-all-wait { color: var(--muted); margin: 0; }
+.an-all-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+.an-all-list li { animation: an-all-in var(--t-slow) var(--ease) both; animation-delay: var(--d, 0s); }
+.an-all-a { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; align-items: center; padding: 14px 16px; border-radius: var(--r-m); background: var(--glass); border: 1px solid var(--border); color: var(--text); transition: background var(--t-fast), border-color var(--t-fast), transform var(--t-fast) var(--ease); }
+.an-all-a:hover, .an-all-a:focus-visible { text-decoration: none; background: var(--surface-2); border-color: color-mix(in srgb, var(--rc, var(--accent)) 55%, transparent); transform: translateX(-3px); }
+.an-all-n { grid-row: span 2; min-width: 2.4em; text-align: center; font-size: var(--fs-3); font-weight: 800; color: var(--rc, var(--accent)); }
+.an-all-t { font-size: var(--fs-2); font-weight: 700; line-height: 1.6; }
+.an-all-m { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--muted); font-size: var(--fs-0); }
+.an-all-c { color: var(--rc, var(--accent)); font-weight: 700; }
+.an-months-h { max-width: var(--read); margin: var(--s7) auto var(--s4); padding: 0 var(--gut); font-size: var(--fs-4); }
+@keyframes an-all-in { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .an-all-list li { animation: none; } .an-all-a:hover, .an-all-a:focus-visible { transform: none; } }

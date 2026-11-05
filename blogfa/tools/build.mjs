@@ -38,11 +38,11 @@ const CSS_SETS = {
 const LABS = ['_ui', 'ai', 'iot', 'city', 'security', 'brain', 'space', 'arch', 'algo', 'energy', 'idea'];
 const JS_MODS = {
   core: ['js/core.js'], sky: ['js/sky.js'], sound: ['js/sound.js'], covers: ['js/covers.js'], charts: ['js/charts.js'], pages: ['js/pages.js'],
-  globe: ['js/data-geo.js', 'js/globe.js'], labs: LABS.map(l => `js/labs/${l}.js`)
+  globe: ['js/data-geo.js', 'js/globe.js'], labs: LABS.map(l => `js/labs/${l}.js`), archive: ['js/archive.js']
 };
 const MODS = {
-  full: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'globe', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound'] },
-  lite: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound'] }
+  full: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'globe', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound', 'archive'] },
+  lite: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound', 'archive'] }
 };
 const VARIANTS = {
   full: { mods: 'full', cdn: false }, lite: { mods: 'lite', cdn: false },
@@ -144,6 +144,23 @@ function fill(tpl, map) {
   return tpl;
 }
 
+/* ---------- categories for the archive and page templates ---------- */
+// Blogfa fills its category list only in the main template, so the other two carry the categories as plain links.
+// Blogfa numbers categories in the order they are made; the kit makes them in the order the posts first use them,
+// which gave /category/1 … /category/7 on the live blog (checked 2026-11-05). core.js prefers the list a visitor's
+// browser saved from a main-template page, so a renamed category shows correctly there.
+function catsStatic() {
+  const dir = path.join(ROOT, 'posts');
+  const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => /^\d\d-[\w-]+\.html$/.test(f)).sort() : [];
+  const names = [];
+  for (const f of files) {
+    const m = fs.readFileSync(path.join(dir, f), 'utf8').match(/^<!--[\s\S]*?^category:\s*(.+)$/m);
+    for (const n of (m ? m[1] : '').split(/[،,]/).map(x => x.trim()).filter(Boolean)) if (!names.includes(n)) names.push(n);
+  }
+  const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  return `<ul hidden id="an-cats" data-static>${names.map((n, i) => `<li><a href="/category/${i + 1}">${esc(n)}</a></li>`).join('')}</ul>`;
+}
+
 /* ---------- facts for the home "numbers" band, read from the real posts ---------- */
 function postFacts() {
   const dir = path.join(ROOT, 'posts');
@@ -183,7 +200,7 @@ async function build(variant) {
       HEAD: () => P('head'), EARLY_JS: early, STYLE: `<style>${cssCode}</style>`,
       CHROME_TOP: () => P('chrome_top'), LOGO: logo, HERO: () => P('hero'), HOME_TOP: () => P('home_top'),
       HOME_BOTTOM: homeBottom, AUTHOR_BOX: () => P('author_box'), FOOT_BOTTOM: () => P('foot_bottom'),
-      CREATOR: () => P('creator'), BODY_END: `<script>${jsCode}</script>`
+      CREATOR: () => P('creator'), BODY_END: `<script>${jsCode}</script>`, CATS_STATIC: catsStatic
     };
     if (cdn) {
       // the same CSS and JS as files; the stylesheet says it is UTF-8 in case a mirror sends no charset

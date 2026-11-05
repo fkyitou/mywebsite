@@ -95,3 +95,6 @@ kbd { font-family: var(--font); font-size: .72em; padding: .1em .45em; border-ra
 .an-toast.on { transform: translate(50%, 0); opacity: 1; }
 .an-js .an-rv { opacity: 0; transform: translateY(26px); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: var(--d, 0s); }
 .an-js .an-rv.in { opacity: 1; transform: none; }
+/* room for Blogfa's fixed ad bar at the bottom of the page; core.js measures its height into --an-ad */
+body::after { content: ""; display: block; height: var(--an-ad, 0px); }
+.an-toast { bottom: calc(24px + var(--an-ad, 0px)); }

@@ -51,7 +51,8 @@ const posts = postFiles.map((f, i) => {
   const day = 4 + i; // 1405/08/04 … : one post a day
   const wd = DAYS[(1 + i) % 7];
   return { id, file: f, title: meta.title || f, cats: pc, tags: pt, main, extended: extended || '', comments: meta.comments !== 'off',
-    date: `${wd} ${fa(day)} آبان ${fa(1405)}`, time: fa(`${9 + (i % 9)}:${(i * 7) % 60 < 10 ? '0' : ''}${(i * 7) % 60}`), ncmt: [3, 0, 7, 1, 0, 12, 2, 0, 5, 4][i % 10] };
+    // the live blog writes the time in Latin digits ("5:49", seen 2026-11-05); the template turns them Persian
+    date: `${wd} ${fa(day)} آبان ${fa(1405)}`, time: `${9 + (i % 9)}:${(i * 7) % 60 < 10 ? '0' : ''}${(i * 7) % 60}`, ncmt: [3, 0, 7, 1, 0, 12, 2, 0, 5, 4][i % 10] };
 }).reverse(); // newest first, like Blogfa
 const pages = fs.existsSync(PAGES) ? fs.readdirSync(PAGES).filter(f => f.endsWith('.html')).map(f => { const { meta, body } = front(path.join(PAGES, f)); return { slug: f.replace(/\.html$/, ''), id: 1, title: meta.title || f, body }; }) : [];
 
@@ -70,8 +71,10 @@ const BLOG = {
 const allTags = [...tags].map(([name, count]) => ({ TagName: name, TagLink: U.tag(name), TagCount: fa(count) }));
 const postCtx = p => ({
   PostId: String(p.id), PostTitle: p.title, PostContent: p.main, PostDate: p.date, PostTime: p.time, PostLink: U.post(p.id),
-  PostAuthor: BLOG.BlogAuthor, PostAuthorId: '1', PostAuthorEmail: '', PostAuthorLink: '#', PostCategory: p.cats[0] ? p.cats[0].name : '',
-  PostCategoryId: p.cats[0] ? String(p.cats[0].id) : '', _post: p
+  // The live blog leaves these two tags as they are (seen 2026-11-05), so the preview does too: a template that
+  // still used them would show the raw tag here, as it would on Blogfa.
+  PostAuthor: BLOG.BlogAuthor, PostAuthorId: '1', PostAuthorEmail: '', PostAuthorLink: '#', PostCategory: '<-PostCategory->',
+  PostCategoryId: '<-PostCategoryId->', _post: p
 });
 
 /* ---------- the template engine ---------- */
@@ -127,11 +130,13 @@ function finish(html, kind, extraHead) {
   if (MODE === 'flat') {
     const hint = PAGE_FOR[kind] ? `<script>window.AN_PAGE=${JSON.stringify(PAGE_FOR[kind])};</script>` : '';
     html = html.replace(/(<head>)/i, `$1${hint}`)
-      .replace(/href="\/posts\/"/g, `href="${U.titles}"`).replace(/href="\/page\/about"/g, `href="${U.page('about')}"`);
+      .replace(/href="\/posts\/"/g, `href="${U.titles}"`).replace(/href="\/page\/about"/g, `href="${U.page('about')}"`)
+      .replace(/href="\/category\/(\d+)"/g, (m, id) => `href="${U.cat(id)}"`);
     const shim = `<script>/* preview only: map Blogfa paths to the flat preview files */document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href^="/"]');if(!a)return;var h=a.getAttribute('href'),m;if(/^\\/page\\/about/.test(h))a.setAttribute('href','${U.page('about')}');else if(/^\\/archive/.test(h))a.setAttribute('href','${U.archive}');else if(/^\\/posts\\//.test(h))a.setAttribute('href','${U.titles}');else if((m=/^\\/comments\\/\\?.*postid=(\\d+)/.exec(h)))a.setAttribute('href','${U.comments}?postid='+m[1]);},true);document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('iframe').forEach(function(f){var s=f.getAttribute('src')||'';if(/^\\/comments\\//.test(s))f.setAttribute('src','${U.comments}');});});</script>`;
     html = html.replace(/<\/body>/i, shim + '</body>');
   }
-  if (ADS) html = html.replace(/<body([^>]*)>/i, '<body$1><div style="position:fixed;bottom:0;left:0;right:0;height:60px;z-index:2147483000;background:#ffe9a8;color:#333;font:13px Tahoma;display:flex;align-items:center;justify-content:center;border-top:1px solid #d9c27a">نمونه‌ی تبلیغ تزریقی بلاگفا (فقط برای آزمون چیدمان)</div>');
+  // the same shape as the ad bar on the live blog (2026-11-05): first child of <body>, no class, fixed to the bottom
+  if (ADS) html = html.replace(/<body([^>]*)>/i, '<body$1><div id="46471336" style="position: fixed; bottom: 0px; left: 0px; right: 0px; width: 728px; text-align: center; margin: 0px auto; padding: 0px; max-width: 100%; z-index: 9999;"><div style="height:90px;background:#ffe9a8;color:#333;font:13px Tahoma;display:flex;align-items:center;justify-content:center;border-top:1px solid #d9c27a">نمونه‌ی تبلیغ تزریقی بلاگفا (فقط برای آزمون چیدمان)</div></div>');
   return html.replace(/^\s+/, '');
 }
 function emit(url, html) { const f = path.join(OUT, fileFor(url)); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, html); }
@@ -148,7 +153,9 @@ for (const p of posts) emit(U.post(p.id), finish(render(T.post, ctxFor({ _feed: 
 // categories and tags
 for (const c of cats) emit(U.cat(c.id), finish(render(T.post, ctxFor({ _feed: posts.filter(p => p.cats.includes(c)), BlogAndPostTitle: `${BLOG.BlogTitle} - ${c.name}`, AutoPageTitle: c.name })), 'list'));
 for (const t of allTags) emit(t.TagLink, finish(render(T.post, ctxFor({ _feed: posts.filter(p => p.tags.includes(t.TagName)), BlogAndPostTitle: `${BLOG.BlogTitle} - ${t.TagName}`, AutoPageTitle: t.TagName })), 'list'));
-emit(U.titles, finish(render(T.post, ctxFor({ _feed: posts, BlogAndPostTitle: `${BLOG.BlogTitle} - فهرست نوشته‌ها`, AutoPageTitle: 'فهرست نوشته‌ها' })), 'titles'));
+// /posts/ is a page of Blogfa's own that no template reaches (seen 2026-11-05): a plain list of links and dates.
+// The archive page reads it and shows it in the blog's design, so the preview carries the same plain page.
+emit(U.titles, `<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>${BLOG.BlogTitle} - فهرست مطالب</title><style>body{font:12px Tahoma;margin:0;background:#fff;color:#222}#titlebox{padding:10px;border-bottom:1px solid #ddd}#result{padding:10px;line-height:2}.d{color:#888}.pagination a{margin:0 4px}</style></head><body><div id="titlebox"><a href="${U.home}">${BLOG.BlogTitle}</a> - فهرست مطالب</div><div id="result">${posts.map(p => `<a href="${U.post(p.id)}">${p.title}</a> - <span class="d">${p.date}</span><br>`).join('\n')}</div><div class="pagination"></div><p>Powered by BLOGFA.COM</p></body></html>`);
 emit(U.month, finish(render(T.post, ctxFor({ _feed: posts, BlogAndPostTitle: `${BLOG.BlogTitle} - آبان ۱۴۰۵`, AutoPageTitle: 'آبان ۱۴۰۵' })), 'list'));
 // archive and separate pages
 emit(U.archive, finish(render(T.archive, ctxFor({})), 'archive'));

@@ -67,7 +67,49 @@
     AN._idx = $$('#an-index a').map(function (a, i) { var t = a.textContent.trim(); return { id: a.getAttribute('data-id') || '', url: a.href, title: t, date: a.getAttribute('data-date') || '', topic: AN.topicOf(t), i: i }; });
     return AN._idx;
   };
-  AN.cats = function () { return $$('#an-cats a').map(function (a) { var n = a.textContent.trim(); return { name: n, url: a.href, realm: AN.realmOf(n) }; }); };
+  // The main template lists the categories from Blogfa (#an-cats); the archive and page templates carry a copy made
+  // when the template was built (data-static). A list read from Blogfa is saved in the browser and shown on those two
+  // pages instead, so a category renamed later still shows its new name there.
+  AN.cats = function () {
+    var box = $('#an-cats'), list = $$('#an-cats a').map(function (a) { return { name: a.textContent.trim(), url: a.href }; });
+    if (box && !box.hasAttribute('data-static')) { if (list.length) AN.store.set('an-cats', JSON.stringify(list)); }
+    else { try { var saved = JSON.parse(AN.store.get('an-cats') || 'null'); if (saved && saved.length) list = saved; } catch (e) {} }
+    return list.filter(function (c) { return c && c.name && c.url && !/^\s*javascript:/i.test(c.url); })
+      .map(function (c) { return { name: String(c.name), url: String(c.url), realm: AN.realmOf(String(c.name)) }; });
+  };
+
+  /* ---------- what Blogfa fills differently from its documentation ---------- */
+  // Blogfa leaves <-PostCategory-> unfilled (seen on the live blog, 2026-11-05), while it does fill the
+  // BlogPostCategories block. Each post takes its category name and number from that block, and the time Blogfa
+  // writes in Latin digits is shown in Persian digits.
+  function postFix() {
+    $$('article.an-post').forEach(function (a) {
+      var c = a.querySelector('.an-post-cats a'), chip = a.querySelector('.an-cat'), name = c ? c.textContent.trim() : '';
+      if (name) { a.setAttribute('data-cat', name); a.setAttribute('data-catid', c.getAttribute('data-catid') || ''); }
+      if (chip) { if (name) chip.textContent = name; else chip.hidden = true; }
+      $$('.an-post-by', a).forEach(function (b) {
+        var w = D.createTreeWalker(b, 4, null), n; while ((n = w.nextNode())) if (/\d/.test(n.nodeValue)) n.nodeValue = AN.faDigits(n.nodeValue);
+      });
+    });
+  }
+
+  // Blogfa adds a fixed ad bar along the bottom of every page. The page keeps that much room under its footer
+  // (--an-ad), so the last lines and the back-to-top button stay clear of it; the ad itself stays as Blogfa shows it.
+  function adRoom() {
+    function find() {
+      var k = D.body ? D.body.children : [];
+      for (var i = 0; i < k.length; i++) {
+        var e = k[i]; if (e.className || e.tagName !== 'DIV') continue;
+        var cs = W.getComputedStyle(e); if (cs.position === 'fixed' && cs.bottom === '0px' && cs.display !== 'none' && cs.visibility !== 'hidden') return e;
+      }
+      return null;
+    }
+    var last = -1;
+    function upd() { var e = find(), h = e ? Math.round(e.getBoundingClientRect().height) : 0; if (h > 240) h = 0; if (h !== last) { last = h; H.style.setProperty('--an-ad', h + 'px'); } }
+    upd(); var n = 0, iv = setInterval(function () { upd(); if (++n > 15) clearInterval(iv); }, 1500);
+    W.addEventListener('resize', upd); W.addEventListener('load', upd);
+    D.addEventListener('click', function () { setTimeout(upd, 400); }, true);
+  }
 
   /* ---------- header ---------- */
   function header() {
@@ -245,7 +287,7 @@
   // bundle, which defines AN.pages and the labs, has run before the page is set up.
   AN.ready = function (fn) { if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', fn); else setTimeout(fn, 0); };
   AN.ready(function () {
-    var steps = [header, versions, search, keysDlg, shortcuts, pointerFx, live, fab];
+    var steps = [postFix, adRoom, header, versions, search, keysDlg, shortcuts, pointerFx, live, fab];
     steps.forEach(function (f) { try { f(); } catch (e) { if (W.console) console.warn('[آینده‌نگار]', f.name, e); } });
     try { if (AN.pages) AN.pages(); } catch (e) { if (W.console) console.warn('[آینده‌نگار] pages', e); }
     AN.reveal(); H.classList.add('an-ready'); AN.ok = true;

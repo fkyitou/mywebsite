@@ -129,7 +129,7 @@ async function browserChecks() {
   if (!fs.existsSync(path.join(PREVIEW, 'index.html'))) { ok('preview exists', false, 'run: node tools/preview.mjs'); return; }
   fs.mkdirSync(SHOTS, { recursive: true });
   const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-  const files = fs.readdirSync(PREVIEW).filter(f => /^(index|post-\d+|cat-\d+|posts|archive|page-[\w-]+)\.html$/.test(f))
+  const files = fs.readdirSync(PREVIEW).filter(f => /^(index|post-\d+|cat-\d+|archive|page-[\w-]+)\.html$/.test(f))
     .sort((a, b) => (a === 'index.html' ? -1 : b === 'index.html' ? 1 : a.localeCompare(b, 'en', { numeric: true })));
   const VIEWS = [['desktop', { width: 1440, height: 900 }, false], ['mobile', { width: 390, height: 844 }, true]];
   for (const [vn, vp, mobile] of VIEWS) {

@@ -26,3 +26,4 @@
 .an-fab svg.ring { position: absolute; inset: -1px; width: calc(100% + 2px); height: calc(100% + 2px); transform: rotate(-90deg); }
 .an-fab svg.ring circle { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--p, 0) * 100); stroke-linecap: round; }
 .an-fab svg.arr { width: 20px; height: 20px; }
+@media (max-width: 900px) { .an-fab { bottom: calc(20px + var(--an-ad, 0px)); } }

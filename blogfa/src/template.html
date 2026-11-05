@@ -29,10 +29,10 @@
   <div class="an-page-head" id="an-page-head"></div>
   <div class="an-feed" id="an-feed">
 <BLOGFA>
-    <article class="an-post" data-id="<-PostId->" data-cat="<-PostCategory->" data-catid="<-PostCategoryId->" data-link="<-PostLink->" data-date="<-PostDate->" itemscope itemtype="https://schema.org/BlogPosting">
+    <article class="an-post" data-id="<-PostId->" data-link="<-PostLink->" data-date="<-PostDate->" itemscope itemtype="https://schema.org/BlogPosting">
       <header class="an-post-head">
         <div class="an-post-meta">
-          <span class="an-chip an-cat"><-PostCategory-></span>
+          <span class="an-chip an-cat"></span>
           <span class="an-date"><-PostDate-></span>
           <span class="an-rt"></span>
         </div>
@@ -79,8 +79,7 @@
 </BlogProfile>
       <ul class="an-foot-links">
         <li><a href="<-BlogUrl->">صفحه‌ی نخست</a></li>
-        <li><a href="/posts/">فهرست همه‌ی نوشته‌ها</a></li>
-        <li><a href="<-BlogArchiveLink->">آرشیو زمانی</a></li>
+        <li><a href="<-BlogArchiveLink->">همه‌ی مقاله‌ها و آرشیو</a></li>
         <li><a href="/page/about">درباره‌ی آینده‌نگار</a></li>
         <li><a href="<-BlogXmlLink->">خوراک RSS</a></li>
 <BlogProfileLinkBlock>
@@ -186,15 +185,24 @@
 /*@CHROME_TOP@*/
 <main id="an-main" class="an-main" tabindex="-1">
   <div class="an-page-head an-page-head-static">
-    <p class="an-eyebrow">بایگانی زمانی</p>
-    <h1 class="an-page-title">آرشیو <-BlogTitle-></h1>
-    <p class="an-page-sub">همه‌ی ماه‌هایی که در آن‌ها روایتی تازه از فردا نوشته شد.</p>
+    <p class="an-eyebrow">آرشیو</p>
+    <h1 class="an-page-title">همه‌ی مقاله‌ها</h1>
+    <p class="an-page-sub" id="an-all-sub">همه‌ی روایت‌های <-BlogTitle->، تازه‌ترین در بالا.</p>
   </div>
-  <ol class="an-timeline" id="an-timeline">
+  <section class="an-all" id="an-all" aria-labelledby="an-all-h">
+    <h2 class="an-sr" id="an-all-h">فهرست مقاله‌ها</h2>
+    <p class="an-all-wait" id="an-all-wait">فهرست مقاله‌ها در حال آمدن است. اگر نیامد، <a href="/posts/">فهرست ساده‌ی بلاگفا</a> را ببینید.</p>
+    <ol class="an-all-list" id="an-all-list"></ol>
+  </section>
+  <section class="an-months" id="an-months" aria-labelledby="an-months-h">
+    <h2 class="an-months-h" id="an-months-h">آرشیو ماه‌ها</h2>
+    <ol class="an-timeline" id="an-timeline">
 <BlogArchive>
-    <li><a href="<-ArchiveLink->"><-ArchiveTitle-></a></li>
+      <li><a href="<-ArchiveLink->"><-ArchiveTitle-></a></li>
 </BlogArchive>
-  </ol>
+    </ol>
+  </section>
+/*@CATS_STATIC@*/
 </main>
 <footer class="an-foot an-foot-min">
 /*@FOOT_BOTTOM@*/
@@ -223,6 +231,7 @@
 <body data-blog="<-BlogId->">
 /*@CHROME_TOP@*/
 <main id="an-main" class="an-main" tabindex="-1">
+/*@CATS_STATIC@*/
   <article class="an-post an-page" data-id="page-<-BlogPageId->">
     <header class="an-post-head">
       <div class="an-post-meta"><span class="an-chip">صفحه</span></div>

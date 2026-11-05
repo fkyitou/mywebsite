@@ -22,7 +22,7 @@ const AXE = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 if (!fs.existsSync(path.join(PREVIEW, 'index.html'))) { console.log('Run: node tools/preview.mjs'); process.exit(1); }
 
 const url = f => pathToFileURL(path.join(PREVIEW, f)).href;
-const PAGES = ['index.html', 'post-1.html', 'post-4.html', 'post-6.html', 'post-9.html', 'page-about.html', 'archive.html', 'posts.html', 'cat-1.html'];
+const PAGES = ['index.html', 'post-1.html', 'post-4.html', 'post-6.html', 'post-9.html', 'page-about.html', 'archive.html', 'cat-1.html'];
 const RUNS = [];
 for (const v of ['a', 'b']) for (const f of PAGES) RUNS.push(['desktop', { width: 1440, height: 900 }, false, v, f]);
 for (const v of ['a', 'b']) for (const f of ['index.html', 'post-1.html']) RUNS.push(['mobile', { width: 390, height: 844 }, true, v, f]);

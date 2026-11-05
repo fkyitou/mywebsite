@@ -10,7 +10,10 @@
   /* ---------- reading posts out of Blogfa's markup ---------- */
   function readPost(a) {
     var body = a.querySelector('.an-post-body'), tl = a.querySelector('.an-post-title a') || a.querySelector('.an-post-title');
-    var title = tl ? tl.textContent.trim() : '', cat = (a.getAttribute('data-cat') || '').trim();
+    var title = tl ? tl.textContent.trim() : '', cat = (a.getAttribute('data-cat') || '').trim(), pc = a.querySelector('.an-post-cats a');
+    // an unfilled Blogfa tag never reaches the page as a category name
+    if (cat.indexOf('<-') > -1) cat = '';
+    if (!cat && pc) cat = pc.textContent.trim();
     var text = body ? body.textContent : '', words = (text.match(/\S+/g) || []).length;
     var lead = body && (body.querySelector('.an-lead') || body.querySelector('p'));
     var ex = lead ? lead.textContent.trim() : text.trim().slice(0, 220);
@@ -101,11 +104,12 @@
     var posts = $$('#an-feed > .an-post').map(readPost), feed = $('#an-feed'), head = $('#an-page-head');
     if (!posts.length || !feed) return;
     var cat = posts[0].cat, same = posts.every(function (p) { return p.cat === cat; }), path = decodeURIComponent(location.pathname);
-    var title = /\/tag\//i.test(path) ? 'برچسب: ' + path.split('/').filter(Boolean).pop().replace(/[-_]/g, ' ') : (/\/category\//i.test(path) && same ? cat : 'نوشته‌ها');
+    var isCat = /\/category\/|\/cat-\d+\.html$/i.test(path);
+    var title = /\/tag\//i.test(path) ? 'برچسب: ' + path.split('/').filter(Boolean).pop().replace(/[-_]/g, ' ') : (isCat && same && cat ? cat : 'نوشته‌ها');
     if (head) {
       var realm = AN.realmOf(title);
       head.style.setProperty('--rc', AN.color(realm));
-      head.innerHTML = '<p class="an-eyebrow">' + (/\/category\//i.test(path) ? 'قلمرو' : 'آرشیو نوشته‌ها') + '</p><h1 class="an-page-title">' + esc(title) + '</h1><p class="an-page-sub">' + AN.fa(posts.length) + ' روایت در این صفحه. روی هر کارت بزن تا مقاله و آزمایشگاه زنده‌اش باز شود.</p>';
+      head.innerHTML = '<p class="an-eyebrow">' + (isCat ? 'قلمرو' : 'آرشیو نوشته‌ها') + '</p><h1 class="an-page-title">' + esc(title) + '</h1><p class="an-page-sub">' + AN.fa(posts.length) + ' روایت در این صفحه. روی هر کارت بزن تا مقاله و آزمایشگاه زنده‌اش باز شود.</p>';
     }
     var grid = el('div', 'an-list-cards');
     posts.forEach(function (p, i) { grid.appendChild(card(p, i, false, 'h2')); });
