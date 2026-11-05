@@ -1,18 +1,18 @@
 {
-  "builtAt": "2026-11-05T17:55:37.075Z",
+  "builtAt": "2026-11-05T23:55:39.173Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
-    "ref": "43e7a0b84a6ec15de037f3b5524e76b73baa7c53",
+    "ref": "0005840ca31245874d6bbf7601caca8338578e87",
     "dir": "blogfa/dist/cdn",
     "ok": true,
     "pushed": true,
     "missing": [],
     "unverifiedTemplates": false,
     "mirrors": [
-      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@43e7a0b84a6ec15de037f3b5524e76b73baa7c53/blogfa/dist/cdn/",
-      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@43e7a0b84a6ec15de037f3b5524e76b73baa7c53/blogfa/dist/cdn/",
-      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@43e7a0b84a6ec15de037f3b5524e76b73baa7c53/blogfa/dist/cdn/",
-      "https://rawcdn.githack.com/fkyitou/mywebsite/43e7a0b84a6ec15de037f3b5524e76b73baa7c53/blogfa/dist/cdn/"
+      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/",
+      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/",
+      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/",
+      "https://rawcdn.githack.com/fkyitou/mywebsite/0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/"
     ],
     "files": [
       {
@@ -36,34 +36,49 @@
         "sri": "sha384-z5Bi81k5iPqSIXmmIAKm2cK3o4yHe4iBzcmSycFBPAszGVUydEeGnRxWtxIPhI0m"
       },
       {
-        "file": "an-full.21d2e0cbf7.css",
-        "bytes": 82903,
-        "sri": "sha384-yNTOu5WAhJKzcn7BaSo9sgueUhA+2J3beugFStOZnP9cYNFKB9lCVTaavdso2A0F"
+        "file": "an-full.495af90d88.css",
+        "bytes": 87770,
+        "sri": "sha384-lNPvE5uXuLQ+m+2gaDi948VBqTwD9uTlauGsqKUcQd0bzAoP4J8pKhsKOdPNzNZ3"
       },
       {
-        "file": "an-post.2ca852b014.js",
-        "bytes": 224204,
-        "sri": "sha384-Da0p+q4dyQz/+p2U9p2cSnV0DaRc4+CUpsxKNHyQc5Qo3COArTeIwpDCVzENM4Eh"
+        "file": "an-post.7bf2715c10.js",
+        "bytes": 225370,
+        "sri": "sha384-cCTUYhXPoBYja+9VH0PKvnr68ZRoFKAQ5Fc89Uyc9+hIdbfotLdvVKYa/USl/7Qf"
       },
       {
-        "file": "an-base.a38a633237.css",
-        "bytes": 67490,
-        "sri": "sha384-W3RBXBM8vWL7yGYkq+6HTApzWY0N13DPtUVQaS64ojmzoW2u3d/znP156kQjmJmU"
+        "file": "an-base.f457dad461.css",
+        "bytes": 72357,
+        "sri": "sha384-BW6ACSK7pVMNQTzDn2T5pQpckChzd+XbOQM/QtTRGe9lgbBihCPAVH29FH75ahAw"
       },
       {
-        "file": "an-archive.2759cafb84.js",
-        "bytes": 31330,
-        "sri": "sha384-32a29kzB1K39HVxdArO6P8LJUjNy7qszHJA8JgTmbGE/zVkjvQQsMFKVN3582OIR"
+        "file": "an-archive.e142cc7506.js",
+        "bytes": 32502,
+        "sri": "sha384-p4S27fXdvXQ73FckUIyoF7gWDX3q02W+ASuqSdJhlWDWNbq82yoX872dZw7x7UtK"
       },
       {
-        "file": "an-page.16e3fddaa7.js",
-        "bytes": 53866,
-        "sri": "sha384-OQ3/jjxpqCAyCzPOy8o57U/zf0sNNcbGD6NsX3GVR6em+d82ymKbB/lbqnmt1O/k"
+        "file": "an-page.995b4c8acb.js",
+        "bytes": 55038,
+        "sri": "sha384-L3MojV+VsWdam7g+X4mpvx4TyRKBCzbe2NGLj9IddLi9tkFz2kM59GwTqXx2lQav"
       },
       {
-        "file": "an-post-lite.a63cce1028.js",
-        "bytes": 166549,
-        "sri": "sha384-R3d6vHRmUoNzwMu0H6nDoe2D8amYLfvflvnoPyu/YSPUeOrF8jYxif16TfYLcrgy"
+        "file": "an-post-lite.a98b976c41.js",
+        "bytes": 167715,
+        "sri": "sha384-stnsIr5qZSYVZ/U/tTU120ICYU80TekEdhsu01rpbtG098KpriFv+ek6ElIXfH5K"
+      },
+      {
+        "file": "an-qr.1952338bb7.js",
+        "bytes": 20434,
+        "sri": "sha384-I8QcCQWYJYnJjMuga5VeMsYk24eSM6jBvbxAXzwNecj04rTZ5v97CC0kDM2TNaOm"
+      },
+      {
+        "file": "an-addons.c1ba7ced11.css",
+        "bytes": 21367,
+        "sri": "sha384-scYOEp9ANOFszjOXl1hKAAaRbh4nqQvTurNla8PORig5ik7EdbCmkyuRkUjWPr0K"
+      },
+      {
+        "file": "an-addons.4b63ae8ae9.js",
+        "bytes": 40474,
+        "sri": "sha384-IfZL7LWiPWWeH1yyksMDxk42eJUvZ5tivBwFOpUQzAnB2N+2HYqpfv/0QEX752Na"
       }
     ]
   },
@@ -71,126 +86,137 @@
     {
       "variant": "full",
       "cdn": false,
-      "bytes": 571017,
+      "bytes": 592058,
       "parts": {
         "post": {
-          "css": 82880,
-          "js": 209390,
-          "html": 330284
+          "css": 87747,
+          "js": 210559,
+          "html": 337259
         },
         "archive": {
-          "css": 67471,
-          "js": 30150,
-          "html": 108223
+          "css": 72338,
+          "js": 31322,
+          "html": 115256
         },
         "page": {
-          "css": 67471,
-          "js": 51850,
-          "html": 132381
+          "css": 72338,
+          "js": 53022,
+          "html": 139414
         }
       },
       "facts": {
         "posts": 10,
         "labs": 10,
         "sources": 57,
-        "minutes": 57
+        "minutes": 64
       }
     },
     {
       "variant": "lite",
       "cdn": false,
-      "bytes": 513378,
+      "bytes": 534419,
       "parts": {
         "post": {
-          "css": 82880,
-          "js": 151740,
-          "html": 272645
+          "css": 87747,
+          "js": 152909,
+          "html": 279620
         },
         "archive": {
-          "css": 67471,
-          "js": 30150,
-          "html": 108223
+          "css": 72338,
+          "js": 31322,
+          "html": 115256
         },
         "page": {
-          "css": 67471,
-          "js": 51850,
-          "html": 132381
+          "css": 72338,
+          "js": 53022,
+          "html": 139414
         }
       },
       "facts": {
         "posts": 10,
         "labs": 10,
         "sources": 57,
-        "minutes": 57
+        "minutes": 64
       }
     },
     {
       "variant": "cdn",
       "cdn": true,
-      "bytes": 51411,
+      "bytes": 54341,
       "parts": {
         "post": {
-          "cssFile": "an-full.21d2e0cbf7.css",
-          "jsFile": "an-post.2ca852b014.js",
-          "css": 82880,
-          "js": 209390,
-          "html": 25734
+          "cssFile": "an-full.495af90d88.css",
+          "jsFile": "an-post.7bf2715c10.js",
+          "css": 87747,
+          "js": 210559,
+          "html": 26676
         },
         "archive": {
-          "cssFile": "an-base.a38a633237.css",
-          "jsFile": "an-archive.2759cafb84.js",
-          "css": 67471,
-          "js": 30150,
-          "html": 11966
+          "cssFile": "an-base.f457dad461.css",
+          "jsFile": "an-archive.e142cc7506.js",
+          "css": 72338,
+          "js": 31322,
+          "html": 12960
         },
         "page": {
-          "cssFile": "an-base.a38a633237.css",
-          "jsFile": "an-page.16e3fddaa7.js",
-          "css": 67471,
-          "js": 51850,
-          "html": 13582
+          "cssFile": "an-base.f457dad461.css",
+          "jsFile": "an-page.995b4c8acb.js",
+          "css": 72338,
+          "js": 53022,
+          "html": 14576
         }
       },
       "facts": {
         "posts": 10,
         "labs": 10,
         "sources": 57,
-        "minutes": 57
+        "minutes": 64
       }
     },
     {
       "variant": "cdn-lite",
       "cdn": true,
-      "bytes": 51437,
+      "bytes": 54367,
       "parts": {
         "post": {
-          "cssFile": "an-full.21d2e0cbf7.css",
-          "jsFile": "an-post-lite.a63cce1028.js",
-          "css": 82880,
-          "js": 151740,
-          "html": 25760
+          "cssFile": "an-full.495af90d88.css",
+          "jsFile": "an-post-lite.a98b976c41.js",
+          "css": 87747,
+          "js": 152909,
+          "html": 26702
         },
         "archive": {
-          "cssFile": "an-base.a38a633237.css",
-          "jsFile": "an-archive.2759cafb84.js",
-          "css": 67471,
-          "js": 30150,
-          "html": 11966
+          "cssFile": "an-base.f457dad461.css",
+          "jsFile": "an-archive.e142cc7506.js",
+          "css": 72338,
+          "js": 31322,
+          "html": 12960
         },
         "page": {
-          "cssFile": "an-base.a38a633237.css",
-          "jsFile": "an-page.16e3fddaa7.js",
-          "css": 67471,
-          "js": 51850,
-          "html": 13582
+          "cssFile": "an-base.f457dad461.css",
+          "jsFile": "an-page.995b4c8acb.js",
+          "css": 72338,
+          "js": 53022,
+          "html": 14576
         }
       },
       "facts": {
         "posts": 10,
         "labs": 10,
         "sources": 57,
-        "minutes": 57
+        "minutes": 64
       }
     }
-  ]
+  ],
+  "addons": {
+    "css": "an-addons.c1ba7ced11.css",
+    "js": "an-addons.4b63ae8ae9.js",
+    "qr": "an-qr.1952338bb7.js",
+    "box": 2150,
+    "boxWritten": true,
+    "words": {
+      "terms": 54,
+      "keys": 30
+    }
+  }
 }
