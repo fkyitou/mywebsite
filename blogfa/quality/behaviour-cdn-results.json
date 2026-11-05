@@ -1,8 +1,8 @@
 {
- "generated": "2026-11-05T03:24:56.081Z",
+ "generated": "2026-11-05T04:15:51.659Z",
  "browser": "Chromium (Playwright)",
  "served": "http://127.0.0.1 (test-only server)",
- "passed": 39,
+ "passed": 47,
  "failed": 0,
  "results": [
   {
@@ -105,7 +105,7 @@
    "group": "posts",
    "name": "post banner links to its category",
    "pass": true,
-   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:41609/cat-1.html"
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:38259/cat-1.html"
   },
   {
    "group": "posts",
@@ -238,6 +238,54 @@
    "name": "phone: no console error",
    "pass": true,
    "info": ""
+  },
+  {
+   "group": "late-css",
+   "name": "desktop post-6.html: styles from the backup address, page set up, no warning",
+   "pass": true,
+   "info": "backup true, ready true, warning false"
+  },
+  {
+   "group": "late-css",
+   "name": "desktop post-6.html: every canvas drawn at the shape of its box",
+   "pass": true,
+   "info": "banner 1, cards 3; all match"
+  },
+  {
+   "group": "late-css",
+   "name": "desktop index.html: styles from the backup address, page set up, no warning",
+   "pass": true,
+   "info": "backup true, ready true, warning false"
+  },
+  {
+   "group": "late-css",
+   "name": "desktop index.html: every canvas drawn at the shape of its box",
+   "pass": true,
+   "info": "globe 1, cards 10; all match"
+  },
+  {
+   "group": "late-css",
+   "name": "phone post-6.html: styles from the backup address, page set up, no warning",
+   "pass": true,
+   "info": "backup true, ready true, warning false"
+  },
+  {
+   "group": "late-css",
+   "name": "phone post-6.html: every canvas drawn at the shape of its box",
+   "pass": true,
+   "info": "banner 1, cards 3; all match"
+  },
+  {
+   "group": "late-css",
+   "name": "phone index.html: styles from the backup address, page set up, no warning",
+   "pass": true,
+   "info": "backup true, ready true, warning false"
+  },
+  {
+   "group": "late-css",
+   "name": "phone index.html: every canvas drawn at the shape of its box",
+   "pass": true,
+   "info": "globe 1, cards 10; all match"
   }
  ]
 }

@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-04T21:53:53.604Z",
+ "generated": "2026-11-05T04:53:38.887Z",
  "validator": {
   "html": "vnu.jar 26.11.4",
   "css": "csstree-validator 4.0.1"
@@ -7,14 +7,14 @@
  "html": {
   "pages": 62,
   "errors": 0,
-  "warnings": 61,
+  "warnings": 60,
   "info": 0,
   "groups": [
    {
     "type": "warning",
     "message": "The “type” attribute is unnecessary for JavaScript resources.",
-    "count": 61,
-    "pages": 61,
+    "count": 60,
+    "pages": 60,
     "example": {
      "file": "preview-cdn/archive.html",
      "line": 4,

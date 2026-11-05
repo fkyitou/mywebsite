@@ -33,7 +33,7 @@ for (const f of ['dist/build-report.json', 'dist/template-cdn.html', 'dist/templ
 const CDN = JSON.parse(read('dist/build-report.json')).cdn || {};
 if (!CDN.ok || !CDN.pushed || CDN.unverifiedTemplates || !CDN.mirrors) { console.error('the CDN templates in dist/ were not verified against a pushed commit (see tools/build.mjs); no kit written'); process.exit(1); }
 // Bump when what has to be pasted changes, so an owner holding an older kit.html can tell the two apart.
-const KIT_VERSION = 4;
+const KIT_VERSION = 5;
 // One stylesheet on the main jsDelivr address: opening it shows whether jsDelivr is reachable from the owner's connection.
 const PROBE = CDN.mirrors[0] + ((CDN.files || []).find(f => /^an-base\.[\w]+\.css$/.test(f.file)) || { file: '' }).file;
 
@@ -311,7 +311,7 @@ const body = `
   <h1 id="kit-h">کیت نصب و انتشار</h1>
   <p>هر چیزی که باید در بلاگفا جای‌گذاری شود، این‌جا با یک دکمه‌ی کپی آمده است: قالب، صفحه‌ی «درباره» و ده مقاله. گام‌ها را به همین ترتیب انجام دهید و هر کدام را که تمام شد تیک بزنید.</p>
   <p class="credit">طراحی، مدیریت و نویسندگی: امیرحسین همتی</p>
-  <p class="warn" id="kit-version"><b>نسخه‌ی ${fa(KIT_VERSION)} کیت.</b> این نسخه آنچه را در وبلاگ زنده دیده شد درست می‌کند: «همه‌ی مقاله‌ها» حالا صفحه‌ای با طراحی خود وبلاگ است، دسته‌ی هر مقاله دیده می‌شود، منوی «قلمروها» در همه‌ی صفحه‌ها پر است، پایین صفحه زیر نوار تبلیغ بلاگفا نمی‌رود و فاصله‌های اضافه‌ای که ویرایشگر بلاگفا به صفحه‌ی «درباره» افزوده بود پاک می‌شوند. <b>اگر قالب نسخه‌ی قبل را نصب کرده‌اید، فقط گام ۲ را دوباره انجام دهید</b> و هر سه تکه را از همین صفحه جای‌گذاری کنید؛ مقاله‌ها و صفحه‌ی «درباره» دست نمی‌خورند. اندازه‌ی تکه‌ها ${kb(DATA.split.full[1]).replace(' کیلوبایت', '')}، ${kb(DATA.split.full[2]).replace(' کیلوبایت', '')} و ${kb(DATA.split.full[3])} است. فایل کیت قبلی را کنار بگذارید و فقط از همین صفحه کپی کنید.</p>
+  <p class="warn" id="kit-version"><b>نسخه‌ی ${fa(KIT_VERSION)} کیت.</b> این نسخه آنچه را در وبلاگ زنده دیده شد درست می‌کند: «همه‌ی مقاله‌ها» حالا صفحه‌ای با طراحی خود وبلاگ است، دسته‌ی هر مقاله دیده می‌شود، منوی «قلمروها» در همه‌ی صفحه‌ها پر است، پایین صفحه زیر نوار تبلیغ بلاگفا نمی‌رود و فاصله‌های اضافه‌ای که ویرایشگر بلاگفا به صفحه‌ی «درباره» افزوده بود پاک می‌شوند. اگر نشانی اصلی فایل‌های قالب پاسخ ندهد و نشانی پشتیبان دیرتر برسد، تصویر بالای مقاله‌ها، تصویر کارت‌ها و کره‌ی زمین صفحه‌ی اول هم دیگر کشیده نمی‌شوند. <b>اگر قالب نسخه‌ی قبل را نصب کرده‌اید، فقط گام ۲ را دوباره انجام دهید</b> و هر سه تکه را از همین صفحه جای‌گذاری کنید؛ مقاله‌ها و صفحه‌ی «درباره» دست نمی‌خورند. اندازه‌ی تکه‌ها ${kb(DATA.split.full[1]).replace(' کیلوبایت', '')}، ${kb(DATA.split.full[2]).replace(' کیلوبایت', '')} و ${kb(DATA.split.full[3])} است. فایل کیت قبلی را کنار بگذارید و فقط از همین صفحه کپی کنید.</p>
   <ol class="status" aria-label="وضعیت کار">
     <li class="st on" id="st-1"><span class="dot" aria-hidden="true">✓</span><div><b>فایل آماده</b><small>قالب، ۱۰ مقاله، صفحه‌ی درباره، تصویرها و راهنماها ساخته و با آزمون خودکار بررسی شده‌اند.</small></div></li>
     <li class="st" id="st-2"><span class="dot" aria-hidden="true">✓</span><div><b>قالب نصب‌شده</b><small>با تیک گام ۲ روشن می‌شود: قالب در بلاگفا ذخیره شده و صفحه‌ی اول با ظاهر آینده‌نگار باز می‌شود.</small></div></li>

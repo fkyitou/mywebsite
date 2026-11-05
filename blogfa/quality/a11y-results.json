@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-04T22:18:44.804Z",
+  "at": "2026-11-05T04:31:54.447Z",
   "axe": [
     {
       "run": "desktop/a index.html",
@@ -7,7 +7,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 156
+          "n": 99
         },
         {
           "id": "link-in-text-block",
@@ -37,7 +37,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 110
+          "n": 102
         },
         {
           "id": "link-in-text-block",
@@ -96,22 +96,7 @@
           "n": 8
         }
       ],
-      "passes": 39
-    },
-    {
-      "run": "desktop/a posts.html",
-      "violations": [],
-      "incomplete": [
-        {
-          "id": "color-contrast",
-          "n": 124
-        },
-        {
-          "id": "link-in-text-block",
-          "n": 1
-        }
-      ],
-      "passes": 39
+      "passes": 40
     },
     {
       "run": "desktop/a cat-1.html",
@@ -223,22 +208,7 @@
           "n": 8
         }
       ],
-      "passes": 39
-    },
-    {
-      "run": "desktop/b posts.html",
-      "violations": [],
-      "incomplete": [
-        {
-          "id": "color-contrast",
-          "n": 124
-        },
-        {
-          "id": "link-in-text-block",
-          "n": 1
-        }
-      ],
-      "passes": 39
+      "passes": 40
     },
     {
       "run": "desktop/b cat-1.html",
@@ -261,7 +231,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 241
+          "n": 240
         },
         {
           "id": "link-in-text-block",
@@ -276,7 +246,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 161
+          "n": 160
         },
         {
           "id": "link-in-text-block",
@@ -291,7 +261,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 241
+          "n": 240
         },
         {
           "id": "link-in-text-block",
@@ -306,7 +276,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 159
+          "n": 158
         },
         {
           "id": "link-in-text-block",

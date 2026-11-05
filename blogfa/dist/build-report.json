@@ -1,18 +1,18 @@
 {
-  "builtAt": "2026-11-05T03:18:25.815Z",
+  "builtAt": "2026-11-05T04:14:55.403Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
-    "ref": "2a42eb3357f17cd311929b90615af7c2ee1991f6",
+    "ref": "23d29aafb7651dcd01144be15b388001901f4657",
     "dir": "blogfa/dist/cdn",
     "ok": true,
     "pushed": true,
     "missing": [],
     "unverifiedTemplates": false,
     "mirrors": [
-      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@2a42eb3357f17cd311929b90615af7c2ee1991f6/blogfa/dist/cdn/",
-      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@2a42eb3357f17cd311929b90615af7c2ee1991f6/blogfa/dist/cdn/",
-      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@2a42eb3357f17cd311929b90615af7c2ee1991f6/blogfa/dist/cdn/",
-      "https://rawcdn.githack.com/fkyitou/mywebsite/2a42eb3357f17cd311929b90615af7c2ee1991f6/blogfa/dist/cdn/"
+      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@23d29aafb7651dcd01144be15b388001901f4657/blogfa/dist/cdn/",
+      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@23d29aafb7651dcd01144be15b388001901f4657/blogfa/dist/cdn/",
+      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@23d29aafb7651dcd01144be15b388001901f4657/blogfa/dist/cdn/",
+      "https://rawcdn.githack.com/fkyitou/mywebsite/23d29aafb7651dcd01144be15b388001901f4657/blogfa/dist/cdn/"
     ],
     "files": [
       {
@@ -21,9 +21,9 @@
         "sri": "sha384-IoknbZ5B6BAwdIxA05rUokiwApHbL6jXza+pAyhpQOP1mrPjB9XnHndTbkzxbffl"
       },
       {
-        "file": "an-post.a999cc6f13.js",
-        "bytes": 217393,
-        "sri": "sha384-JouDKlw9OV3JNR05MwQfvSUpkFaO4+xXErhUITtv/qu28wbaAeLnjMNC3+teU/2y"
+        "file": "an-post.03d7031ff4.js",
+        "bytes": 217705,
+        "sri": "sha384-/NRr4n06bUG93nE+lwrN5B93SFbEDhAvltDlhkHHq4WHwe7dfekdyWQo/aHZaUrL"
       },
       {
         "file": "an-base.e0e10eaa6d.css",
@@ -31,19 +31,19 @@
         "sri": "sha384-kahZVERzV9MXdI38Z4T36fh+fnt80fCq8OKdEuwKSYrsqvIIQlb3g2lDJwDdP4WQ"
       },
       {
-        "file": "an-archive.92f97fea39.js",
-        "bytes": 30603,
-        "sri": "sha384-giSmKx5Oc7+sceolVXmMEgrwOJDu8naJ0VVY5dCNXNhNHY3dQL496Ow5NwFAYC6R"
+        "file": "an-archive.0b3fcacbe7.js",
+        "bytes": 30757,
+        "sri": "sha384-uGt14x5irWJJNDs8IBP86rc3rFR3QYMH5HJFsnoGASPitoLjQPcq7gsuLRib/ipw"
       },
       {
-        "file": "an-page.cdfb7a51b0.js",
-        "bytes": 51241,
-        "sri": "sha384-nQCxd0CpZLQUtr1mGE1CKYuagpz9tp13Hz1wffIR0PoXO655xZ6Ovxys+/W5tgb2"
+        "file": "an-page.a0aea8ed8c.js",
+        "bytes": 51395,
+        "sri": "sha384-eWFcbjQYyhNCGcBAwQ70YBAULejxRMtSHDUIUxwVSQmgKpVUzBuql17gaLZOyAlP"
       },
       {
-        "file": "an-post-lite.ea00b71b7f.js",
-        "bytes": 159802,
-        "sri": "sha384-ANcXbHD022k2EiqXkF1THwDOYyVZ2XcyP8tT2j/olI44nHlSUsYD8KLsyi/heOhl"
+        "file": "an-post-lite.d2d130f3e8.js",
+        "bytes": 160054,
+        "sri": "sha384-0daQ8W6oVck5IFHdVV5MSRK2khdMVLpP8tALFI9vkD3tIkovTxNmkFs1hfll8x/k"
       }
     ]
   },
@@ -51,22 +51,22 @@
     {
       "variant": "full",
       "cdn": false,
-      "bytes": 549364,
+      "bytes": 549984,
       "parts": {
         "post": {
           "css": 79645,
-          "js": 202834,
-          "html": 319686
+          "js": 203146,
+          "html": 319998
         },
         "archive": {
           "css": 64236,
-          "js": 29462,
-          "html": 103654
+          "js": 29616,
+          "html": 103808
         },
         "page": {
           "css": 64236,
-          "js": 49318,
-          "html": 125895
+          "js": 49472,
+          "html": 126049
         }
       },
       "facts": {
@@ -79,22 +79,22 @@
     {
       "variant": "lite",
       "cdn": false,
-      "bytes": 491789,
+      "bytes": 492349,
       "parts": {
         "post": {
           "css": 79645,
-          "js": 145248,
-          "html": 262111
+          "js": 145500,
+          "html": 262363
         },
         "archive": {
           "css": 64236,
-          "js": 29462,
-          "html": 103654
+          "js": 29616,
+          "html": 103808
         },
         "page": {
           "css": 64236,
-          "js": 49318,
-          "html": 125895
+          "js": 49472,
+          "html": 126049
         }
       },
       "facts": {
@@ -111,23 +111,23 @@
       "parts": {
         "post": {
           "cssFile": "an-full.d1d71fb964.css",
-          "jsFile": "an-post.a999cc6f13.js",
+          "jsFile": "an-post.03d7031ff4.js",
           "css": 79645,
-          "js": 202834,
+          "js": 203146,
           "html": 24964
         },
         "archive": {
           "cssFile": "an-base.e0e10eaa6d.css",
-          "jsFile": "an-archive.92f97fea39.js",
+          "jsFile": "an-archive.0b3fcacbe7.js",
           "css": 64236,
-          "js": 29462,
+          "js": 29616,
           "html": 11141
         },
         "page": {
           "cssFile": "an-base.e0e10eaa6d.css",
-          "jsFile": "an-page.cdfb7a51b0.js",
+          "jsFile": "an-page.a0aea8ed8c.js",
           "css": 64236,
-          "js": 49318,
+          "js": 49472,
           "html": 12738
         }
       },
@@ -145,23 +145,23 @@
       "parts": {
         "post": {
           "cssFile": "an-full.d1d71fb964.css",
-          "jsFile": "an-post-lite.ea00b71b7f.js",
+          "jsFile": "an-post-lite.d2d130f3e8.js",
           "css": 79645,
-          "js": 145248,
+          "js": 145500,
           "html": 24990
         },
         "archive": {
           "cssFile": "an-base.e0e10eaa6d.css",
-          "jsFile": "an-archive.92f97fea39.js",
+          "jsFile": "an-archive.0b3fcacbe7.js",
           "css": 64236,
-          "js": 29462,
+          "js": 29616,
           "html": 11141
         },
         "page": {
           "cssFile": "an-base.e0e10eaa6d.css",
-          "jsFile": "an-page.cdfb7a51b0.js",
+          "jsFile": "an-page.a0aea8ed8c.js",
           "css": 64236,
-          "js": 49318,
+          "js": 49472,
           "html": 12738
         }
       },
