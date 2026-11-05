@@ -1,8 +1,8 @@
 {
- "generated": "2026-11-05T03:10:23.787Z",
+ "generated": "2026-11-05T03:24:56.081Z",
  "browser": "Chromium (Playwright)",
  "served": "http://127.0.0.1 (test-only server)",
- "passed": 33,
+ "passed": 39,
  "failed": 0,
  "results": [
   {
@@ -105,7 +105,7 @@
    "group": "posts",
    "name": "post banner links to its category",
    "pass": true,
-   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:40501/cat-1.html"
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:41609/cat-1.html"
   },
   {
    "group": "posts",
@@ -200,6 +200,42 @@
   {
    "group": "ad",
    "name": "phone: the ad stays as Blogfa shows it",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "about",
+   "name": "desktop: the editor's extra line breaks, empty paragraphs and &nbsp; are gone",
+   "pass": true,
+   "info": "34 <br> added by the editor; left: 0 <br>, 0 empty <p>, 0 &nbsp;"
+  },
+  {
+   "group": "about",
+   "name": "desktop: the page is as tall as the clean one",
+   "pass": true,
+   "info": "clean 3451px, after the editor 3451px"
+  },
+  {
+   "group": "about",
+   "name": "desktop: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "about",
+   "name": "phone: the editor's extra line breaks, empty paragraphs and &nbsp; are gone",
+   "pass": true,
+   "info": "34 <br> added by the editor; left: 0 <br>, 0 empty <p>, 0 &nbsp;"
+  },
+  {
+   "group": "about",
+   "name": "phone: the page is as tall as the clean one",
+   "pass": true,
+   "info": "clean 4132px, after the editor 4132px"
+  },
+  {
+   "group": "about",
+   "name": "phone: no console error",
    "pass": true,
    "info": ""
   }
