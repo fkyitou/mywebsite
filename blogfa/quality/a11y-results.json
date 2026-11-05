@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-05T04:31:54.447Z",
+  "at": "2026-11-05T08:50:20.405Z",
   "axe": [
     {
       "run": "desktop/a index.html",
@@ -7,7 +7,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 99
+          "n": 169
         },
         {
           "id": "link-in-text-block",
@@ -37,7 +37,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 102
+          "n": 110
         },
         {
           "id": "link-in-text-block",

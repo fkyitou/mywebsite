@@ -1,8 +1,8 @@
 {
- "generated": "2026-11-05T04:15:51.659Z",
+ "generated": "2026-11-05T09:06:04.421Z",
  "browser": "Chromium (Playwright)",
  "served": "http://127.0.0.1 (test-only server)",
- "passed": 47,
+ "passed": 56,
  "failed": 0,
  "results": [
   {
@@ -79,6 +79,12 @@
   },
   {
    "group": "posts",
+   "name": "index.html: the minutes of the time have two digits",
+   "pass": true,
+   "info": "۹:۰۳ ۱۷:۵۶ ۱۶:۴۹ ۱۵:۴۲ ۱۴:۳۵ ۱۳:۲۸ ۱۲:۲۱ ۱۱:۱۴ ۱۰:۰۷ ۹:۰۰"
+  },
+  {
+   "group": "posts",
    "name": "index.html: no console error",
    "pass": true,
    "info": ""
@@ -103,9 +109,15 @@
   },
   {
    "group": "posts",
+   "name": "post-1.html: the minutes of the time have two digits",
+   "pass": true,
+   "info": "۹:۰۰"
+  },
+  {
+   "group": "posts",
    "name": "post banner links to its category",
    "pass": true,
-   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:38259/cat-1.html"
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:44857/cat-1.html"
   },
   {
    "group": "posts",
@@ -130,6 +142,12 @@
    "name": "cat-1.html: the time is in Persian digits",
    "pass": true,
    "info": "0 with Latin digits"
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: the minutes of the time have two digits",
+   "pass": true,
+   "info": "۱۶:۴۹ ۹:۰۰"
   },
   {
    "group": "posts",
@@ -236,6 +254,42 @@
   {
    "group": "about",
    "name": "phone: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "spelling",
+   "name": "tag cloud: names show without kashida",
+   "pass": true,
+   "info": "0 of 39 with kashida"
+  },
+  {
+   "group": "spelling",
+   "name": "tag cloud: each tag is named once",
+   "pass": true,
+   "info": "0 repeated"
+  },
+  {
+   "group": "spelling",
+   "name": "tag cloud: the stretched tag keeps the address Blogfa gave it",
+   "pass": true,
+   "info": "tag-D987D8B4D980D980D980D980D980D980D980…"
+  },
+  {
+   "group": "spelling",
+   "name": "month page is titled with its month",
+   "pass": true,
+   "info": "«آبان ۱۴۰۵»"
+  },
+  {
+   "group": "spelling",
+   "name": "tag page at its Blogfa address: titled without kashida",
+   "pass": true,
+   "info": "«برچسب: هش», 1 post(s), title «آینده‌نگار - هش»"
+  },
+  {
+   "group": "spelling",
+   "name": "no console error",
    "pass": true,
    "info": ""
   },
