@@ -10,15 +10,30 @@
   else if ((p === '/' || p === '' || /^\/index\.html?$/i.test(p)) && !/[?&]p=([2-9]|\d\d)/.test(q)) t = 'home';
   else t = 'list';
   h.setAttribute('data-page', t);
-  var v = 'a';
+  var v = 'a', m = null, X = null;
   try {
-    var m = q.match(/[?&]v=(a|b)\b/i);
+    m = q.match(/[?&]v=(a|b)\b/i);
     if (m) { v = m[1].toLowerCase(); localStorage.setItem('an-v', v); }
     else v = localStorage.getItem('an-v') || 'a';
+    X = JSON.parse(localStorage.getItem('an-x') || 'null');
   } catch (e) {}
+  // The reader's own settings from «ابزار خواننده» (the toolkit in Blogfa's custom-code box, src/addons/), put on
+  // <html> before the first paint so a chosen theme or text size never flashes. Each value is checked against the
+  // few it may take; css/09-reader.css does the rest. A ?v= address still shows the version it names.
+  if (!X || typeof X !== 'object') X = {};
+  if ((X.tone === 'paper' || X.tone === 'contrast') && !m) { h.setAttribute('data-an-tone', X.tone); v = X.tone === 'paper' ? 'b' : 'a'; }
+  if (X.fs >= 0.85 && X.fs <= 1.5 && X.fs !== 1) h.style.setProperty('--an-fs', String(X.fs));
+  if (X.lh === 2 || X.lh === 3) h.setAttribute('data-an-lh', String(X.lh));
+  if (X.w === 1 || X.w === 3) h.setAttribute('data-an-w', String(X.w));
+  if (X.ease === 1) h.setAttribute('data-an-ease', '');
+  if (X.sky === 0) h.setAttribute('data-an-sky', 'off');
+  if (X.focus === 1) h.setAttribute('data-an-focus', '');
   h.setAttribute('data-v', v);
-  var rm = !!(w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var rm = !!(w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches) || X.motion === 0;
   if (rm) h.setAttribute('data-motion', 'reduce');
+  // The soft change between pages (@view-transition in css/02-chrome.css) is left out when motion is off or the
+  // reader turned it off; the browser asks here, on the new page, before showing it.
+  w.addEventListener('pagereveal', function (e) { if (e.viewTransition && (rm || X.vt === 0 || gpu === 'soft')) e.viewTransition.skipTransition(); });
   // software rendering (no hardware GPU): probed once per session by sky.js, known here from the second page on
   var gpu = '';
   try { gpu = sessionStorage.getItem('an-gpu') || ''; } catch (e) {}

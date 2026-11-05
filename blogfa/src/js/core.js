@@ -156,15 +156,38 @@
   }
 
   /* ---------- A/B versions ---------- */
-  AN.setV = function (v) {
-    AN.v = v; H.setAttribute('data-v', v); AN.store.set('an-v', v);
-    $$('.an-v-label').forEach(function (e) { e.textContent = v.toUpperCase(); });
-    var m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', v === 'b' ? '#F6F8FB' : '#04060D');
-    if (AN.onV) AN.onV(v);
+  // A change of theme opens as a circle from the button that asked for it (View Transitions API: Chrome 111+,
+  // Safari 18+). Without the API, with reduced motion or in a hidden tab, the change is made at once.
+  AN.swap = function (fn, from) {
+    if (!D.startViewTransition || AN.rm || D.hidden) { fn(); return; }
+    var r = from && from.getBoundingClientRect ? from.getBoundingClientRect() : null, vw = W.innerWidth, vh = W.innerHeight;
+    var x = r && r.width ? r.left + r.width / 2 : vw / 2, y = r && r.height ? r.top + r.height / 2 : 0;
+    var end = Math.ceil(Math.hypot(Math.max(x, vw - x), Math.max(y, vh - y))), t;
+    H.classList.add('an-swap');
+    function done() { H.classList.remove('an-swap'); }
+    try { t = D.startViewTransition(fn); } catch (e) { done(); fn(); return; }
+    t.ready.then(function () {
+      H.animate({ clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + end + 'px at ' + x + 'px ' + y + 'px)'] }, { duration: 560, easing: 'cubic-bezier(.2,.8,.2,1)', pseudoElement: '::view-transition-new(root)' });
+    }, function () {});
+    t.finished.then(done, done);
+  };
+  // o.from: the element the circle opens from; o.now: no animation; o.update: more changes made in the same frame.
+  // AN.v changes at once, so code that reads it right after the call sees the new version.
+  AN.setV = function (v, o) {
+    o = o || {}; AN.v = v;
+    function upd() {
+      if (o.update) o.update();
+      AN.v = v; H.setAttribute('data-v', v); AN.store.set('an-v', v);
+      $$('.an-v-label').forEach(function (e) { e.textContent = v.toUpperCase(); });
+      var tone = H.getAttribute('data-an-tone'), m = $('meta[name="theme-color"]');
+      if (m) m.setAttribute('content', tone === 'paper' ? '#F5EEDC' : tone === 'contrast' ? '#000000' : v === 'b' ? '#F6F8FB' : '#04060D');
+      if (AN.onV) AN.onV(v);
+    }
+    if (o.now) upd(); else AN.swap(upd, o.from || $('#an-bar .an-ab-btn'));
   };
   function versions() {
     $$('.an-v-label').forEach(function (e) { e.textContent = AN.v.toUpperCase(); });
-    $$('[data-an="ab"]').forEach(function (b) { b.addEventListener('click', function () { var n = AN.v === 'a' ? 'b' : 'a'; AN.setV(n); AN.toast(n === 'a' ? 'نسخه‌ی A «شب» فعال شد' : 'نسخه‌ی B «روز» فعال شد'); }); });
+    $$('[data-an="ab"]').forEach(function (b) { b.addEventListener('click', function () { var n = AN.v === 'a' ? 'b' : 'a'; AN.setV(n, { from: b }); AN.toast(n === 'a' ? 'نسخه‌ی A «شب» فعال شد' : 'نسخه‌ی B «روز» فعال شد'); }); });
   }
 
   /* ---------- reveal, pointer light, magnetic buttons, tilt ---------- */
@@ -293,6 +316,21 @@
     if ('IntersectionObserver' in W) new IntersectionObserver(function (es) { clearInterval(iv); if (es[0].isIntersecting) { upd(); iv = setInterval(upd, 1000); } }).observe(hero);
   }
 
+  /* ---------- the custom-code box («کدها و جاوا اسکریپت‌های اختصاصی کاربر») ---------- */
+  // Blogfa prints the box in the footer of each template. css/09-reader.css hides it while it holds only code
+  // (scripts, styles) or nothing; this does the same where :has() is missing, keeps the box hidden if a template
+  // ever shows the tag's own name unfilled, and shows it again for anything a reader is meant to see.
+  function customBox() {
+    $$('.an-custom').forEach(function (c) {
+      var seen = false;
+      for (var n = c.firstChild; n; n = n.nextSibling) {
+        if (n.nodeType === 1 && !/^(SCRIPT|STYLE|LINK|NOSCRIPT|TEMPLATE)$/.test(n.nodeName)) seen = true;
+        else if (n.nodeType === 3 && n.nodeValue.trim() && n.nodeValue.indexOf('BlogCustomHtml') < 0) seen = true;
+      }
+      if (seen) c.classList.add('an-custom-on'); else c.hidden = true;
+    });
+  }
+
   /* ---------- back-to-top button with reading ring ---------- */
   function fab() {
     var b = AN.el('button', 'an-fab', '<svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="16" pathLength="100"/></svg><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>');
@@ -315,7 +353,7 @@
     if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', go); else setTimeout(go, 0);
   };
   AN.ready(function () {
-    var steps = [postFix, tagFix, adRoom, header, versions, search, keysDlg, shortcuts, pointerFx, live, fab];
+    var steps = [postFix, tagFix, adRoom, header, versions, search, keysDlg, shortcuts, pointerFx, live, fab, customBox];
     steps.forEach(function (f) { try { f(); } catch (e) { if (W.console) console.warn('[آینده‌نگار]', f.name, e); } });
     try { if (AN.pages) AN.pages(); } catch (e) { if (W.console) console.warn('[آینده‌نگار] pages', e); }
     AN.reveal(); H.classList.add('an-ready'); AN.ok = true;

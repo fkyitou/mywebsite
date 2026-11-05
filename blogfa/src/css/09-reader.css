@@ -1,0 +1,65 @@
+/* ---------- reader settings («ابزار خواننده», src/addons/) ----------
+   The toolkit in Blogfa's custom-code box saves the reader's choices in localStorage («an-x»). js/early.js puts them on
+   <html> before the first paint, so a chosen theme or text size never flashes; the toolkit changes them live. The same
+   rules ship inside the toolkit's own stylesheet for a blog that still runs an older template.
+   Two extra themes sit on top of the two versions: «کاغذی» (paper) on B, «پرتضاد» (high contrast) on A.
+   Text pairs meet WCAG AA (4.5:1) on every background of each theme; the ratios are in docs/06-qa-report.md. */
+[data-an-tone="paper"] {
+  color-scheme: light;
+  --bg: #F5EEDC; --bg-2: #EFE6CF; --surface: #FBF7EC; --surface-2: #F3EBD6; --surface-3: #E9DEC3;
+  --glass: rgba(251, 247, 236, .8); --glass-2: rgba(251, 247, 236, .92);
+  --text: #2A2015; --text-2: #3B2F20; --muted: #5C4C37; --subtle: #66553F;
+  --primary: #8B3A0E; --primary-h: #6E2E0B; --cyan: #0B6363; --accent: #9A4A10; --accent-2: #8A3F0A; --on-accent: #FFFFFF;
+  --border: #DCCFB0; --border-2: #CDBE9B; --border-strong: #8E7C5C; --focus: #8B3A0E;
+  --ok: #2E6B3A; --warn: #7A5300; --danger: #A1281B;
+  --sunrise: linear-gradient(100deg, #A9480F, #9A4A10 55%, #7F370B);
+  --glow: 0 0 0 1px rgba(139, 58, 14, .18), 0 18px 40px -20px rgba(139, 58, 14, .3);
+  --shadow: 0 1px 2px rgba(42, 32, 21, .07), 0 18px 40px -24px rgba(42, 32, 21, .28);
+  --c-ai: #1F57BF; --c-net: #0A6666; --c-city: #A34A0D; --c-mind: #80369F; --c-space: #A63A26; --c-energy: #1A7049; --c-idea: #7A5000; --c-default: #5C4C37;
+}
+[data-an-tone="paper"] .an-sky-base { background: linear-gradient(180deg, #F5EEDC, #EFE6CF); }
+[data-an-tone="paper"] .an-sky-dawn { background: radial-gradient(120% 70% at 50% 110%, rgba(169, 72, 15, .12), transparent 60%); }
+[data-an-tone="contrast"] {
+  color-scheme: dark;
+  --bg: #000000; --bg-2: #000000; --surface: #0B0B0B; --surface-2: #121212; --surface-3: #1C1C1C;
+  --glass: rgba(0, 0, 0, .94); --glass-2: rgba(14, 14, 14, .97);
+  --text: #FFFFFF; --text-2: #FFFFFF; --muted: #E8E8E8; --subtle: #D6D6D6;
+  --primary: #8EC5FF; --primary-h: #B8DCFF; --cyan: #7FF5F5; --accent: #FFD400; --accent-2: #FFC000; --on-accent: #000000;
+  --border: #6B6B6B; --border-2: #8A8A8A; --border-strong: #D0D0D0; --focus: #FFD400;
+  --sunrise: linear-gradient(100deg, #FFE680, #FFD400); --atmo: linear-gradient(100deg, #B8DCFF, #7FF5F5);
+  --glow: 0 0 0 2px #FFD400; --shadow: none;
+  --c-ai: #A9C8FF; --c-net: #6FF0F0; --c-city: #FFC27A; --c-mind: #F0B3FF; --c-space: #FFA38A; --c-energy: #8CF0B0; --c-idea: #FFE27A; --c-default: #E0E0E0;
+}
+/* high contrast drops the decorative sky and the glass blur: plain black behind every word */
+[data-an-tone="contrast"] .an-sky, [data-an-sky="off"] .an-sky { display: none; }
+[data-an-tone="contrast"] .an-bar.solid, [data-an-tone="contrast"] .an-toc, [data-an-tone="contrast"] .an-dlg-box { -webkit-backdrop-filter: none; backdrop-filter: none; }
+[data-an-tone="contrast"] a:not(.an-btn):not(.an-card):not(.an-realm) { text-decoration: underline; text-underline-offset: .28em; }
+[data-an-tone="contrast"] .an-post-body { color: #FFFFFF; }
+
+/* text size, line spacing, column width and easy-reading spacing apply to the article text only */
+.an-post-body { font-size: calc(1.125rem * var(--an-fs, 1)); }
+@media (max-width: 640px) { .an-post-body { font-size: calc(1.0625rem * var(--an-fs, 1)); } }
+[data-an-lh="2"] .an-post-body { line-height: 2.4; }
+[data-an-lh="3"] .an-post-body { line-height: 2.75; }
+[data-an-w="1"] { --read: 600px; }
+[data-an-w="3"] { --read: 860px; }
+/* WCAG 1.4.12 text spacing, without letter-spacing: spacing between letters breaks the joins of Persian script */
+[data-an-ease] .an-post-body { word-spacing: .16em; text-align: start; }
+[data-an-ease] .an-post-body p, [data-an-ease] .an-post-body li { margin-bottom: 2em; }
+
+/* focus mode: the article alone, centred, with the table of contents, sky and side panels put away */
+[data-an-focus][data-page="post"] .an-sky, [data-an-focus][data-page="post"] .an-toc, [data-an-focus][data-page="post"] .an-related,
+[data-an-focus][data-page="post"] .an-share, [data-an-focus][data-page="post"] .an-banner-art { display: none; }
+[data-an-focus][data-page="post"] .an-article { grid-template-columns: minmax(0, var(--read)); justify-content: center; }
+[data-an-focus][data-page="post"] .an-banner { min-height: 0; padding-top: calc(var(--bar-h) + var(--s6)); background: var(--bg); color: var(--text); }
+[data-an-focus][data-page="post"] .an-banner::after { display: none; }
+
+/* Blogfa's custom-code box sits in every footer; while it holds only code (the toolkit's loader) or nothing, or a
+   template shows the tag unfilled (text only), it takes no room. js/core.js shows it again for visible content. */
+.an-custom:not(:has(> :not(script, style, link, noscript, template))) { display: none; }
+.an-custom.an-custom-on { display: block; }
+
+/* «جلوه‌های حرکتی» switched off in the toolkit does what the system's reduced-motion setting does (07-responsive.css) */
+[data-motion="reduce"] *, [data-motion="reduce"] *::before, [data-motion="reduce"] *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+html[data-motion="reduce"] { scroll-behavior: auto; }
+html[data-motion="reduce"] .an-hero-slogan span { opacity: 1; transform: none; filter: none; }

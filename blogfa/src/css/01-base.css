@@ -52,6 +52,8 @@ a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
 /* :where() keeps this at element weight, so buttons and other classed links keep their own colours. */
 :where([data-v="b"]) a { color: var(--primary); }
 p, ul, ol, dl, blockquote, figure { margin: 0 0 1.1em; }
+/* no word left alone on the last line of a paragraph, in browsers that support it (others wrap as before) */
+p, li, figcaption { text-wrap: pretty; }
 h1, h2, h3, h4 { line-height: 1.35; margin: 0 0 .6em; font-weight: 800; letter-spacing: -.01em; text-wrap: balance; }
 b, strong { font-weight: 700; }
 small { font-size: .8em; }

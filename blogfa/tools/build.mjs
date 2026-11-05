@@ -29,11 +29,13 @@ const rd = (...p) => fs.readFileSync(path.join(ROOT, ...p), 'utf8');
 const wr = (rel, s) => { const f = path.join(DIST, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
 
 /* ---------- module sets ---------- */
-const CSS_ALL = ['01-base', '02-chrome', '03-home', '04-post', '05-labs', '06-dialogs', '07-responsive', '08-sky'];
+// 09-reader: the reader's settings from «ابزار خواننده» (themes, text size, focus mode), in every template so a
+// saved choice shows from the first paint; the toolkit's own stylesheet carries it too, for older templates
+const CSS_ALL = ['01-base', '02-chrome', '03-home', '04-post', '05-labs', '06-dialogs', '07-responsive', '08-sky', '09-reader'];
 const CSS_SETS = {
   post: CSS_ALL,
-  page: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive', '08-sky'],
-  archive: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive', '08-sky']
+  page: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive', '08-sky', '09-reader'],
+  archive: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive', '08-sky', '09-reader']
 };
 const LABS = ['_ui', 'ai', 'iot', 'city', 'security', 'brain', 'space', 'arch', 'algo', 'energy', 'idea'];
 const JS_MODS = {
@@ -265,22 +267,83 @@ async function build(variant) {
   return { variant, cdn, bytes: Buffer.byteLength(all), parts, facts, out };
 }
 
+/* ---------- «ابزار خواننده»: the code for Blogfa's custom-code box (src/addons/) ---------- */
+// The box («کدها و جاوا اسکریپت‌های اختصاصی کاربر») is printed by <-BlogCustomHtml-> in the footer of each template.
+// What the owner pastes there is dist/box.html: a few lines that load the toolkit's stylesheet and script from the
+// same pinned commit as the template, with the same backup addresses and Subresource Integrity. The QR encoder is
+// a third file the script fetches only when a reader opens the QR window. dist/box-local.html is the same code
+// for the local previews (files next to the page, no integrity check: a file:// page cannot use crossorigin).
+const QR_BANNER = '/*! qrcode-generator 2.0.4 | Copyright (c) 2009 Kazuhiko Arase | MIT License | "QR Code" is a registered trademark of DENSO WAVE INCORPORATED */\n';
+function postWords() {
+  // every glossary term, and the first three key points of each article, for the quiz's wrong choices
+  const dir = path.join(ROOT, 'posts');
+  const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => /^\d\d-[\w-]+\.html$/.test(f)).sort() : [];
+  const ent = { '&nbsp;': ' ', '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };
+  const txt = h => h.replace(/<[^>]+>/g, '').replace(/&(nbsp|amp|lt|gt|quot|#39);/g, m => ent[m]).replace(/\s+/g, ' ').trim();
+  const terms = [], keys = [];
+  for (const f of files) {
+    const topic = f.replace(/^\d\d-/, '').replace(/\.html$/, '');
+    const s = fs.readFileSync(path.join(dir, f), 'utf8');
+    for (const m of s.matchAll(/<abbr\b[^>]*>([\s\S]*?)<\/abbr>/g)) { const t = txt(m[1]); if (t && !terms.includes(t)) terms.push(t); }
+    const k = s.match(/<div class="an-keys">([\s\S]*?)<\/div>/);
+    if (k) for (const li of [...k[1].matchAll(/<li>([\s\S]*?)<\/li>/g)].slice(0, 3)) keys.push([topic, txt(li[1])]);
+  }
+  return { terms, keys };
+}
+async function addons() {
+  const qrSrc = fs.readFileSync(path.join(ROOT, 'node_modules', 'qrcode-generator', 'dist', 'qrcode.js'), 'utf8');
+  // the library's UMD tail looks for define/module/exports; inside this wrapper it finds none and stays private
+  const qrCode = QR_BANNER + await jsSource(`(function(){var define,module,exports;\n${qrSrc}\n;qrcode.stringToBytes=qrcode.stringToBytesFuncs['UTF-8'];window.AN_QR=qrcode;})();`, 'qr encoder');
+  guard('qr encoder', qrCode);
+  const qrA = asset('an-qr', 'js', qrCode);
+  const words = postWords();
+  const cssCode = csso(rd('src', 'css', '09-reader.css') + '\n' + rd('src', 'addons', 'addons.css'), { restructure: false, comments: false }).css;
+  guard('toolkit css', cssCode);
+  const cssA = asset('an-addons', 'css', (/[^\x00-\x7f]/.test(cssCode) ? '@charset "UTF-8";' : '') + cssCode);
+  const jsCode = await jsSource(rd('src', 'addons', 'addons.js').replace("'@QR@'", JSON.stringify([qrA.file, qrA.sri]))
+    .replace("'@TERMS@'", JSON.stringify(words.terms)).replace("'@KEYS@'", JSON.stringify(words.keys)), 'toolkit js');
+  const jsA = asset('an-addons', 'js', jsCode);
+  const loader = async (M, sri) => jsSource(rd('src', 'addons', 'box.js').replace("'@MIRRORS@'", JSON.stringify(M))
+    .replace("'@CSSFILE@'", JSON.stringify([cssA.file, cssA.sri])).replace("'@JSFILE@'", JSON.stringify([jsA.file, jsA.sri])).replace("'@SRI@'", sri ? '1' : '0'), 'box loader');
+  // Only /* */ comments in the box: if a newline were ever lost on the way, a // comment would swallow the code after it
+  const box = code => [
+    '<script>',
+    '/* آینده‌نگار · «ابزار خواننده» (کیت ۸): پوسته‌ها، اندازه‌ی متن، خط‌کش خواندن، حالت تمرکز، شنیدن متن، نشان‌ها، گذرنامه‌ی آینده، خودآزمایی، ارجاع و کد QR.',
+    '   طراحی، مدیریت و نویسندگی: امیرحسین همتی. بدون پاپ‌آپ، بدون انتقال صفحه، بدون دست زدن به تبلیغات بلاگفا و بدون فرستادن هیچ داده‌ای.',
+    '   برای خاموش کردن یک ابزار، 1 جلوی نامش را 0 کنید: tools دکمه‌ی نوار بالا، passport گذرنامه، quiz خودآزمایی، listen شنیدن، ruler خط‌کش،',
+    '   focus حالت تمرکز، marks نشان‌ها، cite ارجاع، qr کد QR، resume ادامه‌ی خواندن. */',
+    'window.AN_X_OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1 };',
+    '</script>',
+    `<script>${code}</script>`, ''
+  ].join('\n');
+  const M = mirrorsAt(REF || 'REF-NOT-SET');
+  return {
+    files: { css: cssA, js: jsA, qr: qrA }, words: { terms: words.terms.length, keys: words.keys.length },
+    box: box(await loader(M, true)), boxLocal: box(await loader(['./'], false))
+  };
+}
+
 const t0 = Date.now();
 fs.rmSync(DIST, { recursive: true, force: true });
 const reports = [];
 for (const v of Object.keys(VARIANTS)) reports.push(await build(v));
+const addon = await addons();
 for (const [file, buf] of assets) wr('cdn/' + file, buf);
 const ref = verifyRef();
 // --unverified writes the cdn templates anyway, for the offline tests (they serve dist/cdn/ themselves); such
 // templates must not be installed, and tools/check.mjs fails while build-report.json says the ref is not verified
 const UNVERIFIED = process.argv.includes('--unverified');
 for (const r of reports) if (!r.cdn || ref.ok || UNVERIFIED) for (const [rel, s] of Object.entries(r.out)) wr(rel, s);
+// the box code names the pinned commit like the CDN templates, so it is written under the same condition
+if (ref.ok || UNVERIFIED) wr('box.html', addon.box);
+wr('box-local.html', addon.boxLocal);
 const kb = n => (n / 1024).toFixed(1) + ' KB';
 console.log('\nآینده‌نگار · build OK in ' + (Date.now() - t0) + ' ms');
 for (const r of reports) {
   console.log(`\n${r.variant.toUpperCase()}  template${r.variant === 'full' ? '' : '-' + r.variant}.html  ${kb(r.bytes)}${r.cdn && !ref.ok ? (UNVERIFIED ? '  (UNVERIFIED: for offline tests only)' : '  (NOT WRITTEN, see below)') : ''}`);
   for (const [k, p] of Object.entries(r.parts)) console.log(`  ${k.padEnd(8)} html ${kb(p.html).padStart(9)}   (css ${kb(p.css)}, js ${kb(p.js)})${p.jsFile ? '   → ' + p.cssFile + ', ' + p.jsFile : ''}`);
 }
+console.log(`\nTOOLKIT  box.html ${kb(Buffer.byteLength(addon.box))}${ref.ok ? '' : UNVERIFIED ? '  (UNVERIFIED: for offline tests only)' : '  (NOT WRITTEN, see below)'}   → ${addon.files.css.file} ${kb(addon.files.css.bytes)}, ${addon.files.js.file} ${kb(addon.files.js.bytes)}, ${addon.files.qr.file} ${kb(addon.files.qr.bytes)} (on demand); quiz pool: ${addon.words.terms} terms, ${addon.words.keys} key points`);
 console.log(`\ndist/cdn: ${assets.size} files, ${kb([...assets.values()].reduce((a, b) => a + b.length, 0))}`);
 if (ref.ok) console.log(`cdn ref ${REF}: holds every asset${ref.pushed ? ', and is on a remote branch' : '. WARNING: no remote branch contains it yet; push before installing'}`);
 else console.log(`cdn templates ${UNVERIFIED ? 'written UNVERIFIED (offline tests only, do not install)' : 'NOT written'}: ${ref.why}.\n  Commit dist/cdn/, push, set "ref" in cdn.json to that commit's full hash, and run the build again.`);
@@ -290,5 +353,6 @@ const files = [...assets].map(([file, buf]) => ({ file, bytes: buf.length, sri: 
 wr('build-report.json', JSON.stringify({
   builtAt: new Date().toISOString(),
   cdn: { repo: CDN.repo, ref: REF, dir: CDN_DIR, ok: ref.ok, pushed: ref.pushed, missing: ref.missing, unverifiedTemplates: !ref.ok && UNVERIFIED, mirrors: MIRRORS, files },
-  reports: reports.map(({ out, ...r }) => r)
+  reports: reports.map(({ out, ...r }) => r),
+  addons: { css: addon.files.css.file, js: addon.files.js.file, qr: addon.files.qr.file, box: Buffer.byteLength(addon.box), boxWritten: ref.ok || UNVERIFIED, words: addon.words }
 }, null, 2));

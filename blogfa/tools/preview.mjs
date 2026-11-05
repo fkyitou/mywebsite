@@ -6,7 +6,9 @@
 
    node tools/preview.mjs                         → preview/   (flat files; open preview/index.html)
    node tools/preview.mjs --mode root --out q     → q/post/1/index.html … (Blogfa-like URLs for a local server)
-   options: --template dist/template-lite.html  --posts <dir>  --ads (adds a mock ad bar to test layout) */
+   options: --template dist/template-lite.html  --posts <dir>  --ads (adds a mock ad bar to test layout)
+            --box <file> (what the custom-code box holds; default dist/box.html for a CDN template, else
+            dist/box-local.html)  --no-box (an empty box, as before kit 8) */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,6 +21,22 @@ const TPL = path.resolve(ROOT, arg('template', 'dist/template.html'));
 const POSTS = path.resolve(ROOT, arg('posts', 'posts'));
 const PAGES = path.resolve(ROOT, arg('pages', 'pages'));
 const ADS = !!arg('ads', false);
+// «ابزار خواننده» (kit 8): the code the owner pastes into Blogfa's custom-code box reaches the page through
+// <-BlogCustomHtml->. A CDN template gets dist/box.html (files from jsDelivr, answered offline by the tests like the
+// template's own); an inline template gets dist/box-local.html, whose files are copied next to the pages.
+const CDN_TPL = /template-cdn/.test(path.basename(TPL));
+const BOX_ARG = arg('box', null);
+let BOX_FILE = process.argv.includes('--no-box') ? null
+  : typeof BOX_ARG === 'string' ? path.resolve(ROOT, BOX_ARG)
+  : path.join(ROOT, 'dist', CDN_TPL ? 'box.html' : 'box-local.html');
+if (BOX_FILE && !fs.existsSync(BOX_FILE)) {
+  if (typeof BOX_ARG === 'string') throw new Error('no such box file: ' + BOX_FILE);
+  console.log(`note: ${path.relative(ROOT, BOX_FILE)} not built, the custom-code box stays empty`);
+  BOX_FILE = null;
+}
+// the local box names its files relative to the page ("./"); pages at Blogfa-like nested addresses find them at the root
+let BOX = BOX_FILE ? fs.readFileSync(BOX_FILE, 'utf8') : '';
+if (BOX && MODE !== 'flat') BOX = BOX.replace(/\["\.\/"\]/g, '["/"]');
 
 const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -67,7 +85,7 @@ const BLOG = {
   BlogId: 'ayandehnegar', BlogTitle: 'آینده‌نگار', BlogAuthor: 'امیرحسین همتی', BlogUrl: U.home, BlogXmlLink: U.rss,
   BlogDescription: 'روایت انسان، ایده و فناوری؛ مجله‌ای آنلاین درباره‌ی فناوری‌هایی که فردای ما را می‌سازند.',
   BlogMetaDescription: 'آینده‌نگار: روایت انسان، ایده و فناوری. مقاله‌های مستند با آزمایشگاه‌های تعاملی درباره‌ی هوش مصنوعی، اینترنت اشیا، شهر هوشمند، امنیت، مغز، فضا، معماری، الگوریتم‌ها، انرژی پاک و اختراع.',
-  BlogArchiveLink: U.archive, BlogAbout: 'آینده‌نگار، پروژه‌ی کارگاهی درس تجارت الکترونیک و امنیت شبکه.', BlogPhotoLink: '', BlogEmail: '', BlogProfileLink: '#', BlogCustomHtml: '', BlogTimeZone: '+03:30'
+  BlogArchiveLink: U.archive, BlogAbout: 'آینده‌نگار، پروژه‌ی کارگاهی درس تجارت الکترونیک و امنیت شبکه.', BlogPhotoLink: '', BlogEmail: '', BlogProfileLink: '#', BlogCustomHtml: BOX, BlogTimeZone: '+03:30'
 };
 const allTags = [...tags].map(([name, count]) => ({ TagName: name, TagLink: U.tag(name), TagCount: fa(count) }));
 // The live tag cloud listed post 4's tag «هش» with 48 kashidas (2026-11-05): Blogfa's tag table kept an earlier
@@ -176,6 +194,8 @@ fs.mkdirSync(path.dirname(cmFile), { recursive: true }); fs.writeFileSync(cmFile
 // the font files the inline stylesheets point to, next to the pages (a CDN template gets them from jsDelivr instead)
 const CDN_FILES = path.join(ROOT, 'dist', 'cdn');
 if (fs.existsSync(CDN_FILES)) for (const f of fs.readdirSync(CDN_FILES).filter(f => f.endsWith('.woff2'))) fs.copyFileSync(path.join(CDN_FILES, f), path.join(OUT, f));
+// and the toolkit's files for a local box (stylesheet, script, and the QR encoder it fetches when asked)
+if (BOX && !CDN_TPL && fs.existsSync(CDN_FILES)) for (const f of fs.readdirSync(CDN_FILES).filter(f => /^an-(addons|qr)\./.test(f))) fs.copyFileSync(path.join(CDN_FILES, f), path.join(OUT, f));
 
-console.log(`preview (${MODE}) → ${path.relative(ROOT, OUT)}/  ·  ${posts.length} posts, ${cats.length} categories, ${allTags.length} tags, ${pages.length} pages  ·  template ${path.relative(ROOT, TPL)}`);
+console.log(`preview (${MODE}) → ${path.relative(ROOT, OUT)}/  ·  ${posts.length} posts, ${cats.length} categories, ${allTags.length} tags, ${pages.length} pages  ·  template ${path.relative(ROOT, TPL)}  ·  box ${BOX_FILE ? path.relative(ROOT, BOX_FILE) : 'empty'}`);
 if (unknown.size) console.log('note: tags/blocks the emulator does not know (left empty):', [...unknown].join(' '));

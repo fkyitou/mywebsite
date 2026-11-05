@@ -1,3 +1,9 @@
+/* ---------- soft change between pages and themes (View Transitions) ----------
+   Going from page to page of the blog cross-fades in browsers that support it (others just load the page). js/early.js
+   skips it on the new page when motion is off, the reader turned it off, or the device has no graphics chip.
+   A change of theme (js/core.js AN.swap) opens as a circle instead, so the default fade is off for it. */
+@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
+html.an-swap::view-transition-old(root), html.an-swap::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 /* ---------- top bar ---------- */
 .an-bar { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--bar-h); display: flex; align-items: center; gap: var(--s5); padding: 0 var(--gut); transition: background var(--t-mid), border-color var(--t-mid), transform var(--t-mid) var(--ease); border-bottom: 1px solid transparent; }
 .an-bar.solid { background: color-mix(in srgb, var(--bg) 78%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3); border-bottom-color: var(--border); }
