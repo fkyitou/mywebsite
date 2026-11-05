@@ -29,7 +29,7 @@ export async function routeCdn(ctx, { fail = () => null, delay = () => 0, log = 
     return route.fulfill({
       status: 200, body,
       headers: {
-        'content-type': file.endsWith('.css') ? 'text/css; charset=utf-8' : 'application/javascript; charset=utf-8',
+        'content-type': file.endsWith('.css') ? 'text/css; charset=utf-8' : file.endsWith('.woff2') ? 'font/woff2' : 'application/javascript; charset=utf-8',
         'access-control-allow-origin': '*', 'cache-control': 'public, max-age=31536000, immutable'
       }
     });

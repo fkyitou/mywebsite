@@ -39,7 +39,10 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   ok('16 steps to tick', (await p.$$('input[data-step]')).length === 16);
   const parts = [[1, '1-main-and-posts.html'], [2, '2-archive.html'], [3, '3-pages.html']];
   const version = (await p.textContent('#kit-version')) || '';
-  ok('version notice names kit 6 and says only step 2 is redone', /نسخه‌ی ۶ کیت/.test(version) && /فقط گام ۲ را دوباره انجام دهید/.test(version), version.slice(0, 80));
+  ok('version notice names kit 7 and asks for step 2 and the shorter description of step 3', /نسخه‌ی ۷ کیت/.test(version) && /گام ۲ را دوباره انجام دهید/.test(version) && /در گام ۳ «شرح خلاصه» را/.test(version), version.slice(0, 80));
+  // Blogfa keeps the first 100 characters of the blog's description; a longer one is cut in the footer and the meta tags
+  const desc = await p.evaluate(() => JSON.parse(document.getElementById('kit-data').textContent).blog.desc);
+  ok('the blog description offered is 100 characters or fewer, and the note beside it says so', !!desc && [...desc].length <= 100 && /۱۰۰ نویسه/.test(await p.textContent('#desc-note')), desc && [...desc].length);
   const sizes = await p.evaluate(() => { const K = JSON.parse(document.getElementById('kit-data').textContent); return ['full', 'lite'].flatMap(v => [1, 2, 3].map(n => new Blob([K.split[v][n]]).size)); });
   ok('every template part offered fits the 60 KB budget', sizes.every(n => n > 0 && n <= 60 * 1024), sizes.join(','));
   for (const [part, file] of parts) ok(`full part ${part} copies dist/split-cdn/${file}`, (await click(`[data-copy="split"][data-part="${part}"]`)) === read('dist/split-cdn/' + file));

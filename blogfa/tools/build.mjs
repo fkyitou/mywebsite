@@ -37,13 +37,14 @@ const CSS_SETS = {
 };
 const LABS = ['_ui', 'ai', 'iot', 'city', 'security', 'brain', 'space', 'arch', 'algo', 'energy', 'idea'];
 const JS_MODS = {
-  core: ['js/core.js'], sky: ['js/sky.js'], sound: ['js/sound.js'], covers: ['js/covers.js'], charts: ['js/charts.js'], pages: ['js/pages.js'],
+  core: ['js/core.js'], sky: ['js/sky.js'], sound: ['js/sound.js'], covers: ['js/covers.js'], charts: ['js/charts.js'], present: ['js/present.js'], pages: ['js/pages.js'],
   globe: ['js/data-geo.js', 'js/globe.js'], labs: LABS.map(l => `js/labs/${l}.js`), archive: ['js/archive.js'], pagebody: ['js/pagebody.js']
 };
-// pagebody (tidying after Blogfa's page editor) sits in the page bundle only, so changing it changes part 3 alone
+// pagebody (tidying after Blogfa's page editor) sits in the page bundle only, so changing it changes part 3 alone;
+// present («ارائه در کلاس») only in the post bundle, the one that shows single articles
 const MODS = {
-  full: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'globe', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages', 'pagebody'], archive: ['core', 'sky', 'sound', 'archive'] },
-  lite: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages', 'pagebody'], archive: ['core', 'sky', 'sound', 'archive'] }
+  full: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'present', 'pages', 'globe', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages', 'pagebody'], archive: ['core', 'sky', 'sound', 'archive'] },
+  lite: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'present', 'pages', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages', 'pagebody'], archive: ['core', 'sky', 'sound', 'archive'] }
 };
 const VARIANTS = {
   full: { mods: 'full', cdn: false }, lite: { mods: 'lite', cdn: false },
@@ -69,7 +70,7 @@ const mirrorsAt = ref => [
 const MIRRORS = REF ? mirrorsAt(REF) : [];
 const assets = new Map();   // file name → bytes, written to dist/cdn/
 function asset(base, ext, code) {
-  const buf = Buffer.from(code, 'utf8');
+  const buf = Buffer.isBuffer(code) ? code : Buffer.from(code, 'utf8');
   const file = `${base}.${crypto.createHash('sha256').update(buf).digest('hex').slice(0, 10)}.${ext}`;
   assets.set(file, buf);
   return { file, sri: 'sha384-' + crypto.createHash('sha384').update(buf).digest('base64'), bytes: buf.length };
@@ -87,6 +88,34 @@ function verifyRef() {
   try { pushed = git('branch', '-r', '--contains', REF).toString().trim().length > 0; } catch (e) { /* unknown commit */ }
   return { ok: !missing.length, missing, pushed, why: missing.length ? `commit ${REF.slice(0, 12)} lacks ${missing.length} asset(s)` : '' };
 }
+
+/* ---------- web font ---------- */
+// Vazirmatn in three subsets (src/fonts/fonts.json). The files go to dist/cdn/ and every stylesheet starts with their
+// @font-face rules, with addresses relative to the stylesheet: the font comes from the same pinned commit and the
+// same mirror as the CSS, so it needs no server of its own and no stylesheet that holds back the first paint.
+// The CDN templates preload the arabic subset. The inline templates (local preview only) do not: a preload with
+// crossorigin from a file:// page is refused, while the @font-face request itself loads.
+const FONT = JSON.parse(rd('src', 'fonts', 'fonts.json'));
+const FONT_FILES = FONT.faces.map(f => ({ ...f, a: asset(f.file.replace(/\.woff2$/, ''), 'woff2', fs.readFileSync(path.join(ROOT, 'src', 'fonts', f.file))) }));
+const FONT_CSS = FONT_FILES.map(f => `@font-face{font-family:"${FONT.family}";font-style:normal;font-weight:${FONT.weight};font-display:swap;src:url(${f.a.file}) format("woff2");unicode-range:${f.range}}`).join('');
+const FONT_PRELOAD = FONT_FILES.filter(f => f.preload);
+
+/* ---------- share picture ---------- */
+// What a messenger or a social site shows when someone sends a link to the blog: assets/social/blog.jpg, the
+// 1200×630 card tools/assets.mjs draws (name, slogan and the creator's credit). It goes to dist/cdn like the fonts
+// and every template names it at the pinned jsDelivr address, in the inline variants too, so a CDN template stays
+// its inline twin. A link preview reads only the meta tags of the page's own HTML, and Blogfa's tags cannot name a
+// post's picture in <head>, so every page shares this one card.
+const SHARE = asset('an-share', 'jpg', fs.readFileSync(path.join(ROOT, 'assets', 'social', 'blog.jpg')));
+const SHARE_URL = mirrorsAt(REF || 'REF-NOT-SET')[0] + SHARE.file;
+const OG_IMAGE = [
+  `<meta property="og:image" content="${SHARE_URL}">`,
+  '<meta property="og:image:type" content="image/jpeg">',
+  '<meta property="og:image:width" content="1200">',
+  '<meta property="og:image:height" content="630">',
+  '<meta property="og:image:alt" content="آینده‌نگار، روایت انسان، ایده و فناوری. طراحی، مدیریت و نویسندگی: امیرحسین همتی">',
+  `<meta name="twitter:image" content="${SHARE_URL}">`
+].join('\n');
 
 /* ---------- Blogfa safety: patterns that must never reach the template ---------- */
 // Blogfa tags look like <-Name-> and blocks like <BlogX>/<BLOGFA>; a stray "<-" or "<Blog" inside JS/CSS could be
@@ -195,10 +224,10 @@ async function build(variant) {
   for (const [tag, key] of [['PostTemplate', 'post'], ['ArchiveTemplate', 'archive'], ['PageTemplate', 'page']]) {
     const m = source.match(new RegExp(`<blog:${tag}>([\\s\\S]*?)</blog:${tag}>`));
     if (!m) throw new Error('Missing ' + tag);
-    const cssCode = css(CSS_SETS[key], `${key} css`);
+    const cssCode = FONT_CSS + css(CSS_SETS[key], `${key} css`);
     const jsCode = await js(V[key].flatMap(k => JS_MODS[k]), `${key} js (${V[key].join('+')})`);
     const map = {
-      HEAD: () => P('head'), EARLY_JS: early, STYLE: `<style>${cssCode}</style>`,
+      HEAD: () => P('head'), OG_IMAGE, FONT: '', EARLY_JS: early, STYLE: `<style>${cssCode}</style>`,
       CHROME_TOP: () => P('chrome_top'), LOGO: logo, HERO: () => P('hero'), HOME_TOP: () => P('home_top'),
       HOME_BOTTOM: homeBottom, AUTHOR_BOX: () => P('author_box'), FOOT_BOTTOM: () => P('foot_bottom'),
       CREATOR: () => P('creator'), BODY_END: `<script>${jsCode}</script>`, CATS_STATIC: catsStatic
@@ -213,6 +242,7 @@ async function build(variant) {
         .replace("'@MIRRORS@'", JSON.stringify(M)).replace("'@CSSFILE@'", JSON.stringify([cssA.file, cssA.sri]))
         .replace("'@JSFILE@'", JSON.stringify([jsA.file, jsA.sri])), `${key} loader`);
       map.EARLY_JS = early + loader;
+      map.FONT = FONT_PRELOAD.map(f => `<link rel="preload" href="${M[0]}${f.a.file}" as="font" type="font/woff2" crossorigin id="an-font">`).join('');
       map.STYLE = `<link rel="stylesheet" id="an-css" href="${M[0]}${cssA.file}" integrity="${cssA.sri}" crossorigin="anonymous">`;
       // id "an-script", not "an-main": that id belongs to <main> (the skip link's target)
       map.BODY_END = `<script src="${M[0]}${jsA.file}" id="an-script" integrity="${jsA.sri}" crossorigin="anonymous"></script>`;

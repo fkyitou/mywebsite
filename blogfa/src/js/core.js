@@ -13,7 +13,8 @@
   AN.store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
   AN.fine = !!(W.matchMedia && W.matchMedia('(hover: hover) and (pointer: fine)').matches);
   var toastT;
-  AN.toast = function (msg) { var t = $('#an-toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 2600); };
+  // a longer message stays longer: about 60 ms a character, never under 2.6 s
+  AN.toast = function (msg) { var t = $('#an-toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, Math.max(2600, String(msg).length * 60)); };
 
   /* ---------- topics & realms ---------- */
   var IC = {
@@ -237,7 +238,7 @@
     $$('[data-an="search"]').forEach(function (b) { b.addEventListener('click', AN.openSearch); });
   }
   function keysDlg() {
-    var html = '<div class="an-dlg-head"><h2>میان‌برهای صفحه‌کلید</h2><button type="button" class="an-dlg-x" aria-label="بستن">✕</button></div><div class="an-dlg-body"><dl class="an-keys-list"><dt><kbd>Ctrl</kbd> + <kbd>K</kbd> یا <kbd>/</kbd></dt><dd>جست‌وجو در مقاله‌ها</dd><dt><kbd>B</kbd></dt><dd>تغییر نسخه‌ی وبلاگ (A شب / B روز)</dd><dt><kbd>T</kbd></dt><dd>بازگشت به بالای صفحه</dd><dt><kbd>M</kbd></dt><dd>روشن یا خاموش کردن صدا</dd><dt><kbd>?</kbd></dt><dd>نمایش همین راهنما</dd><dt><kbd>Esc</kbd></dt><dd>بستن پنجره‌ها</dd></dl></div>';
+    var html = '<div class="an-dlg-head"><h2>میان‌برهای صفحه‌کلید</h2><button type="button" class="an-dlg-x" aria-label="بستن">✕</button></div><div class="an-dlg-body"><dl class="an-keys-list"><dt><kbd>Ctrl</kbd> + <kbd>K</kbd> یا <kbd>/</kbd></dt><dd>جست‌وجو در مقاله‌ها</dd><dt><kbd>B</kbd></dt><dd>تغییر نسخه‌ی وبلاگ (A شب / B روز)</dd><dt><kbd>T</kbd></dt><dd>بازگشت به بالای صفحه</dd><dt><kbd>M</kbd></dt><dd>روشن یا خاموش کردن صدا</dd><dt><kbd>P</kbd></dt><dd>ارائه در کلاس، در صفحه‌ی هر مقاله (جلو: PageDown یا Space، عقب: PageUp)</dd><dt><kbd>?</kbd></dt><dd>نمایش همین راهنما</dd><dt><kbd>Esc</kbd></dt><dd>بستن پنجره‌ها</dd></dl></div>';
     var d = AN.dialog('an-keys', html);
     AN.openKeys = function () { AN.openDlg(d, '.an-dlg-x'); };
     $$('[data-an="keys"]').forEach(function (b) { b.addEventListener('click', AN.openKeys); });

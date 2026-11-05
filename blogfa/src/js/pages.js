@@ -56,7 +56,7 @@
     hl = hl || 'h3';
     var a = el('a', 'an-card an-rv' + (feat ? ' an-feat' : '')), t = AN.TOPICS[p.topic];
     a.href = p.url; a.style.setProperty('--rc', AN.color(p.realm)); a.style.setProperty('--d', (Math.min(i, 6) * 0.06) + 's');
-    a.innerHTML = '<div class="an-cover"><canvas width="640" height="400" aria-hidden="true"></canvas><span class="an-cover-n">' + AN.faDigits(String(i + 1).padStart(2, '0')) + ' · ' + esc(t ? t.n : '') + '</span>' + (p.lab ? '<span class="an-cover-lab"><i></i>آزمایشگاه زنده</span>' : '') + '</div>' +
+    a.innerHTML = '<div class="an-cover"><canvas width="640" height="400" aria-hidden="true"></canvas><span class="an-cover-n"><b>' + AN.faDigits(String(i + 1).padStart(2, '0')) + '</b> ' + esc(t ? t.n : '') + '</span>' + (p.lab ? '<span class="an-cover-lab"><i></i>آزمایشگاه زنده</span>' : '') + '</div>' +
       '<div class="an-card-in">' + (feat ? '<span class="an-feat-badge">تازه‌ترین روایت</span>' : '') +
       // meta stays on one line in a three-column grid: the weekday is dropped (full date in the tooltip) and the
       // reading time is an icon + minutes; the comment count moves down beside «بخوانید»
@@ -131,7 +131,7 @@
     ban.innerHTML = '<div class="an-banner-art"><canvas aria-hidden="true"></canvas></div><div class="an-banner-in">' +
       '<div class="an-post-meta">' + (p.cat ? '<a class="an-chip" href="' + esc((art.querySelector('.an-post-cats a') || {}).href || '#') + '">' + esc(p.cat) + '</a>' : '') + (t ? '<span>' + esc(t.n) + '</span>' : '') + (p.lab ? '<span class="an-chip" style="--rc:#5FD49A">آزمایشگاه زنده دارد</span>' : '') + '</div>' +
       '<h1 class="an-post-title">' + esc(p.title) + '</h1>' +
-      '<div class="an-banner-by"><span class="an-mono" aria-hidden="true">ا.ه</span><span>نوشته‌ی <b>امیرحسین همتی</b></span><span>' + esc(p.date) + '</span><span>' + AN.fa(p.min) + ' دقیقه خواندن</span><span>' + AN.fa(p.words) + ' واژه</span></div></div>';
+      '<div class="an-banner-by"><span class="an-mono" aria-hidden="true">ا.ه</span><span class="an-by-list"><span class="an-by-in"><span>نوشته‌ی <b>امیرحسین همتی</b></span><span>' + esc(p.date) + '</span><span>' + AN.fa(p.min) + ' دقیقه خواندن</span><span>' + AN.fa(p.words) + ' واژه</span></span></span></div></div>';
     main.insertBefore(ban, feed); D.documentElement.classList.add('an-banner-on'); // same task: the band in 04-post.css gives way to the banner without a shift
     var bcv = ban.querySelector('canvas');
     function drawBanner() { if (AN.cover) AN.cover(bcv, p.topic, p.id || 1, { banner: true }); }
@@ -143,7 +143,7 @@
     hs.forEach(function (h, i) { if (!h.id) h.id = 'an-s' + (i + 1); });
     if (hs.length > 1) {
       toc = el('nav', 'an-toc'); toc.setAttribute('aria-label', 'فهرست این مقاله');
-      toc.innerHTML = '<p class="an-toc-h" role="button" tabindex="0" aria-expanded="false"><svg class="an-toc-ring" viewBox="0 0 40 40" aria-hidden="true"><circle class="bg" cx="20" cy="20" r="16" pathLength="100"/><circle class="fg" cx="20" cy="20" r="16" pathLength="100"/></svg><span>در این مقاله<small>' + AN.fa(hs.length) + ' بخش · ' + AN.fa(p.min) + ' دقیقه</small></span></p><ol>' +
+      toc.innerHTML = '<p class="an-toc-h" role="button" tabindex="0" aria-expanded="false"><svg class="an-toc-ring" viewBox="0 0 40 40" aria-hidden="true"><circle class="bg" cx="20" cy="20" r="16" pathLength="100"/><circle class="fg" cx="20" cy="20" r="16" pathLength="100"/></svg><span>در این مقاله<small>' + AN.fa(hs.length) + ' بخش، ' + AN.fa(p.min) + ' دقیقه</small></span></p><ol>' +
         hs.map(function (h) { return '<li><a href="#' + h.id + '">' + esc(h.textContent) + '</a></li>'; }).join('') + '</ol>' +
         '<div class="an-toc-tools"><button type="button" class="an-btn an-btn-ghost an-btn-sm" data-an="copy">کپی پیوند</button>' + (p.lab ? '<a class="an-btn an-btn-ghost an-btn-sm" href="#an-lab">برو به آزمایشگاه</a>' : '') + '</div>';
       wrap.insertBefore(toc, body);
@@ -160,6 +160,8 @@
       }
       W.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(spy); } }, { passive: true }); spy();
     }
+    // «ارائه در کلاس» (js/present.js, post bundle only): its button joins the table of contents' tools
+    if (AN.present) AN.present({ body: body, hs: hs, tools: toc && toc.querySelector('.an-toc-tools'), title: p.title });
     // heading anchors
     hs.forEach(function (h) { h.classList.add('an-rv'); });
     // glossary tooltips

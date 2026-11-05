@@ -36,7 +36,7 @@
     var w = Math.max(300, Math.min(860, Math.round(box.clientWidth || 640))), fs = w < 480 ? 11 : 12.5, ns = o.series.length;
     var all = []; o.rows.forEach(function (r) { r.vals.forEach(function (v) { if (v != null) all.push(v); }); }); if (ref != null) all.push(ref);
     var vmax = fixMax || nice(Math.max.apply(null, all.concat([0])) * 1.08), fmt = function (v, d) { return AN.fa(v, d == null ? o.d : d) + (unit && unit.length < 3 ? unit : ''); };
-    var s, h, i, j;
+    var s, h, i, j, refT = null;
     box.textContent = '';
     if (type === 'hbar') {
       var rowH = ns > 1 ? 18 * ns + 18 : 34, labW = Math.round(w * (w < 480 ? 0.42 : 0.34)), padL = 64; h = o.rows.length * rowH + 30;
@@ -49,7 +49,7 @@
         r.vals.forEach(function (v, si) {
           if (v == null) return; var bh = ns > 1 ? 14 : 20, by = y + (ns > 1 ? si * 18 + 4 : (rowH - bh) / 2 - 2), bw = Math.max(2, span * v / vmax);
           var b = node(s, 'rect', { x: x0 - bw, y: by, width: bw, height: bh, rx: 4, class: 'an-ch-bar', style: 'fill:' + COLS[si % COLS.length] + ';transition-delay:' + (ri * 0.06) + 's' });
-          node(b, 'title', {}, r.label + (ns > 1 ? ' · ' + o.series[si] : '') + ': ' + fmt(v, r.ds[si]) + (unit.length >= 3 ? ' ' + unit : ''));
+          node(b, 'title', {}, r.label + (ns > 1 ? '، ' + o.series[si] : '') + ': ' + fmt(v, r.ds[si]) + (unit.length >= 3 ? ' ' + unit : ''));
           node(s, 'text', { x: x0 - bw - 6, y: by + bh / 2, 'text-anchor': 'end', 'dominant-baseline': 'middle', class: 'an-ch-val' }, fmt(v, r.ds[si]));
         });
       });
@@ -70,7 +70,7 @@
           var ln = node(s, 'path', { d: d, class: 'an-ch-line', pathLength: 100, style: 'stroke:' + col });
           pts.forEach(function (p, k) {
             var c = node(s, 'circle', { cx: p[0], cy: p[1], r: 4.5, class: 'an-ch-dot', style: 'stroke:' + col + ';transition-delay:' + (0.2 + k * 0.08) + 's' });
-            node(c, 'title', {}, p[3] + (ns > 1 ? ' · ' + o.series[j] : '') + ': ' + fmt(p[2], p[4]));
+            node(c, 'title', {}, p[3] + (ns > 1 ? '، ' + o.series[j] : '') + ': ' + fmt(p[2], p[4]));
             if (k === 0 || k === pts.length - 1 || n <= 8) node(s, 'text', { x: p[0], y: p[1] - 11, 'text-anchor': 'middle', class: 'an-ch-val' }, fmt(p[2], p[4]));
           });
         }
@@ -80,7 +80,7 @@
           r.vals.forEach(function (v, si) {
             if (v == null) return; var bh2 = chh * v / vmax, bx = pl + step * ri + (step - gw) / 2 + si * bw2;
             var b = node(s, 'rect', { x: bx + 1, y: pt + chh - bh2, width: Math.max(2, bw2 - 2), height: bh2, rx: 4, class: 'an-ch-bar', style: 'fill:' + COLS[si % COLS.length] + ';transition-delay:' + (ri * 0.05) + 's' });
-            node(b, 'title', {}, r.label + (ns > 1 ? ' · ' + o.series[si] : '') + ': ' + fmt(v, r.ds[si]));
+            node(b, 'title', {}, r.label + (ns > 1 ? '، ' + o.series[si] : '') + ': ' + fmt(v, r.ds[si]));
             if (bw2 > fs * 2.6) node(s, 'text', { x: bx + bw2 / 2, y: pt + chh - bh2 - 7, 'text-anchor': 'middle', class: 'an-ch-val' }, fmt(v, r.ds[si]));
           });
         });
@@ -88,14 +88,46 @@
       if (ref != null) {
         var ry = pt + chh - chh * ref / vmax;
         node(s, 'line', { x1: pl, x2: w - pr, y1: ry, y2: ry, class: 'an-ch-ref' });
-        node(s, 'text', { x: w - pr, y: ry - 7, 'text-anchor': 'end', class: 'an-ch-reft' }, (refL ? refL + ': ' : '') + fmt(ref, decs(tb.getAttribute('data-ref'))));
+        // direction rtl: in the chart's ltr frame a Persian label lost its «٪» to the far end of the line
+        refT = node(s, 'text', { x: w - pr, y: ry - 7, 'text-anchor': 'start', direction: 'rtl', class: 'an-ch-reft' }, (refL ? refL + ': ' : '') + fmt(ref, decs(tb.getAttribute('data-ref'))));
+        refT._at = [pl + 4, w - pr, pt, pt + chh, ry];
       }
       node(s, 'line', { x1: pl, x2: w - pr, y1: pt + chh, y2: pt + chh, class: 'an-ch-base' });
     }
     s.setAttribute('role', 'img');
     s.setAttribute('aria-label', (tb.getAttribute('data-title') || 'نمودار') + '؛ داده‌های کامل در جدول زیر نمودار آمده است.');
     s.style.fontSize = fs + 'px';
+    // the halo of the values and the reference label (css: stroke in the card colour) goes under the letters; set
+    // here as an SVG attribute, since the CSS validator the tests run does not know the paint-order property
+    $$('.an-ch-val, .an-ch-reft', s).forEach(function (t) { t.setAttribute('paint-order', 'stroke'); });
     box.appendChild(s);
+    if (refT) placeRef(s, refT, fs);
+  }
+
+  // The reference label goes to whichever end of its line, above or below it, covers the least of the value labels,
+  // points, bars and line. Its old fixed place (right end, above) sat on the last values of post 1's chart on a phone.
+  function placeRef(s, t, fs) {
+    var a = t._at, asc = fs * 0.85, dsc = fs * 0.3, obs = [], best = null;
+    function len(n) { var v = 0; try { v = n.getComputedTextLength(); } catch (e) { /* not laid out */ } return v || n.textContent.length * fs * 0.56; }
+    $$('.an-ch-val', s).forEach(function (v) { var vw = len(v); obs.push([+v.getAttribute('x') - vw / 2, +v.getAttribute('y') - asc, vw, asc + dsc]); });
+    $$('.an-ch-dot', s).forEach(function (c) { obs.push([+c.getAttribute('cx') - 6, +c.getAttribute('cy') - 6, 12, 12]); });
+    $$('.an-ch-bar', s).forEach(function (b) { obs.push([+b.getAttribute('x'), +b.getAttribute('y'), +b.getAttribute('width'), +b.getAttribute('height')]); });
+    $$('.an-ch-line', s).forEach(function (l) {
+      var p = (l.getAttribute('d').match(/[\d.]+ [\d.]+/g) || []).map(function (q) { return q.split(' ').map(Number); });
+      for (var i = 1; i < p.length; i++) for (var k = 0; k <= 10; k++) obs.push([p[i - 1][0] + (p[i][0] - p[i - 1][0]) * k / 10 - 2, p[i - 1][1] + (p[i][1] - p[i - 1][1]) * k / 10 - 2, 4, 4]);
+    });
+    var tw = len(t), below = a[4] + asc + 5;
+    // anchors in the label's rtl sense: 'start' puts its right edge at x, 'end' its left edge
+    [[a[1], a[4] - 7, 'start'], [a[0], a[4] - 7, 'end'], [a[1], below, 'start'], [a[0], below, 'end']].forEach(function (c) {
+      var r = [(c[2] === 'start' ? c[0] - tw : c[0]) - 3, c[1] - asc - 2, tw + 6, asc + dsc + 4], hit = 0;
+      if (r[1] < a[2] - fs || r[1] + r[3] > a[3] + 2) return;
+      obs.forEach(function (o) {
+        var ix = Math.min(r[0] + r[2], o[0] + o[2]) - Math.max(r[0], o[0]), iy = Math.min(r[1] + r[3], o[1] + o[3]) - Math.max(r[1], o[1]);
+        if (ix > 0 && iy > 0) hit += ix * iy;
+      });
+      if (!best || hit < best.hit) best = { c: c, hit: hit };
+    });
+    if (best) { t.setAttribute('x', best.c[0]); t.setAttribute('y', best.c[1]); t.setAttribute('text-anchor', best.c[2]); }
   }
 
   AN.charts = function (root) {

@@ -101,7 +101,9 @@ const EXPECTED = /Failed to load resource|net::ERR_FAILED|integrity|status of 40
           if (s.fail !== 2) problems.push(`AN.fail ${s.fail}, expected 2`);
           if (!s.banner) problems.push('no warning bar');
           if (!s.credit) problems.push('credit not in the page text');
-          if (log.filter(r => r.how === 'abort').length !== 8) problems.push(`${log.length} requests, expected 8 (two files × four addresses)`);
+          // the preloaded font is asked for too; only the stylesheet and the script go through the loader's backups
+          const tried = log.filter(r => r.how === 'abort' && /\.(css|js)$/.test(r.file)).length;
+          if (tried !== 8) problems.push(`${tried} stylesheet and script requests, expected 8 (two files × four addresses)`);
         } else {
           if (!s.ok || !s.ready) problems.push('boot did not finish');
           if (String(s.via) !== String(c.via)) problems.push(`served by ${s.via}, expected ${c.via}`);

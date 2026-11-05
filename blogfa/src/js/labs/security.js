@@ -76,7 +76,7 @@
         var pw = inp.value, a = analyze(pw), b = a.bits, g = Math.pow(2, Math.max(0, b - 1));
         var lv = !pw ? ['', '0%', 'var(--border-2)'] : b < 28 ? ['خیلی ضعیف', '12%', 'var(--danger)'] : b < 36 ? ['ضعیف', '30%', 'var(--danger)'] : b < 60 ? ['متوسط', '55%', 'var(--warn)'] : b < 80 ? ['قوی', '80%', 'var(--ok)'] : ['عالی', '100%', 'var(--ok)'];
         meter.firstChild.style.setProperty('--w', lv[1]); meter.firstChild.style.setProperty('--mc', lv[2]);
-        lbl.innerHTML = pw ? '<b>' + lv[0] + '</b> · ' + AN.fa(a.len) + ' نویسه از میان حدود ' + AN.fa(a.pool) + ' نویسه‌ی ممکن' : 'هنوز چیزی ننوشته‌ای.';
+        lbl.innerHTML = pw ? '<b>' + lv[0] + '</b>، ' + AN.fa(a.len) + ' نویسه از میان حدود ' + AN.fa(a.pool) + ' نویسه‌ی ممکن' : 'هنوز چیزی ننوشته‌ای.';
         st.set('bits', pw ? AN.fa(b, 0) + ' بیت' : '—', b >= 60 ? 'good' : b >= 36 ? 'warn' : pw ? 'bad' : '');
         st.set('on', pw ? ui.fmtTime(g / 100) : '—'); st.set('slow', pw ? ui.fmtTime(g / 1e4) : '—'); st.set('fast', pw ? ui.fmtTime(g / 1e11) : '—', pw ? (g / 1e11 > 3.15e7 ? 'good' : 'bad') : '');
         tips.innerHTML = a.flags.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') || (pw ? '<li class="ok">الگوی ضعف آشکاری پیدا نشد.</li>' : '');

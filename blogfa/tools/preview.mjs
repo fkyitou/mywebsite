@@ -142,6 +142,8 @@ function finish(html, kind, extraHead) {
   }
   // the same shape as the ad bar on the live blog (2026-11-05): first child of <body>, no class, fixed to the bottom
   if (ADS) html = html.replace(/<body([^>]*)>/i, '<body$1><div id="46471336" style="position: fixed; bottom: 0px; left: 0px; right: 0px; width: 728px; text-align: center; margin: 0px auto; padding: 0px; max-width: 100%; z-index: 9999;"><div style="height:90px;background:#ffe9a8;color:#333;font:13px Tahoma;display:flex;align-items:center;justify-content:center;border-top:1px solid #d9c27a">نمونه‌ی تبلیغ تزریقی بلاگفا (فقط برای آزمون چیدمان)</div></div>');
+  // the inline stylesheet names the font files relative to the page (tools/build.mjs); nested pages reach them at the root
+  if (MODE !== 'flat') html = html.replace(/url\((vazirmatn-[\w.-]+\.woff2)\)/g, 'url(/$1)');
   return html.replace(/^\s+/, '');
 }
 function emit(url, html) { const f = path.join(OUT, fileFor(url)); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, html); }
@@ -170,6 +172,10 @@ for (const pg of pages) emit(U.page(pg.slug), finish(render(T.page, ctxFor({ Blo
 const cm = `<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>نظرات</title><style>body{margin:0;font:15px/1.9 Tahoma,sans-serif;background:#f4f4f4;color:#222}main{max-width:560px;margin:0 auto;padding:16px}label{display:block;margin-top:10px}input,textarea{width:100%;box-sizing:border-box;padding:8px;border:1px solid #ccc;border-radius:6px;font:inherit}textarea{min-height:120px}button{margin-top:12px;padding:8px 18px}p.n{background:#fff8d6;border:1px solid #e8d48a;padding:8px 12px;border-radius:6px}</style></head><body><main><p class="n">پیش‌نمایش محلی: در وبلاگ واقعی، این قاب صفحه‌ی نظرات خود بلاگفا را نشان می‌دهد.</p><h1>نظر شما</h1><label>نام شما:<input></label><label>آدرس وب‌سایت یا وبلاگ:<input dir="ltr"></label><label>ایمیل:<input dir="ltr"></label><label>متن نظر:<textarea placeholder="نظر خود را اینجا بنویسید ..."></textarea></label><button type="button">ثبت نظر</button></main></body></html>`;
 const cmFile = path.join(OUT, MODE === 'flat' ? U.comments : 'comments/index.html');
 fs.mkdirSync(path.dirname(cmFile), { recursive: true }); fs.writeFileSync(cmFile, cm);
+
+// the font files the inline stylesheets point to, next to the pages (a CDN template gets them from jsDelivr instead)
+const CDN_FILES = path.join(ROOT, 'dist', 'cdn');
+if (fs.existsSync(CDN_FILES)) for (const f of fs.readdirSync(CDN_FILES).filter(f => f.endsWith('.woff2'))) fs.copyFileSync(path.join(CDN_FILES, f), path.join(OUT, f));
 
 console.log(`preview (${MODE}) → ${path.relative(ROOT, OUT)}/  ·  ${posts.length} posts, ${cats.length} categories, ${allTags.length} tags, ${pages.length} pages  ·  template ${path.relative(ROOT, TPL)}`);
 if (unknown.size) console.log('note: tags/blocks the emulator does not know (left empty):', [...unknown].join(' '));

@@ -26,6 +26,8 @@ const PAGES = ['index.html', 'post-1.html', 'post-4.html', 'post-6.html', 'post-
 const RUNS = [];
 for (const v of ['a', 'b']) for (const f of PAGES) RUNS.push(['desktop', { width: 1440, height: 900 }, false, v, f]);
 for (const v of ['a', 'b']) for (const f of ['index.html', 'post-1.html']) RUNS.push(['mobile', { width: 390, height: 844 }, true, v, f]);
+// «ارائه در کلاس» (js/present.js, key P) on a projector-sized screen: its step bar and the bigger type
+for (const v of ['a', 'b']) RUNS.push(['present', { width: 1280, height: 720 }, false, v, 'post-1.html']);
 
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const report = { at: new Date().toISOString(), axe: [], keyboard: [], motion: [] };
@@ -40,6 +42,10 @@ for (const [vn, vp, mobile, v, f] of RUNS) {
   // walk down so lazy covers, charts and labs mount before the scan
   await p.evaluate(async () => { document.documentElement.style.scrollBehavior = 'auto'; const H = document.documentElement.scrollHeight; for (let y = 0; y < H; y += innerHeight * 0.8) { scrollTo(0, y); await new Promise(r => setTimeout(r, 100)); } scrollTo(0, 0); });
   await p.waitForTimeout(500);
+  if (vn === 'present') {
+    await p.keyboard.press('p'); await p.waitForTimeout(500);
+    if (!(await p.evaluate(() => document.documentElement.classList.contains('an-present')))) { problems++; console.log(`✗ present/${v} ${f}  — P did not turn presentation mode on`); }
+  }
   await p.addScriptTag({ content: AXE });
   const r = await p.evaluate(async () => {
     const x = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] }, resultTypes: ['violations', 'incomplete'] });

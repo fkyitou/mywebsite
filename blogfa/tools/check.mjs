@@ -44,6 +44,16 @@ const FORBIDDEN = [[/\beval\s*\(/, 'eval('], [/document\.write/, 'document.write
 
 const report = fs.existsSync(path.join(ROOT, 'dist', 'build-report.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'build-report.json'), 'utf8')) : {};
 const sha384 = buf => 'sha384-' + crypto.createHash('sha384').update(buf).digest('base64');
+// [width, height] from a JPEG's start-of-frame segment (FF C0..CF, except C4, C8 and CC, which are not frames)
+function jpegSize(b) {
+  if (b[0] !== 0xFF || b[1] !== 0xD8) return null;
+  for (let i = 2; i + 9 < b.length; i += 2 + b.readUInt16BE(i + 2)) {
+    if (b[i] !== 0xFF) return null;
+    const m = b[i + 1];
+    if (m >= 0xC0 && m <= 0xCF && m !== 0xC4 && m !== 0xC8 && m !== 0xCC) return [b.readUInt16BE(i + 7), b.readUInt16BE(i + 5)];
+  }
+  return null;
+}
 function cdnTags(name, t, body) {
   const ref = (report.cdn && report.cdn.ref) || '';
   const pin = new RegExp(`^https://cdn\\.jsdelivr\\.net/gh/${(report.cdn && report.cdn.repo || '').replace('.', '\\.')}@${ref || 'x'}/${(report.cdn && report.cdn.dir) || 'x'}/([\\w.-]+)$`);
@@ -55,6 +65,19 @@ function cdnTags(name, t, body) {
     const f = path.join(ROOT, 'dist', 'cdn', file), sri = (x.match(/integrity="([^"]+)"/) || [])[1];
     ok(`${name} ${t}: ${file} has integrity and crossorigin matching dist/cdn`, fs.existsSync(f) && sri === sha384(fs.readFileSync(f)) && /crossorigin="anonymous"/.test(x));
   }
+  // the preloaded font: from the pinned address, a file in dist/cdn, and one the stylesheet names
+  const font = (body.match(/<link\b[^>]*\bid="an-font"[^>]*>/) || [''])[0], fontUrl = (font.match(/href="([^"]+)"/) || [])[1] || '';
+  const fontFile = (fontUrl.match(pin) || [])[1] || '';
+  const sheetFile = ((sheets[0] || '').match(/href="[^"]*\/([\w.-]+)"/) || [])[1] || '';
+  ok(`${name} ${t}: preloads the font (${fontFile || 'none'}) from the pinned address, as the stylesheet names it`, /rel="preload"/.test(font) && /as="font"/.test(font) && /crossorigin/.test(font) &&
+    !!fontFile && fs.existsSync(path.join(ROOT, 'dist', 'cdn', fontFile)) && !!sheetFile && fs.existsSync(path.join(ROOT, 'dist', 'cdn', sheetFile)) && cdnText(sheetFile).includes(`url(${fontFile})`));
+  // the share picture: og:image and twitter:image name one 1200×630 JPEG in dist/cdn, at the pinned address
+  const og = (body.match(/<meta property="og:image" content="([^"]+)">/) || [])[1] || '';
+  const ogFile = (og.match(pin) || [])[1] || '', ogPath = path.join(ROOT, 'dist', 'cdn', ogFile);
+  const dim = ogFile && fs.existsSync(ogPath) ? jpegSize(fs.readFileSync(ogPath)) : null;
+  ok(`${name} ${t}: share picture (${ogFile || 'none'}${dim ? ', ' + dim.join('×') : ''}) at the pinned address, for og:image and twitter:image`,
+    !!dim && dim[0] === 1200 && dim[1] === 630 && body.includes(`<meta name="twitter:image" content="${og}">`) &&
+    body.includes('<meta property="og:image:width" content="1200">') && body.includes('<meta property="og:image:height" content="630">'));
   const loader = body.match(/\["(https:\/\/cdn\.jsdelivr\.net\/gh\/[^"]+)"(?:,"[^"]+"){3}\]/);
   ok(`${name} ${t}: loader lists the same pinned address and three backups`, !!loader && pin.test(loader[1] + 'x.js'));
 }
@@ -62,7 +85,7 @@ function cdnTags(name, t, body) {
 // A CDN template must be its inline template with only the stylesheet and the script moved out: the same markup,
 // and files on jsDelivr that hold exactly the inline CSS and JS. Then what the browser, validation, accessibility
 // and link tests found on the inline preview also holds for the template that gets installed.
-const stripCode = b => b.replace(/<script\b[^>]*>[\s\S]*?<\/script>|<style\b[^>]*>[\s\S]*?<\/style>|<link\b[^>]*\bid="an-css"[^>]*>/g, '');
+const stripCode = b => b.replace(/<script\b[^>]*>[\s\S]*?<\/script>|<style\b[^>]*>[\s\S]*?<\/style>|<link\b[^>]*\bid="an-(?:css|font)"[^>]*>/g, '');
 const cdnText = f => fs.readFileSync(path.join(ROOT, 'dist', 'cdn', f), 'utf8').replace(/^@charset "UTF-8";/, '');
 function sameAsInline(name, t, body, inline) {
   if (!inline) return ok(`${name} ${t}: inline counterpart found`, false);
@@ -100,6 +123,9 @@ function staticChecks(file, cdn) {
     ok(`${name} ${t}: no code Blogfa blocks or misreads`, !hits.length, hits.join(', '));
     const credit = (body.match(/طراحی، مدیریت و نویسندگی/g) || []).length;
     ok(`${name} ${t}: creator credit present`, credit >= 1, credit + '×');
+    // Blogfa keeps only 100 characters of the blog's description (seen live, 2026-11-05): <-BlogDescription-> showed
+    // it cut mid-sentence, so the footer and the archive and page meta carry the template's own text
+    ok(`${name} ${t}: no <-BlogDescription->, which Blogfa cuts at 100 characters`, !tags.includes('BlogDescription'));
     if (cdn) {
       cdnTags(name, t, body);
       sameAsInline(name, t, body, (inlineText.match(new RegExp(`<blog:${t}>([\\s\\S]*?)</blog:${t}>`)) || [])[1]);
@@ -118,8 +144,10 @@ for (const f of ['template-cdn.html', 'template-cdn-lite.html']) staticChecks(pa
   ok('cdn: that commit is on a remote branch, so jsDelivr can read it', !!c.pushed);
   ok('cdn: no unverified templates in dist/', !c.unverifiedTemplates, c.unverifiedTemplates ? 'built with --unverified: for offline tests only' : '');
   const files = fs.existsSync(path.join(ROOT, 'dist', 'cdn')) ? fs.readdirSync(path.join(ROOT, 'dist', 'cdn')) : [];
-  const hits = files.flatMap(f => FORBIDDEN.filter(([re]) => re.test(cdnText(f))).map(x => `${f}: ${x[1]}`));
-  ok(`cdn: none of the ${files.length} files in dist/cdn holds code Blogfa blocks`, files.length > 0 && !hits.length, hits.join(', '));
+  // stylesheets and scripts only: in a font or an image the same bytes are data, which no browser runs
+  const code = files.filter(f => /\.(css|js)$/.test(f));
+  const hits = code.flatMap(f => FORBIDDEN.filter(([re]) => re.test(cdnText(f))).map(x => `${f}: ${x[1]}`));
+  ok(`cdn: none of the ${code.length} stylesheets and scripts in dist/cdn holds code Blogfa blocks`, code.length > 0 && !hits.length, hits.join(', '));
 }
 
 /* ---------- browser ---------- */

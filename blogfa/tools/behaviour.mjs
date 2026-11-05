@@ -14,6 +14,9 @@
       up once the styles are in, so the banner, the cards and the globe are drawn at their real size, not stretched.
    8. Blogfa's own spellings: a tag the cloud lists with a run of kashidas shows plainly and once, the minutes of a
       post's time keep two digits, and a month of the archive is titled with its month.
+   9. Kit 7: the web font comes from the blog's own files (no Google Fonts), no «·» sits next to a Persian digit,
+      the byline's dots never open a line, the chart's reference label keeps clear of the values, and
+      «ارائه در کلاس» (presentation mode) steps through an article heading by heading and leaves cleanly.
 
    node tools/behaviour.mjs          → preview/,     quality/behaviour-results.json, exit 1 on any failure
    node tools/behaviour.mjs --cdn    → preview-cdn/ (CDN addresses answered from dist/cdn/), quality/behaviour-cdn-results.json
@@ -53,7 +56,9 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': TYPES['.html'] }); res.end(html); return;
   }
   // a tag page at its Blogfa address (/tag/<name>) is the preview's flat tag file, so the page sees a Blogfa path
-  const file = path.join(PREVIEW, /^tag\//.test(rel) ? 'tag-' + encodeURIComponent(rel.slice(4)).replace(/%/g, '') + '.html' : rel);
+  // the inline stylesheet names the font files relative to the page, so a page under /tag/ asks for /tag/<font>;
+  // they sit next to the flat pages (on Blogfa the stylesheet and its fonts come from jsDelivr instead)
+  const file = path.join(PREVIEW, /^tag\//.test(rel) ? (/\.woff2$/.test(rel) ? path.basename(rel) : 'tag-' + encodeURIComponent(rel.slice(4)).replace(/%/g, '') + '.html') : rel);
   if (!file.startsWith(PREVIEW + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end(); return; }
   res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
   fs.createReadStream(file).pipe(res);
@@ -218,6 +223,99 @@ for (const [name, vp] of [['desktop', { width: 1366, height: 900 }], ['phone', {
   ok('spelling', 'tag page at its Blogfa address: titled without kashida', g.posts > 0 && g.h === 'برچسب: هش' && !/\u0640/.test(g.title), `«${g.h}», ${g.posts} post(s), title «${g.title.slice(0, 30)}»`);
   errs.push(...errors); await ctx.close();
   ok('spelling', 'no console error', errs.length === 0, errs.slice(0, 2).join(' | '));
+}
+
+/* ---------- 9. kit 7: font, separators, byline, chart label, presentation mode ---------- */
+{
+  const errs = [];
+  for (const [name, vp] of [['desktop', { width: 1366, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
+    const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: 1, locale: 'fa-IR' });
+    if (CDN) await routeCdn(ctx);
+    const page = await ctx.newPage(), asked = [];
+    page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); page.on('pageerror', e => errs.push(String(e)));
+    page.on('request', r => asked.push(r.url()));
+    await page.goto(BASE + 'post-1.html', { waitUntil: 'load' });
+    await page.waitForFunction(() => window.AN && window.AN.ok, null, { timeout: 15000 }).catch(() => {});
+    await page.evaluate(async () => { document.querySelector('.an-fig').scrollIntoView(); await document.fonts.ready; });
+    await page.waitForTimeout(600);
+    const r = await page.evaluate(() => {
+      const loaded = [...document.fonts].filter(f => f.family.replace(/"/g, '') === 'Vazirmatn' && f.status === 'loaded').length;
+      const toc = ((document.querySelector('.an-toc-h small') || {}).textContent || '');
+      const list = document.querySelector('.an-by-list').getBoundingClientRect(), spans = [...document.querySelectorAll('.an-by-in > span')];
+      // each item's dot sits 10px inside its right (inline-start) edge; it should show only between items on one line
+      const dots = spans.map((s, i) => {
+        const b = s.getBoundingClientRect(), right = b.right - 10, left = right - 4, shown = left >= list.left - 0.5 && right <= list.right + 0.5;
+        const first = !spans.some((o, j) => j !== i && Math.abs(o.getBoundingClientRect().top - b.top) < 4 && o.getBoundingClientRect().left > b.left);
+        return { shown, first };
+      });
+      const svg = document.querySelector('.an-fig svg'), ref = svg && svg.querySelector('.an-ch-reft');
+      const box = e => e.getBBox(), hit = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+      const rb = ref ? box(ref) : null, vals = svg ? [...svg.querySelectorAll('.an-ch-val, .an-ch-dot')] : [];
+      const lab = document.querySelector('.an-toc-tools a[href="#an-lab"]');
+      return {
+        loaded, toc, dotTrouble: dots.filter(d => d.shown === d.first).length, dotsN: dots.length,
+        refHits: rb ? vals.filter(v => hit(rb, box(v))).length : -1, refDir: ref ? ref.getAttribute('direction') : '',
+        labBefore: lab ? getComputedStyle(lab, '::before').content : 'no link'
+      };
+    });
+    ok('kit7', `${name}: Vazirmatn comes from the blog's own files, nothing from Google Fonts`, r.loaded >= 1 && !asked.some(u => /fonts\.(googleapis|gstatic)\.com/.test(u)) && asked.some(u => /vazirmatn-arabic\.\w+\.woff2$/.test(u)), `${r.loaded} face(s) loaded`);
+    ok('kit7', `${name}: table of contents says «… بخش، … دقیقه», no «·» next to a digit`, /^[۰-۹]+ بخش، [۰-۹]+ دقیقه$/.test(r.toc), `«${r.toc}»`);
+    ok('kit7', `${name}: byline dots only between items on a line`, r.dotsN === 4 && r.dotTrouble === 0, `${r.dotTrouble} misplaced of ${r.dotsN}`);
+    ok('kit7', `${name}: chart reference label clear of values and points, right to left`, r.refHits === 0 && r.refDir === 'rtl', `${r.refHits} overlap(s)`);
+    ok('kit7', `${name}: «برو به آزمایشگاه» carries no stray section number`, r.labBefore === 'none' || r.labBefore === 'normal', r.labBefore);
+    await ctx.close();
+  }
+  // the home page's cover numbers: a thin rule, not «·»; a space stays in the text (the flex layout drops it on
+  // screen) so that a screen reader, a copy or a text-only reader does not run the number into the topic's name
+  {
+    const { ctx, page, errors } = await open(BASE + 'index.html');
+    const c = await page.evaluate(() => [...document.querySelectorAll('.an-cover-n')].map(e => e.textContent));
+    ok('kit7', 'home: card numbers stand apart from the topic without «·»', c.length >= 10 && c.every(t => /^[۰-۹]{2} \S/.test(t) && !/·/.test(t)), `${c.length} cards, first «${c[0]}»`);
+    errs.push(...errors); await ctx.close();
+  }
+  // «ارائه در کلاس» on a projector-sized window, with a Blogfa ad bar in place
+  {
+    // reduced motion: each step then jumps instead of gliding, so the positions can be read right after a key
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1, locale: 'fa-IR', reducedMotion: 'reduce' });
+    if (CDN) await routeCdn(ctx);
+    const page = await ctx.newPage(), errors = [];
+    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); }); page.on('pageerror', e => errors.push(String(e)));
+    await page.goto(BASE + 'post-1.html', { waitUntil: 'load' });
+    await page.waitForFunction(() => window.AN && window.AN.ok, null, { timeout: 15000 }).catch(() => {});
+    await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; const d = document.createElement('div'); d.setAttribute('style', 'position: fixed; bottom: 0px; left: 0px; right: 0px; width: 728px; margin: 0px auto; max-width: 100%; z-index: 9999;'); d.innerHTML = '<div style="height:90px;background:#fc0"></div>'; document.body.insertBefore(d, document.body.firstChild); window.dispatchEvent(new Event('resize')); });
+    await page.waitForTimeout(400);
+    await page.click('.an-toc-tools button[aria-keyshortcuts="P"]');
+    await page.waitForTimeout(300);
+    const st = () => page.evaluate(() => {
+      const H = document.documentElement, bar = document.querySelector('.an-present-bar'), body = document.querySelector('.an-post-body');
+      const vis = e => !!e && getComputedStyle(e).display !== 'none' && !e.hidden;
+      return { on: H.classList.contains('an-present'), bar: vis(bar), barBottom: bar ? Math.round(bar.getBoundingClientRect().bottom) : 0, header: vis(document.querySelector('.an-bar')), toc: vis(document.querySelector('.an-toc')),
+        fs: parseFloat(getComputedStyle(body).fontSize), y: Math.round(scrollY), heads: [...body.querySelectorAll('h2')].map(h => Math.round(h.getBoundingClientRect().top)), at: (document.querySelector('.an-present-at') || {}).textContent || '' };
+    });
+    const a = await st();
+    ok('kit7', 'presentation: on, step bar shown, header and table of contents put away, type at least 24px', a.on && a.bar && !a.header && !a.toc && a.fs >= 24, `type ${a.fs}px`);
+    ok('kit7', 'presentation: step bar sits above the ad bar', a.barBottom <= 720 - 90, `step bar bottom ${a.barBottom}, ad top 630`);
+    // step forward to the end: every heading must come to the top once
+    const met = new Set(); let last = -1, steps = 0;
+    while (steps < 80) {
+      await page.keyboard.press('PageDown'); await page.waitForTimeout(60); steps++;
+      const s = await st(); s.heads.forEach((t, i) => { if (Math.abs(t - 20) <= 3) met.add(i); });
+      if (s.y === last) break; last = s.y;
+    }
+    ok('kit7', 'presentation: PageDown stops at every section heading', met.size === a.heads.length, `${met.size} of ${a.heads.length} headings, ${steps} steps`);
+    await page.keyboard.press('Home'); await page.waitForTimeout(100);
+    ok('kit7', 'presentation: Home goes back to the title', (await st()).y === 0);
+    await page.keyboard.press('Control+k'); await page.waitForTimeout(200); await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+    const d = await st(), dlg = await page.evaluate(() => !!document.querySelector('.an-dlg.on'));
+    ok('kit7', 'presentation: Esc in the search window closes only the window', d.on && !dlg);
+    await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+    const e = await st();
+    ok('kit7', 'presentation: Esc leaves, and the article is as before', !e.on && !e.bar && e.header && e.toc && e.fs < 24, `type ${e.fs}px`);
+    await page.keyboard.press('p'); await page.waitForTimeout(200);
+    ok('kit7', 'presentation: P turns it on again', (await st()).on);
+    errs.push(...errors); await ctx.close();
+  }
+  ok('kit7', 'no console error', errs.length === 0, errs.slice(0, 2).join(' | '));
 }
 
 /* ---------- 7. a stylesheet that arrives late (CDN build) ---------- */

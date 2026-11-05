@@ -33,7 +33,7 @@ for (const f of ['dist/build-report.json', 'dist/template-cdn.html', 'dist/templ
 const CDN = JSON.parse(read('dist/build-report.json')).cdn || {};
 if (!CDN.ok || !CDN.pushed || CDN.unverifiedTemplates || !CDN.mirrors) { console.error('the CDN templates in dist/ were not verified against a pushed commit (see tools/build.mjs); no kit written'); process.exit(1); }
 // Bump when what has to be pasted changes, so an owner holding an older kit.html can tell the two apart.
-const KIT_VERSION = 6;
+const KIT_VERSION = 7;
 // One stylesheet on the main jsDelivr address: opening it shows whether jsDelivr is reachable from the owner's connection.
 const PROBE = CDN.mirrors[0] + ((CDN.files || []).find(f => /^an-base\.[\w]+\.css$/.test(f.file)) || { file: '' }).file;
 
@@ -48,10 +48,14 @@ const BLOG = {
   user: 'ayandehnegar',
   title: 'آینده‌نگار',
   author: 'امیرحسین همتی',
-  desc: 'روایت انسان، ایده و فناوری: ده روایت مستند از آینده، از هوش مصنوعی تا زندگی روی مریخ، هر کدام با یک آزمایشگاه تعاملی.',
+  desc: 'روایت انسان، ایده و فناوری: ده روایت مستند از آینده، هر کدام با یک آزمایشگاه تعاملی.',
   about: 'امیرحسین همتی، هنرجوی پایه‌ی دوازدهم رشته‌ی شبکه و نرم‌افزار رایانه؛ طراح، مدیر و نویسنده‌ی آینده‌نگار.',
   posts: '10'
 };
+// Blogfa keeps only the first 100 characters of the blog's description: on the live blog (2026-11-05) the earlier
+// 118-character text ended «…هر کدام با یک» in the footer and in the meta description of the home, archive and
+// about pages (a post's meta description is the opening of the post).
+if ([...BLOG.desc].length > 100) throw new Error(`kit: the blog description has ${[...BLOG.desc].length} characters; Blogfa keeps 100`);
 const split = dir => ({ 1: read(dir + '1-main-and-posts.html'), 2: read(dir + '2-archive.html'), 3: read(dir + '3-pages.html') });
 const posts = fs.readdirSync(path.join(ROOT, 'posts')).filter(f => /^\d\d-[\w-]+\.html$/.test(f)).sort().map(f => {
   const { meta, body } = source('posts/' + f), tags = (meta.tags || '').split(/\s*[،,]\s*/).filter(Boolean);
@@ -311,7 +315,7 @@ const body = `
   <h1 id="kit-h">کیت نصب و انتشار</h1>
   <p>هر چیزی که باید در بلاگفا جای‌گذاری شود، این‌جا با یک دکمه‌ی کپی آمده است: قالب، صفحه‌ی «درباره» و ده مقاله. گام‌ها را به همین ترتیب انجام دهید و هر کدام را که تمام شد تیک بزنید.</p>
   <p class="credit">طراحی، مدیریت و نویسندگی: امیرحسین همتی</p>
-  <p class="warn" id="kit-version"><b>نسخه‌ی ${fa(KIT_VERSION)} کیت.</b> این نسخه آنچه را در وبلاگ زنده دیده شد درست می‌کند: «همه‌ی مقاله‌ها» حالا صفحه‌ای با طراحی خود وبلاگ است، دسته‌ی هر مقاله دیده می‌شود، منوی «قلمروها» در همه‌ی صفحه‌ها پر است، پایین صفحه زیر نوار تبلیغ بلاگفا نمی‌رود و فاصله‌های اضافه‌ای که ویرایشگر بلاگفا به صفحه‌ی «درباره» افزوده بود پاک می‌شوند. اگر نشانی اصلی فایل‌های قالب پاسخ ندهد و نشانی پشتیبان دیرتر برسد، تصویر بالای مقاله‌ها، تصویر کارت‌ها و کره‌ی زمین صفحه‌ی اول هم دیگر کشیده نمی‌شوند. ساعت مقاله‌ها با دو رقم دقیقه دیده می‌شود (۶:۰۱ به جای ۶:۱)، برچسبی که بلاگفا در فهرست برچسب‌ها با کشیده‌ی بلند نگه داشته بود عادی نوشته می‌شود و صفحه‌ی آرشیو هر ماه نام همان ماه را دارد. <b>اگر قالب نسخه‌ی قبل را نصب کرده‌اید، فقط گام ۲ را دوباره انجام دهید</b> و هر سه تکه را از همین صفحه جای‌گذاری کنید؛ مقاله‌ها و صفحه‌ی «درباره» دست نمی‌خورند. اندازه‌ی تکه‌ها ${kb(DATA.split.full[1]).replace(' کیلوبایت', '')}، ${kb(DATA.split.full[2]).replace(' کیلوبایت', '')} و ${kb(DATA.split.full[3])} است. فایل کیت قبلی را کنار بگذارید و فقط از همین صفحه کپی کنید.</p>
+  <p class="warn" id="kit-version"><b>نسخه‌ی ${fa(KIT_VERSION)} کیت.</b> اگر روی وبلاگ کیت ۴ یا نسخه‌ای قدیمی‌تر نصب است، این نسخه جای آن را می‌گیرد و اصلاح‌های کیت‌های ۵ و ۶ را هم دارد. تازه‌ها: دکمه‌ی «ارائه در کلاس» در فهرست مطالب هر مقاله (یا کلید P) مقاله را با حروف درشت برای ویدئوپروژکتور نشان می‌دهد و با PageDown و PageUp بخش‌به‌بخش جلو و عقب می‌رود. قلم وزیرمتن از همان جایی می‌آید که فایل‌های قالب، پس صفحه منتظر سرور قلم گوگل نمی‌ماند. در پیام‌رسان‌هایی که پیش‌نمایش پیوند نشان می‌دهند، پیوند وبلاگ با تصویر آینده‌نگار دیده می‌شود. توضیح وبلاگ پایین همه‌ی صفحه‌ها کامل است؛ پیش از این بلاگفا آن را پس از ۱۰۰ نویسه می‌بُرید. از کیت‌های ۵ و ۶: ساعت مقاله‌ها با دو رقم دقیقه (۶:۰۱ به جای ۶:۱)، برچسب «هش» بی‌کشیده‌ی بلند، نام ماه در آرشیو هر ماه، و تصویرها و کره‌ی صفحه‌ی اول که وقتی نشانی پشتیبان فایل‌ها دیر می‌رسد دیگر کش نمی‌آیند. <b>دو کار لازم است: گام ۲ را دوباره انجام دهید</b> و هر سه تکه را از همین صفحه جای‌گذاری کنید، <b>و در گام ۳ «شرح خلاصه» را با متن کوتاه‌تر همین صفحه عوض کنید.</b> مقاله‌ها و صفحه‌ی «درباره» دست نمی‌خورند. اندازه‌ی تکه‌ها ${kb(DATA.split.full[1]).replace(' کیلوبایت', '')}، ${kb(DATA.split.full[2]).replace(' کیلوبایت', '')} و ${kb(DATA.split.full[3])} است. فایل کیت قبلی را کنار بگذارید و فقط از همین صفحه کپی کنید.</p>
   <ol class="status" aria-label="وضعیت کار">
     <li class="st on" id="st-1"><span class="dot" aria-hidden="true">✓</span><div><b>فایل آماده</b><small>قالب، ۱۰ مقاله، صفحه‌ی درباره، تصویرها و راهنماها ساخته و با آزمون خودکار بررسی شده‌اند.</small></div></li>
     <li class="st" id="st-2"><span class="dot" aria-hidden="true">✓</span><div><b>قالب نصب‌شده</b><small>با تیک گام ۲ روشن می‌شود: قالب در بلاگفا ذخیره شده و صفحه‌ی اول با ظاهر آینده‌نگار باز می‌شود.</small></div></li>
@@ -338,7 +342,7 @@ const body = `
 <section class="step" aria-labelledby="h2">
   <div class="step-h"><span class="step-n">۲</span><h2 id="h2">نصب قالب</h2></div>
   <p>در پنل به <span class="path">«تنظیمات و دیگر امکانات» ← «ویرایش قالب وبلاگ»</span> بروید. این صفحه سه زبانه دارد: «صفحات اصلی»، «آرشیو» و «صفحات جداگانه»، و هر زبانه کادر کد و دکمه‌ی «ثبت و بازسازی وبلاگ» خودش را دارد. قالب آینده‌نگار هم سه تکه است، یکی برای هر زبانه.</p>
-  <p class="note">هر تکه فقط ساختار صفحه را دارد. ظاهر و امکانات قالب (CSS و JavaScript) در فایل‌های جداگانه‌ای روی <a href="https://www.jsdelivr.com/">jsDelivr</a> است، شبکه‌ی توزیع رایگانی که فایل‌ها را از مخزن GitHub همین پروژه می‌خواند. نشانی هر فایل به یک نسخه‌ی ثابت قفل شده و «کد یکپارچگی» (SRI) دارد، پس مرورگر فایلی را که حتی یک بایتش عوض شده باشد اجرا نمی‌کند. اگر نشانی اصلی در دسترس نباشد، همان فایل از سه نشانی پشتیبان گرفته می‌شود.</p>
+  <p class="note">هر تکه فقط ساختار صفحه را دارد. ظاهر و امکانات قالب (CSS، JavaScript، قلم و تصویر پیش‌نمایش پیوند) در فایل‌های جداگانه‌ای روی <a href="https://www.jsdelivr.com/">jsDelivr</a> است، شبکه‌ی توزیع رایگانی که فایل‌ها را از مخزن GitHub همین پروژه می‌خواند. نشانی هر فایل به یک نسخه‌ی ثابت قفل شده و «کد یکپارچگی» (SRI) دارد، پس مرورگر فایلی را که حتی یک بایتش عوض شده باشد اجرا نمی‌کند. اگر نشانی اصلی در دسترس نباشد، همان فایل از سه نشانی پشتیبان گرفته می‌شود.</p>
   <div class="seg" role="radiogroup" aria-label="نسخه‌ی قالب"><label><input type="radio" name="split-v" value="full" checked>کامل (پیشنهادی)</label><label><input type="radio" name="split-v" value="lite">سبک، بدون کره‌ی سه‌بعدی</label></div>
   <p class="note">نسخه‌ی سبک برای گوشی‌ها و رایانه‌های کم‌توان است و اندازه‌ی تکه‌هایش تقریباً همان نسخه‌ی کامل است.</p>
   <div class="rows">
@@ -381,6 +385,7 @@ const body = `
     ${field('شرح خلاصه', esc(BLOG.desc), 'blog.desc', 'شرح خلاصه', { vcls: 'plain' })}
     ${field('درباره وبلاگ', esc(BLOG.about), 'blog.about', 'متن درباره وبلاگ', { vcls: 'plain' })}
   </div>
+  <p class="note" id="desc-note">بلاگفا فقط ${fa(100)} نویسه‌ی اول «شرح خلاصه» را نگه می‌دارد. متن این‌جا ${fa([...BLOG.desc].length)} نویسه است. اگر متن بلندتر کیت‌های قبلی را گذاشته‌اید، آن را با همین عوض کنید؛ پانویس صفحه‌ها از کیت ۷ متن کامل خودش را دارد.</p>
   ${tick('s-settings', 'تنظیمات را ثبت کردم.')}
 </section>
 
