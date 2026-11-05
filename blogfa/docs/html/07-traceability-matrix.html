@@ -264,7 +264,7 @@ nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration:
 </tr>
 <tr>
 <td>سئو: عنوان، توضیح متا، تیترها، پیوند داخلی</td>
-<td>انجام و آزموده. Lighthouse سئو: ۱۰۰ در هر هفت اجرا</td>
+<td>انجام و آزموده. Lighthouse سئو: ۱۰۰ در هر هفت اجرا. بلاگفا «شرح خلاصه» را فقط تا ۱۰۰ نویسه نگه می‌دارد؛ از کیت ۷ توضیح متای آرشیو و «درباره» و متن پانویس متن ثابت قالب‌اند، کیت متن ۸۴ نویسه‌ای برای «شرح خلاصه» پیشنهاد می‌کند و <code>og:image</code> تصویر ۱۲۰۰×۶۳۰ پیش‌نمایش پیوند را می‌دهد. <code>check.mjs</code> می‌سنجد که هیچ قالبی <code>&lt;-BlogDescription-&gt;</code> را به کار نبرد و <code>og:image</code> به تصویر قفل‌شده روی jsDelivr برود</td>
 </tr>
 </tbody></table></div>
 <h3 id="سازنده-تحویل-و-مرزها-بخشهای-۱۳-و-۱۵-تا-۱۹">سازنده، تحویل و مرزها (بخش‌های ۱۳ و ۱۵ تا ۱۹)</h3>
@@ -297,7 +297,7 @@ nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration:
 </tr>
 <tr>
 <td>فرق «فایل آماده»، «قالب نصب‌شده» و «وبلاگ منتشرشده»</td>
-<td>انجام. هر سه جدا گزارش می‌شوند: فایل آماده (کیت ۶)، قالب نصب‌شده (کیت ۴، از بیرون دیده شد؛ کیت ۶ هنوز جای‌گذاری نشده) و وبلاگ منتشرشده، که ۵ نوامبر ۲۰۲۶ از بیرون دیده شد (<a href="08-final-report.html">گزارش نهایی</a>)</td>
+<td>انجام. هر سه جدا گزارش می‌شوند: فایل آماده (کیت ۷)، قالب نصب‌شده (کیت ۴، از بیرون دیده شد؛ کیت ۷ هنوز جای‌گذاری نشده) و وبلاگ منتشرشده، که ۵ نوامبر ۲۰۲۶ از بیرون دیده شد (<a href="08-final-report.html">گزارش نهایی</a>)</td>
 </tr>
 <tr>
 <td>نخواستن رمز و دور نزدن احراز هویت</td>
@@ -324,7 +324,7 @@ nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration:
 <td>۲</td>
 <td>قالب واقعی و سازگار با بلاگفا</td>
 <td>انجام و آزموده</td>
-<td><code>dist/split-cdn/</code> و <code>dist/template-cdn.html</code>؛ ۱۳۸ آزمون ایستا و ۴۸ آزمون بارگذاری از jsDelivr. نسخه‌ی درون‌خطی (<code>dist/template.html</code>) را بلاگفا به‌خاطر حجم رد کرد؛ ذخیره‌ی نسخه‌ی ۲ در خود بلاگفا با شماست</td>
+<td><code>dist/split-cdn/</code> و <code>dist/template-cdn.html</code>؛ ۱۶۲ آزمون ایستا و ۴۸ آزمون بارگذاری از jsDelivr. نسخه‌ی درون‌خطی (<code>dist/template.html</code>) را بلاگفا به‌خاطر حجم رد کرد؛ ذخیره‌ی نسخه‌ی ۲ در خود بلاگفا با شماست</td>
 </tr>
 <tr>
 <td>۳</td>
@@ -410,7 +410,7 @@ nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration:
 ۲. جای‌گذاری قالب (با کیت نصب) و دیدن نتیجه.
 ۳. انتشار ده مقاله به ترتیب ۰۱ تا ۱۰ و ساختن صفحه‌ی «درباره».
 ۴. دیدن وبلاگ روی گوشی خودتان.
-۵. اختیاری: روی رایانه‌ی خودتان <code>npm run links:external</code> تا همه‌ی ۱۰۵ نشانی بیرونی آزموده شوند.</p>
+۵. اختیاری: روی رایانه‌ی خودتان <code>npm run links:external</code> تا همه‌ی ۱۰۲ نشانی بیرونی آزموده شوند.</p>
 
 <nav class="docs" aria-label="همه‌ی راهنماها"><ol><li><a href="01-install-guide.html">راهنمای نصب گام‌به‌گام آینده‌نگار روی بلاگفا</a></li><li><a href="02-settings-guide.html">تنظیمات پیشنهادی وبلاگ</a></li><li><a href="03-publishing-guide.html">راهنمای انتشار مقاله‌ها</a></li><li><a href="04-sources-report.html">گزارش پژوهش و منابع</a></li><li><a href="05-decision-log.html">دفتر تصمیم‌ها (Decision Log)</a></li><li><a href="06-qa-report.html">گزارش کنترل کیفیت (QA)</a></li><li><a href="07-traceability-matrix.html" aria-current="page">ماتریس ردیابی الزامات</a></li><li><a href="08-final-report.html">گزارش نهایی پروژه‌ی آینده‌نگار</a></li><li><a href="09-audit-report.html">گزارش ممیزی کامل پروژه</a></li></ol></nav>
 </main>

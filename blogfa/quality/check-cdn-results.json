@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-05T09:03:27.596Z",
+  "at": "2026-11-05T18:13:41.268Z",
   "preview": "preview-cdn",
   "cdn": true,
   "failed": 0,
@@ -32,7 +32,12 @@
     {
       "name": "template.html PostTemplate: creator credit present",
       "pass": true,
-      "info": "5×"
+      "info": "6×"
+    },
+    {
+      "name": "template.html PostTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template.html PostTemplate: no external scripts",
@@ -67,7 +72,12 @@
     {
       "name": "template.html ArchiveTemplate: creator credit present",
       "pass": true,
-      "info": "1×"
+      "info": "2×"
+    },
+    {
+      "name": "template.html ArchiveTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template.html ArchiveTemplate: no external scripts",
@@ -102,7 +112,12 @@
     {
       "name": "template.html PageTemplate: creator credit present",
       "pass": true,
-      "info": "2×"
+      "info": "3×"
+    },
+    {
+      "name": "template.html PageTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template.html PageTemplate: no external scripts",
@@ -117,7 +132,7 @@
     {
       "name": "template.html: size",
       "pass": true,
-      "info": "538.9 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+      "info": "557.6 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
     },
     {
       "name": "template-lite.html: three template holders",
@@ -147,7 +162,12 @@
     {
       "name": "template-lite.html PostTemplate: creator credit present",
       "pass": true,
-      "info": "5×"
+      "info": "6×"
+    },
+    {
+      "name": "template-lite.html PostTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template-lite.html PostTemplate: no external scripts",
@@ -182,7 +202,12 @@
     {
       "name": "template-lite.html ArchiveTemplate: creator credit present",
       "pass": true,
-      "info": "1×"
+      "info": "2×"
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template-lite.html ArchiveTemplate: no external scripts",
@@ -217,7 +242,12 @@
     {
       "name": "template-lite.html PageTemplate: creator credit present",
       "pass": true,
-      "info": "2×"
+      "info": "3×"
+    },
+    {
+      "name": "template-lite.html PageTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template-lite.html PageTemplate: no external scripts",
@@ -232,7 +262,7 @@
     {
       "name": "template-lite.html: size",
       "pass": true,
-      "info": "482.6 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+      "info": "501.3 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
     },
     {
       "name": "template-cdn.html: three template holders",
@@ -262,7 +292,12 @@
     {
       "name": "template-cdn.html PostTemplate: creator credit present",
       "pass": true,
-      "info": "5×"
+      "info": "6×"
+    },
+    {
+      "name": "template-cdn.html PostTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template-cdn.html PostTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
@@ -270,12 +305,22 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-full.d1d71fb964.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PostTemplate: an-full.21d2e0cbf7.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-post.feec19fc93.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PostTemplate: an-post.2ca852b014.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: preloads the font (vazirmatn-arabic.84a382e46c.woff2) from the pinned address, as the stylesheet names it",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: share picture (an-share.29dab94d6e.jpg, 1200×630) at the pinned address, for og:image and twitter:image",
       "pass": true,
       "info": ""
     },
@@ -290,19 +335,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-full.d1d71fb964.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn.html PostTemplate: an-full.21d2e0cbf7.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-post.feec19fc93.js holds the inline script byte for byte",
+      "name": "template-cdn.html PostTemplate: an-post.2ca852b014.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn.html PostTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "24.4 KB"
+      "info": "25.1 KB"
     },
     {
       "name": "template-cdn.html PostTemplate: html lang/dir",
@@ -332,7 +377,12 @@
     {
       "name": "template-cdn.html ArchiveTemplate: creator credit present",
       "pass": true,
-      "info": "1×"
+      "info": "2×"
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template-cdn.html ArchiveTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
@@ -340,12 +390,22 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-base.e0e10eaa6d.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html ArchiveTemplate: an-base.a38a633237.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-archive.5c8b44c21f.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html ArchiveTemplate: an-archive.2759cafb84.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: preloads the font (vazirmatn-arabic.84a382e46c.woff2) from the pinned address, as the stylesheet names it",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: share picture (an-share.29dab94d6e.jpg, 1200×630) at the pinned address, for og:image and twitter:image",
       "pass": true,
       "info": ""
     },
@@ -360,19 +420,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-base.e0e10eaa6d.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn.html ArchiveTemplate: an-base.a38a633237.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-archive.5c8b44c21f.js holds the inline script byte for byte",
+      "name": "template-cdn.html ArchiveTemplate: an-archive.2759cafb84.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn.html ArchiveTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "10.9 KB"
+      "info": "11.7 KB"
     },
     {
       "name": "template-cdn.html ArchiveTemplate: html lang/dir",
@@ -402,7 +462,12 @@
     {
       "name": "template-cdn.html PageTemplate: creator credit present",
       "pass": true,
-      "info": "2×"
+      "info": "3×"
+    },
+    {
+      "name": "template-cdn.html PageTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template-cdn.html PageTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
@@ -410,12 +475,22 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-base.e0e10eaa6d.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PageTemplate: an-base.a38a633237.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-page.6e0b8ee20f.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PageTemplate: an-page.16e3fddaa7.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: preloads the font (vazirmatn-arabic.84a382e46c.woff2) from the pinned address, as the stylesheet names it",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: share picture (an-share.29dab94d6e.jpg, 1200×630) at the pinned address, for og:image and twitter:image",
       "pass": true,
       "info": ""
     },
@@ -430,19 +505,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-base.e0e10eaa6d.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn.html PageTemplate: an-base.a38a633237.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-page.6e0b8ee20f.js holds the inline script byte for byte",
+      "name": "template-cdn.html PageTemplate: an-page.16e3fddaa7.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn.html PageTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "12.4 KB"
+      "info": "13.3 KB"
     },
     {
       "name": "template-cdn.html PageTemplate: html lang/dir",
@@ -452,7 +527,7 @@
     {
       "name": "template-cdn.html: size",
       "pass": true,
-      "info": "47.8 KB"
+      "info": "50.2 KB"
     },
     {
       "name": "template-cdn-lite.html: three template holders",
@@ -482,7 +557,12 @@
     {
       "name": "template-cdn-lite.html PostTemplate: creator credit present",
       "pass": true,
-      "info": "5×"
+      "info": "6×"
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template-cdn-lite.html PostTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
@@ -490,12 +570,22 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-full.d1d71fb964.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PostTemplate: an-full.21d2e0cbf7.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-post-lite.d621f5781c.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PostTemplate: an-post-lite.a63cce1028.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: preloads the font (vazirmatn-arabic.84a382e46c.woff2) from the pinned address, as the stylesheet names it",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: share picture (an-share.29dab94d6e.jpg, 1200×630) at the pinned address, for og:image and twitter:image",
       "pass": true,
       "info": ""
     },
@@ -510,19 +600,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-full.d1d71fb964.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn-lite.html PostTemplate: an-full.21d2e0cbf7.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-post-lite.d621f5781c.js holds the inline script byte for byte",
+      "name": "template-cdn-lite.html PostTemplate: an-post-lite.a63cce1028.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn-lite.html PostTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "24.4 KB"
+      "info": "25.2 KB"
     },
     {
       "name": "template-cdn-lite.html PostTemplate: html lang/dir",
@@ -552,7 +642,12 @@
     {
       "name": "template-cdn-lite.html ArchiveTemplate: creator credit present",
       "pass": true,
-      "info": "1×"
+      "info": "2×"
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template-cdn-lite.html ArchiveTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
@@ -560,12 +655,22 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-base.e0e10eaa6d.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-base.a38a633237.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.5c8b44c21f.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.2759cafb84.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: preloads the font (vazirmatn-arabic.84a382e46c.woff2) from the pinned address, as the stylesheet names it",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: share picture (an-share.29dab94d6e.jpg, 1200×630) at the pinned address, for og:image and twitter:image",
       "pass": true,
       "info": ""
     },
@@ -580,19 +685,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-base.e0e10eaa6d.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-base.a38a633237.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.5c8b44c21f.js holds the inline script byte for byte",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.2759cafb84.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn-lite.html ArchiveTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "10.9 KB"
+      "info": "11.7 KB"
     },
     {
       "name": "template-cdn-lite.html ArchiveTemplate: html lang/dir",
@@ -622,7 +727,12 @@
     {
       "name": "template-cdn-lite.html PageTemplate: creator credit present",
       "pass": true,
-      "info": "2×"
+      "info": "3×"
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: no <-BlogDescription->, which Blogfa cuts at 100 characters",
+      "pass": true,
+      "info": ""
     },
     {
       "name": "template-cdn-lite.html PageTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
@@ -630,12 +740,22 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-base.e0e10eaa6d.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PageTemplate: an-base.a38a633237.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-page.6e0b8ee20f.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PageTemplate: an-page.16e3fddaa7.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: preloads the font (vazirmatn-arabic.84a382e46c.woff2) from the pinned address, as the stylesheet names it",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: share picture (an-share.29dab94d6e.jpg, 1200×630) at the pinned address, for og:image and twitter:image",
       "pass": true,
       "info": ""
     },
@@ -650,19 +770,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-base.e0e10eaa6d.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn-lite.html PageTemplate: an-base.a38a633237.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-page.6e0b8ee20f.js holds the inline script byte for byte",
+      "name": "template-cdn-lite.html PageTemplate: an-page.16e3fddaa7.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn-lite.html PageTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "12.4 KB"
+      "info": "13.3 KB"
     },
     {
       "name": "template-cdn-lite.html PageTemplate: html lang/dir",
@@ -672,12 +792,12 @@
     {
       "name": "template-cdn-lite.html: size",
       "pass": true,
-      "info": "47.8 KB"
+      "info": "50.2 KB"
     },
     {
       "name": "cdn: the commit in cdn.json holds every dist/cdn file byte for byte",
       "pass": true,
-      "info": "3033d7cd3796"
+      "info": "43e7a0b84a6e"
     },
     {
       "name": "cdn: that commit is on a remote branch, so jsDelivr can read it",
@@ -690,7 +810,7 @@
       "info": ""
     },
     {
-      "name": "cdn: none of the 6 files in dist/cdn holds code Blogfa blocks",
+      "name": "cdn: none of the 6 stylesheets and scripts in dist/cdn holds code Blogfa blocks",
       "pass": true,
       "info": ""
     },

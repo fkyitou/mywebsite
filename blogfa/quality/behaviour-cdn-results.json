@@ -1,8 +1,8 @@
 {
- "generated": "2026-11-05T09:06:04.421Z",
+ "generated": "2026-11-05T18:16:34.975Z",
  "browser": "Chromium (Playwright)",
  "served": "http://127.0.0.1 (test-only server)",
- "passed": 56,
+ "passed": 75,
  "failed": 0,
  "results": [
   {
@@ -117,7 +117,7 @@
    "group": "posts",
    "name": "post banner links to its category",
    "pass": true,
-   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:44857/cat-1.html"
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:34317/cat-1.html"
   },
   {
    "group": "posts",
@@ -289,6 +289,120 @@
   },
   {
    "group": "spelling",
+   "name": "no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: Vazirmatn comes from the blog's own files, nothing from Google Fonts",
+   "pass": true,
+   "info": "2 face(s) loaded"
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: table of contents says «… بخش، … دقیقه», no «·» next to a digit",
+   "pass": true,
+   "info": "«۶ بخش، ۶ دقیقه»"
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: byline dots only between items on a line",
+   "pass": true,
+   "info": "0 misplaced of 4"
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: chart reference label clear of values and points, right to left",
+   "pass": true,
+   "info": "0 overlap(s)"
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: «برو به آزمایشگاه» carries no stray section number",
+   "pass": true,
+   "info": "none"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: Vazirmatn comes from the blog's own files, nothing from Google Fonts",
+   "pass": true,
+   "info": "2 face(s) loaded"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: table of contents says «… بخش، … دقیقه», no «·» next to a digit",
+   "pass": true,
+   "info": "«۶ بخش، ۶ دقیقه»"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: byline dots only between items on a line",
+   "pass": true,
+   "info": "0 misplaced of 4"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: chart reference label clear of values and points, right to left",
+   "pass": true,
+   "info": "0 overlap(s)"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: «برو به آزمایشگاه» carries no stray section number",
+   "pass": true,
+   "info": "none"
+  },
+  {
+   "group": "kit7",
+   "name": "home: card numbers stand apart from the topic without «·»",
+   "pass": true,
+   "info": "10 cards, first «۰۱ از ایده تا اختراع»"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: on, step bar shown, header and table of contents put away, type at least 24px",
+   "pass": true,
+   "info": "type 28.16px"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: step bar sits above the ad bar",
+   "pass": true,
+   "info": "step bar bottom 614, ad top 630"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: PageDown stops at every section heading",
+   "pass": true,
+   "info": "6 of 6 headings, 24 steps"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: Home goes back to the title",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: Esc in the search window closes only the window",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: Esc leaves, and the article is as before",
+   "pass": true,
+   "info": "type 18px"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: P turns it on again",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit7",
    "name": "no console error",
    "pass": true,
    "info": ""
