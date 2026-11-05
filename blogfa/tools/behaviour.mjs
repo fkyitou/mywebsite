@@ -22,7 +22,9 @@ import { routeCdn } from './cdnroute.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CDN = process.argv.includes('--cdn');
-const PREVIEW = path.join(ROOT, CDN ? 'preview-cdn' : 'preview');
+// --preview=<folder> tests another preview folder (default preview/, or preview-cdn/ with --cdn)
+const PV = (process.argv.find(a => a.startsWith('--preview=')) || '').slice(10);
+const PREVIEW = path.resolve(ROOT, PV || (CDN ? 'preview-cdn' : 'preview'));
 const require = createRequire(import.meta.url);
 let chromium;
 try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require(path.join(process.env.NODE_PATH || '', 'playwright'))); }
@@ -34,8 +36,17 @@ const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 
 // a plain static server on 127.0.0.1, only for this test: a page opened from disk cannot fetch another file
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.json': 'application/json' };
+// Blogfa's page editor turned each line break of the pasted About page into <br>, each blank line into two empty
+// paragraphs, and added <br>&nbsp;<p></p> at the end (live About page, 2026-11-05). page-about-live.html is the
+// preview's About page with its body changed the same way.
+const editorize = body => body.replace(/^\s+|\s+$/g, '').replace(/\n[ \t]*\n\s*/g, '<p></p><p></p>').replace(/\n/g, '<br>') + '<br>&nbsp;<p></p>';
+const LIVE_ABOUT = 'page-about-live.html';
 const server = http.createServer((req, res) => {
   const rel = decodeURIComponent(new URL(req.url, 'http://x').pathname).replace(/^\/+/, '') || 'index.html';
+  if (rel === LIVE_ABOUT) {
+    const html = fs.readFileSync(path.join(PREVIEW, 'page-about.html'), 'utf8').replace(/(<div class="an-post-body">)([\s\S]*?)(<\/div>\s*<\/article>)/, (m, a, b, c) => a + editorize(b) + c);
+    res.writeHead(200, { 'Content-Type': TYPES['.html'] }); res.end(html); return;
+  }
   const file = path.join(PREVIEW, rel);
   if (!file.startsWith(PREVIEW + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end(); return; }
   res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
@@ -149,6 +160,30 @@ for (const [name, vp] of [['desktop', { width: 1366, height: 900 }], ['phone', {
   ok('ad', `${name}: back-to-top button clear of the ad bar`, !r.fab || !overlaps || r.fab.bottom <= r.adTop + 1, r.fab ? `button bottom ${r.fab.bottom}, bar top ${r.adTop}${overlaps ? '' : ', side by side'}` : 'no button');
   ok('ad', `${name}: the ad stays as Blogfa shows it`, r.adShown);
   await ctx.close();
+}
+
+/* ---------- 6. the About page after Blogfa's page editor ---------- */
+for (const [name, vp] of [['desktop', { width: 1366, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
+  const raw = await (await fetch(BASE + LIVE_ABOUT)).text();
+  const added = (raw.match(/<br>/g) || []).length;
+  const clean = await open(BASE + 'page-about.html', vp), live = await open(BASE + LIVE_ABOUT, vp);
+  const height = p => p.evaluate(() => Math.round(document.querySelector('.an-post-body').getBoundingClientRect().height));
+  const left = await live.page.evaluate(() => {
+    const b = document.querySelector('.an-post-body'), BLOCK = /^(P|H[1-6]|UL|OL|LI|DIV|FIGURE|TABLE|BLOCKQUOTE|PRE|SECTION)$/;
+    const blank = n => n.nodeType === 3 && !/[^\s ]/.test(n.nodeValue);
+    const near = (n, k) => { while (n && blank(n)) n = n[k]; return n; };
+    const isBlock = n => !n || (n.nodeType === 1 && BLOCK.test(n.tagName));
+    return {
+      brs: [...b.querySelectorAll('br')].filter(br => /^(UL|OL)$/.test(br.parentNode.tagName) || (isBlock(near(br.previousSibling, 'previousSibling')) && isBlock(near(br.nextSibling, 'nextSibling')))).length,
+      empty: [...b.querySelectorAll('p')].filter(p => !p.children.length && !/[^\s ]/.test(p.textContent)).length,
+      nbsp: [...b.childNodes].filter(n => n.nodeType === 3 && / /.test(n.nodeValue) && blank(n)).length
+    };
+  });
+  const [hc, hl] = [await height(clean.page), await height(live.page)];
+  ok('about', `${name}: the editor's extra line breaks, empty paragraphs and &nbsp; are gone`, added > 20 && left.brs === 0 && left.empty === 0 && left.nbsp === 0, `${added} <br> added by the editor; left: ${left.brs} <br>, ${left.empty} empty <p>, ${left.nbsp} &nbsp;`);
+  ok('about', `${name}: the page is as tall as the clean one`, Math.abs(hc - hl) <= 4, `clean ${hc}px, after the editor ${hl}px`);
+  ok('about', `${name}: no console error`, live.errors.length === 0, live.errors.slice(0, 2).join(' | '));
+  await clean.ctx.close(); await live.ctx.close();
 }
 
 await browser.close();

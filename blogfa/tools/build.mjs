@@ -38,11 +38,12 @@ const CSS_SETS = {
 const LABS = ['_ui', 'ai', 'iot', 'city', 'security', 'brain', 'space', 'arch', 'algo', 'energy', 'idea'];
 const JS_MODS = {
   core: ['js/core.js'], sky: ['js/sky.js'], sound: ['js/sound.js'], covers: ['js/covers.js'], charts: ['js/charts.js'], pages: ['js/pages.js'],
-  globe: ['js/data-geo.js', 'js/globe.js'], labs: LABS.map(l => `js/labs/${l}.js`), archive: ['js/archive.js']
+  globe: ['js/data-geo.js', 'js/globe.js'], labs: LABS.map(l => `js/labs/${l}.js`), archive: ['js/archive.js'], pagebody: ['js/pagebody.js']
 };
+// pagebody (tidying after Blogfa's page editor) sits in the page bundle only, so changing it changes part 3 alone
 const MODS = {
-  full: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'globe', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound', 'archive'] },
-  lite: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages'], archive: ['core', 'sky', 'sound', 'archive'] }
+  full: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'globe', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages', 'pagebody'], archive: ['core', 'sky', 'sound', 'archive'] },
+  lite: { post: ['core', 'sky', 'sound', 'covers', 'charts', 'pages', 'labs'], page: ['core', 'sky', 'sound', 'charts', 'pages', 'pagebody'], archive: ['core', 'sky', 'sound', 'archive'] }
 };
 const VARIANTS = {
   full: { mods: 'full', cdn: false }, lite: { mods: 'lite', cdn: false },

@@ -1,12 +1,14 @@
 {
-  "builtAt": "2026-11-05T03:02:42.643Z",
+  "builtAt": "2026-11-05T03:17:14.103Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
     "ref": "f490e617b607f628861a1643c66bc363b36ea5be",
     "dir": "blogfa/dist/cdn",
-    "ok": true,
+    "ok": false,
     "pushed": true,
-    "missing": [],
+    "missing": [
+      "an-page.cdfb7a51b0.js"
+    ],
     "unverifiedTemplates": false,
     "mirrors": [
       "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@f490e617b607f628861a1643c66bc363b36ea5be/blogfa/dist/cdn/",
@@ -36,9 +38,9 @@
         "sri": "sha384-giSmKx5Oc7+sceolVXmMEgrwOJDu8naJ0VVY5dCNXNhNHY3dQL496Ow5NwFAYC6R"
       },
       {
-        "file": "an-page.315f92230b.js",
-        "bytes": 50409,
-        "sri": "sha384-w9/i5ihm5/rbmPxxSaTO7OALxmw9taJwK0y1nH6v2MItRRRFS7bioU/FoxGvljj6"
+        "file": "an-page.cdfb7a51b0.js",
+        "bytes": 51241,
+        "sri": "sha384-nQCxd0CpZLQUtr1mGE1CKYuagpz9tp13Hz1wffIR0PoXO655xZ6Ovxys+/W5tgb2"
       },
       {
         "file": "an-post-lite.ea00b71b7f.js",
@@ -51,7 +53,7 @@
     {
       "variant": "full",
       "cdn": false,
-      "bytes": 548497,
+      "bytes": 549364,
       "parts": {
         "post": {
           "css": 79645,
@@ -61,12 +63,12 @@
         "archive": {
           "css": 64236,
           "js": 29462,
-          "html": 103619
+          "html": 103654
         },
         "page": {
           "css": 64236,
-          "js": 48489,
-          "html": 125063
+          "js": 49318,
+          "html": 125895
         }
       },
       "facts": {
@@ -79,7 +81,7 @@
     {
       "variant": "lite",
       "cdn": false,
-      "bytes": 490922,
+      "bytes": 491789,
       "parts": {
         "post": {
           "css": 79645,
@@ -89,12 +91,12 @@
         "archive": {
           "css": 64236,
           "js": 29462,
-          "html": 103619
+          "html": 103654
         },
         "page": {
           "css": 64236,
-          "js": 48489,
-          "html": 125063
+          "js": 49318,
+          "html": 125895
         }
       },
       "facts": {
@@ -107,7 +109,7 @@
     {
       "variant": "cdn",
       "cdn": true,
-      "bytes": 48937,
+      "bytes": 48972,
       "parts": {
         "post": {
           "cssFile": "an-full.d1d71fb964.css",
@@ -121,13 +123,13 @@
           "jsFile": "an-archive.92f97fea39.js",
           "css": 64236,
           "js": 29462,
-          "html": 11106
+          "html": 11141
         },
         "page": {
           "cssFile": "an-base.e0e10eaa6d.css",
-          "jsFile": "an-page.315f92230b.js",
+          "jsFile": "an-page.cdfb7a51b0.js",
           "css": 64236,
-          "js": 48489,
+          "js": 49318,
           "html": 12738
         }
       },
@@ -141,7 +143,7 @@
     {
       "variant": "cdn-lite",
       "cdn": true,
-      "bytes": 48963,
+      "bytes": 48998,
       "parts": {
         "post": {
           "cssFile": "an-full.d1d71fb964.css",
@@ -155,13 +157,13 @@
           "jsFile": "an-archive.92f97fea39.js",
           "css": 64236,
           "js": 29462,
-          "html": 11106
+          "html": 11141
         },
         "page": {
           "cssFile": "an-base.e0e10eaa6d.css",
-          "jsFile": "an-page.315f92230b.js",
+          "jsFile": "an-page.cdfb7a51b0.js",
           "css": 64236,
-          "js": 48489,
+          "js": 49318,
           "html": 12738
         }
       },
