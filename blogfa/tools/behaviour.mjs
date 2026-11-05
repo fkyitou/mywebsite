@@ -9,6 +9,9 @@
       in the main template).
    5. Blogfa's fixed ad bar: the page keeps room under its footer and lifts the back-to-top button above it,
       and the ad itself stays as Blogfa shows it.
+   6. The About page after Blogfa's page editor has no extra line breaks.
+   7. CDN build only: when the stylesheet's first address fails and a backup answers seconds later, the page is set
+      up once the styles are in, so the banner, the cards and the globe are drawn at their real size, not stretched.
 
    node tools/behaviour.mjs          → preview/,     quality/behaviour-results.json, exit 1 on any failure
    node tools/behaviour.mjs --cdn    → preview-cdn/ (CDN addresses answered from dist/cdn/), quality/behaviour-cdn-results.json
@@ -184,6 +187,41 @@ for (const [name, vp] of [['desktop', { width: 1366, height: 900 }], ['phone', {
   ok('about', `${name}: the page is as tall as the clean one`, Math.abs(hc - hl) <= 4, `clean ${hc}px, after the editor ${hl}px`);
   ok('about', `${name}: no console error`, live.errors.length === 0, live.errors.slice(0, 2).join(' | '));
   await clean.ctx.close(); await live.ctx.close();
+}
+
+/* ---------- 7. a stylesheet that arrives late (CDN build) ---------- */
+// The template's own <link> holds the script back until the styles are in. A backup <link> added by the loader
+// does not, so when cdn.jsdelivr.net fails the script can run on an unstyled page. Here the first address fails
+// and fastly answers 2.5 s later; every canvas must still match the box it is shown in.
+if (CDN) {
+  for (const [name, vp] of [['desktop', { width: 1366, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
+    for (const file of ['post-6.html', 'index.html']) {
+      const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: 1, locale: 'fa-IR' }), log = [];
+      await routeCdn(ctx, { fail: (m, f) => m === 0 && f.endsWith('.css') ? 'abort' : null, delay: (m, f) => m === 1 && f.endsWith('.css') ? 2500 : 0, log });
+      const page = await ctx.newPage(), errors = [];
+      page.on('pageerror', e => errors.push(String(e)));
+      await page.goto(BASE + file, { waitUntil: 'load' });
+      await page.waitForFunction(() => window.AN && window.AN.ok, null, { timeout: 20000 }).catch(() => {});
+      // walk down the page so the lazy covers are drawn, then back to the top
+      await page.evaluate(async () => {
+        document.documentElement.style.scrollBehavior = 'auto';
+        for (let y = 0; y < document.documentElement.scrollHeight; y += innerHeight * 0.7) { scrollTo(0, y); await new Promise(r => setTimeout(r, 80)); }
+        scrollTo(0, 0);
+      });
+      await page.waitForTimeout(1500);
+      const r = await page.evaluate(() => {
+        const fit = c => { const b = c.getBoundingClientRect(); return { w: c.width, h: c.height, bw: Math.round(b.width), bh: Math.round(b.height), ok: b.width > 0 && b.height > 0 && Math.abs(c.width / c.height - b.width / b.height) <= 0.02 * (b.width / b.height) }; };
+        const pick = s => [...document.querySelectorAll(s)].filter(c => c.getAttribute('data-drawn') || c.classList.contains('an-globe-gl')).map(fit);
+        return { banner: pick('.an-banner-art canvas'), cards: pick('.an-cover canvas'), globe: pick('.an-globe-gl'), alert: !!document.querySelector('body > [role="alert"]'), ok: !!(window.AN && AN.ok), via: window.AN && AN.via };
+      });
+      const backup = log.some(l => l.mirror === 1 && l.file.endsWith('.css') && l.how === 'ok');
+      const all = [...r.banner, ...r.cards, ...r.globe], bad = all.filter(c => !c.ok);
+      const what = file === 'index.html' ? `globe ${r.globe.length}, cards ${r.cards.length}` : `banner ${r.banner.length}, cards ${r.cards.length}`;
+      ok('late-css', `${name} ${file}: styles from the backup address, page set up, no warning`, backup && r.ok && !r.alert && errors.length === 0, `backup ${backup}, ready ${r.ok}, warning ${r.alert}${errors.length ? ', ' + errors[0] : ''}`);
+      ok('late-css', `${name} ${file}: every canvas drawn at the shape of its box`, all.length > 0 && bad.length === 0 && (file !== 'post-6.html' || r.banner.length === 1) && (file !== 'index.html' || r.globe.length >= 1), `${what}; ${bad.length ? 'stretched: ' + bad.map(c => `${c.w}×${c.h} in ${c.bw}×${c.bh}`).join(', ') : 'all match'}`);
+      await ctx.close();
+    }
+  }
 }
 
 await browser.close();

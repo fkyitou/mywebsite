@@ -415,6 +415,8 @@
     c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1; c.setLineDash([]);
     finish(F);
     cv.setAttribute('data-drawn', key);
+    // a 2D canvas whose GPU context was reset (driver update, sleep, a crashed GPU process) comes back empty
+    if (!cv._anRestore) { cv._anRestore = 1; cv.addEventListener('contextrestored', function () { AN.cover(cv, topic, seed, o); }); }
   };
   AN.coverTopics = Object.keys(PAL).filter(function (k) { return k !== 'def'; });
   AN.glyph = glyph; AN.coverPalette = PAL;

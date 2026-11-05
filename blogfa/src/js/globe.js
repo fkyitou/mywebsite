@@ -459,6 +459,7 @@
       x.globalCompositeOperation = 'source-over';
     }
     paint(); W.addEventListener('resize', function () { clearTimeout(paint.t); paint.t = setTimeout(paint, 150); });
+    c.addEventListener('contextrestored', paint); // a 2D canvas whose GPU context was reset comes back empty
   }
   function start() {
     layout();
@@ -475,5 +476,6 @@
     if (RM) { st.rise = 1; drawGL(); drawOverlay(); } else kick();
     AN.globe = { state: st, redraw: function () { drawGL(); drawOverlay(); } };
   }
-  if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start); else start();
+  // AN.ready (core.js) also waits for the stylesheet, so the globe is sized on the styled page
+  if (AN.ready) AN.ready(start); else if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start); else start();
 })();

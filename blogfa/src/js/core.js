@@ -285,7 +285,17 @@
 
   // After the page has been parsed (the CDN build's backup script arrives late), wait one task so the rest of the
   // bundle, which defines AN.pages and the labs, has run before the page is set up.
-  AN.ready = function (fn) { if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', fn); else setTimeout(fn, 0); };
+  // Then wait for the stylesheet as well. In the CDN build it can land after this script: when its first address
+  // fails, js/loader.js asks a backup address, and that tag no longer holds the script back. Setting the page up
+  // before it would measure an unstyled page and draw the article covers, the banner and the globe at the wrong
+  // size (stretched once the styles arrive). --bg is set on :root by the stylesheet; after ten seconds without it
+  // the page is set up anyway.
+  function styled() { try { return !!W.getComputedStyle(H).getPropertyValue('--bg').trim(); } catch (e) { return true; } }
+  AN.ready = function (fn) {
+    var n = 0;
+    function go() { if (styled() || n++ >= 100) fn(); else setTimeout(go, 100); }
+    if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', go); else setTimeout(go, 0);
+  };
   AN.ready(function () {
     var steps = [postFix, adRoom, header, versions, search, keysDlg, shortcuts, pointerFx, live, fab];
     steps.forEach(function (f) { try { f(); } catch (e) { if (W.console) console.warn('[آینده‌نگار]', f.name, e); } });
