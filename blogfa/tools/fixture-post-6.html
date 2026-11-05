@@ -9,6 +9,33 @@
   if (css) { var s = document.createElement('style'); s.textContent = css; document.head.appendChild(s); }
   document.documentElement.setAttribute('data-x', x || 'none');
 })();
+</script>
+<script>
+(function () {
+  var ev = window.__ev = [];
+  document.addEventListener('contextlost', function (e) { ev.push('lost:' + e.target.tagName); }, true);
+  document.addEventListener('contextrestored', function (e) { ev.push('restored:' + e.target.tagName); }, true);
+  window.addEventListener('resize', function () { ev.push('resize:' + innerWidth + 'x' + innerHeight); });
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      var c = document.querySelector('.an-banner-art canvas'), out = [];
+      if (!c) out.push('no banner canvas');
+      else {
+        var r = c.getBoundingClientRect();
+        out.push('canvas ' + c.width + 'x' + c.height + ' css ' + Math.round(r.width) + 'x' + Math.round(r.height) + ' drawn=' + c.getAttribute('data-drawn'));
+        try {
+          var x = c.getContext('2d'), a = x.getImageData(c.width / 4 | 0, c.height / 4 | 0, 1, 1).data, b = x.getImageData(c.width / 2 | 0, c.height / 2 | 0, 1, 1).data;
+          out.push('px ' + [].join.call(a, ',') + ' / ' + [].join.call(b, ',') + ' lost=' + (x.isContextLost ? x.isContextLost() : '?'));
+        } catch (er) { out.push('read error ' + er.message); }
+      }
+      out.push('gpu=' + document.documentElement.getAttribute('data-gpu') + ' x=' + document.documentElement.getAttribute('data-x') + ' dpr=' + devicePixelRatio + ' vw=' + innerWidth);
+      out.push('events=' + ev.join(','));
+      var box = document.createElement('pre');
+      box.style.cssText = 'position:fixed;left:0;right:0;top:70px;z-index:100000;margin:0;padding:8px;background:#fff;color:#000;font:12px/1.4 monospace;white-space:pre-wrap;direction:ltr;text-align:left';
+      box.textContent = out.join('\n'); document.body.appendChild(box);
+    }, 4000);
+  });
+})();
 </script><script>window.AN_PAGE="post";</script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><script type="text/javascript">
 BlogComments=[10,4,9,5,8,0,7,2,6,12,5,0,4,1,3,7,2,0,1,3];
