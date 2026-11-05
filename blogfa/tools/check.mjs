@@ -150,6 +150,37 @@ for (const f of ['template-cdn.html', 'template-cdn-lite.html']) staticChecks(pa
   ok(`cdn: none of the ${code.length} stylesheets and scripts in dist/cdn holds code Blogfa blocks`, code.length > 0 && !hits.length, hits.join(', '));
 }
 
+/* ---------- the code for Blogfa's custom-code box (dist/box.html) ----------
+   The owner pastes it into «کدها و جاوا اسکریپت‌های اختصاصی کاربر», which Blogfa runs on every page. Blogfa forbids code
+   there that removes ads, earns money, opens pop-ups or sends the reader elsewhere, so the box holds only the toolkit's
+   options and its loader: two files from the template's pinned commit, each with its integrity hash. */
+{
+  const c = report.cdn || {}, a = report.addons || {}, file = path.join(ROOT, 'dist', 'box.html');
+  if (!fs.existsSync(file)) ok('box.html exists', false, 'written once cdn.json names a pushed commit holding dist/cdn (see tools/build.mjs)');
+  else {
+    const box = fs.readFileSync(file, 'utf8');
+    const code = [...box.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]).join('\n');
+    ok('box.html: two plain <script> elements and nothing Blogfa would show as text', (box.match(/<script>/g) || []).length === 2 && box.replace(/<script>[\s\S]*?<\/script>/g, '').trim() === '');
+    const hits = FORBIDDEN.filter(([re]) => re.test(code)).map(x => x[1]);
+    ok('box.html: no code Blogfa blocks or misreads', !hits.length, hits.join(', '));
+    const banned = /adsbygoogle|googlesyndication|doubleclick|popunder|\.open\s*\(|location\b|<iframe|<a\b|\.innerHTML|\.style\b/i.exec(code);
+    ok('box.html: no ads, earning code, pop-up, redirect or page change of its own', !banned, banned ? banned[0] : '');
+    ok('box.html: small enough to paste', Buffer.byteLength(box) <= 4096, (Buffer.byteLength(box) / 1024).toFixed(1) + ' KB');
+    ok('box.html: the credit in its comment', /طراحی، مدیریت و نویسندگی: امیرحسین همتی/.test(box));
+    const mirrors = (code.match(/\[("https:\/\/[^"]+"(?:,"https:\/\/[^"]+"){3})\]/) || [])[1] || '';
+    ok('box.html: loads from the pinned jsDelivr address and three backups', !!c.ref && mirrors.startsWith(`"https://cdn.jsdelivr.net/gh/${c.repo}@${c.ref}/${c.dir}/"`), c.ref ? c.ref.slice(0, 12) : 'cdn.json has no ref');
+    for (const f of [a.css, a.js]) {
+      const at = f ? path.join(ROOT, 'dist', 'cdn', f) : '';
+      ok(`box.html: ${f || 'toolkit file'} named with the integrity hash of dist/cdn`, !!f && fs.existsSync(at) && code.includes(`"${f}","${sha384(fs.readFileSync(at))}"`));
+    }
+    ok('box.html: integrity checked (crossorigin set by the loader)', /\.integrity=/.test(code) && /\.crossOrigin="anonymous"/.test(code));
+    // the QR encoder is loaded by the toolkit only when its window opens: the same pinned files, with its own hash
+    const qr = a.qr ? path.join(ROOT, 'dist', 'cdn', a.qr) : '';
+    ok(`toolkit: ${a.qr || 'QR encoder'} named with its integrity hash`, !!a.js && !!qr && fs.existsSync(qr) && cdnText(a.js).includes(`"${a.qr}","${sha384(fs.readFileSync(qr))}"`));
+    ok('box.html: not written by an unverified build', !c.unverifiedTemplates, c.unverifiedTemplates ? 'built with --unverified: for offline tests only' : '');
+  }
+}
+
 /* ---------- browser ---------- */
 async function browserChecks() {
   let chromium;

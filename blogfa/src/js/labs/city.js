@@ -64,7 +64,7 @@
       ui.seg(C, 'روش کنترل چراغ', [['fixed', 'زمان‌بندی ثابت'], ['smart', 'هوشمند با حسگر']], o.mode, function (v) { o.mode = v; restart(); });
       ui.range(C, { label: 'ترافیک شمال–جنوب (خودرو در ساعت)', min: 100, max: 900, step: 50, value: o.ns, on: function (v) { o.ns = v; } });
       ui.range(C, { label: 'ترافیک شرق–غرب (خودرو در ساعت)', min: 100, max: 900, step: 50, value: o.ew, on: function (v) { o.ew = v; } });
-      ui.range(C, { label: 'سبزِ ثابت برای هر جهت (ثانیه)', min: 10, max: 60, value: o.green, on: function (v) { o.green = v; } });
+      ui.range(C, { label: 'سبز ثابت برای هر جهت (ثانیه)', min: 10, max: 60, value: o.green, on: function (v) { o.green = v; } });
       ui.range(C, { label: 'سرعت شبیه‌سازی', min: 1, max: 8, value: speed, fmt: function (v) { return '×' + AN.fa(v); }, on: function (v) { speed = v; } });
       var st = ui.stats(B, [['d', 'میانگین تأخیر هر خودرو'], ['q', 'خودروهای ایستاده در صف'], ['n', 'خودروهای عبورکرده'], ['clk', 'زمان شبیه‌سازی']]);
       var cmpBox = AN.el('div', 'an-bars'); ui.btns(B, [['مقایسه‌ی یک ساعت کامل با همین ترافیک', compare, true], ['از نو', restart]]); B.appendChild(cmpBox);

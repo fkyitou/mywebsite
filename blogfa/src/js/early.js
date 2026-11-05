@@ -31,8 +31,16 @@
   h.setAttribute('data-v', v);
   var rm = !!(w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches) || X.motion === 0;
   if (rm) h.setAttribute('data-motion', 'reduce');
-  // The soft change between pages (@view-transition in css/02-chrome.css) is left out when motion is off or the
-  // reader turned it off; the browser asks here, on the new page, before showing it.
+  // The soft change between pages and themes (CSS View Transitions): going from page to page of the blog cross-fades
+  // in browsers that support it (others just load the page). A change of theme (AN.swap in core.js) opens as a circle
+  // instead, so the default fade is off for it. These rules are added here, before the first paint, and not kept in
+  // the stylesheet: the W3C Nu checker that validates every page does not know them yet (vnu 26.11) and reports them
+  // as errors. On the new page the transition is skipped when motion is off, the reader turned it off in the toolkit,
+  // or the device has no graphics chip.
+  var vt = d.createElement('style');
+  vt.textContent = '@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}' +
+    'html.an-swap::view-transition-old(root),html.an-swap::view-transition-new(root){animation:none;mix-blend-mode:normal}';
+  d.head.appendChild(vt);
   w.addEventListener('pagereveal', function (e) { if (e.viewTransition && (rm || X.vt === 0 || gpu === 'soft')) e.viewTransition.skipTransition(); });
   // software rendering (no hardware GPU): probed once per session by sky.js, known here from the second page on
   var gpu = '';

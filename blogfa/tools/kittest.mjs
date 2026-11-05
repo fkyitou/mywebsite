@@ -1,7 +1,8 @@
 /* آینده‌نگار · kittest — behaviour tests of the install kit (kit.html) in a real browser (Chromium via Playwright).
    Every copy button must put exactly the right text on the clipboard (the three template parts in both versions, the
    combined templates, the seven category names, the About page and each post), every template part offered must fit
-   the 60 KB budget (the kit offers the CDN build only), the version notice and the jsDelivr test link must be there
+   the 60 KB budget (the kit offers the CDN build only), the code for the custom-code box must be dist/box.html exactly,
+   pinned to the same commit as the template, the version notice and the jsDelivr test link must be there
    and point at a real file of the pinned commit, «کپی همه» must join at most four tags
    with the ASCII comma Blogfa splits on, ticks and the version choice must survive a reload, axe must find no WCAG A/AA
    violation, and the page must not scroll sideways at phone width. The clipboard is replaced by a recorder, so the
@@ -36,10 +37,10 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   const last = () => p.evaluate(() => window.__copied[window.__copied.length - 1]);
   const click = async sel => { await p.click(sel); await p.waitForTimeout(30); return last(); };
   ok('no JS or console errors on load', errs.length === 0, errs.join(' | '));
-  ok('16 steps to tick', (await p.$$('input[data-step]')).length === 16);
+  ok('17 steps to tick', (await p.$$('input[data-step]')).length === 17);
   const parts = [[1, '1-main-and-posts.html'], [2, '2-archive.html'], [3, '3-pages.html']];
   const version = (await p.textContent('#kit-version')) || '';
-  ok('version notice names kit 7 and asks for step 2 and the shorter description of step 3', /نسخه‌ی ۷ کیت/.test(version) && /گام ۲ را دوباره انجام دهید/.test(version) && /در گام ۳ «شرح خلاصه» را/.test(version), version.slice(0, 80));
+  ok('version notice names kit 8 and asks for steps 2, 4 and 7', /نسخه‌ی ۸ کیت/.test(version) && /گام ۲ را دوباره انجام دهید/.test(version) && /در گام ۴ کد کادر اختصاصی را بگذارید/.test(version) && /در گام ۷ متن هر ده مقاله را عوض کنید/.test(version), version.slice(0, 160));
   // Blogfa keeps the first 100 characters of the blog's description; a longer one is cut in the footer and the meta tags
   const desc = await p.evaluate(() => JSON.parse(document.getElementById('kit-data').textContent).blog.desc);
   ok('the blog description offered is 100 characters or fewer, and the note beside it says so', !!desc && [...desc].length <= 100 && /۱۰۰ نویسه/.test(await p.textContent('#desc-note')), desc && [...desc].length);
@@ -59,6 +60,11 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   ok('combined lite copies dist/template-cdn-lite.html', (await click('[data-copy="tpl.lite"]')) === read('dist/template-cdn-lite.html'));
   ok('category 1 copies its exact name', (await click('[data-copy="cats.0"]')) === 'هوش مصنوعی و داده');
   ok('category 7 copies its exact name', (await click('[data-copy="cats.6"]')) === 'ایده و خلاقیت');
+  // the toolkit for Blogfa's custom-code box: the exact file, small, loading from the template's pinned commit
+  const boxText = await click('[data-copy="box"]');
+  ok('custom-code box copies dist/box.html', boxText === read('dist/box.html'));
+  ok('custom-code box is small and loads from the pinned commit', Buffer.byteLength(boxText || '') <= 4096 && (boxText || '').includes(`https://cdn.jsdelivr.net/gh/${CDN.repo}@${CDN.ref}/${CDN.dir}/`), (boxText || '').length);
+  ok('step 7 explains how to replace the text of posts already published', /نوشته‌های پیشین/.test(await p.textContent('#update-posts')));
   ok('about page slug copies "about"', (await click('[data-copy="page.slug"]')) === 'about');
   ok('about page body copies pages/about.html without the meta comment', (await click('[data-copy="page.body"]')) === body('pages/about.html'));
   ok('post 1 body copies posts/01-ai.html body', (await click('[data-copy="posts.0.body"]')) === body('posts/01-ai.html'));
@@ -70,9 +76,9 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   ok('single tag copies on its own', (await click('[data-copy="posts.0.tags.0"]')) === 'هوش مصنوعی');
   for (const id of ['s-blog', 's-cats', 'p1']) await p.click(`label[for="${id}"]`);
   const prog = (await p.textContent('#prog-t')).trim();
-  ok('progress counts ticks', prog === '۳ از ۱۶ گام', prog);
+  ok('progress counts ticks', prog === '۳ از ۱۷ گام', prog);
   await p.reload(); await p.waitForTimeout(100);
-  ok('ticks survive a reload', (await p.isChecked('#s-cats')) && (await p.isChecked('#p1')) && (await p.textContent('#prog-t')).trim() === '۳ از ۱۶ گام');
+  ok('ticks survive a reload', (await p.isChecked('#s-cats')) && (await p.isChecked('#p1')) && (await p.textContent('#prog-t')).trim() === '۳ از ۱۷ گام');
   ok('lite choice survives a reload', await p.isChecked('input[name="split-v"][value="lite"]'));
   await p.addScriptTag({ path: path.join(ROOT, 'node_modules/axe-core/axe.min.js') });
   const ax = await p.evaluate(async () => {

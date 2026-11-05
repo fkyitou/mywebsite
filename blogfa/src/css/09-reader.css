@@ -15,7 +15,7 @@
   --sunrise: linear-gradient(100deg, #A9480F, #9A4A10 55%, #7F370B);
   --glow: 0 0 0 1px rgba(139, 58, 14, .18), 0 18px 40px -20px rgba(139, 58, 14, .3);
   --shadow: 0 1px 2px rgba(42, 32, 21, .07), 0 18px 40px -24px rgba(42, 32, 21, .28);
-  --c-ai: #1F57BF; --c-net: #0A6666; --c-city: #A34A0D; --c-mind: #80369F; --c-space: #A63A26; --c-energy: #1A7049; --c-idea: #7A5000; --c-default: #5C4C37;
+  --c-ai: #1F57BF; --c-net: #0A6666; --c-city: #9C460C; --c-mind: #80369F; --c-space: #A63A26; --c-energy: #1A7049; --c-idea: #7A5000; --c-default: #5C4C37;
 }
 [data-an-tone="paper"] .an-sky-base { background: linear-gradient(180deg, #F5EEDC, #EFE6CF); }
 [data-an-tone="paper"] .an-sky-dawn { background: radial-gradient(120% 70% at 50% 110%, rgba(169, 72, 15, .12), transparent 60%); }

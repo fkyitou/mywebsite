@@ -26,14 +26,14 @@ const kb = s => fa(Math.max(1, Math.round(Buffer.byteLength(s, 'utf8') / 1024)))
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const words = html => (html.replace(/<[^>]+>/g, ' ').match(/\S+/g) || []).length;
 
-for (const f of ['dist/build-report.json', 'dist/template-cdn.html', 'dist/template-cdn-lite.html', 'dist/split-cdn/1-main-and-posts.html', 'dist/split-cdn-lite/1-main-and-posts.html']) {
+for (const f of ['dist/build-report.json', 'dist/box.html', 'dist/template-cdn.html', 'dist/template-cdn-lite.html', 'dist/split-cdn/1-main-and-posts.html', 'dist/split-cdn-lite/1-main-and-posts.html']) {
   if (!fs.existsSync(path.join(ROOT, f))) { console.error(`${f} is missing. Run: node tools/build.mjs (the CDN templates are written once cdn.json names a pushed commit that holds dist/cdn/)`); process.exit(1); }
 }
 // A template whose jsDelivr addresses name a commit without the files would install a page with no styles or scripts.
 const CDN = JSON.parse(read('dist/build-report.json')).cdn || {};
 if (!CDN.ok || !CDN.pushed || CDN.unverifiedTemplates || !CDN.mirrors) { console.error('the CDN templates in dist/ were not verified against a pushed commit (see tools/build.mjs); no kit written'); process.exit(1); }
 // Bump when what has to be pasted changes, so an owner holding an older kit.html can tell the two apart.
-const KIT_VERSION = 7;
+const KIT_VERSION = 8;
 // One stylesheet on the main jsDelivr address: opening it shows whether jsDelivr is reachable from the owner's connection.
 const PROBE = CDN.mirrors[0] + ((CDN.files || []).find(f => /^an-base\.[\w]+\.css$/.test(f.file)) || { file: '' }).file;
 
@@ -68,6 +68,8 @@ const DATA = {
   tpl: { full: read('dist/template-cdn.html'), lite: read('dist/template-cdn-lite.html') },
   split: { full: split('dist/split-cdn/'), lite: split('dist/split-cdn-lite/') },
   blog: BLOG,
+  // the code for Blogfa's «کدها و جاوا اسکریپت‌های اختصاصی کاربر» box: the reader's toolkit (src/addons/)
+  box: read('dist/box.html'),
   page: { title: about.meta.title || 'درباره‌ی آینده‌نگار', slug: 'about', body: about.body },
   cats,
   posts
@@ -108,7 +110,7 @@ const postCards = posts.map((p, i) => `
   </div>
 </li>`).join('');
 
-const STEPS = 6 + posts.length; // blog, template, settings, categories, about and final review, plus one tick per post
+const STEPS = 7 + posts.length; // blog, template, settings, custom-code box, categories, about and final review, plus one tick per post
 const CSS = `
 /* Layout: one reading column of install steps in the order Blogfa asks for them; every value to paste sits on a row
    with its copy button, under a sticky bar that counts finished steps. Tokens follow the blog: night first, day second. */
@@ -313,9 +315,9 @@ const body = `
 <section class="intro" aria-labelledby="kit-h">
   <p class="eyebrow">آینده‌نگار · روایت انسان، ایده و فناوری</p>
   <h1 id="kit-h">کیت نصب و انتشار</h1>
-  <p>هر چیزی که باید در بلاگفا جای‌گذاری شود، این‌جا با یک دکمه‌ی کپی آمده است: قالب، صفحه‌ی «درباره» و ده مقاله. گام‌ها را به همین ترتیب انجام دهید و هر کدام را که تمام شد تیک بزنید.</p>
+  <p>هر چیزی که باید در بلاگفا جای‌گذاری شود، این‌جا با یک دکمه‌ی کپی آمده است: قالب، کد کادر اختصاصی، صفحه‌ی «درباره» و ده مقاله. گام‌ها را به همین ترتیب انجام دهید و هر کدام را که تمام شد تیک بزنید.</p>
   <p class="credit">طراحی، مدیریت و نویسندگی: امیرحسین همتی</p>
-  <p class="warn" id="kit-version"><b>نسخه‌ی ${fa(KIT_VERSION)} کیت.</b> اگر روی وبلاگ کیت ۴ یا نسخه‌ای قدیمی‌تر نصب است، این نسخه جای آن را می‌گیرد و اصلاح‌های کیت‌های ۵ و ۶ را هم دارد. تازه‌ها: دکمه‌ی «ارائه در کلاس» در فهرست مطالب هر مقاله (یا کلید P) مقاله را با حروف درشت برای ویدئوپروژکتور نشان می‌دهد و با PageDown و PageUp بخش‌به‌بخش جلو و عقب می‌رود. قلم وزیرمتن از همان جایی می‌آید که فایل‌های قالب، پس صفحه منتظر سرور قلم گوگل نمی‌ماند. در پیام‌رسان‌هایی که پیش‌نمایش پیوند نشان می‌دهند، پیوند وبلاگ با تصویر آینده‌نگار دیده می‌شود. توضیح وبلاگ پایین همه‌ی صفحه‌ها کامل است؛ پیش از این، بلاگفا فقط ۱۰۰ نویسه‌ی اول آن را نگه می‌داشت. از کیت‌های ۵ و ۶: ساعت مقاله‌ها با دو رقم دقیقه (۶:۰۱ به جای ۶:۱)، برچسب «هش» بی‌کشیده‌ی بلند، نام ماه در آرشیو هر ماه، و تصویرها و کره‌ی صفحه‌ی اول که وقتی نشانی پشتیبان فایل‌ها دیر می‌رسد دیگر کش نمی‌آیند. <b>دو کار لازم است: گام ۲ را دوباره انجام دهید</b> و هر سه تکه را از همین صفحه جای‌گذاری کنید، <b>و در گام ۳ «شرح خلاصه» را با متن کوتاه‌تر همین صفحه عوض کنید.</b> مقاله‌ها و صفحه‌ی «درباره» دست نمی‌خورند. اندازه‌ی تکه‌ها ${kb(DATA.split.full[1]).replace(' کیلوبایت', '')}، ${kb(DATA.split.full[2]).replace(' کیلوبایت', '')} و ${kb(DATA.split.full[3])} است. فایل کیت قبلی را کنار بگذارید و فقط از همین صفحه کپی کنید.</p>
+  <p class="warn" id="kit-version"><b>نسخه‌ی ${fa(KIT_VERSION)} کیت.</b> تازه‌ها: «ابزار خواننده» در کادر کدهای اختصاصی بلاگفا (گام ۴، تازه): پوسته‌ی «کاغذی» و «پرتضاد»، اندازه‌ی متن و فاصله‌ی سطرها، خط‌کش خواندن، حالت تمرکز، شنیدن متن با صدای فارسی خود دستگاه، نشان کردن مقاله، «گذرنامه‌ی آینده» برای روایت‌هایی که تا پایان خوانده شده‌اند، خودآزمایی واژه‌ها، ارجاع و کد QR. انتخاب‌های هر خواننده فقط در مرورگر خود او می‌ماند. در هر مقاله هم کادر تازه‌ی «برای گفت‌وگو در کلاس» با سه پرسش آمده، واژه‌نامه ۱۳ واژه‌ی تازه گرفته و چند اصلاح املایی انجام شده است. رفتن از صفحه‌ای به صفحه‌ی دیگر نرم‌تر شده و نسخه‌ی چاپی مقاله برای کلاس مرتب است. <b>سه کار لازم است: گام ۲ را دوباره انجام دهید</b> و هر سه تکه را از همین صفحه جای‌گذاری کنید، <b>در گام ۴ کد کادر اختصاصی را بگذارید</b> و <b>در گام ۷ متن هر ده مقاله را عوض کنید</b> (راهش همان‌جا آمده است؛ عنوان، موضوع و برچسب‌ها دست نمی‌خورند). اگر در گام ۳ «شرح خلاصه» را هنوز با متن کوتاه‌تر کیت ۷ عوض نکرده‌اید، آن را هم انجام دهید و عنوان وبلاگ را با دکمه‌ی کپی بگذارید تا «آینده‌نگار» با نیم‌فاصله و بی فاصله نوشته شود. جای‌گذاری دوباره‌ی صفحه‌ی «درباره» اختیاری است و فقط املای یک نام را درست می‌کند. اندازه‌ی تکه‌ها ${kb(DATA.split.full[1]).replace(' کیلوبایت', '')}، ${kb(DATA.split.full[2]).replace(' کیلوبایت', '')} و ${kb(DATA.split.full[3])} است. فایل کیت قبلی را کنار بگذارید و فقط از همین صفحه کپی کنید.</p>
   <ol class="status" aria-label="وضعیت کار">
     <li class="st on" id="st-1"><span class="dot" aria-hidden="true">✓</span><div><b>فایل آماده</b><small>قالب، ۱۰ مقاله، صفحه‌ی درباره، تصویرها و راهنماها ساخته و با آزمون خودکار بررسی شده‌اند.</small></div></li>
     <li class="st" id="st-2"><span class="dot" aria-hidden="true">✓</span><div><b>قالب نصب‌شده</b><small>با تیک گام ۲ روشن می‌شود: قالب در بلاگفا ذخیره شده و صفحه‌ی اول با ظاهر آینده‌نگار باز می‌شود.</small></div></li>
@@ -389,8 +391,24 @@ const body = `
   ${tick('s-settings', 'تنظیمات را ثبت کردم.')}
 </section>
 
+<section class="step" aria-labelledby="h-box">
+  <div class="step-h"><span class="step-n">۴</span><h2 id="h-box">ابزار خواننده در کادر کدهای اختصاصی</h2></div>
+  <p>در پنل به <span class="path">«تنظیمات و دیگر امکانات» ← «کدها و جاوا اسکریپت‌های اختصاصی کاربر»</span> بروید. بلاگفا هر چه در این کادر باشد در همه‌ی صفحه‌های وبلاگ می‌گذارد و قالب آینده‌نگار جای آن را در پانویس هر سه زبانه گذاشته است.</p>
+  <div class="rows">
+    ${field('کد کادر', `دو بلوک کوتاه <code class="ltr">&lt;script&gt;</code>، ${kb(DATA.box)}`, 'box', 'کد کادر کدهای اختصاصی', { vcls: 'muted', btn: 'کپی کد' })}
+  </div>
+  <ol>
+    <li>اگر کادر خالی است، «کپی کد» را بزنید و کد را در آن جای‌گذاری کنید. اگر کد دیگری در کادر هست، اول یک نسخه از آن را برای خودتان نگه دارید، بعد کد آینده‌نگار را در خطی تازه زیر آن بگذارید.</li>
+    <li>دکمه‌ی ثبت پایین همان صفحه را بزنید.</li>
+    <li>یک مقاله را باز کنید و با <kbd>Ctrl</kbd>+<kbd>F5</kbd> از نو بارگیری کنید. در نوار بالا، کنار دکمه‌ی جست‌وجو، دکمه‌ی تازه‌ای با نماد ابزار می‌آید که نامش «ابزار خواننده» است (کلید <kbd>R</kbd>)، و پایین مقاله «خودآزمایی» دیده می‌شود. در پانویس چیزی اضافه دیده نمی‌شود.</li>
+  </ol>
+  <p class="note">این کد فقط دو فایل ابزار را از همان نسخه‌ی قفل‌شده‌ی jsDelivr و با همان «کد یکپارچگی» (SRI) قالب می‌آورد و اگر نشانی اصلی در دسترس نباشد، از سه نشانی پشتیبان. خود بلاگفا در همین صفحه کد حذف تبلیغات، کد سیستم‌های کسب درآمد، پاپ‌آپ و انتقال صفحه به نشانی دیگر را ممنوع کرده است. این کد هیچ‌کدام را ندارد و چیزی به جایی نمی‌فرستد: انتخاب‌های هر خواننده فقط در مرورگر خود او می‌ماند.</p>
+  <p class="note">برای خاموش کردن یک ابزار، در خط <code class="ltr">window.AN_X_OPT</code> عدد ۱ جلوی نام آن را ۰ کنید. نام هر ابزار در توضیح فارسی بالای همان خط آمده است.</p>
+  ${tick('s-box', 'کد را ثبت کردم و دکمه‌ی «ابزار خواننده» در نوار بالای مقاله دیده می‌شود.')}
+</section>
+
 <section class="step" aria-labelledby="h4">
-  <div class="step-h"><span class="step-n">۴</span><h2 id="h4">تعریف موضوعات</h2></div>
+  <div class="step-h"><span class="step-n">۵</span><h2 id="h4">تعریف موضوعات</h2></div>
   <p>هر مقاله یک موضوع دارد و موضوع باید پیش از انتشار مقاله ساخته شده باشد. در پنل «تعاریف موضوعات» را باز کنید و برای هر سطر زیر، نام را در «عنوان موضوع» بگذارید و «درج موضوع» را بزنید. «جایگاه» را می‌توانید خالی بگذارید.</p>
   <div class="rows">
     ${cats.map((c, i) => field(fa(i + 1), esc(c), `cats.${i}`, `موضوع ${esc(c)}`)).join('\n    ')}
@@ -400,7 +418,7 @@ const body = `
 </section>
 
 <section class="step" aria-labelledby="h5">
-  <div class="step-h"><span class="step-n">۵</span><h2 id="h5">صفحه‌ی «درباره»</h2></div>
+  <div class="step-h"><span class="step-n">۶</span><h2 id="h5">صفحه‌ی «درباره»</h2></div>
   <p>در پنل «صفحات جداگانه» را باز کنید و «ایجاد صفحه جدید در قالب وبلاگ» را بزنید (نه «ایجاد صفحه جدید با ویرایش کامل کدها»)، تا صفحه ظاهر آینده‌نگار را بگیرد. خود بلاگفا در همان صفحه نوشته که برای هر صفحه می‌شود نشانی تعیین کرد، مثل <code>yourblog.com/page/myprojects</code>.</p>
   <div class="rows">
     ${field('عنوان صفحه', esc(DATA.page.title), 'page.title', 'عنوان صفحه‌ی درباره')}
@@ -408,12 +426,12 @@ const body = `
     ${field('', 'دقیقاً با حروف کوچک. پیوند پانویس قالب به <code>/page/about</code> می‌رود.', '', '', { vcls: 'plain muted' })}
     ${field('متن صفحه', `کد HTML، ${kb(DATA.page.body)}`, 'page.body', 'متن صفحه‌ی درباره', { vcls: 'muted', btn: 'کپی متن' })}
   </div>
-  <p class="note">متن را مثل مقاله‌ها با دکمه‌ی «منبع» ویرایشگر جای‌گذاری کنید (گام ۶).</p>
+  <p class="note">متن را مثل مقاله‌ها با دکمه‌ی «منبع» ویرایشگر جای‌گذاری کنید (گام ۷). اگر صفحه را قبلاً ساخته‌اید، جای‌گذاری دوباره اختیاری است: کیت ۸ در آن فقط املای نام «مک‌یوئن» را درست کرده است.</p>
   ${tick('s-about', 'صفحه ساخته شد و پیوند «درباره‌ی آینده‌نگار» در پانویس آن را باز می‌کند.')}
 </section>
 
 <section class="step" aria-labelledby="h6">
-  <div class="step-h"><span class="step-n">۶</span><h2 id="h6">انتشار ۱۰ مقاله</h2></div>
+  <div class="step-h"><span class="step-n">۷</span><h2 id="h6">انتشار ۱۰ مقاله</h2></div>
   <p>برای هر مقاله در پنل «نوشته جدید» را باز کنید و:</p>
   <ol>
     <li>عنوان را کپی کنید و در کادر «عنوان» بگذارید.</li>
@@ -423,15 +441,17 @@ const body = `
     <li>«ادامه نوشته» و «ثبت موقت» را دست نزنید و «ثبت نوشته و انتشار» را بزنید.</li>
   </ol>
   <p class="warn">مقاله‌ها را به ترتیب ۱ تا ۱۰ منتشر کنید تا پیوندهای «روایت قبلی» و «روایت بعدی» به همین ترتیب بچینند. آخرین مقاله‌ای که منتشر می‌شود کارت ویژه‌ی صفحه‌ی اول می‌شود. بعد از انتشار مقاله‌ی ۱ آن را باز کنید: باید کادر «آزمایشگاه زنده» و نمودار را ببینید. اگر فقط متن ساده یا کد خام دیدید، متن با دکمه‌ی «منبع» جای‌گذاری نشده است؛ مطلب را از «نوشته‌های پیشین» ویرایش کنید و دوباره جای‌گذاری کنید.</p>
+  <p class="warn" id="update-posts"><b>مقاله‌ها را قبلاً منتشر کرده‌اید؟</b> متن هر ده مقاله در کیت ۸ عوض شده است: کادر «برای گفت‌وگو در کلاس»، واژه‌های تازه‌ی واژه‌نامه و چند اصلاح املایی. برای هر مقاله در پنل «نوشته‌های پیشین» آن را برای ویرایش باز کنید، دکمه‌ی «منبع» را بزنید، همه‌ی کد قبلی را پاک کنید، «کپی متن» همان مقاله را از پایین همین صفحه جای‌گذاری کنید و نوشته را ثبت کنید. عنوان، موضوع، برچسب‌ها و زمان نوشته را دست نزنید تا نشانی و ترتیب مقاله‌ها همان بماند. بعد از ثبت، کادر «برای گفت‌وگو در کلاس» باید بالای «منابع» دیده شود.</p>
   <ol class="posts">${postCards}
   </ol>
 </section>
 
 <section class="step" aria-labelledby="h8">
-  <div class="step-h"><span class="step-n">۷</span><h2 id="h8">بازبینی نهایی</h2></div>
+  <div class="step-h"><span class="step-n">۸</span><h2 id="h8">بازبینی نهایی</h2></div>
   <ul>
     <li>صفحه‌ی اول: پنل زنده، کره‌ی زمین (در قالب کامل)، ده کارت مقاله و بخش سازنده با نام امیرحسین همتی.</li>
-    <li>یک مقاله: فهرست مطالب، نمودار، آزمایشگاه زنده، منابع، مقاله‌های پیشنهادی و دکمه‌های اشتراک.</li>
+    <li>یک مقاله: فهرست مطالب، نمودار، آزمایشگاه زنده، کادر «برای گفت‌وگو در کلاس»، منابع، مقاله‌های پیشنهادی و دکمه‌های اشتراک.</li>
+    <li>دکمه‌ی «ابزار خواننده» در نوار بالا: پوسته‌ی «کاغذی» را انتخاب کنید و به صفحه‌ی دیگری بروید؛ پوسته باید بماند. دکمه‌ی «بازگرداندن تنظیم‌های نمایش» پایین همان پنجره همه را به حالت اول برمی‌گرداند.</li>
     <li>پیوند «درباره‌ی آینده‌نگار» در پانویس، منوی «قلمروها» و صفحه‌ی بایگانی.</li>
     <li>همین صفحه‌ها روی گوشی.</li>
     <li>نشانی عمومی وبلاگ، مثل <code>https://ayandehnegar.blogfa.com/</code>، همان چیزی است که برای معلم می‌فرستید؛ نشانی پنل مدیریت نیست.</li>

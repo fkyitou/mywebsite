@@ -5,7 +5,9 @@
    must refuse, several addresses down, every address down), and for templates whose tags lost their integrity and
    crossorigin attributes, or were removed, in an editor. Each case checks which address served each file, that the stylesheet
    applies, that the page booted exactly once, that the post's lab mounted, that the warning bar shows only when
-   nothing could be loaded, and that no script error happened.
+   nothing could be loaded, and that no script error happened. When the preview holds the reader's toolkit (the code
+   for Blogfa's custom-code box, dist/box.html), its two files go through the same addresses, backups and integrity
+   checks: each case also checks which address served them and that the toolkit started.
      node tools/build.mjs --unverified   (or a verified build)
      node tools/preview.mjs --template dist/template-cdn.html --out preview-cdn
      node tools/cdntest.mjs [--preview preview-cdn] */
@@ -27,6 +29,13 @@ if (!/<script\b[^>]*\bid="an-script"/.test(fs.readFileSync(path.join(PREVIEW, 'i
 let pass = 0, fail = 0;
 const results = [];
 const ok = (name, cond, info = '') => { results.push({ name, pass: !!cond, info }); if (cond) pass++; else fail++; console.log((cond ? '✓ ' : '✗ ') + name + (info ? '  — ' + info : '')); };
+
+// The toolkit's own files are counted apart from the template's stylesheet and script.
+const TOOLKIT = /^an-(addons|qr)\./;
+const BOX = fs.readFileSync(path.join(PREVIEW, 'index.html'), 'utf8').includes('AN_X_OPT');
+const ADDONS = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'build-report.json'), 'utf8')).addons || {}; } catch (e) { return {}; } })();
+// the address that should serve a file: the first one the case does not make fail (a refused copy counts as failed)
+const firstGood = (c, file) => { let m = 0; while (m < 4 && c.fail(m, file)) m++; return m; };
 
 // Copies of a page whose CDN tags lost attributes, as an over-eager editor might leave them.
 const STRIPPED = [];
@@ -78,6 +87,7 @@ const EXPECTED = /Failed to load resource|net::ERR_FAILED|integrity|status of 40
         await page.goto(pathToFileURL(path.join(PREVIEW, file)).href, { waitUntil: 'load' });
         if (c.down) await page.waitForSelector('[role=alert]', { timeout: 20000 }).catch(() => {});
         else await page.waitForFunction(() => window.AN && window.AN.ok, null, { timeout: 15000 }).catch(() => {});
+        if (BOX && !c.down) await page.waitForFunction(() => window.AN && window.AN.x, null, { timeout: 15000 }).catch(() => {});
         if (base === 'post-1.html' && !c.down) {
           await page.evaluate(() => { const l = document.querySelector('.an-lab'); if (l) l.scrollIntoView(); });
           await page.waitForFunction(() => { const l = document.querySelector('.an-lab'); return !l || l.classList.contains('on'); }, null, { timeout: 8000 }).catch(() => {});
@@ -92,17 +102,33 @@ const EXPECTED = /Failed to load resource|net::ERR_FAILED|integrity|status of 40
             fabs: document.querySelectorAll('.an-fab').length,
             lab: lab ? lab.classList.contains('on') && lab.querySelectorAll('.an-lab-root *').length > 4 : null,
             banner: !!document.querySelector('[role=alert]'),
-            credit: /طراحی، مدیریت و نویسندگی/.test(document.body.innerText)
+            credit: /طراحی، مدیریت و نویسندگی/.test(document.body.innerText),
+            x: !!(A.x && A.x.v)
           };
         });
-        const problems = [];
+        const problems = [], tpl = log.filter(r => !TOOLKIT.test(r.file));
+        let toolkit = '';
+        if (BOX) {
+          const kit = log.filter(r => /^an-addons\./.test(r.file));
+          if (c.down) {
+            if (s.x) problems.push('toolkit started although no address worked');
+            const tried = kit.filter(r => r.how === 'abort').length;
+            if (tried !== 8) problems.push(`${tried} toolkit requests, expected 8 (two files × four addresses)`);
+          } else {
+            if (!s.x) problems.push('toolkit did not start');
+            const want = [ADDONS.css, ADDONS.js].map(f => '0123'.slice(0, firstGood(c, f || '') + 1));
+            const asked = ['.css', '.js'].map(x => kit.filter(r => r.file.endsWith(x)).map(r => r.mirror).join(''));
+            if (String(asked) !== String(want)) problems.push(`toolkit addresses asked ${asked}, expected ${want}`);
+            toolkit = `; toolkit css #${asked[0].slice(-1)}, js #${asked[1].slice(-1)}`;
+          }
+        }
         if (c.down) {
           if (s.ok) problems.push('booted although no address worked');
           if (s.fail !== 2) problems.push(`AN.fail ${s.fail}, expected 2`);
           if (!s.banner) problems.push('no warning bar');
           if (!s.credit) problems.push('credit not in the page text');
           // the preloaded font is asked for too; only the stylesheet and the script go through the loader's backups
-          const tried = log.filter(r => r.how === 'abort' && /\.(css|js)$/.test(r.file)).length;
+          const tried = tpl.filter(r => r.how === 'abort' && /\.(css|js)$/.test(r.file)).length;
           if (tried !== 8) problems.push(`${tried} stylesheet and script requests, expected 8 (two files × four addresses)`);
         } else {
           if (!s.ok || !s.ready) problems.push('boot did not finish');
@@ -113,13 +139,13 @@ const EXPECTED = /Failed to load resource|net::ERR_FAILED|integrity|status of 40
           if (s.banner) problems.push('warning bar shown');
           if (base === 'post-1.html' && !s.lab) problems.push('lab did not mount');
           // one request per address tried: the first address, then each backup up to the one that served the file
-          const asked = ['.css', '.js'].map(x => log.filter(r => r.file.endsWith(x)).map(r => r.mirror).join(''));
+          const asked = ['.css', '.js'].map(x => tpl.filter(r => r.file.endsWith(x)).map(r => r.mirror).join(''));
           const want = c.via.map(v => '0123'.slice(0, v + 1));
           if (String(asked) !== String(want)) problems.push(`addresses asked ${asked}, expected ${want}`);
           if (c.sri && !noise.some(t => /integrity/i.test(t))) problems.push('no integrity refusal reported');
         }
         if (errs.length) problems.push(errs.length + ' error(s): ' + errs.slice(0, 2).join(' | ').slice(0, 240));
-        ok(`${c.name} · ${base}`, !problems.length, problems.join('; ') || (c.down ? 'warning bar shown, text readable' : `css from #${s.via[0]}, js from #${s.via[1]}${s.lab ? ', lab on' : ''}`));
+        ok(`${c.name} · ${base}`, !problems.length, problems.join('; ') || (c.down ? 'warning bar shown, text readable' : `css from #${s.via[0]}, js from #${s.via[1]}${s.lab ? ', lab on' : ''}${toolkit}`));
         await ctx.close();
       }
     }

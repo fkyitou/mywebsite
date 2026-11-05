@@ -56,9 +56,10 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': TYPES['.html'] }); res.end(html); return;
   }
   // a tag page at its Blogfa address (/tag/<name>) is the preview's flat tag file, so the page sees a Blogfa path
-  // the inline stylesheet names the font files relative to the page, so a page under /tag/ asks for /tag/<font>;
-  // they sit next to the flat pages (on Blogfa the stylesheet and its fonts come from jsDelivr instead)
-  const file = path.join(PREVIEW, /^tag\//.test(rel) ? (/\.woff2$/.test(rel) ? path.basename(rel) : 'tag-' + encodeURIComponent(rel.slice(4)).replace(/%/g, '') + '.html') : rel);
+  // the inline stylesheet names the font files relative to the page, and the preview's custom-code box
+  // (dist/box-local.html) names the toolkit's files the same way, so a page under /tag/ asks for /tag/<file>;
+  // they sit next to the flat pages (on Blogfa all of them come from jsDelivr instead)
+  const file = path.join(PREVIEW, /^tag\//.test(rel) ? (/\.(woff2|css|js)$/.test(rel) ? path.basename(rel) : 'tag-' + encodeURIComponent(rel.slice(4)).replace(/%/g, '') + '.html') : rel);
   if (!file.startsWith(PREVIEW + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end(); return; }
   res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
   fs.createReadStream(file).pipe(res);
