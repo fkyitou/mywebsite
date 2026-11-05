@@ -1,25 +1,18 @@
 {
-  "builtAt": "2026-11-05T03:01:21.121Z",
+  "builtAt": "2026-11-05T03:02:42.643Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
-    "ref": "84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71",
+    "ref": "f490e617b607f628861a1643c66bc363b36ea5be",
     "dir": "blogfa/dist/cdn",
-    "ok": false,
+    "ok": true,
     "pushed": true,
-    "missing": [
-      "an-full.d1d71fb964.css",
-      "an-post.a999cc6f13.js",
-      "an-base.e0e10eaa6d.css",
-      "an-archive.92f97fea39.js",
-      "an-page.315f92230b.js",
-      "an-post-lite.ea00b71b7f.js"
-    ],
+    "missing": [],
     "unverifiedTemplates": false,
     "mirrors": [
-      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71/blogfa/dist/cdn/",
-      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71/blogfa/dist/cdn/",
-      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71/blogfa/dist/cdn/",
-      "https://rawcdn.githack.com/fkyitou/mywebsite/84deb3879edd8d8a0942d7d35d4cd1f9d6d20f71/blogfa/dist/cdn/"
+      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@f490e617b607f628861a1643c66bc363b36ea5be/blogfa/dist/cdn/",
+      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@f490e617b607f628861a1643c66bc363b36ea5be/blogfa/dist/cdn/",
+      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@f490e617b607f628861a1643c66bc363b36ea5be/blogfa/dist/cdn/",
+      "https://rawcdn.githack.com/fkyitou/mywebsite/f490e617b607f628861a1643c66bc363b36ea5be/blogfa/dist/cdn/"
     ],
     "files": [
       {

@@ -1,0 +1,207 @@
+{
+ "generated": "2026-11-05T03:01:37.143Z",
+ "browser": "Chromium (Playwright)",
+ "served": "http://127.0.0.1 (test-only server)",
+ "passed": 33,
+ "failed": 0,
+ "results": [
+  {
+   "group": "archive",
+   "name": "lists every article (10)",
+   "pass": true,
+   "info": "10 items, 10 with titles"
+  },
+  {
+   "group": "archive",
+   "name": "newest first, each linking to its post",
+   "pass": true,
+   "info": "10 9 8 7 6 5 4 3 2 1"
+  },
+  {
+   "group": "archive",
+   "name": "every item shows its topic and date",
+   "pass": true,
+   "info": "10 topics, 10 dates"
+  },
+  {
+   "group": "archive",
+   "name": "the waiting note is gone and the count is shown",
+   "pass": true,
+   "info": "۱۰ روایت، تازه‌ترین در بالا. روی هر عنوان بزن تا مقاله و آزمایشگاه زنده‌اش باز شود."
+  },
+  {
+   "group": "archive",
+   "name": "search on this page knows the articles",
+   "pass": true,
+   "info": "10 in the search index"
+  },
+  {
+   "group": "archive",
+   "name": "the month archive is still there",
+   "pass": true,
+   "info": "1 month link(s)"
+  },
+  {
+   "group": "archive",
+   "name": "no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "archive",
+   "name": "opened from disk: keeps the link to the plain list",
+   "pass": true,
+   "info": "posts.html"
+  },
+  {
+   "group": "archive",
+   "name": "opened from disk: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "index.html: every post carries its category",
+   "pass": true,
+   "info": "10 of 10"
+  },
+  {
+   "group": "posts",
+   "name": "index.html: no Blogfa tag shows as raw text",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "index.html: the time is in Persian digits",
+   "pass": true,
+   "info": "0 with Latin digits"
+  },
+  {
+   "group": "posts",
+   "name": "index.html: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "post-1.html: every post carries its category",
+   "pass": true,
+   "info": "1 of 1"
+  },
+  {
+   "group": "posts",
+   "name": "post-1.html: no Blogfa tag shows as raw text",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "post-1.html: the time is in Persian digits",
+   "pass": true,
+   "info": "0 with Latin digits"
+  },
+  {
+   "group": "posts",
+   "name": "post banner links to its category",
+   "pass": true,
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:45265/cat-1.html"
+  },
+  {
+   "group": "posts",
+   "name": "post-1.html: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: every post carries its category",
+   "pass": true,
+   "info": "2 of 2"
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: no Blogfa tag shows as raw text",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: the time is in Persian digits",
+   "pass": true,
+   "info": "0 with Latin digits"
+  },
+  {
+   "group": "posts",
+   "name": "category page is titled with its category",
+   "pass": true,
+   "info": "«هوش مصنوعی و داده»"
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "menu",
+   "name": "archive.html: the realm menu lists the categories",
+   "pass": true,
+   "info": "7 links"
+  },
+  {
+   "group": "menu",
+   "name": "page-about.html: the realm menu lists the categories",
+   "pass": true,
+   "info": "7 links"
+  },
+  {
+   "group": "ad",
+   "name": "desktop: the page measures the ad bar",
+   "pass": true,
+   "info": "--an-ad 123px, bar 123px"
+  },
+  {
+   "group": "ad",
+   "name": "desktop: the footer ends above the ad bar",
+   "pass": true,
+   "info": "footer bottom 777, bar top 777"
+  },
+  {
+   "group": "ad",
+   "name": "desktop: back-to-top button clear of the ad bar",
+   "pass": true,
+   "info": "button bottom 880, bar top 777, side by side"
+  },
+  {
+   "group": "ad",
+   "name": "desktop: the ad stays as Blogfa shows it",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "ad",
+   "name": "phone: the page measures the ad bar",
+   "pass": true,
+   "info": "--an-ad 121px, bar 121px"
+  },
+  {
+   "group": "ad",
+   "name": "phone: the footer ends above the ad bar",
+   "pass": true,
+   "info": "footer bottom 723, bar top 723"
+  },
+  {
+   "group": "ad",
+   "name": "phone: back-to-top button clear of the ad bar",
+   "pass": true,
+   "info": "button bottom 703, bar top 723"
+  },
+  {
+   "group": "ad",
+   "name": "phone: the ad stays as Blogfa shows it",
+   "pass": true,
+   "info": ""
+  }
+ ]
+}
