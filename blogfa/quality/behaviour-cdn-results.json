@@ -1,0 +1,459 @@
+{
+ "generated": "2026-11-05T18:16:34.975Z",
+ "browser": "Chromium (Playwright)",
+ "served": "http://127.0.0.1 (test-only server)",
+ "passed": 75,
+ "failed": 0,
+ "results": [
+  {
+   "group": "archive",
+   "name": "lists every article (10)",
+   "pass": true,
+   "info": "10 items, 10 with titles"
+  },
+  {
+   "group": "archive",
+   "name": "newest first, each linking to its post",
+   "pass": true,
+   "info": "10 9 8 7 6 5 4 3 2 1"
+  },
+  {
+   "group": "archive",
+   "name": "every item shows its topic and date",
+   "pass": true,
+   "info": "10 topics, 10 dates"
+  },
+  {
+   "group": "archive",
+   "name": "the waiting note is gone and the count is shown",
+   "pass": true,
+   "info": "۱۰ روایت، تازه‌ترین در بالا. روی هر عنوان بزن تا مقاله و آزمایشگاه زنده‌اش باز شود."
+  },
+  {
+   "group": "archive",
+   "name": "search on this page knows the articles",
+   "pass": true,
+   "info": "10 in the search index"
+  },
+  {
+   "group": "archive",
+   "name": "the month archive is still there",
+   "pass": true,
+   "info": "1 month link(s)"
+  },
+  {
+   "group": "archive",
+   "name": "no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "archive",
+   "name": "opened from disk: keeps the link to the plain list",
+   "pass": true,
+   "info": "posts.html"
+  },
+  {
+   "group": "archive",
+   "name": "opened from disk: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "index.html: every post carries its category",
+   "pass": true,
+   "info": "10 of 10"
+  },
+  {
+   "group": "posts",
+   "name": "index.html: no Blogfa tag shows as raw text",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "index.html: the time is in Persian digits",
+   "pass": true,
+   "info": "0 with Latin digits"
+  },
+  {
+   "group": "posts",
+   "name": "index.html: the minutes of the time have two digits",
+   "pass": true,
+   "info": "۹:۰۳ ۱۷:۵۶ ۱۶:۴۹ ۱۵:۴۲ ۱۴:۳۵ ۱۳:۲۸ ۱۲:۲۱ ۱۱:۱۴ ۱۰:۰۷ ۹:۰۰"
+  },
+  {
+   "group": "posts",
+   "name": "index.html: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "post-1.html: every post carries its category",
+   "pass": true,
+   "info": "1 of 1"
+  },
+  {
+   "group": "posts",
+   "name": "post-1.html: no Blogfa tag shows as raw text",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "post-1.html: the time is in Persian digits",
+   "pass": true,
+   "info": "0 with Latin digits"
+  },
+  {
+   "group": "posts",
+   "name": "post-1.html: the minutes of the time have two digits",
+   "pass": true,
+   "info": "۹:۰۰"
+  },
+  {
+   "group": "posts",
+   "name": "post banner links to its category",
+   "pass": true,
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:34317/cat-1.html"
+  },
+  {
+   "group": "posts",
+   "name": "post-1.html: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: every post carries its category",
+   "pass": true,
+   "info": "2 of 2"
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: no Blogfa tag shows as raw text",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: the time is in Persian digits",
+   "pass": true,
+   "info": "0 with Latin digits"
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: the minutes of the time have two digits",
+   "pass": true,
+   "info": "۱۶:۴۹ ۹:۰۰"
+  },
+  {
+   "group": "posts",
+   "name": "category page is titled with its category",
+   "pass": true,
+   "info": "«هوش مصنوعی و داده»"
+  },
+  {
+   "group": "posts",
+   "name": "cat-1.html: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "menu",
+   "name": "archive.html: the realm menu lists the categories",
+   "pass": true,
+   "info": "7 links"
+  },
+  {
+   "group": "menu",
+   "name": "page-about.html: the realm menu lists the categories",
+   "pass": true,
+   "info": "7 links"
+  },
+  {
+   "group": "ad",
+   "name": "desktop: the page measures the ad bar",
+   "pass": true,
+   "info": "--an-ad 123px, bar 123px"
+  },
+  {
+   "group": "ad",
+   "name": "desktop: the footer ends above the ad bar",
+   "pass": true,
+   "info": "footer bottom 777, bar top 777"
+  },
+  {
+   "group": "ad",
+   "name": "desktop: back-to-top button clear of the ad bar",
+   "pass": true,
+   "info": "button bottom 880, bar top 777, side by side"
+  },
+  {
+   "group": "ad",
+   "name": "desktop: the ad stays as Blogfa shows it",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "ad",
+   "name": "phone: the page measures the ad bar",
+   "pass": true,
+   "info": "--an-ad 121px, bar 121px"
+  },
+  {
+   "group": "ad",
+   "name": "phone: the footer ends above the ad bar",
+   "pass": true,
+   "info": "footer bottom 723, bar top 723"
+  },
+  {
+   "group": "ad",
+   "name": "phone: back-to-top button clear of the ad bar",
+   "pass": true,
+   "info": "button bottom 703, bar top 723"
+  },
+  {
+   "group": "ad",
+   "name": "phone: the ad stays as Blogfa shows it",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "about",
+   "name": "desktop: the editor's extra line breaks, empty paragraphs and &nbsp; are gone",
+   "pass": true,
+   "info": "34 <br> added by the editor; left: 0 <br>, 0 empty <p>, 0 &nbsp;"
+  },
+  {
+   "group": "about",
+   "name": "desktop: the page is as tall as the clean one",
+   "pass": true,
+   "info": "clean 3451px, after the editor 3451px"
+  },
+  {
+   "group": "about",
+   "name": "desktop: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "about",
+   "name": "phone: the editor's extra line breaks, empty paragraphs and &nbsp; are gone",
+   "pass": true,
+   "info": "34 <br> added by the editor; left: 0 <br>, 0 empty <p>, 0 &nbsp;"
+  },
+  {
+   "group": "about",
+   "name": "phone: the page is as tall as the clean one",
+   "pass": true,
+   "info": "clean 4132px, after the editor 4132px"
+  },
+  {
+   "group": "about",
+   "name": "phone: no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "spelling",
+   "name": "tag cloud: names show without kashida",
+   "pass": true,
+   "info": "0 of 39 with kashida"
+  },
+  {
+   "group": "spelling",
+   "name": "tag cloud: each tag is named once",
+   "pass": true,
+   "info": "0 repeated"
+  },
+  {
+   "group": "spelling",
+   "name": "tag cloud: the stretched tag keeps the address Blogfa gave it",
+   "pass": true,
+   "info": "tag-D987D8B4D980D980D980D980D980D980D980…"
+  },
+  {
+   "group": "spelling",
+   "name": "month page is titled with its month",
+   "pass": true,
+   "info": "«آبان ۱۴۰۵»"
+  },
+  {
+   "group": "spelling",
+   "name": "tag page at its Blogfa address: titled without kashida",
+   "pass": true,
+   "info": "«برچسب: هش», 1 post(s), title «آینده‌نگار - هش»"
+  },
+  {
+   "group": "spelling",
+   "name": "no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: Vazirmatn comes from the blog's own files, nothing from Google Fonts",
+   "pass": true,
+   "info": "2 face(s) loaded"
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: table of contents says «… بخش، … دقیقه», no «·» next to a digit",
+   "pass": true,
+   "info": "«۶ بخش، ۶ دقیقه»"
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: byline dots only between items on a line",
+   "pass": true,
+   "info": "0 misplaced of 4"
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: chart reference label clear of values and points, right to left",
+   "pass": true,
+   "info": "0 overlap(s)"
+  },
+  {
+   "group": "kit7",
+   "name": "desktop: «برو به آزمایشگاه» carries no stray section number",
+   "pass": true,
+   "info": "none"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: Vazirmatn comes from the blog's own files, nothing from Google Fonts",
+   "pass": true,
+   "info": "2 face(s) loaded"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: table of contents says «… بخش، … دقیقه», no «·» next to a digit",
+   "pass": true,
+   "info": "«۶ بخش، ۶ دقیقه»"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: byline dots only between items on a line",
+   "pass": true,
+   "info": "0 misplaced of 4"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: chart reference label clear of values and points, right to left",
+   "pass": true,
+   "info": "0 overlap(s)"
+  },
+  {
+   "group": "kit7",
+   "name": "phone: «برو به آزمایشگاه» carries no stray section number",
+   "pass": true,
+   "info": "none"
+  },
+  {
+   "group": "kit7",
+   "name": "home: card numbers stand apart from the topic without «·»",
+   "pass": true,
+   "info": "10 cards, first «۰۱ از ایده تا اختراع»"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: on, step bar shown, header and table of contents put away, type at least 24px",
+   "pass": true,
+   "info": "type 28.16px"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: step bar sits above the ad bar",
+   "pass": true,
+   "info": "step bar bottom 614, ad top 630"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: PageDown stops at every section heading",
+   "pass": true,
+   "info": "6 of 6 headings, 24 steps"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: Home goes back to the title",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: Esc in the search window closes only the window",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: Esc leaves, and the article is as before",
+   "pass": true,
+   "info": "type 18px"
+  },
+  {
+   "group": "kit7",
+   "name": "presentation: P turns it on again",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit7",
+   "name": "no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "late-css",
+   "name": "desktop post-6.html: styles from the backup address, page set up, no warning",
+   "pass": true,
+   "info": "backup true, ready true, warning false"
+  },
+  {
+   "group": "late-css",
+   "name": "desktop post-6.html: every canvas drawn at the shape of its box",
+   "pass": true,
+   "info": "banner 1, cards 3; all match"
+  },
+  {
+   "group": "late-css",
+   "name": "desktop index.html: styles from the backup address, page set up, no warning",
+   "pass": true,
+   "info": "backup true, ready true, warning false"
+  },
+  {
+   "group": "late-css",
+   "name": "desktop index.html: every canvas drawn at the shape of its box",
+   "pass": true,
+   "info": "globe 1, cards 10; all match"
+  },
+  {
+   "group": "late-css",
+   "name": "phone post-6.html: styles from the backup address, page set up, no warning",
+   "pass": true,
+   "info": "backup true, ready true, warning false"
+  },
+  {
+   "group": "late-css",
+   "name": "phone post-6.html: every canvas drawn at the shape of its box",
+   "pass": true,
+   "info": "banner 1, cards 3; all match"
+  },
+  {
+   "group": "late-css",
+   "name": "phone index.html: styles from the backup address, page set up, no warning",
+   "pass": true,
+   "info": "backup true, ready true, warning false"
+  },
+  {
+   "group": "late-css",
+   "name": "phone index.html: every canvas drawn at the shape of its box",
+   "pass": true,
+   "info": "globe 1, cards 10; all match"
+  }
+ ]
+}

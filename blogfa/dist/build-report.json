@@ -1,0 +1,222 @@
+{
+  "builtAt": "2026-11-05T23:55:39.173Z",
+  "cdn": {
+    "repo": "fkyitou/mywebsite",
+    "ref": "0005840ca31245874d6bbf7601caca8338578e87",
+    "dir": "blogfa/dist/cdn",
+    "ok": true,
+    "pushed": true,
+    "missing": [],
+    "unverifiedTemplates": false,
+    "mirrors": [
+      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/",
+      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/",
+      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/",
+      "https://rawcdn.githack.com/fkyitou/mywebsite/0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/"
+    ],
+    "files": [
+      {
+        "file": "vazirmatn-arabic.84a382e46c.woff2",
+        "bytes": 46308,
+        "sri": "sha384-C3i2KEfVFwy0pBXx4NtilzSOwJT+ZJuGlUBU/BiLI7cPGfesu7W60ub6iGuwZsyg"
+      },
+      {
+        "file": "vazirmatn-latin-ext.21529facfd.woff2",
+        "bytes": 21860,
+        "sri": "sha384-k/u5fLAis//tB1GghPwHN7VNyk+dsgCUnZpQFrzgje+1SozhYmKmJZA1hABNg3RJ"
+      },
+      {
+        "file": "vazirmatn-latin.d29c041cd4.woff2",
+        "bytes": 34524,
+        "sri": "sha384-TdV45eZ/3Vm1RpNgyb6ZvJkzCSwREAJnuyiX0JE0JDS1Y9tbG0V1/LMiHIxiPNao"
+      },
+      {
+        "file": "an-share.29dab94d6e.jpg",
+        "bytes": 116898,
+        "sri": "sha384-z5Bi81k5iPqSIXmmIAKm2cK3o4yHe4iBzcmSycFBPAszGVUydEeGnRxWtxIPhI0m"
+      },
+      {
+        "file": "an-full.495af90d88.css",
+        "bytes": 87770,
+        "sri": "sha384-lNPvE5uXuLQ+m+2gaDi948VBqTwD9uTlauGsqKUcQd0bzAoP4J8pKhsKOdPNzNZ3"
+      },
+      {
+        "file": "an-post.7bf2715c10.js",
+        "bytes": 225370,
+        "sri": "sha384-cCTUYhXPoBYja+9VH0PKvnr68ZRoFKAQ5Fc89Uyc9+hIdbfotLdvVKYa/USl/7Qf"
+      },
+      {
+        "file": "an-base.f457dad461.css",
+        "bytes": 72357,
+        "sri": "sha384-BW6ACSK7pVMNQTzDn2T5pQpckChzd+XbOQM/QtTRGe9lgbBihCPAVH29FH75ahAw"
+      },
+      {
+        "file": "an-archive.e142cc7506.js",
+        "bytes": 32502,
+        "sri": "sha384-p4S27fXdvXQ73FckUIyoF7gWDX3q02W+ASuqSdJhlWDWNbq82yoX872dZw7x7UtK"
+      },
+      {
+        "file": "an-page.995b4c8acb.js",
+        "bytes": 55038,
+        "sri": "sha384-L3MojV+VsWdam7g+X4mpvx4TyRKBCzbe2NGLj9IddLi9tkFz2kM59GwTqXx2lQav"
+      },
+      {
+        "file": "an-post-lite.a98b976c41.js",
+        "bytes": 167715,
+        "sri": "sha384-stnsIr5qZSYVZ/U/tTU120ICYU80TekEdhsu01rpbtG098KpriFv+ek6ElIXfH5K"
+      },
+      {
+        "file": "an-qr.1952338bb7.js",
+        "bytes": 20434,
+        "sri": "sha384-I8QcCQWYJYnJjMuga5VeMsYk24eSM6jBvbxAXzwNecj04rTZ5v97CC0kDM2TNaOm"
+      },
+      {
+        "file": "an-addons.c1ba7ced11.css",
+        "bytes": 21367,
+        "sri": "sha384-scYOEp9ANOFszjOXl1hKAAaRbh4nqQvTurNla8PORig5ik7EdbCmkyuRkUjWPr0K"
+      },
+      {
+        "file": "an-addons.4b63ae8ae9.js",
+        "bytes": 40474,
+        "sri": "sha384-IfZL7LWiPWWeH1yyksMDxk42eJUvZ5tivBwFOpUQzAnB2N+2HYqpfv/0QEX752Na"
+      }
+    ]
+  },
+  "reports": [
+    {
+      "variant": "full",
+      "cdn": false,
+      "bytes": 592058,
+      "parts": {
+        "post": {
+          "css": 87747,
+          "js": 210559,
+          "html": 337259
+        },
+        "archive": {
+          "css": 72338,
+          "js": 31322,
+          "html": 115256
+        },
+        "page": {
+          "css": 72338,
+          "js": 53022,
+          "html": 139414
+        }
+      },
+      "facts": {
+        "posts": 10,
+        "labs": 10,
+        "sources": 57,
+        "minutes": 64
+      }
+    },
+    {
+      "variant": "lite",
+      "cdn": false,
+      "bytes": 534419,
+      "parts": {
+        "post": {
+          "css": 87747,
+          "js": 152909,
+          "html": 279620
+        },
+        "archive": {
+          "css": 72338,
+          "js": 31322,
+          "html": 115256
+        },
+        "page": {
+          "css": 72338,
+          "js": 53022,
+          "html": 139414
+        }
+      },
+      "facts": {
+        "posts": 10,
+        "labs": 10,
+        "sources": 57,
+        "minutes": 64
+      }
+    },
+    {
+      "variant": "cdn",
+      "cdn": true,
+      "bytes": 54341,
+      "parts": {
+        "post": {
+          "cssFile": "an-full.495af90d88.css",
+          "jsFile": "an-post.7bf2715c10.js",
+          "css": 87747,
+          "js": 210559,
+          "html": 26676
+        },
+        "archive": {
+          "cssFile": "an-base.f457dad461.css",
+          "jsFile": "an-archive.e142cc7506.js",
+          "css": 72338,
+          "js": 31322,
+          "html": 12960
+        },
+        "page": {
+          "cssFile": "an-base.f457dad461.css",
+          "jsFile": "an-page.995b4c8acb.js",
+          "css": 72338,
+          "js": 53022,
+          "html": 14576
+        }
+      },
+      "facts": {
+        "posts": 10,
+        "labs": 10,
+        "sources": 57,
+        "minutes": 64
+      }
+    },
+    {
+      "variant": "cdn-lite",
+      "cdn": true,
+      "bytes": 54367,
+      "parts": {
+        "post": {
+          "cssFile": "an-full.495af90d88.css",
+          "jsFile": "an-post-lite.a98b976c41.js",
+          "css": 87747,
+          "js": 152909,
+          "html": 26702
+        },
+        "archive": {
+          "cssFile": "an-base.f457dad461.css",
+          "jsFile": "an-archive.e142cc7506.js",
+          "css": 72338,
+          "js": 31322,
+          "html": 12960
+        },
+        "page": {
+          "cssFile": "an-base.f457dad461.css",
+          "jsFile": "an-page.995b4c8acb.js",
+          "css": 72338,
+          "js": 53022,
+          "html": 14576
+        }
+      },
+      "facts": {
+        "posts": 10,
+        "labs": 10,
+        "sources": 57,
+        "minutes": 64
+      }
+    }
+  ],
+  "addons": {
+    "css": "an-addons.c1ba7ced11.css",
+    "js": "an-addons.4b63ae8ae9.js",
+    "qr": "an-qr.1952338bb7.js",
+    "box": 2150,
+    "boxWritten": true,
+    "words": {
+      "terms": 54,
+      "keys": 30
+    }
+  }
+}

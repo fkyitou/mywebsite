@@ -1,0 +1,104 @@
+/* ==========================================================================
+   آینده‌نگار · Ayandeh-Negar — custom Blogfa theme
+   Version A «شب» (default: dark, cinematic) · Version B «روز» (light, calm)
+   Text/background pairs meet WCAG AA (≥ 4.5:1); the ratios are listed in docs/06-qa-report.md.
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+  --bg: #04060D; --bg-2: #070B18; --surface: #0B1222; --surface-2: #111A2F; --surface-3: #18233D;
+  --glass: rgba(11, 18, 34, .62); --glass-2: rgba(17, 26, 47, .74);
+  --text: #EDF2FA; --text-2: #C9D3E3; --muted: #9AA8C0; --subtle: #8391AB;
+  --primary: #5B9BFF; --primary-h: #82B4FF; --cyan: #53E0E0; --accent: #FFB36B; --accent-2: #FF8A4C; --on-accent: #1A0E04;
+  --border: #1C2741; --border-2: #27355A; --border-strong: #3F5079;
+  --focus: #FFC27A; --ok: #5FD49A; --warn: #FFC861; --danger: #FF7A7A;
+  --sunrise: linear-gradient(100deg, #FFE2B8 0%, #FFB36B 38%, #FF8A4C 70%, #F25F3A 100%);
+  --atmo: linear-gradient(100deg, #82B4FF, #53E0E0);
+  --glow: 0 0 0 1px rgba(255, 179, 107, .22), 0 18px 50px -18px rgba(255, 138, 76, .45);
+  --shadow: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 28px 60px -28px rgba(0, 0, 0, .8);
+  --r-xs: 6px; --r-s: 10px; --r-m: 16px; --r-l: 24px; --r-xl: 32px; --r-pill: 999px;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px; --s10: 136px;
+  --wrap: 1240px; --read: 720px; --bar-h: 68px; --gut: clamp(16px, 4vw, 40px);
+  --ease: cubic-bezier(.2, .8, .2, 1); --ease-io: cubic-bezier(.65, 0, .35, 1); --spring: cubic-bezier(.34, 1.56, .64, 1);
+  --t-fast: .18s; --t-mid: .36s; --t-slow: .8s;
+  --font: "Vazirmatn", "Vazir", "Tahoma", "Segoe UI", system-ui, sans-serif;
+  --fs-0: .8125rem; --fs-1: .9375rem; --fs-2: 1.0625rem; --fs-3: 1.25rem; --fs-4: 1.5rem;
+  --fs-5: clamp(1.55rem, 1.15rem + 1.6vw, 2.25rem); --fs-6: clamp(1.9rem, 1.2rem + 2.9vw, 3.5rem);
+  --fs-7: clamp(2.2rem, 1.1rem + 4.6vw, 4.8rem); --fs-hero: clamp(3.6rem, 1.2rem + 10.5vw, 10.5rem);
+  --c-ai: #8FB6FF; --c-net: #53E0E0; --c-city: #FFB36B; --c-mind: #E89BFF; --c-space: #FF8A6B; --c-energy: #7FE3A0; --c-idea: #FFD66B; --c-default: #9AA8C0;
+}
+[data-v="b"] {
+  color-scheme: light;
+  --bg: #F6F8FB; --bg-2: #EEF2F7; --surface: #FFFFFF; --surface-2: #F3F6FA; --surface-3: #E8EDF4;
+  --glass: rgba(255, 255, 255, .78); --glass-2: rgba(255, 255, 255, .9);
+  --text: #0B1426; --text-2: #24324D; --muted: #4A5872; --subtle: #5A6782;
+  --primary: #1F5FD1; --primary-h: #174BA8; --cyan: #0A7070; --accent: #B4530F; --accent-2: #A2440A; --on-accent: #FFFFFF;
+  --border: #D8DFEA; --border-2: #C9D3E1; --border-strong: #8A97AE; --focus: #1F5FD1;
+  --ok: #1C7C4F; --warn: #8A5A00; --danger: #B42318;
+  --sunrise: linear-gradient(100deg, #C2410C, #B4530F 55%, #9A3412);
+  --glow: 0 0 0 1px rgba(31, 95, 209, .18), 0 18px 40px -20px rgba(31, 95, 209, .35);
+  --shadow: 0 1px 2px rgba(11, 20, 38, .06), 0 18px 40px -24px rgba(11, 20, 38, .25);
+  --c-ai: #1F5FD1; --c-net: #0A7070; --c-city: #B4530F; --c-mind: #8E3DB0; --c-space: #B4402A; --c-energy: #1C7C4F; --c-idea: #8A5A00; --c-default: #4A5872;
+}
+
+/* ---------- reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+/* body stays transparent so the fixed sky (08-sky.css) shows through; html keeps the base colour */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--bar-h) + 16px); background: var(--bg); }
+body { margin: 0; min-height: 100vh; background: transparent; color: var(--text); font-family: var(--font); font-size: var(--fs-2); line-height: 1.95; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img, svg, canvas, video, iframe { display: block; max-width: 100%; }
+svg:not([fill]) { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+a { color: var(--primary-h); text-decoration: none; text-underline-offset: .28em; }
+a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+/* :where() keeps this at element weight, so buttons and other classed links keep their own colours. */
+:where([data-v="b"]) a { color: var(--primary); }
+p, ul, ol, dl, blockquote, figure { margin: 0 0 1.1em; }
+/* no word left alone on the last line of a paragraph, in browsers that support it (others wrap as before) */
+p, li, figcaption { text-wrap: pretty; }
+h1, h2, h3, h4 { line-height: 1.35; margin: 0 0 .6em; font-weight: 800; letter-spacing: -.01em; text-wrap: balance; }
+b, strong { font-weight: 700; }
+small { font-size: .8em; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
+::selection { background: rgba(255, 179, 107, .32); color: var(--text); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+kbd { font-family: var(--font); font-size: .72em; padding: .1em .45em; border-radius: 5px; border: 1px solid var(--border-2); background: var(--surface-2); color: var(--muted); direction: ltr; unicode-bidi: isolate; }
+.an-sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.an-skip { position: fixed; inset-inline-start: 12px; top: -60px; z-index: 100; padding: 10px 16px; border-radius: var(--r-s); background: var(--accent); color: var(--on-accent); font-weight: 700; transition: top var(--t-fast); }
+.an-skip:focus { top: 12px; text-decoration: none; }
+.an-main { outline: none; }
+
+/* ---------- buttons, chips ---------- */
+.an-btn { --pad: .78em 1.35em; display: inline-flex; align-items: center; gap: .55em; padding: var(--pad); border-radius: var(--r-pill); border: 1px solid transparent; font-weight: 700; font-size: var(--fs-1); line-height: 1.2; transition: transform var(--t-fast) var(--ease), background var(--t-mid), box-shadow var(--t-mid), border-color var(--t-mid), color var(--t-mid); will-change: transform; }
+.an-btn:hover { text-decoration: none; }
+.an-btn svg { width: 18px; height: 18px; flex: none; }
+.an-btn-primary { background: var(--sunrise); color: var(--on-accent); box-shadow: 0 10px 30px -10px rgba(255, 138, 76, .7), inset 0 1px 0 rgba(255, 255, 255, .45); }
+.an-btn-primary:hover { box-shadow: 0 14px 40px -12px rgba(255, 138, 76, .9), inset 0 1px 0 rgba(255, 255, 255, .5); color: var(--on-accent); }
+[data-v="b"] .an-btn-primary { box-shadow: 0 10px 24px -12px rgba(180, 83, 15, .55); }
+.an-btn-ghost { background: var(--glass); border-color: var(--border-2); color: var(--text); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.an-btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+.an-btn-sm { --pad: .5em 1em; font-size: var(--fs-0); }
+.an-btn:active { transform: scale(.97); }
+.an-ico-btn { display: inline-grid; place-items: center; grid-auto-flow: column; gap: 6px; min-width: 40px; height: 40px; padding: 0 10px; border-radius: var(--r-pill); border: 1px solid var(--border-2); background: var(--glass); color: var(--text); transition: border-color var(--t-fast), background var(--t-fast); }
+.an-ico-btn:hover { border-color: var(--accent); }
+.an-ico-btn svg { width: 19px; height: 19px; }
+.an-link-btn { background: none; border: 0; padding: 0; color: var(--primary-h); font-size: inherit; }
+[data-v="b"] .an-link-btn { color: var(--primary); }
+.an-link-btn:hover { text-decoration: underline; }
+.an-chip { display: inline-flex; align-items: center; gap: .4em; padding: .22em .8em; border-radius: var(--r-pill); font-size: var(--fs-0); font-weight: 700; line-height: 1.6; border: 1px solid color-mix(in srgb, var(--rc, var(--accent)) 45%, transparent); color: var(--rc, var(--accent)); background: color-mix(in srgb, var(--rc, var(--accent)) 10%, transparent); }
+.an-chip:empty { display: none; }
+.an-eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 var(--s3); color: var(--accent); font-size: var(--fs-0); font-weight: 800; letter-spacing: .02em; }
+.an-eyebrow::before { content: ""; width: 26px; height: 2px; border-radius: 2px; background: var(--sunrise); }
+
+/* ---------- progress, toast, reveal ---------- */
+.an-progress { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 60; pointer-events: none; }
+.an-progress i { display: block; height: 100%; width: 100%; background: var(--sunrise); transform-origin: right; transform: scaleX(var(--p, 0)); }
+/* Centred by its own width, up to the screen less 16px a side (it was held to half the screen by its old offset and
+   wrapped a long message into a tall blob on a phone). A 22px radius is a pill for one line, a soft box for two. */
+.an-toast { position: fixed; z-index: 90; inset-inline: 0; bottom: 24px; width: max-content; max-width: calc(100% - 32px); margin-inline: auto; transform: translateY(140%); padding: 10px 18px; border-radius: 22px; background: var(--surface-3); color: var(--text); border: 1px solid var(--border-2); box-shadow: var(--shadow); font-size: var(--fs-1); font-weight: 600; text-align: center; opacity: 0; transition: transform var(--t-mid) var(--ease), opacity var(--t-mid); pointer-events: none; }
+.an-toast.on { transform: none; opacity: 1; }
+.an-js .an-rv { opacity: 0; transform: translateY(26px); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: var(--d, 0s); }
+.an-js .an-rv.in { opacity: 1; transform: none; }
+/* room for Blogfa's fixed ad bar at the bottom of the page; core.js measures its height into --an-ad */
+body::after { content: ""; display: block; height: var(--an-ad, 0px); }
+.an-toast { bottom: calc(24px + var(--an-ad, 0px)); }

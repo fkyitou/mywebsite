@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راهنمای انتشار مقاله‌ها · آینده‌نگار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&amp;display=swap">
+<style>:root { color-scheme: dark; --bg: #04060D; --surface: #0B1222; --surface-2: #111A2F; --line: #1C2741; --text: #EDF2FA; --muted: #9AA8C0; --link: #8FD3FF; --accent: #FFB36B;
+  --font: Vazirmatn, Tahoma, "Segoe UI", sans-serif; --mono: ui-monospace, "Cascadia Code", Consolas, monospace; }
+@media (prefers-color-scheme: light) { :root { color-scheme: light; --bg: #F6F8FB; --surface: #FFFFFF; --surface-2: #EEF2F8; --line: #D8E0EC; --text: #0E1626; --muted: #4A5872; --link: #0B5CAD; --accent: #A04A00; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.95; direction: rtl; }
+.top { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); font-size: 14px; }
+.top b { font-weight: 800; margin-inline-end: auto; }
+main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 1.9rem; line-height: 1.5; margin: .4em 0 .6em; }
+h2 { font-size: 1.35rem; margin: 2em 0 .6em; padding-top: .6em; border-top: 1px solid var(--line); }
+h3 { font-size: 1.1rem; margin: 1.6em 0 .4em; }
+a { color: var(--link); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+code { font-family: var(--mono); font-size: .88em; padding: 1px 6px; border-radius: 6px; background: var(--surface-2); direction: ltr; unicode-bidi: isolate; }
+pre { direction: ltr; text-align: left; overflow-x: auto; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); line-height: 1.6; }
+pre code { padding: 0; background: none; }
+.tbl { overflow-x: auto; margin: 1em 0; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { padding: 8px 12px; border-bottom: 1px solid var(--line); text-align: right; vertical-align: top; }
+th { background: var(--surface-2); font-weight: 700; }
+tr:last-child td { border-bottom: 0; }
+blockquote { margin: 1em 0; padding: 4px 16px; border-inline-start: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; color: var(--muted); }
+li { margin: .2em 0; }
+nav.docs { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+nav.docs ol { padding-inline-start: 1.4em; }
+nav.docs [aria-current] { color: var(--text); font-weight: 700; text-decoration: none; }</style>
+</head>
+<body>
+<header class="top"><b>آینده‌نگار · راهنماها</b><a href="../../kit.html">کیت نصب</a><a href="../03-publishing-guide.md">متن Markdown</a></header>
+<main>
+<h1 id="راهنمای-انتشار-مقالهها">راهنمای انتشار مقاله‌ها</h1>
+<p>ده مقاله‌ی آینده‌نگار در پوشه‌ی <code>posts</code> آماده‌اند. هر فایل با یک توضیح پنهان شروع می‌شود که عنوان، موضوع و برچسب‌های مقاله را دارد و بقیه‌اش متن مقاله به‌شکل HTML است. ساده‌ترین راه انتشار، <code>kit.html</code> است: برای هر مقاله دکمه‌ی کپی عنوان، متن، موضوع و تک‌تک برچسب‌ها را دارد و متن را بدون آن توضیح پنهان کپی می‌کند.</p>
+<h2 id="فهرست-مقالهها">فهرست مقاله‌ها</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>عنوان</th>
+<th>موضوع</th>
+<th>برچسب‌ها</th>
+<th>آزمایشگاه زنده</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>۱</td>
+<td>هوش مصنوعی چطور یاد می‌گیرد؟</td>
+<td>هوش مصنوعی و داده</td>
+<td>هوش مصنوعی، یادگیری ماشین، شبکه عصبی، داده</td>
+<td>یک شبکه‌ی عصبی واقعی را خودت آموزش بده</td>
+</tr>
+<tr>
+<td>۲</td>
+<td>اینترنت اشیا: وقتی یخچال هم آی‌پی دارد</td>
+<td>شبکه و امنیت</td>
+<td>اینترنت اشیا، امنیت شبکه، خانه هوشمند، بات‌نت</td>
+<td>خانه‌ی هوشمندت در برابر یک بات‌نت</td>
+</tr>
+<tr>
+<td>۳</td>
+<td>شهر هوشمند: چراغ راهنمایی که فکر می‌کند</td>
+<td>شهر و معماری</td>
+<td>شهر هوشمند، ترافیک، حسگر، شهرسازی</td>
+<td>چراغ راهنمای ثابت یا هوشمند؟</td>
+</tr>
+<tr>
+<td>۴</td>
+<td>امنیت دیجیتال: رمز عبورت چند ثانیه دوام می‌آورد؟</td>
+<td>شبکه و امنیت</td>
+<td>امنیت سایبری، رمز عبور، تأیید دومرحله‌ای، هش</td>
+<td>آزمایشگاه رمز: قدرت رمز و کدهای یک‌بارمصرف</td>
+</tr>
+<tr>
+<td>۵</td>
+<td>مغز چطور یاد می‌گیرد و چرا فراموش می‌کند؟</td>
+<td>ذهن و یادگیری</td>
+<td>مغز، حافظه، یادگیری، روش مطالعه</td>
+<td>منحنی فراموشی: مرور فشرده یا مرور با فاصله؟</td>
+</tr>
+<tr>
+<td>۶</td>
+<td>زندگی روی مریخ: از رؤیا تا محاسبه</td>
+<td>فضا و کشف</td>
+<td>مریخ، فضا، ناسا، اکتشاف فضایی</td>
+<td>مأموریت مریخ: از مدار زنده تا زندگی روی سیاره‌ی سرخ</td>
+</tr>
+<tr>
+<td>۷</td>
+<td>معماری آینده: برج‌هایی که با باد کنار می‌آیند</td>
+<td>شهر و معماری</td>
+<td>معماری، آسمان‌خراش، طراحی پارامتریک، مهندسی سازه</td>
+<td>برج پارامتریک خودت را طراحی کن</td>
+</tr>
+<tr>
+<td>۸</td>
+<td>الگوریتم‌ها: چه کسی فید تو را می‌چیند؟</td>
+<td>هوش مصنوعی و داده</td>
+<td>الگوریتم، شبکه‌های اجتماعی، سواد رسانه‌ای، داده</td>
+<td>الگوریتم فید را خودت تنظیم کن</td>
+</tr>
+<tr>
+<td>۹</td>
+<td>انرژی پاک: یک روز از زندگی شبکه‌ی برق</td>
+<td>انرژی و زمین</td>
+<td>انرژی پاک، خورشید، باد، شبکه‌ی برق</td>
+<td>یک روزِ شبکه‌ی برق شهر را خودت مدیریت کن</td>
+</tr>
+<tr>
+<td>۱۰</td>
+<td>از جرقه تا اختراع: ایده‌ها چطور به دنیا می‌آیند؟</td>
+<td>ایده و خلاقیت</td>
+<td>خلاقیت، اختراع، نوآوری، اسکمپر</td>
+<td>کارگاه ایده: از جرقه تا اختراع</td>
+</tr>
+</tbody></table></div>
+<p>فایل‌ها به ترتیب: <code>posts/01-ai.html</code>، <code>02-iot.html</code>، <code>03-city.html</code>، <code>04-security.html</code>، <code>05-brain.html</code>، <code>06-space.html</code>، <code>07-arch.html</code>، <code>08-algo.html</code>، <code>09-energy.html</code> و <code>10-idea.html</code>.</p>
+<h2 id="انتشار-هر-مقاله">انتشار هر مقاله</h2>
+<ol>
+<li>در منوی پنل بلاگفا «نوشته جدید» را باز کنید.</li>
+<li><strong>عنوان</strong> را کپی کنید و در کادر «عنوان» بگذارید. عنوان را تغییر ندهید: قالب موضوع، رنگ و آزمایشگاه هر مقاله را از واژه‌های عنوانش هم تشخیص می‌دهد.</li>
+<li><strong>متن:</strong> در نوار ابزار ویرایشگر دکمه‌ی «منبع» را بزنید تا کد متن دیده شود، هر چه در آن هست پاک کنید و متن مقاله را همان‌جا جای‌گذاری کنید. اگر متن را در حالت عادی ویرایشگر جای‌گذاری کنید، کدها به‌شکل نوشته دیده می‌شوند.</li>
+<li><strong>موضوع:</strong> زیر ویرایشگر، زبانه‌ی «موضوع نوشته» را باز کنید و موضوع را انتخاب کنید. اگر در فهرست نیست، اول آن را در «تعاریف موضوعات» بسازید.</li>
+<li><strong>برچسب‌ها:</strong> در زبانه‌ی «برچسب‌ها»، در کادر «برچسب‌های نوشته» بگذارید. بلاگفا برچسب‌ها را با <code>,</code> یا <code>+</code> جدا می‌کند و حداکثر چهار برچسب می‌پذیرد؛ دکمه‌ی «کپی همه» در <code>kit.html</code> همین شکل را کپی می‌کند.</li>
+<li>کادر <strong>«ادامه نوشته (متن تکمیلی برای نوشته های طولانی)»</strong> را خالی بگذارید. قالب در صفحه‌ی اول از هر مقاله فقط یک کارت با خلاصه نشان می‌دهد و متن کامل را در صفحه‌ی خود مقاله؛ تقسیم متن لازم نیست.</li>
+<li>گزینه‌ی <strong>«ثبت موقت و عدم نمایش در وبلاگ»</strong> را نزنید، وگرنه مقاله منتشر نمی‌شود.</li>
+<li><strong>«ثبت نوشته و انتشار»</strong> را بزنید.</li>
+</ol>
+<p>زبانه‌های «نحوه نظردهی»، «زمان نوشته» و «رمز نوشته» را دست نزنید.</p>
+<p>اگر روش دستی را ترجیح می‌دهید: فایل مقاله را با Notepad باز کنید، از اولین خط بعد از <code>--&gt;</code> تا آخر فایل را کپی کنید و عنوان، موضوع و برچسب‌ها را از سه خط اول فایل بردارید. اگر آن توضیح پنهان هم همراه متن جای‌گذاری شد، اشکالی ندارد، چون در صفحه دیده نمی‌شود.</p>
+<h2 id="ترتیب-انتشار">ترتیب انتشار</h2>
+<p>مقاله‌ها را به ترتیب ۱ تا ۱۰ منتشر کنید.</p>
+<ul>
+<li>پیوندهای «روایت قبلی» و «روایت بعدی» پایین هر مقاله بر اساس زمان انتشار چیده می‌شوند؛ با این ترتیب، از هوش مصنوعی تا اختراع پشت سر هم خوانده می‌شوند.</li>
+<li>صفحه‌ی اول تازه‌ترین مقاله را بزرگ‌تر و به‌عنوان مقاله‌ی ویژه نشان می‌دهد. با این ترتیب مقاله‌ی ۱۰، «از جرقه تا اختراع»، ویژه می‌شود. اگر می‌خواهید مقاله‌ی دیگری ویژه باشد، آن را آخر از همه منتشر کنید.</li>
+<li>مقاله‌ها با پیوندهای درون‌متنی به هم وصل‌اند، مثل پیوند مقاله‌ی انرژی به «شهر هوشمند». این پیوندها با عنوان مقاله‌ها پیدا می‌شوند و وقتی همه‌ی ده مقاله منتشر شدند، همه کار می‌کنند. تا آن موقع، پیوند به مقاله‌ای که هنوز منتشر نشده به فهرست همه‌ی نوشته‌ها می‌رود.</li>
+</ul>
+<h2 id="بررسی-بعد-از-مقالهی-۱">بررسی بعد از مقاله‌ی ۱</h2>
+<p>پیش از انتشار بقیه، مقاله‌ی ۱ را باز کنید:</p>
+<ul>
+<li>باید سرصفحه‌ی تصویری، زمان مطالعه، فهرست مطالب، نمودار «خطای برندگان مسابقه‌ی ImageNet» و کادر «آزمایشگاه زنده» را ببینید.</li>
+<li>در آزمایشگاه، شبکه‌ی عصبی باید با زدن دکمه‌ی آموزش شروع به یادگیری کند.</li>
+<li>اگر متن مقاله را می‌بینید ولی نمودار و آزمایشگاه نیستند، احتمالاً ویرایشگر بخشی از کد را حذف کرده است. مطلب را باز کنید، دکمه‌ی «منبع» را بزنید و ببینید عبارت <code>class=&quot;an-lab an-lab-ai&quot;</code> مانده است یا نه، و بخش عیب‌یابی <a href="01-install-guide.html">راهنمای نصب</a> را ببینید.</li>
+</ul>
+<h2 id="ویرایش-مقالهی-منتشرشده">ویرایش مقاله‌ی منتشرشده</h2>
+<p>مطلب را از «نوشته‌های پیشین» در منوی پنل باز کنید، دکمه‌ی «منبع» را بزنید، تغییر را بدهید و ذخیره کنید. برای جایگزینی کامل، همه‌ی متن را پاک و متن تازه را جای‌گذاری کنید.</p>
+<h2 id="تصویرهای-اختیاری">تصویرهای اختیاری</h2>
+<p>قالب برای هر مقاله خودش تصویر سرصفحه و کارت می‌کشد و به بارگذاری عکس نیازی نیست. تصویرهای پوشه‌ی <code>assets</code> برای کارهای دیگرند:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>پوشه</th>
+<th>چیست</th>
+<th>کاربرد پیشنهادی</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>assets/logo</code></td>
+<td>نشانه‌ی آینده‌نگار به‌شکل SVG، تصویر ۵۱۲ در ۵۱۲ و نسخه‌ی پهن ۱۲۰۰ در ۴۰۰</td>
+<td>تصویر پروفایل وبلاگ، ارائه‌ی کلاسی</td>
+</tr>
+<tr>
+<td><code>assets/covers</code></td>
+<td>یک تصویر ۱۶۰۰ در ۱۰۰۰ برای هر مقاله، با همان طرح سرصفحه‌ی آن</td>
+<td>ارائه یا گزارش. اگر در متن مقاله بگذارید، کنار سرصفحه‌ی خود قالب تکراری می‌شود.</td>
+</tr>
+<tr>
+<td><code>assets/social</code></td>
+<td>یک کارت ۱۲۰۰ در ۶۳۰ برای هر مقاله و یکی برای کل وبلاگ، با نام سازنده</td>
+<td>فرستادن همراه پیوند مقاله در پیام‌رسان‌ها و گروه کلاس</td>
+</tr>
+</tbody></table></div>
+<p>همه‌ی این تصویرها با کد همین پروژه ساخته شده‌اند (<code>tools/assets.mjs</code>) و حق استفاده‌شان با خود شماست.</p>
+<h2 id="نوشتن-مقالهی-تازه">نوشتن مقاله‌ی تازه</h2>
+<p>اگر بعدها مقاله‌ی تازه‌ای نوشتید، می‌توانید در ویرایشگر عادی بنویسید؛ قالب برایش کارت، سرصفحه، زمان مطالعه و فهرست مطالب می‌سازد. برای استفاده از کادرها و نمودارهای آینده‌نگار، این قطعه‌ها را پس از زدن دکمه‌ی «منبع» به کار ببرید:</p>
+<p><strong>پاراگراف آغازین و پرسش اصلی</strong></p>
+<pre><code class="language-html">&lt;p class=&quot;an-lead&quot;&gt;نخستین پاراگراف که بزرگ‌تر نمایش داده می‌شود.&lt;/p&gt;
+&lt;p class=&quot;an-q&quot;&gt;پرسشی که مقاله به آن جواب می‌دهد؟&lt;/p&gt;
+</code></pre>
+<p><strong>تیترها:</strong> برای بخش‌های اصلی <code>&lt;h2&gt;</code> و برای زیربخش‌ها <code>&lt;h3&gt;</code>. فهرست مطالب از تیترهای <code>&lt;h2&gt;</code> ساخته می‌شود.</p>
+<p><strong>برچسب سطح شاهد</strong> (بعد از جمله‌ی ادعا)</p>
+<pre><code class="language-html">&lt;span class=&quot;an-ev an-ev-4&quot;&gt;اندازه‌گیری‌شده&lt;/span&gt;
+&lt;span class=&quot;an-ev an-ev-3&quot;&gt;نظریه‌ی پذیرفته&lt;/span&gt;
+&lt;span class=&quot;an-ev an-ev-2&quot;&gt;فرضیه&lt;/span&gt;
+&lt;span class=&quot;an-ev an-ev-1&quot;&gt;گمانه‌زنی&lt;/span&gt;
+</code></pre>
+<p>برچسب فقط برای ادعایی است که منبع دارد؛ تعریف‌ها و حساب‌های خودتان برچسب نمی‌خواهند.</p>
+<p><strong>کادرها</strong></p>
+<pre><code class="language-html">&lt;div class=&quot;an-simple&quot;&gt;&lt;p class=&quot;an-box-t&quot;&gt;به زبان ساده&lt;/p&gt;&lt;p&gt;توضیح ساده.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;an-myth&quot;&gt;&lt;p class=&quot;an-box-t&quot;&gt;باور نادرست&lt;/p&gt;&lt;p&gt;باور رایج و پاسخ آن.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;an-fact&quot;&gt;&lt;p class=&quot;an-box-t&quot;&gt;یک واقعیت&lt;/p&gt;&lt;p&gt;یک واقعیت جالب با منبع.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;an-keys&quot;&gt;&lt;p class=&quot;an-box-t&quot;&gt;نکته‌های کلیدی&lt;/p&gt;&lt;ul&gt;&lt;li&gt;نکته‌ی اول&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+</code></pre>
+<p><strong>نمودار:</strong> یک جدول داده که قالب از آن نمودار می‌کشد. نوع نمودار در <code>data-chart</code> می‌آید: <code>bar</code> (ستونی)، <code>hbar</code> (میله‌ای افقی) یا <code>line</code> (خطی). عددها را با همان دقتی بنویسید که منبع گزارش کرده است.</p>
+<pre><code class="language-html">&lt;table class=&quot;an-data an-chart-hbar&quot; data-chart=&quot;hbar&quot; data-unit=&quot;٪&quot; data-title=&quot;عنوان نمودار&quot;&gt;
+&lt;caption&gt;توضیح نمودار و منبع عددها.&lt;/caption&gt;
+&lt;thead&gt;&lt;tr&gt;&lt;th&gt;دسته&lt;/th&gt;&lt;th&gt;مقدار&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;الف&lt;/td&gt;&lt;td&gt;۳۳٫۰&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;ب&lt;/td&gt;&lt;td&gt;۲۱٫۸&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p>اگر مرورگر خواننده جاوااسکریپت را اجرا نکند، همین جدول به‌شکل جدول ساده نمایش داده می‌شود.</p>
+<p><strong>نقل‌قول</strong></p>
+<pre><code class="language-html">&lt;blockquote&gt;&lt;p&gt;«متن نقل‌قول»&lt;/p&gt;&lt;cite&gt;گوینده، منبع&lt;/cite&gt;&lt;/blockquote&gt;
+</code></pre>
+<p><strong>پیوند به مقاله‌ای دیگر</strong> (نشانی با عنوان مقاله پیدا می‌شود؛ <code>data-topic</code> یکی از <code>ai</code>، <code>iot</code>، <code>city</code>، <code>security</code>، <code>brain</code>، <code>space</code>، <code>arch</code>، <code>algo</code>، <code>energy</code> یا <code>idea</code> است)</p>
+<pre><code class="language-html">&lt;a class=&quot;an-xref an-to-city&quot; data-topic=&quot;city&quot; href=&quot;/posts/&quot;&gt;شهر هوشمند&lt;/a&gt;
+</code></pre>
+<p><strong>آزمایشگاه:</strong> هر کدام از ده آزمایشگاه را می‌شود در مقاله‌ی تازه هم گذاشت. متن داخل کادر فقط وقتی دیده می‌شود که آزمایشگاه بارگذاری نشده باشد.</p>
+<pre><code class="language-html">&lt;div class=&quot;an-lab an-lab-energy&quot;&gt;&lt;p&gt;اینجا آزمایشگاه زنده‌ی این مقاله است.&lt;/p&gt;&lt;/div&gt;
+</code></pre>
+<p><strong>منابع</strong> (همیشه در پایان مقاله)</p>
+<pre><code class="language-html">&lt;div class=&quot;an-sources&quot;&gt;&lt;p class=&quot;an-box-t&quot;&gt;منابع&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;نویسنده (سال). عنوان. &lt;a href=&quot;https://...&quot;&gt;نام سایت&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/div&gt;
+</code></pre>
+<p><strong>واژه‌ی تخصصی با توضیح</strong></p>
+<pre><code class="language-html">&lt;abbr title=&quot;توضیح کوتاه واژه&quot;&gt;واژه‌ی تخصصی&lt;/abbr&gt;
+</code></pre>
+<p>قالب موضوع هر مقاله را اول از آزمایشگاه داخل آن و بعد از واژه‌های عنوانش تشخیص می‌دهد؛ مثلاً عنوانی که «انرژی» دارد، رنگ و نماد انرژی می‌گیرد.</p>
+<p>پیش از انتشار مقاله‌ی تازه می‌توانید آن را در شبیه‌ساز محلی ببینید: فایل را با همین ساختار در <code>posts</code> بگذارید و <code>node tools/preview.mjs</code> را اجرا کنید (راهنمای سازندگان در <code>README.md</code>).</p>
+
+<nav class="docs" aria-label="همه‌ی راهنماها"><ol><li><a href="01-install-guide.html">راهنمای نصب گام‌به‌گام آینده‌نگار روی بلاگفا</a></li><li><a href="02-settings-guide.html">تنظیمات پیشنهادی وبلاگ</a></li><li><a href="03-publishing-guide.html" aria-current="page">راهنمای انتشار مقاله‌ها</a></li><li><a href="04-sources-report.html">گزارش پژوهش و منابع</a></li><li><a href="05-decision-log.html">دفتر تصمیم‌ها (Decision Log)</a></li><li><a href="06-qa-report.html">گزارش کنترل کیفیت (QA)</a></li><li><a href="07-traceability-matrix.html">ماتریس ردیابی الزامات</a></li><li><a href="08-final-report.html">گزارش نهایی پروژه‌ی آینده‌نگار</a></li><li><a href="09-audit-report.html">گزارش ممیزی کامل پروژه</a></li></ol></nav>
+</main>
+</body>
+</html>
