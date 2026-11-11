@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-05T18:00:44.593Z",
+  "at": "2026-11-06T00:03:23.699Z",
   "axe": [
     {
       "run": "desktop/a index.html",
@@ -7,7 +7,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 173
+          "n": 86
         },
         {
           "id": "link-in-text-block",
@@ -22,7 +22,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 118
+          "n": 128
         },
         {
           "id": "link-in-text-block",
@@ -37,7 +37,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 111
+          "n": 121
         },
         {
           "id": "link-in-text-block",
@@ -52,7 +52,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 118
+          "n": 128
         },
         {
           "id": "link-in-text-block",
@@ -67,7 +67,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 132
+          "n": 143
         },
         {
           "id": "link-in-text-block",
@@ -134,7 +134,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 116
+          "n": 126
         },
         {
           "id": "link-in-text-block",
@@ -149,7 +149,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 110
+          "n": 120
         },
         {
           "id": "link-in-text-block",
@@ -164,7 +164,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 117
+          "n": 127
         },
         {
           "id": "link-in-text-block",
@@ -179,7 +179,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 131
+          "n": 142
         },
         {
           "id": "link-in-text-block",
@@ -246,7 +246,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 163
+          "n": 174
         },
         {
           "id": "link-in-text-block",
@@ -276,7 +276,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 161
+          "n": 172
         },
         {
           "id": "link-in-text-block",
@@ -291,7 +291,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 116
+          "n": 126
         },
         {
           "id": "link-in-text-block",
@@ -306,7 +306,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 164
+          "n": 174
         },
         {
           "id": "link-in-text-block",
@@ -336,7 +336,7 @@
         "visible": true
       },
       "hash": "#an-main",
-      "distinctStops": 48,
+      "distinctStops": 47,
       "ok": true
     }
   ],

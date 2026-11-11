@@ -1,0 +1,279 @@
+{
+ "generated": "2026-11-06T00:11:30.217Z",
+ "browser": "Chromium (Playwright)",
+ "box": "dist/box-local.html",
+ "passed": 45,
+ "failed": 0,
+ "results": [
+  {
+   "group": "article",
+   "name": "post: toolkit loaded (html.an-x-on, AN.x.v=8)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "post: header button first in the tools",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "post: custom box takes no room",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "post: keys list has R/F/Q",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "panel: opens as dialog with 4 themes",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "panel: focus moved into the dialog",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "theme paper: tone, version B, theme-color, saved",
+   "pass": true,
+   "info": "{\"tone\":\"paper\",\"v\":\"b\",\"tc\":\"#F5EEDC\",\"bg\":\"#F5EEDC\",\"saved\":\"paper\"}"
+  },
+  {
+   "group": "article",
+   "name": "theme contrast: tone, version A, black theme-color, sky hidden",
+   "pass": true,
+   "info": "{\"tone\":\"contrast\",\"v\":\"a\",\"tc\":\"#000000\",\"sky\":\"none\"}"
+  },
+  {
+   "group": "article",
+   "name": "text size: two steps up = 125%",
+   "pass": true,
+   "info": "{\"v\":\"1.25\",\"out\":\"۱۲۵٪\",\"px\":\"22.5px\"}"
+  },
+  {
+   "group": "article",
+   "name": "Escape closes the panel",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "template A/B switch ends the contrast theme",
+   "pass": true,
+   "info": "{\"tone\":null,\"v\":\"b\",\"saved\":\"\"}"
+  },
+  {
+   "group": "article",
+   "name": "R opens the panel",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "R closes it again",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "F: focus mode on, contents hidden",
+   "pass": true,
+   "info": "{\"attr\":true,\"toc\":\"none\"}"
+  },
+  {
+   "group": "article",
+   "name": "F again: focus mode off",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "listen: button shown for an on-device Persian voice",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "listen: player bar, sentences spoken, paragraph highlighted",
+   "pass": true,
+   "info": "{\"bar\":true,\"said\":17,\"hl\":true}"
+  },
+  {
+   "group": "article",
+   "name": "listen: stop hides the player",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "mark: saved with title",
+   "pass": true,
+   "info": "{\"u\":\"/post-1.html\",\"h\":\"http://127.0.0.1:45303/post-1.html\",\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"k\":\"ai\",\"at\":1793923868666}"
+  },
+  {
+   "group": "article",
+   "name": "ruler: on, follows the pointer",
+   "pass": true,
+   "info": "{\"hidden\":false,\"y\":\"500px\",\"h\":\"109px\"}"
+  },
+  {
+   "group": "article",
+   "name": "QR: decodes to this page address",
+   "pass": true,
+   "info": "{\"got\":\"http://127.0.0.1:45303/post-1.html\",\"want\":\"http://127.0.0.1:45303/post-1.html\"}"
+  },
+  {
+   "group": "article",
+   "name": "QR: the code as drawn on screen decodes too",
+   "pass": true,
+   "info": "http://127.0.0.1:45303/post-1.html"
+  },
+  {
+   "group": "article",
+   "name": "cite: APA text with author, blog and address",
+   "pass": true,
+   "info": "همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:45303/post-1.html"
+  },
+  {
+   "group": "article",
+   "name": "quiz: 2 to 5 questions after the article",
+   "pass": true,
+   "info": "{\"n\":5,\"kinds\":[\"an-x-q-t\",\"an-x-q-m\",\"an-x-q-t\",\"an-x-q-t\",\"an-x-q-k\"]}"
+  },
+  {
+   "group": "article",
+   "name": "quiz: scored, feedback on each, result saved, right answer marked",
+   "pass": true,
+   "info": "{\"score\":\"۰ از ۵ درست. پاسخ‌ها در متن همین مقاله‌اند (روی هر واژه‌ی نقطه‌چین بزنید تا تعریفش را ببینید). دوباره امتحان کنید.\",\"fb\":true,\"saved\":{\"ai\":{\"s\":0,\"n\":5,\"full\":false}},\"ok\":5}"
+  },
+  {
+   "group": "article",
+   "name": "quiz: «new questions» rebuilds the form",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "passport: stamp after reading to the end",
+   "pass": true,
+   "info": "{\"read\":{\"ai\":{\"id\":\"1\",\"u\":\"/post-1.html\",\"h\":\"http://127.0.0.1:45303/post-1.html\",\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"at\":1793923871845}},\"seal\":\"an-x-seal stamp\"}"
+  },
+  {
+   "group": "article",
+   "name": "resume: reading position saved",
+   "pass": true,
+   "info": "{\"1\":{\"i\":2,\"d\":680,\"f\":0.472,\"at\":1793923878063}}"
+  },
+  {
+   "group": "article",
+   "name": "resume: bar offered on the next visit",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "resume: «continue» scrolls down the article",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "panel: passport shows 1 stamp, 1 mark",
+   "pass": true,
+   "info": "{\"on\":1,\"marks\":1}"
+  },
+  {
+   "group": "article",
+   "name": "home: read and marked badges on the card",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "wipe: all toolkit data removed",
+   "pass": true,
+   "info": "[null,null,null,null,null]"
+  },
+  {
+   "group": "article",
+   "name": "post/home: no console errors",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "early.js: saved paper theme set before the first paint",
+   "pass": true,
+   "info": "{\"tone\":\"paper\",\"v\":\"b\"}"
+  },
+  {
+   "group": "pages",
+   "name": "archive: toolkit button present",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "archive: custom box takes no room",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "about: toolkit button, box hidden, paper theme kept",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "?v=a shows version A over the saved paper theme",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "archive/about: no console errors",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "tag",
+   "name": "unfilled tag text stays hidden",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "phone",
+   "name": "mobile: panel is a full-width bottom sheet, no sideways scroll",
+   "pass": true,
+   "info": "{\"w\":390,\"bottom\":844,\"h\":743,\"vh\":844,\"sw\":390}"
+  },
+  {
+   "group": "phone",
+   "name": "mobile: no sideways scroll at the end of the article",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "phone",
+   "name": "mobile: no console errors",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "motion",
+   "name": "reduced motion: AN.rm stays true and the motion switch is disabled",
+   "pass": true,
+   "info": ""
+  }
+ ]
+}

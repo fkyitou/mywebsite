@@ -1,167 +1,167 @@
 {
-  "at": "2026-11-05T18:15:50.095Z",
+  "at": "2026-11-06T00:20:37.321Z",
   "pass": 48,
   "fail": 0,
   "results": [
     {
       "name": "normal · index.html",
       "pass": true,
-      "info": "css from #0, js from #0"
+      "info": "css from #0, js from #0; toolkit css #0, js #0"
     },
     {
       "name": "normal · post-1.html",
       "pass": true,
-      "info": "css from #0, js from #0, lab on"
+      "info": "css from #0, js from #0, lab on; toolkit css #0, js #0"
     },
     {
       "name": "normal · archive.html",
       "pass": true,
-      "info": "css from #0, js from #0"
+      "info": "css from #0, js from #0; toolkit css #0, js #0"
     },
     {
       "name": "normal · page-about.html",
       "pass": true,
-      "info": "css from #0, js from #0"
+      "info": "css from #0, js from #0; toolkit css #0, js #0"
     },
     {
       "name": "first address blocked · index.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #1, js #1"
     },
     {
       "name": "first address blocked · post-1.html",
       "pass": true,
-      "info": "css from #1, js from #1, lab on"
+      "info": "css from #1, js from #1, lab on; toolkit css #1, js #1"
     },
     {
       "name": "first address blocked · archive.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #1, js #1"
     },
     {
       "name": "first address blocked · page-about.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #1, js #1"
     },
     {
       "name": "first address answers 404 · index.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #1, js #1"
     },
     {
       "name": "first address answers 404 · post-1.html",
       "pass": true,
-      "info": "css from #1, js from #1, lab on"
+      "info": "css from #1, js from #1, lab on; toolkit css #1, js #1"
     },
     {
       "name": "first address answers 404 · archive.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #1, js #1"
     },
     {
       "name": "first address answers 404 · page-about.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #1, js #1"
     },
     {
       "name": "first address sends altered bytes (integrity must refuse them) · index.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #1, js #1"
     },
     {
       "name": "first address sends altered bytes (integrity must refuse them) · post-1.html",
       "pass": true,
-      "info": "css from #1, js from #1, lab on"
+      "info": "css from #1, js from #1, lab on; toolkit css #1, js #1"
     },
     {
       "name": "first address sends altered bytes (integrity must refuse them) · archive.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #1, js #1"
     },
     {
       "name": "first address sends altered bytes (integrity must refuse them) · page-about.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #1, js #1"
     },
     {
       "name": "two addresses down · index.html",
       "pass": true,
-      "info": "css from #2, js from #2"
+      "info": "css from #2, js from #2; toolkit css #2, js #2"
     },
     {
       "name": "two addresses down · post-1.html",
       "pass": true,
-      "info": "css from #2, js from #2, lab on"
+      "info": "css from #2, js from #2, lab on; toolkit css #2, js #2"
     },
     {
       "name": "two addresses down · archive.html",
       "pass": true,
-      "info": "css from #2, js from #2"
+      "info": "css from #2, js from #2; toolkit css #2, js #2"
     },
     {
       "name": "two addresses down · page-about.html",
       "pass": true,
-      "info": "css from #2, js from #2"
+      "info": "css from #2, js from #2; toolkit css #2, js #2"
     },
     {
       "name": "three addresses down · index.html",
       "pass": true,
-      "info": "css from #3, js from #3"
+      "info": "css from #3, js from #3; toolkit css #3, js #3"
     },
     {
       "name": "three addresses down · post-1.html",
       "pass": true,
-      "info": "css from #3, js from #3, lab on"
+      "info": "css from #3, js from #3, lab on; toolkit css #3, js #3"
     },
     {
       "name": "three addresses down · archive.html",
       "pass": true,
-      "info": "css from #3, js from #3"
+      "info": "css from #3, js from #3; toolkit css #3, js #3"
     },
     {
       "name": "three addresses down · page-about.html",
       "pass": true,
-      "info": "css from #3, js from #3"
+      "info": "css from #3, js from #3; toolkit css #3, js #3"
     },
     {
       "name": "only the script fails at the first address · index.html",
       "pass": true,
-      "info": "css from #0, js from #1"
+      "info": "css from #0, js from #1; toolkit css #0, js #1"
     },
     {
       "name": "only the script fails at the first address · post-1.html",
       "pass": true,
-      "info": "css from #0, js from #1, lab on"
+      "info": "css from #0, js from #1, lab on; toolkit css #0, js #1"
     },
     {
       "name": "only the script fails at the first address · archive.html",
       "pass": true,
-      "info": "css from #0, js from #1"
+      "info": "css from #0, js from #1; toolkit css #0, js #1"
     },
     {
       "name": "only the script fails at the first address · page-about.html",
       "pass": true,
-      "info": "css from #0, js from #1"
+      "info": "css from #0, js from #1; toolkit css #0, js #1"
     },
     {
       "name": "only the stylesheet fails at the first address · index.html",
       "pass": true,
-      "info": "css from #1, js from #0"
+      "info": "css from #1, js from #0; toolkit css #1, js #0"
     },
     {
       "name": "only the stylesheet fails at the first address · post-1.html",
       "pass": true,
-      "info": "css from #1, js from #0, lab on"
+      "info": "css from #1, js from #0, lab on; toolkit css #1, js #0"
     },
     {
       "name": "only the stylesheet fails at the first address · archive.html",
       "pass": true,
-      "info": "css from #1, js from #0"
+      "info": "css from #1, js from #0; toolkit css #1, js #0"
     },
     {
       "name": "only the stylesheet fails at the first address · page-about.html",
       "pass": true,
-      "info": "css from #1, js from #0"
+      "info": "css from #1, js from #0; toolkit css #1, js #0"
     },
     {
       "name": "every address down · index.html",
@@ -186,62 +186,62 @@
     {
       "name": "editor dropped crossorigin (integrity then refuses the first copy) · index.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #0, js #0"
     },
     {
       "name": "editor dropped crossorigin (integrity then refuses the first copy) · post-1.html",
       "pass": true,
-      "info": "css from #1, js from #1, lab on"
+      "info": "css from #1, js from #1, lab on; toolkit css #0, js #0"
     },
     {
       "name": "editor dropped crossorigin (integrity then refuses the first copy) · archive.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #0, js #0"
     },
     {
       "name": "editor dropped crossorigin (integrity then refuses the first copy) · page-about.html",
       "pass": true,
-      "info": "css from #1, js from #1"
+      "info": "css from #1, js from #1; toolkit css #0, js #0"
     },
     {
       "name": "editor dropped crossorigin and integrity · index.html",
       "pass": true,
-      "info": "css from #0, js from #0"
+      "info": "css from #0, js from #0; toolkit css #0, js #0"
     },
     {
       "name": "editor dropped crossorigin and integrity · post-1.html",
       "pass": true,
-      "info": "css from #0, js from #0, lab on"
+      "info": "css from #0, js from #0, lab on; toolkit css #0, js #0"
     },
     {
       "name": "editor dropped crossorigin and integrity · archive.html",
       "pass": true,
-      "info": "css from #0, js from #0"
+      "info": "css from #0, js from #0; toolkit css #0, js #0"
     },
     {
       "name": "editor dropped crossorigin and integrity · page-about.html",
       "pass": true,
-      "info": "css from #0, js from #0"
+      "info": "css from #0, js from #0; toolkit css #0, js #0"
     },
     {
       "name": "editor removed both tags (the loader adds them back) · index.html",
       "pass": true,
-      "info": "css from #0, js from #0"
+      "info": "css from #0, js from #0; toolkit css #0, js #0"
     },
     {
       "name": "editor removed both tags (the loader adds them back) · post-1.html",
       "pass": true,
-      "info": "css from #0, js from #0, lab on"
+      "info": "css from #0, js from #0, lab on; toolkit css #0, js #0"
     },
     {
       "name": "editor removed both tags (the loader adds them back) · archive.html",
       "pass": true,
-      "info": "css from #0, js from #0"
+      "info": "css from #0, js from #0; toolkit css #0, js #0"
     },
     {
       "name": "editor removed both tags (the loader adds them back) · page-about.html",
       "pass": true,
-      "info": "css from #0, js from #0"
+      "info": "css from #0, js from #0; toolkit css #0, js #0"
     }
   ]
 }

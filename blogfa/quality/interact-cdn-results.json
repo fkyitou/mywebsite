@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-05T18:23:51.072Z",
+ "generated": "2026-11-06T00:29:13.251Z",
  "browser": "Chromium (Playwright), software WebGL",
  "passed": 52,
  "failed": 0,
@@ -158,7 +158,7 @@
    "group": "feature",
    "name": "back-to-top button returns to the top",
    "pass": true,
-   "info": "from 6103px, at the top after 1590 ms"
+   "info": "from 6103px, at the top after 1434 ms"
   },
   {
    "group": "feature",
@@ -170,7 +170,7 @@
    "group": "feature",
    "name": "table of contents: a link scrolls its heading to the top of the screen",
    "pass": true,
-   "info": "7 entries, heading at 193px after 725 ms"
+   "info": "7 entries, heading at 193px after 738 ms"
   },
   {
    "group": "feature",
@@ -182,7 +182,7 @@
    "group": "feature",
    "name": "reading progress bar grows while reading",
    "pass": true,
-   "info": "464px → 689px"
+   "info": "382px → 629px"
   },
   {
    "group": "feature",
@@ -381,7 +381,7 @@
     "button «هوشمند با حسگر»",
     "input:range «ترافیک شمال–جنوب (خودرو در ساعت)۶۰۰»",
     "input:range «ترافیک شرق–غرب (خودرو در ساعت)۲۵۰»",
-    "input:range «سبزِ ثابت برای هر جهت (ثانیه)۳۰»",
+    "input:range «سبز ثابت برای هر جهت (ثانیه)۳۰»",
     "input:range «سرعت شبیه‌سازی×۳»",
     "button «مقایسه‌ی یک ساعت کامل با همین ترافیک»",
     "button «از نو»"
@@ -435,7 +435,7 @@
     "زندگی روی مریخ"
    ],
    "output": [
-    "input:range «تاریخ۱۴ آبان ۱۴۰۵»",
+    "input:range «تاریخ۱۵ آبان ۱۴۰۵»",
     "button «▶ حرکت زمان»",
     "button «🚀 پرتاب از همین تاریخ»",
     "button «برو به پنجره‌ی پرتاب بعدی»",

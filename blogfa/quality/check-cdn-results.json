@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-05T18:13:41.268Z",
+  "at": "2026-11-06T00:18:16.783Z",
   "preview": "preview-cdn",
   "cdn": true,
   "failed": 0,
@@ -132,7 +132,7 @@
     {
       "name": "template.html: size",
       "pass": true,
-      "info": "557.6 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+      "info": "578.2 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
     },
     {
       "name": "template-lite.html: three template holders",
@@ -262,7 +262,7 @@
     {
       "name": "template-lite.html: size",
       "pass": true,
-      "info": "501.3 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+      "info": "521.9 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
     },
     {
       "name": "template-cdn.html: three template holders",
@@ -305,12 +305,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-full.21d2e0cbf7.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PostTemplate: an-full.495af90d88.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-post.2ca852b014.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PostTemplate: an-post.7bf2715c10.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -335,19 +335,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-full.21d2e0cbf7.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn.html PostTemplate: an-full.495af90d88.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-post.2ca852b014.js holds the inline script byte for byte",
+      "name": "template-cdn.html PostTemplate: an-post.7bf2715c10.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn.html PostTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "25.1 KB"
+      "info": "26.1 KB"
     },
     {
       "name": "template-cdn.html PostTemplate: html lang/dir",
@@ -390,12 +390,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-base.a38a633237.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html ArchiveTemplate: an-base.f457dad461.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-archive.2759cafb84.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html ArchiveTemplate: an-archive.e142cc7506.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -420,19 +420,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-base.a38a633237.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn.html ArchiveTemplate: an-base.f457dad461.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-archive.2759cafb84.js holds the inline script byte for byte",
+      "name": "template-cdn.html ArchiveTemplate: an-archive.e142cc7506.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn.html ArchiveTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "11.7 KB"
+      "info": "12.7 KB"
     },
     {
       "name": "template-cdn.html ArchiveTemplate: html lang/dir",
@@ -475,12 +475,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-base.a38a633237.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PageTemplate: an-base.f457dad461.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-page.16e3fddaa7.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PageTemplate: an-page.995b4c8acb.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -505,19 +505,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-base.a38a633237.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn.html PageTemplate: an-base.f457dad461.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-page.16e3fddaa7.js holds the inline script byte for byte",
+      "name": "template-cdn.html PageTemplate: an-page.995b4c8acb.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn.html PageTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "13.3 KB"
+      "info": "14.2 KB"
     },
     {
       "name": "template-cdn.html PageTemplate: html lang/dir",
@@ -527,7 +527,7 @@
     {
       "name": "template-cdn.html: size",
       "pass": true,
-      "info": "50.2 KB"
+      "info": "53.1 KB"
     },
     {
       "name": "template-cdn-lite.html: three template holders",
@@ -570,12 +570,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-full.21d2e0cbf7.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PostTemplate: an-full.495af90d88.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-post-lite.a63cce1028.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PostTemplate: an-post-lite.a98b976c41.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -600,19 +600,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-full.21d2e0cbf7.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn-lite.html PostTemplate: an-full.495af90d88.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-post-lite.a63cce1028.js holds the inline script byte for byte",
+      "name": "template-cdn-lite.html PostTemplate: an-post-lite.a98b976c41.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn-lite.html PostTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "25.2 KB"
+      "info": "26.1 KB"
     },
     {
       "name": "template-cdn-lite.html PostTemplate: html lang/dir",
@@ -655,12 +655,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-base.a38a633237.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-base.f457dad461.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.2759cafb84.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.e142cc7506.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -685,19 +685,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-base.a38a633237.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-base.f457dad461.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.2759cafb84.js holds the inline script byte for byte",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.e142cc7506.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn-lite.html ArchiveTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "11.7 KB"
+      "info": "12.7 KB"
     },
     {
       "name": "template-cdn-lite.html ArchiveTemplate: html lang/dir",
@@ -740,12 +740,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-base.a38a633237.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PageTemplate: an-base.f457dad461.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-page.16e3fddaa7.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PageTemplate: an-page.995b4c8acb.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -770,19 +770,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-base.a38a633237.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn-lite.html PageTemplate: an-base.f457dad461.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-page.16e3fddaa7.js holds the inline script byte for byte",
+      "name": "template-cdn-lite.html PageTemplate: an-page.995b4c8acb.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn-lite.html PageTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "13.3 KB"
+      "info": "14.2 KB"
     },
     {
       "name": "template-cdn-lite.html PageTemplate: html lang/dir",
@@ -792,12 +792,12 @@
     {
       "name": "template-cdn-lite.html: size",
       "pass": true,
-      "info": "50.2 KB"
+      "info": "53.1 KB"
     },
     {
       "name": "cdn: the commit in cdn.json holds every dist/cdn file byte for byte",
       "pass": true,
-      "info": "43e7a0b84a6e"
+      "info": "0005840ca312"
     },
     {
       "name": "cdn: that commit is on a remote branch, so jsDelivr can read it",
@@ -810,7 +810,62 @@
       "info": ""
     },
     {
-      "name": "cdn: none of the 6 stylesheets and scripts in dist/cdn holds code Blogfa blocks",
+      "name": "cdn: none of the 9 stylesheets and scripts in dist/cdn holds code Blogfa blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box.html: two plain <script> elements and nothing Blogfa would show as text",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box.html: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box.html: no ads, earning code, pop-up, redirect or page change of its own",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box.html: small enough to paste",
+      "pass": true,
+      "info": "2.1 KB"
+    },
+    {
+      "name": "box.html: the credit in its comment",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box.html: loads from the pinned jsDelivr address and three backups",
+      "pass": true,
+      "info": "0005840ca312"
+    },
+    {
+      "name": "box.html: an-addons.c1ba7ced11.css named with the integrity hash of dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box.html: an-addons.4b63ae8ae9.js named with the integrity hash of dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box.html: integrity checked (crossorigin set by the loader)",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "toolkit: an-qr.1952338bb7.js named with its integrity hash",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box.html: not written by an unverified build",
       "pass": true,
       "info": ""
     },

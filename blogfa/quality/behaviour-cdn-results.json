@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-05T18:16:34.975Z",
+ "generated": "2026-11-06T00:21:25.321Z",
  "browser": "Chromium (Playwright)",
  "served": "http://127.0.0.1 (test-only server)",
  "passed": 75,
@@ -117,7 +117,7 @@
    "group": "posts",
    "name": "post banner links to its category",
    "pass": true,
-   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:34317/cat-1.html"
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:39321/cat-1.html"
   },
   {
    "group": "posts",
@@ -303,7 +303,7 @@
    "group": "kit7",
    "name": "desktop: table of contents says «… بخش، … دقیقه», no «·» next to a digit",
    "pass": true,
-   "info": "«۶ بخش، ۶ دقیقه»"
+   "info": "«۶ بخش، ۷ دقیقه»"
   },
   {
    "group": "kit7",
@@ -333,7 +333,7 @@
    "group": "kit7",
    "name": "phone: table of contents says «… بخش، … دقیقه», no «·» next to a digit",
    "pass": true,
-   "info": "«۶ بخش، ۶ دقیقه»"
+   "info": "«۶ بخش، ۷ دقیقه»"
   },
   {
    "group": "kit7",
@@ -375,7 +375,7 @@
    "group": "kit7",
    "name": "presentation: PageDown stops at every section heading",
    "pass": true,
-   "info": "6 of 6 headings, 24 steps"
+   "info": "6 of 6 headings, 28 steps"
   },
   {
    "group": "kit7",
