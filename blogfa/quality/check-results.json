@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-06T00:03:13.849Z",
+  "at": "2026-11-12T02:08:21.022Z",
   "preview": "preview",
   "cdn": false,
   "failed": 0,
@@ -132,7 +132,7 @@
     {
       "name": "template.html: size",
       "pass": true,
-      "info": "578.2 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+      "info": "578.4 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
     },
     {
       "name": "template-lite.html: three template holders",
@@ -262,7 +262,7 @@
     {
       "name": "template-lite.html: size",
       "pass": true,
-      "info": "521.9 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+      "info": "522.1 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
     },
     {
       "name": "template-cdn.html: three template holders",
@@ -517,7 +517,7 @@
     {
       "name": "template-cdn.html PageTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "14.2 KB"
+      "info": "14.3 KB"
     },
     {
       "name": "template-cdn.html PageTemplate: html lang/dir",
@@ -527,7 +527,7 @@
     {
       "name": "template-cdn.html: size",
       "pass": true,
-      "info": "53.1 KB"
+      "info": "53.3 KB"
     },
     {
       "name": "template-cdn-lite.html: three template holders",
@@ -782,7 +782,7 @@
     {
       "name": "template-cdn-lite.html PageTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "14.2 KB"
+      "info": "14.3 KB"
     },
     {
       "name": "template-cdn-lite.html PageTemplate: html lang/dir",
@@ -792,7 +792,7 @@
     {
       "name": "template-cdn-lite.html: size",
       "pass": true,
-      "info": "53.1 KB"
+      "info": "53.3 KB"
     },
     {
       "name": "cdn: the commit in cdn.json holds every dist/cdn file byte for byte",

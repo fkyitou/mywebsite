@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-11-05T23:57:19.881Z",
+  "builtAt": "2026-11-12T02:02:49.382Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
     "ref": "0005840ca31245874d6bbf7601caca8338578e87",
@@ -86,22 +86,22 @@
     {
       "variant": "full",
       "cdn": false,
-      "bytes": 592058,
+      "bytes": 592262,
       "parts": {
         "post": {
           "css": 87747,
           "js": 210559,
-          "html": 337259
+          "html": 337327
         },
         "archive": {
           "css": 72338,
           "js": 31322,
-          "html": 115256
+          "html": 115324
         },
         "page": {
           "css": 72338,
           "js": 53022,
-          "html": 139414
+          "html": 139482
         }
       },
       "facts": {
@@ -114,22 +114,22 @@
     {
       "variant": "lite",
       "cdn": false,
-      "bytes": 534419,
+      "bytes": 534623,
       "parts": {
         "post": {
           "css": 87747,
           "js": 152909,
-          "html": 279620
+          "html": 279688
         },
         "archive": {
           "css": 72338,
           "js": 31322,
-          "html": 115256
+          "html": 115324
         },
         "page": {
           "css": 72338,
           "js": 53022,
-          "html": 139414
+          "html": 139482
         }
       },
       "facts": {
@@ -142,28 +142,28 @@
     {
       "variant": "cdn",
       "cdn": true,
-      "bytes": 54341,
+      "bytes": 54545,
       "parts": {
         "post": {
           "cssFile": "an-full.495af90d88.css",
           "jsFile": "an-post.7bf2715c10.js",
           "css": 87747,
           "js": 210559,
-          "html": 26676
+          "html": 26744
         },
         "archive": {
           "cssFile": "an-base.f457dad461.css",
           "jsFile": "an-archive.e142cc7506.js",
           "css": 72338,
           "js": 31322,
-          "html": 12960
+          "html": 13028
         },
         "page": {
           "cssFile": "an-base.f457dad461.css",
           "jsFile": "an-page.995b4c8acb.js",
           "css": 72338,
           "js": 53022,
-          "html": 14576
+          "html": 14644
         }
       },
       "facts": {
@@ -176,28 +176,28 @@
     {
       "variant": "cdn-lite",
       "cdn": true,
-      "bytes": 54367,
+      "bytes": 54571,
       "parts": {
         "post": {
           "cssFile": "an-full.495af90d88.css",
           "jsFile": "an-post-lite.a98b976c41.js",
           "css": 87747,
           "js": 152909,
-          "html": 26702
+          "html": 26770
         },
         "archive": {
           "cssFile": "an-base.f457dad461.css",
           "jsFile": "an-archive.e142cc7506.js",
           "css": 72338,
           "js": 31322,
-          "html": 12960
+          "html": 13028
         },
         "page": {
           "cssFile": "an-base.f457dad461.css",
           "jsFile": "an-page.995b4c8acb.js",
           "css": 72338,
           "js": 53022,
-          "html": 14576
+          "html": 14644
         }
       },
       "facts": {
