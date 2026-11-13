@@ -119,7 +119,9 @@ async function operate(page, c) {
   return how || 'none';
 }
 
-for (let n = 1; n <= (run('labs') ? 10 : 0); n++) {
+// one lab for each post file of the kit
+const POSTS = fs.readdirSync(new URL('../posts/', import.meta.url)).filter(f => /^\d+-.*\.html$/.test(f)).length;
+for (let n = 1; n <= (run('labs') ? POSTS : 0); n++) {
   const file = `post-${n}.html`;
   const { ctx, page, errors } = await open(file, { wait: 400 });
   const name = await page.evaluate(() => { const l = document.querySelector('.an-lab'); return l ? (l.className.match(/an-lab-([a-z]+)/) || [])[1] : null; });

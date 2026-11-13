@@ -82,12 +82,14 @@
         return '<a class="an-realm an-rv" href="' + esc(c.url) + '" style="--rc:' + AN.color(c.realm) + ';--d:' + (i * 0.05) + 's"><span class="an-realm-ico">' + AN.icon(AN.realmIcon(c.realm)) + '</span><span class="an-realm-txt"><b>' + esc(c.name) + '</b><small>' + (n ? AN.fa(n) + ' مقاله در صفحه‌ی اول' : 'ورود به قلمرو') + '</small></span><span class="an-realm-go">' + ARROW + '</span></a>';
       }).join('');
     }
-    // numbers band: computed from the posts on the page
+    // numbers band: the figures written at build time count every post of the kit; the posts on this page can only
+    // raise them (Blogfa shows a limited number of posts on the first page, so the page alone would undercount)
     if (posts.length) {
+      var built = function (b) { return parseInt(b.textContent.replace(/[۰-۹]/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d); }).replace(/\D/g, ''), 10) || 0; };
       var labs = posts.filter(function (p) { return p.lab; }).length, src = posts.reduce(function (s, p) { return s + p.sources; }, 0), min = posts.reduce(function (s, p) { return s + p.min; }, 0);
       var vals = { posts: posts.length, labs: labs, sources: src, minutes: min };
       $$('.an-numbers [data-count]').forEach(function (b) {
-        var k = b.getAttribute('data-count'), v = vals[k] || 0; b.textContent = AN.fa(v);
+        var k = b.getAttribute('data-count'), v = Math.max(vals[k] || 0, built(b)); b.textContent = AN.fa(v);
         if (!v) b.parentNode.style.display = 'none';
         else if (!AN.rm && 'IntersectionObserver' in W) {
           b.textContent = '۰';

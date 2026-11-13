@@ -120,6 +120,10 @@
     if (idx.length) put('an-x-idx', idx.map(function (q) { return { u: q.url, t: q.title, k: q.topic, id: q.id }; }));
     else idx = (get('an-x-idx', []) || []).map(function (q) { return { url: q.u, title: q.t, topic: q.k, id: q.id }; });
     function byTopic() { var m = {}; idx.forEach(function (q) { if (q.topic && !m[q.topic]) m[q.topic] = q; }); return m; }
+    // the passport has one cell for each story the blog really has (from the list of articles) or the reader has
+    // already finished; with no list at hand it falls back to every known topic
+    function pkeys() { var m = byTopic(), rd = get('an-x-read', {}), all = Object.keys(AN.TOPICS), k = all.filter(function (x) { return m[x] || rd[x]; }); return k.length ? k : all; }
+    function pread(rd) { return pkeys().filter(function (x) { return rd[x]; }).length; }
 
     /* ---------- the panel ---------- */
     var dlg = null, btn = null;
@@ -268,7 +272,7 @@
 
     /* ---------- the future passport: one stamp for each story read to its end ---------- */
     function passport() {
-      var read = get('an-x-read', {}), quiz = get('an-x-quiz', {}), map = byTopic(), keys = Object.keys(AN.TOPICS), n = 0;
+      var read = get('an-x-read', {}), quiz = get('an-x-quiz', {}), map = byTopic(), keys = pkeys(), n = 0;
       var cells = keys.map(function (k) {
         var t = AN.TOPICS[k], r = read[k], q = quiz[k], u = (r && r.h) || (map[k] && map[k].url) || '', full = q && q.full;
         if (r) n++;
@@ -295,12 +299,12 @@
 
     function sealHTML(stamped, n) {
       var t = AN.TOPICS[post.topic] || { n: '' };
-      return stamped ? '<span class="an-x-seal-i on" aria-hidden="true">' + AN.icon(t.i || 'def') + '</span><p><b>مهر «' + esc(t.n) + '» در گذرنامه‌ی آینده‌ی شما خورد.</b> ' + fa(n) + ' از ' + fa(Object.keys(AN.TOPICS).length) + ' روایت را تا پایان خوانده‌اید.</p>'
+      return stamped ? '<span class="an-x-seal-i on" aria-hidden="true">' + AN.icon(t.i || 'def') + '</span><p><b>مهر «' + esc(t.n) + '» در گذرنامه‌ی آینده‌ی شما خورد.</b> ' + fa(n) + ' از ' + fa(pkeys().length) + ' روایت را تا پایان خوانده‌اید.</p>'
         : '<span class="an-x-seal-i" aria-hidden="true">' + AN.icon(t.i || 'def') + '</span><p><b>گذرنامه‌ی آینده:</b> وقتی این روایت را تا پایان بخوانید، مهر «' + esc(t.n) + '» در گذرنامه‌تان می‌خورد.</p>';
     }
     function track() {
       var seal = $('#an-x-seal'), read = get('an-x-read', {}), t0 = Date.now(), done = !!read[post.topic], tick = false;
-      if (seal) seal.innerHTML = sealHTML(done, Object.keys(read).length);
+      if (seal) seal.innerHTML = sealHTML(done, pread(read));
       if (done) return;
       var end = el('span', 'an-x-end'); end.setAttribute('aria-hidden', 'true'); body.appendChild(end);
       function check() {
@@ -310,10 +314,10 @@
           done = true; W.removeEventListener('scroll', onS);
           var rd = get('an-x-read', {});
           rd[post.topic] = { id: post.id, u: path(here), h: here, t: post.title, at: Date.now() }; put('an-x-read', rd);
-          var n = Object.keys(rd).length;
+          var n = pread(rd);
           if (seal) { seal.innerHTML = sealHTML(true, n); seal.classList.add('stamp'); }
-          AN.toast('مهر «' + AN.TOPICS[post.topic].n + '» خورد: ' + fa(n) + ' از ' + fa(Object.keys(AN.TOPICS).length) + ' روایت در گذرنامه‌ی آینده.');
-          if (n === Object.keys(AN.TOPICS).length) confetti();
+          AN.toast('مهر «' + AN.TOPICS[post.topic].n + '» خورد: ' + fa(n) + ' از ' + fa(pkeys().length) + ' روایت در گذرنامه‌ی آینده.');
+          if (n === pkeys().length) confetti();
           sync();
         }
       }

@@ -272,6 +272,12 @@ for (const [name, vp] of [['desktop', { width: 1366, height: 900 }], ['phone', {
     const { ctx, page, errors } = await open(BASE + 'index.html');
     const c = await page.evaluate(() => [...document.querySelectorAll('.an-cover-n')].map(e => e.textContent));
     ok('kit7', 'home: card numbers stand apart from the topic without «·»', c.length >= 10 && c.every(t => /^[۰-۹]{2} \S/.test(t) && !/·/.test(t)), `${c.length} cards, first «${c[0]}»`);
+    // the numbers band counts every post of the kit, not only the ones Blogfa puts on the first page
+    const nPosts = fs.readdirSync(new URL('../posts/', import.meta.url)).filter(f => /^\d+-.*\.html$/.test(f)).length;
+    await page.evaluate(() => document.querySelector('.an-numbers').scrollIntoView());
+    await page.waitForTimeout(2200);
+    const nums = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.an-numbers [data-count]')].map(b => [b.getAttribute('data-count'), +b.textContent.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/\D/g, '')])));
+    ok('kit9', 'home: the numbers band counts every post of the kit', nums.posts >= nPosts && nums.labs >= nPosts && nums.sources > nums.posts && nums.minutes > nums.posts, JSON.stringify(nums) + ` for ${nPosts} post files, ${c.length} cards on the page`);
     errs.push(...errors); await ctx.close();
   }
   // «ارائه در کلاس» on a projector-sized window, with a Blogfa ad bar in place
