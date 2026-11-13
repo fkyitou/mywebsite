@@ -37,7 +37,7 @@ const CSS_SETS = {
   page: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive', '08-sky', '09-reader'],
   archive: ['01-base', '02-chrome', '03-home', '04-post', '06-dialogs', '07-responsive', '08-sky', '09-reader']
 };
-const LABS = ['_ui', 'ai', 'iot', 'city', 'security', 'brain', 'space', 'arch', 'algo', 'energy', 'idea'];
+const LABS = ['_ui', 'ai', 'iot', 'city', 'security', 'brain', 'space', 'arch', 'algo', 'energy', 'idea', 'video'];
 const JS_MODS = {
   core: ['js/core.js'], sky: ['js/sky.js'], sound: ['js/sound.js'], covers: ['js/covers.js'], charts: ['js/charts.js'], present: ['js/present.js'], pages: ['js/pages.js'],
   globe: ['js/data-geo.js', 'js/globe.js'], labs: LABS.map(l => `js/labs/${l}.js`), archive: ['js/archive.js'], pagebody: ['js/pagebody.js']

@@ -8,7 +8,7 @@
     ai: ['#8FB6FF', '#B79BFF', '#53E0E0'], iot: ['#53E0E0', '#5B9BFF', '#FFB36B'], city: ['#FFB36B', '#5B9BFF', '#FFE2B8'],
     security: ['#53E0E0', '#7FE3A0', '#5B9BFF'], brain: ['#E89BFF', '#9B7BFF', '#53E0E0'], space: ['#FF8A6B', '#FFB36B', '#8FB6FF'],
     arch: ['#FFB36B', '#FFE2B8', '#8FB6FF'], algo: ['#8FB6FF', '#FF7EB6', '#FFD66B'], energy: ['#7FE3A0', '#FFD66B', '#53E0E0'],
-    idea: ['#FFD66B', '#FF9F5A', '#E89BFF'], def: ['#9AA8C0', '#5B9BFF', '#FFB36B']
+    idea: ['#FFD66B', '#FF9F5A', '#E89BFF'], video: ['#FF8FA3', '#FFC46B', '#7FD8FF'], def: ['#9AA8C0', '#5B9BFF', '#FFB36B']
   };
   function hash(s) { var h = 2166136261; s = String(s); for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
   function rng(a) { a = (a >>> 0) || 1; return function () { a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -381,6 +381,37 @@
     c.lineTo(bx + br * 0.18, by + br * 1.3); c.stroke(); glow(c, bx, by + br * 0.1, br * 0.5, '#FFFFFF', 0.55); add(c, false);
     for (i = 0; i < 4; i++) { var yb = by + br * (1.36 + i * 0.13); rr(c, bx - br * 0.36, yb, br * 0.72, br * 0.1, br * 0.05); c.fillStyle = i % 2 ? '#8E98AE' : '#C9D1E2'; c.fill(); }
     add(c, true); for (i = 0; i < 26; i++) { var ra = R() * TAU, rd = br * (1.4 + R() * 1.8); glow(c, bx + cos(ra) * rd, by + sin(ra) * rd, u * 0.012 * (1 + R() * 2), R() < 0.5 ? P[0] : P[2], 0.7); } add(c, false);
+  };
+
+  /* AI video: the five frames of one clip come out of the noise together, above the timeline of clips */
+  M.video = function (F) {
+    var c = F.c, u = F.u, R = F.R, P = F.P, lw = F.lw, i, j, hts = [];
+    for (j = 0; j < 12; j++) hts.push(0.2 + R() * 0.36);
+    for (i = 0; i < 5; i++) {
+      var t = i / 4, fw = u * (0.42 + t * 0.3), fh = fw * 9 / 16, sh = t * fw * 0.05;
+      c.save(); c.translate(F.x - u * 0.72 + t * u * 1.16, F.y - u * 0.1 + (1 - t) * u * 0.05); c.rotate(-0.1 + t * 0.06); c.translate(-fw / 2, -fh / 2);
+      c.save(); rr(c, 0, 0, fw, fh, u * 0.02); c.clip();
+      c.fillStyle = '#080C1E'; c.fillRect(0, 0, fw, fh);
+      // the picture, clearer in every later frame: dawn sky, sun, skyline (the same towers in all five, moved a little)
+      c.globalAlpha = t * t;
+      var sky = c.createLinearGradient(0, 0, 0, fh * 0.7); sky.addColorStop(0, '#16235C'); sky.addColorStop(0.62, rgba(P[0], 0.95)); sky.addColorStop(1, P[1]); c.fillStyle = sky; c.fillRect(0, 0, fw, fh * 0.7);
+      c.fillStyle = '#2A1B44'; c.fillRect(0, fh * 0.7, fw, fh * 0.3);
+      add(c, true); glow(c, fw * 0.6, fh * 0.52, fh * 0.6, '#FFE9B0', 0.55); add(c, false); dot(c, fw * 0.6, fh * 0.52, fh * 0.12, '#FFF6D6');
+      c.fillStyle = '#11122E'; for (j = 0; j < 12; j++) c.fillRect(fw * (j / 11) - fw * 0.06 - sh, fh * (1 - hts[j]), fw * 0.07, fh * hts[j]);
+      c.fillStyle = 'rgba(255,214,140,.85)'; for (j = 0; j < 12; j++) c.fillRect(fw * (j / 11) - fw * 0.04 - sh, fh * (1 - hts[j]) + fh * 0.06, fw * 0.03, fh * 0.03);
+      c.globalAlpha = 1;
+      // the noise every frame starts from
+      for (j = 0; j < 320 * (1 - t) * (1 - t) + 6; j++) { var s = fw * (0.014 + R() * 0.016); c.fillStyle = rgba(P[(R() * 3) | 0], 0.2 + R() * 0.65); c.fillRect(R() * fw, R() * fh, s, s); }
+      c.restore();
+      rr(c, 0, 0, fw, fh, u * 0.02); c.strokeStyle = rgba(P[2], 0.3 + t * 0.65); c.lineWidth = lw * (1 + t * 1.2); c.stroke();
+      if (i === 4) { add(c, true); glow(c, fw, fh, u * 0.2, P[1], 0.5); add(c, false); dot(c, fw, fh, u * 0.075, 'rgba(4,6,13,.82)'); c.strokeStyle = P[1]; c.lineWidth = lw * 2; c.stroke(); c.beginPath(); c.moveTo(fw - u * 0.024, fh - u * 0.036); c.lineTo(fw + u * 0.04, fh); c.lineTo(fw - u * 0.024, fh + u * 0.036); c.closePath(); c.fillStyle = '#FFFFFF'; c.fill(); }
+      c.restore();
+    }
+    // the timeline: four clips, the last one shorter, and a playhead
+    var x0 = F.x - u * 0.9, y0 = F.y + u * 0.34, th = u * 0.07, lens = [0.46, 0.46, 0.46, 0.3], x = x0;
+    for (i = 0; i < 4; i++) { var bw = u * lens[i]; rr(c, x, y0, bw - u * 0.014, th, u * 0.016); c.fillStyle = rgba(P[i % 2 ? 0 : 2], 0.16); c.fill(); c.strokeStyle = rgba(P[i % 2 ? 0 : 2], 0.8); c.lineWidth = lw; c.stroke(); for (j = 1; j < 8 * lens[i] / 0.46; j++) { c.strokeStyle = rgba(P[i % 2 ? 0 : 2], 0.3); c.beginPath(); c.moveTo(x + j * u * 0.0575, y0 + th * 0.62); c.lineTo(x + j * u * 0.0575, y0 + th); c.stroke(); } x += bw; }
+    var px = x0 + u * 1.06; add(c, true); glow(c, px, y0 + th / 2, u * 0.16, P[1], 0.55); add(c, false);
+    c.strokeStyle = P[1]; c.lineWidth = lw * 2.2; c.beginPath(); c.moveTo(px, y0 - u * 0.035); c.lineTo(px, y0 + th + u * 0.035); c.stroke(); dot(c, px, y0 - u * 0.035, u * 0.016, '#FFF1C2');
   };
 
   M.def = function (F) { var c = F.c, u = F.u; add(c, true); for (var i = 1; i < 8; i++) { c.strokeStyle = rgba(F.P[i % 3], 0.5 / i); c.lineWidth = F.lw * 1.4; c.beginPath(); c.ellipse(F.x, F.y, u * 0.12 * i, u * 0.05 * i, -0.3, 0, TAU); c.stroke(); } glow(c, F.x, F.y, u * 0.4, F.P[0], 0.5); add(c, false); };

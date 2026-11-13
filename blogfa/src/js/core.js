@@ -28,6 +28,7 @@
     idea: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
     algo: '<path d="M4 6h7M4 12h11M4 18h5"/><path d="m17 15 3 3-3 3M20 18h-6"/>',
     arch: '<path d="M4 21h16M7 21V9.5L12 4l5 5.5V21"/><path d="M10 21v-5h4v5M9.5 11h5"/>',
+    video: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9.4 5 2.6-5 2.6z"/><path d="M3 9h2.4M3 15h2.4M18.6 9H21M18.6 15H21"/>',
     def: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
     cmt: '<path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 3.5v-3.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/>'
   };
@@ -43,7 +44,9 @@
     arch: { n: 'معماری آینده', c: 'city', i: 'arch', k: ['معماری'] },
     algo: { n: 'الگوریتم‌ها', c: 'ai', i: 'algo', k: ['الگوریتم'] },
     energy: { n: 'انرژی پاک', c: 'energy', i: 'energy', k: ['انرژی'] },
-    idea: { n: 'از ایده تا اختراع', c: 'idea', i: 'idea', k: ['اختراع', 'ایده'] }
+    idea: { n: 'از ایده تا اختراع', c: 'idea', i: 'idea', k: ['اختراع', 'ایده'] },
+    // w: a narrower topic inside a wider one; its words are asked first, so «هوش مصنوعی ویدیوساز» is this article and not the AI one
+    video: { n: 'ویدیوسازهای هوشمند', c: 'ai', i: 'video', k: ['ویدیوساز', 'ویدیو', 'ویدئو'], w: 1 }
   };
   var REALMS = [['ai', ['هوش', 'داده', 'الگوریتم']], ['net', ['شبکه', 'امنیت', 'اینترنت']], ['city', ['شهر', 'معماری']], ['mind', ['ذهن', 'مغز', 'یادگیری']], ['space', ['فضا', 'کیهان', 'کشف']], ['energy', ['انرژی', 'زمین', 'محیط']], ['idea', ['ایده', 'خلاق', 'اختراع', 'نوآوری']]];
   var RICON = { ai: 'ai', net: 'net', city: 'city', mind: 'mind', space: 'space', energy: 'energy', idea: 'idea' };
@@ -56,7 +59,8 @@
       var lb = el.querySelector('.an-lab'), ml = lb && /\ban-lab-([a-z]+)/.exec(lb.className); if (ml && AN.TOPICS[ml[1]]) return ml[1];
     }
     var t = AN.norm(title), keys = Object.keys(AN.TOPICS);
-    for (var i = 0; i < keys.length; i++) { var ks = AN.TOPICS[keys[i]].k; for (var j = 0; j < ks.length; j++) if (t.indexOf(AN.norm(ks[j])) > -1) return keys[i]; }
+    var asked = keys.filter(function (x) { return AN.TOPICS[x].w; }).concat(keys.filter(function (x) { return !AN.TOPICS[x].w; }));
+    for (var i = 0; i < asked.length; i++) { var ks = AN.TOPICS[asked[i]].k; for (var j = 0; j < ks.length; j++) if (t.indexOf(AN.norm(ks[j])) > -1) return asked[i]; }
     var r = AN.realmOf(cat || ''); for (var k = 0; k < keys.length; k++) if (AN.TOPICS[keys[k]].c === r) return keys[k];
     return 'ai';
   };

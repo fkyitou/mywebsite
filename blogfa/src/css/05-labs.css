@@ -13,7 +13,7 @@
 .an-lab-hint { position: absolute; top: 10px; inset-inline-start: 12px; margin: 0; padding: 3px 10px; border-radius: var(--r-pill); background: rgba(4, 6, 13, .65); color: rgba(237, 242, 250, .8); font-size: .72rem; pointer-events: none; }
 .an-lab-body { padding: var(--s5); display: grid; gap: var(--s4); }
 .an-lab-ctl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--s4) var(--s5); }
-.an-field { display: grid; gap: 6px; }
+.an-field { display: grid; gap: 6px; align-content: start; }
 .an-field label, .an-field .an-lbl { display: flex; justify-content: space-between; gap: 10px; font-size: var(--fs-0); color: var(--text-2); font-weight: 600; }
 .an-field output, .an-field label b { color: var(--accent); font-weight: 800; font-variant-numeric: tabular-nums; }
 .an-range { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; --v: 50%; }
@@ -28,11 +28,15 @@
 .an-lab-btns button.pri { background: var(--sunrise); color: var(--on-accent); border-color: transparent; }
 .an-lab-btns button[aria-pressed="true"], .an-seg button[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent); }
 .an-seg { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.an-seg button:disabled { opacity: .42; cursor: not-allowed; border-style: dashed; }
+.an-seg button:disabled:hover { border-color: var(--border-2); }
 .an-lab-out { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: var(--s3); }
 .an-stat { padding: var(--s3) var(--s4); border-radius: var(--r-m); background: var(--surface-2); border: 1px solid var(--border); }
 .an-stat small { display: block; color: var(--muted); font-size: .72rem; }
 .an-stat b { font-size: var(--fs-3); font-weight: 900; font-variant-numeric: tabular-nums; color: var(--text); }
 .an-stat.good b { color: var(--ok); } .an-stat.bad b { color: var(--danger); } .an-stat.warn b { color: var(--warn); }
+.an-lab-video .an-lab-out { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 720px) { .an-lab-video .an-lab-out { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .an-lab-note { margin: 0; padding: var(--s3) var(--s4); border-radius: var(--r-m); background: var(--glass-2); border-inline-start: 3px solid var(--cyan); color: var(--text-2); font-size: var(--fs-0); line-height: 1.9; }
 .an-lab-tabs { display: flex; gap: 4px; padding: 6px; margin: 0; border-bottom: 1px solid var(--border); background: var(--bg-2); overflow-x: auto; }
 .an-lab-tabs button { padding: 8px 14px; border: 0; border-radius: var(--r-s); background: none; color: var(--muted); font-weight: 700; font-size: var(--fs-0); white-space: nowrap; }
