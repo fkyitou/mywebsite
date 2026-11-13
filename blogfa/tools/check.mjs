@@ -177,6 +177,9 @@ for (const f of ['template-cdn.html', 'template-cdn-lite.html']) staticChecks(pa
     // the QR encoder is loaded by the toolkit only when its window opens: the same pinned files, with its own hash
     const qr = a.qr ? path.join(ROOT, 'dist', 'cdn', a.qr) : '';
     ok(`toolkit: ${a.qr || 'QR encoder'} named with its integrity hash`, !!a.js && !!qr && fs.existsSync(qr) && cdnText(a.js).includes(`"${a.qr}","${sha384(fs.readFileSync(qr))}"`));
+    // the guide's card, fetched the same way on the first press of «نگار»
+    const gd = a.guide ? path.join(ROOT, 'dist', 'cdn', a.guide) : '';
+    ok(`toolkit: ${a.guide || 'guide card'} named with its integrity hash`, !!a.js && !!gd && fs.existsSync(gd) && cdnText(a.js).includes(`"${a.guide}","${sha384(fs.readFileSync(gd))}"`));
     ok('box.html: not written by an unverified build', !c.unverifiedTemplates, c.unverifiedTemplates ? 'built with --unverified: for offline tests only' : '');
   }
 }

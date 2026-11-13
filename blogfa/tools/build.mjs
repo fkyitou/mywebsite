@@ -296,29 +296,32 @@ async function addons() {
   const qrCode = QR_BANNER + await jsSource(`(function(){var define,module,exports;\n${qrSrc}\n;qrcode.stringToBytes=qrcode.stringToBytesFuncs['UTF-8'];window.AN_QR=qrcode;})();`, 'qr encoder');
   guard('qr encoder', qrCode);
   const qrA = asset('an-qr', 'js', qrCode);
+  // the guide's card and walk through the page (src/addons/guide.js): fetched by the toolkit on the first press
+  const guideCode = await jsSource(rd('src', 'addons', 'guide.js'), 'guide js');
+  const guideA = asset('an-guide', 'js', guideCode);
   const words = postWords();
   const cssCode = csso(rd('src', 'css', '09-reader.css') + '\n' + rd('src', 'addons', 'addons.css'), { restructure: false, comments: false }).css;
   guard('toolkit css', cssCode);
   const cssA = asset('an-addons', 'css', (/[^\x00-\x7f]/.test(cssCode) ? '@charset "UTF-8";' : '') + cssCode);
   const jsCode = await jsSource(rd('src', 'addons', 'addons.js').replace("'@QR@'", JSON.stringify([qrA.file, qrA.sri]))
-    .replace("'@TERMS@'", JSON.stringify(words.terms)).replace("'@KEYS@'", JSON.stringify(words.keys)), 'toolkit js');
+    .replace("'@GUIDE@'", JSON.stringify([guideA.file, guideA.sri])).replace("'@TERMS@'", JSON.stringify(words.terms)).replace("'@KEYS@'", JSON.stringify(words.keys)), 'toolkit js');
   const jsA = asset('an-addons', 'js', jsCode);
   const loader = async (M, sri) => jsSource(rd('src', 'addons', 'box.js').replace("'@MIRRORS@'", JSON.stringify(M))
     .replace("'@CSSFILE@'", JSON.stringify([cssA.file, cssA.sri])).replace("'@JSFILE@'", JSON.stringify([jsA.file, jsA.sri])).replace("'@SRI@'", sri ? '1' : '0'), 'box loader');
   // Only /* */ comments in the box: if a newline were ever lost on the way, a // comment would swallow the code after it
   const box = code => [
     '<script>',
-    '/* آینده‌نگار · «ابزار خواننده» (کیت ۸): پوسته‌ها، اندازه‌ی متن، خط‌کش خواندن، حالت تمرکز، شنیدن متن، نشان‌ها، گذرنامه‌ی آینده، خودآزمایی، ارجاع و کد QR.',
+    '/* آینده‌نگار · «ابزار خواننده» (کیت ۹): پوسته‌ها، اندازه‌ی متن، خط‌کش خواندن، حالت تمرکز، شنیدن متن، نشان‌ها، گذرنامه‌ی آینده، خودآزمایی، ارجاع، کد QR و «نگار» راهنمای وبلاگ.',
     '   طراحی، مدیریت و نویسندگی: امیرحسین همتی. بدون پاپ‌آپ، بدون انتقال صفحه، بدون دست زدن به تبلیغات بلاگفا و بدون فرستادن هیچ داده‌ای.',
     '   برای خاموش کردن یک ابزار، 1 جلوی نامش را 0 کنید: tools دکمه‌ی نوار بالا، passport گذرنامه، quiz خودآزمایی، listen شنیدن، ruler خط‌کش،',
-    '   focus حالت تمرکز، marks نشان‌ها، cite ارجاع، qr کد QR، resume ادامه‌ی خواندن. */',
-    'window.AN_X_OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1 };',
+    '   focus حالت تمرکز، marks نشان‌ها، cite ارجاع، qr کد QR، resume ادامه‌ی خواندن، guide نگار. */',
+    'window.AN_X_OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1, guide: 1 };',
     '</script>',
     `<script>${code}</script>`, ''
   ].join('\n');
   const M = mirrorsAt(REF || 'REF-NOT-SET');
   return {
-    files: { css: cssA, js: jsA, qr: qrA }, words: { terms: words.terms.length, keys: words.keys.length },
+    files: { css: cssA, js: jsA, qr: qrA, guide: guideA }, words: { terms: words.terms.length, keys: words.keys.length },
     box: box(await loader(M, true)), boxLocal: box(await loader(['./'], false))
   };
 }
@@ -343,7 +346,7 @@ for (const r of reports) {
   console.log(`\n${r.variant.toUpperCase()}  template${r.variant === 'full' ? '' : '-' + r.variant}.html  ${kb(r.bytes)}${r.cdn && !ref.ok ? (UNVERIFIED ? '  (UNVERIFIED: for offline tests only)' : '  (NOT WRITTEN, see below)') : ''}`);
   for (const [k, p] of Object.entries(r.parts)) console.log(`  ${k.padEnd(8)} html ${kb(p.html).padStart(9)}   (css ${kb(p.css)}, js ${kb(p.js)})${p.jsFile ? '   → ' + p.cssFile + ', ' + p.jsFile : ''}`);
 }
-console.log(`\nTOOLKIT  box.html ${kb(Buffer.byteLength(addon.box))}${ref.ok ? '' : UNVERIFIED ? '  (UNVERIFIED: for offline tests only)' : '  (NOT WRITTEN, see below)'}   → ${addon.files.css.file} ${kb(addon.files.css.bytes)}, ${addon.files.js.file} ${kb(addon.files.js.bytes)}, ${addon.files.qr.file} ${kb(addon.files.qr.bytes)} (on demand); quiz pool: ${addon.words.terms} terms, ${addon.words.keys} key points`);
+console.log(`\nTOOLKIT  box.html ${kb(Buffer.byteLength(addon.box))}${ref.ok ? '' : UNVERIFIED ? '  (UNVERIFIED: for offline tests only)' : '  (NOT WRITTEN, see below)'}   → ${addon.files.css.file} ${kb(addon.files.css.bytes)}, ${addon.files.js.file} ${kb(addon.files.js.bytes)}, ${addon.files.qr.file} ${kb(addon.files.qr.bytes)} and ${addon.files.guide.file} ${kb(addon.files.guide.bytes)} (on demand); quiz pool: ${addon.words.terms} terms, ${addon.words.keys} key points`);
 console.log(`\ndist/cdn: ${assets.size} files, ${kb([...assets.values()].reduce((a, b) => a + b.length, 0))}`);
 if (ref.ok) console.log(`cdn ref ${REF}: holds every asset${ref.pushed ? ', and is on a remote branch' : '. WARNING: no remote branch contains it yet; push before installing'}`);
 else console.log(`cdn templates ${UNVERIFIED ? 'written UNVERIFIED (offline tests only, do not install)' : 'NOT written'}: ${ref.why}.\n  Commit dist/cdn/, push, set "ref" in cdn.json to that commit's full hash, and run the build again.`);
@@ -354,5 +357,5 @@ wr('build-report.json', JSON.stringify({
   builtAt: new Date().toISOString(),
   cdn: { repo: CDN.repo, ref: REF, dir: CDN_DIR, ok: ref.ok, pushed: ref.pushed, missing: ref.missing, unverifiedTemplates: !ref.ok && UNVERIFIED, mirrors: MIRRORS, files },
   reports: reports.map(({ out, ...r }) => r),
-  addons: { css: addon.files.css.file, js: addon.files.js.file, qr: addon.files.qr.file, box: Buffer.byteLength(addon.box), boxWritten: ref.ok || UNVERIFIED, words: addon.words }
+  addons: { css: addon.files.css.file, js: addon.files.js.file, qr: addon.files.qr.file, guide: addon.files.guide.file, box: Buffer.byteLength(addon.box), boxWritten: ref.ok || UNVERIFIED, words: addon.words }
 }, null, 2));

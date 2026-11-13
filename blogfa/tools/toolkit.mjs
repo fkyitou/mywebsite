@@ -84,7 +84,7 @@ try {
     const { ctx, page, errors } = await fresh({ tts: true });
     await page.goto(BASE + 'post-1.html', { waitUntil: 'load' });
     await ready(page);
-    ok('post: toolkit loaded (html.an-x-on, AN.x.v=8)', await page.evaluate(() => window.AN.x && window.AN.x.v === 8));
+    ok('post: toolkit loaded (html.an-x-on, AN.x.v=9)', await page.evaluate(() => window.AN.x && window.AN.x.v === 9));
     ok('post: header button first in the tools', await page.evaluate(() => { const t = document.querySelector('#an-bar .an-tools'); return !!t && t.firstElementChild.classList.contains('an-x-btn'); }));
     ok('post: custom box takes no room', await page.evaluate(() => { const c = document.querySelector('.an-custom'); return !!c && getComputedStyle(c).display === 'none'; }));
     ok('post: keys list has R/F/Q', await page.evaluate(() => /ابزار خواننده/.test((document.querySelector('#an-keys .an-keys-list') || {}).textContent || '')));

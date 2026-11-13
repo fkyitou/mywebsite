@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* آینده‌نگار · accessibility check
    Runs axe-core (WCAG 2.0/2.1 A and AA rules plus axe best practices) on the preview in both versions, then checks the skip
-   link, keyboard flow and reduced motion. Writes quality/a11y-results.json; exits 1 on any violation.
+   link, keyboard flow and reduced motion. Kit 9: axe again with «نگار»'s card open and during its walk. Writes quality/a11y-results.json; exits 1 on any violation.
 
    node tools/preview.mjs && node tools/a11y.mjs        (needs Playwright, like tools/check.mjs)
    node tools/a11y.mjs --cdn    on preview-cdn/ (made from a CDN template), the CDN addresses answered from dist/cdn/
@@ -33,6 +33,20 @@ const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=sw
 const report = { at: new Date().toISOString(), axe: [], keyboard: [], motion: [] };
 let problems = 0;
 
+async function scan(p, run) {
+  await p.addScriptTag({ content: AXE });
+  const r = await p.evaluate(async () => {
+    const x = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] }, resultTypes: ['violations', 'incomplete'] });
+    return {
+      violations: x.violations.map(i => ({ id: i.id, impact: i.impact, nodes: i.nodes.map(n => n.target.join(' ') + ' :: ' + (n.failureSummary || '').slice(0, 200)) })),
+      incomplete: x.incomplete.map(i => ({ id: i.id, n: i.nodes.length })), passes: x.passes.length
+    };
+  });
+  report.axe.push({ run, ...r });
+  problems += r.violations.length;
+  console.log(`${r.violations.length ? '✗' : '✓'} ${run}  — ${r.violations.length ? r.violations.map(i => i.id + '×' + i.nodes.length).join(', ') : 'no violations'} · ${r.passes} rules passed · needs review: ${r.incomplete.map(i => i.id + '×' + i.n).join(', ') || '—'}`);
+}
+
 for (const [vn, vp, mobile, v, f] of RUNS) {
   const ctx = await browser.newContext({ viewport: vp, isMobile: mobile, hasTouch: mobile, locale: 'fa-IR' });
   if (CDN) await routeCdn(ctx);
@@ -46,17 +60,22 @@ for (const [vn, vp, mobile, v, f] of RUNS) {
     await p.keyboard.press('p'); await p.waitForTimeout(500);
     if (!(await p.evaluate(() => document.documentElement.classList.contains('an-present')))) { problems++; console.log(`✗ present/${v} ${f}  — P did not turn presentation mode on`); }
   }
-  await p.addScriptTag({ content: AXE });
-  const r = await p.evaluate(async () => {
-    const x = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] }, resultTypes: ['violations', 'incomplete'] });
-    return {
-      violations: x.violations.map(i => ({ id: i.id, impact: i.impact, nodes: i.nodes.map(n => n.target.join(' ') + ' :: ' + (n.failureSummary || '').slice(0, 200)) })),
-      incomplete: x.incomplete.map(i => ({ id: i.id, n: i.nodes.length })), passes: x.passes.length
-    };
-  });
-  report.axe.push({ run: `${vn}/${v} ${f}`, ...r });
-  problems += r.violations.length;
-  console.log(`${r.violations.length ? '✗' : '✓'} ${vn}/${v} ${f}  — ${r.violations.length ? r.violations.map(i => i.id + '×' + i.nodes.length).join(', ') : 'no violations'} · ${r.passes} rules passed · needs review: ${r.incomplete.map(i => i.id + '×' + i.n).join(', ') || '—'}`);
+  await scan(p, `${vn}/${v} ${f}`);
+  await ctx.close();
+}
+
+// «نگار» (kit 9): its card open, and its walk through the page, in both versions
+for (const v of ['a', 'b']) for (const [f, what] of [['index.html', 'card'], ['index.html', 'walk'], ['post-1.html', 'walk']]) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'fa-IR' });
+  if (CDN) await routeCdn(ctx);
+  await ctx.addInitScript(ver => { try { localStorage.setItem('an-v', ver); } catch (e) {} }, v);
+  const p = await ctx.newPage();
+  await p.goto(url(f), { waitUntil: 'load' }); await p.waitForTimeout(600);
+  await p.click('.an-g'); await p.waitForSelector('.an-g-card.on', { timeout: 10000 }).catch(() => {}); await p.waitForTimeout(400);
+  if (what === 'walk') { await p.click('.an-g-acts [data-g="tour"]'); await p.waitForTimeout(1200); }
+  const shown = await p.evaluate(w => !!document.querySelector(w === 'walk' ? '.an-g-tip' : '.an-g-card.on'), what);
+  if (!shown) { problems++; console.log(`✗ guide-${what}/${v} ${f}  — the guide's ${what} did not open`); }
+  await scan(p, `guide-${what}/${v} ${f}`);
   await ctx.close();
 }
 
@@ -94,5 +113,5 @@ for (const f of ['index.html', 'post-6.html']) {
 await browser.close();
 fs.mkdirSync(path.join(ROOT, 'quality'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'quality', CDN ? 'a11y-cdn-results.json' : 'a11y-results.json'), JSON.stringify(report, null, 2));
-console.log(problems ? `\n${problems} problem(s)` : `\nall ${RUNS.length} axe runs clean; keyboard and reduced-motion checks passed`);
+console.log(problems ? `\n${problems} problem(s)` : `\nall ${report.axe.length} axe runs clean; keyboard and reduced-motion checks passed`);
 process.exit(problems ? 1 : 0);

@@ -6,19 +6,24 @@
      · on an article: bookmark, listen (the browser's own Persian voice, only when it has one), reading ruler,
        focus mode, citation, QR code, print, «continue where you stopped», a stamp in the «future passport» for each
        story read to the end, and a word quiz built from the article's own glossary
+     · «نگار», the blog's guide: a small figure of light in the corner that, when pressed, introduces the page,
+       sums up the article, suggests a story, tells what the sky shows and walks through the page. Its card and
+       walk are a third file (src/addons/guide.js), fetched on the first press like the QR encoder.
    Everything stays in this browser (localStorage) and nothing is sent anywhere. Blogfa forbids popups, redirects,
-   ad changes and earning code in that box; the toolkit has none of them. It works only with the Ayandeh-Negar
-   template (window.AN); with any other template it stays silent. Keys: R toolkit, F focus mode, Q QR code. */
+   ad changes and earning code in that box; the toolkit has none of them, and the guide never opens by itself. It
+   works only with the Ayandeh-Negar template (window.AN); with any other template it stays silent.
+   Keys: R toolkit, F focus mode, Q QR code, G the guide. */
 (function () {
   'use strict';
   var W = window, D = document, H = D.documentElement;
   if (W.AN_XT) return;
   W.AN_XT = 1;
-  // filled in by tools/build.mjs: the QR encoder file [name, SRI], every glossary term of the ten articles, and
-  // the first key points of each article as [topic, text]
-  var X = W.AN_X || {}, QR = '@QR@', TERMS = '@TERMS@', KEYS = '@KEYS@';
-  // what the blog owner switched off in the box (window.AN_X_OPT): 0 turns a tool off
-  var OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1 };
+  // filled in by tools/build.mjs: the QR encoder and the guide's card as [file, SRI], every glossary term of the
+  // articles, and the first key points of each article as [topic, text]
+  var X = W.AN_X || {}, QR = '@QR@', GUIDE = '@GUIDE@', TERMS = '@TERMS@', KEYS = '@KEYS@';
+  // what the blog owner switched off in the box (window.AN_X_OPT): 0 turns a tool off. A box pasted before the
+  // guide existed does not name it, and the guide stays on.
+  var OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1, guide: 1 };
   var own = W.AN_X_OPT || X.opt || {};
   for (var key in OPT) if (Object.prototype.hasOwnProperty.call(own, key)) OPT[key] = own[key] ? 1 : 0;
 
@@ -38,7 +43,7 @@
 
   function start(AN) {
     var $ = AN.$, $$ = AN.$$, el = AN.el, esc = AN.esc, fa = AN.fa;
-    var STORE = ['an-x', 'an-x-read', 'an-x-quiz', 'an-x-marks', 'an-x-pos', 'an-x-idx'];
+    var STORE = ['an-x', 'an-x-read', 'an-x-quiz', 'an-x-marks', 'an-x-pos', 'an-x-idx', 'an-x-guide'];
     var osRM = !!(W.matchMedia && W.matchMedia('(prefers-reduced-motion: reduce)').matches);
     var FS = [0.9, 1, 1.12, 1.25, 1.4];
     var THEMES = [['a', 'شب', 'نسخه‌ی A'], ['b', 'روز', 'نسخه‌ی B'], ['paper', 'کاغذی', 'گرم و آرام'], ['contrast', 'پرتضاد', 'سیاه و سفید']];
@@ -61,6 +66,7 @@
 
     /* ---------- the reader's settings ---------- */
     var ruler = { on: false, el: null, y: 0 }; // methods below, in «reading ruler»; apply() reads .on from the start
+    var guide = { ready: false, el: null, mod: null }; // the same for «نگار, the blog's guide»
     var P = get('an-x', {});
     if (!P || typeof P !== 'object') P = {};
     // an address with ?v=a or ?v=b shows the version it names (js/early.js); a saved theme waits until the reader
@@ -72,11 +78,11 @@
       P.lh = P.lh === 2 || P.lh === 3 ? P.lh : 1;
       P.w = P.w === 1 || P.w === 3 ? P.w : 2;
       P.ease = P.ease ? 1 : 0; P.focus = P.focus ? 1 : 0; P.ruler = P.ruler ? 1 : 0;
-      P.motion = P.motion === 0 ? 0 : 1; P.sky = P.sky === 0 ? 0 : 1; P.vt = P.vt === 0 ? 0 : 1;
+      P.motion = P.motion === 0 ? 0 : 1; P.sky = P.sky === 0 ? 0 : 1; P.vt = P.vt === 0 ? 0 : 1; P.guide = P.guide === 0 ? 0 : 1;
     }
     clean();
     // nothing is kept while every setting is at its default, so «پاک کردن همه‌ی داده‌های من» leaves the storage empty
-    function save() { if (P.tone || P.fs !== 1 || P.lh !== 1 || P.w !== 2 || P.ease || P.focus || P.ruler || !P.motion || !P.sky || !P.vt) put('an-x', P); else drop('an-x'); }
+    function save() { if (P.tone || P.fs !== 1 || P.lh !== 1 || P.w !== 2 || P.ease || P.focus || P.ruler || !P.motion || !P.sky || !P.vt || !P.guide) put('an-x', P); else drop('an-x'); }
     // the same values js/early.js reads before the first paint; an older template leaves them to this call
     function apply() {
       attr('data-an-tone', P.tone && !forced ? P.tone : null);
@@ -90,6 +96,7 @@
       attr('data-motion', AN.rm ? 'reduce' : null);
       if (AN.sky && AN.sky.refresh) AN.sky.refresh();
       if (ruler.on) ruler.size();
+      guideShow();
     }
     // A or B from the template's own switch (button, B key) ends the paper and high-contrast themes
     var setV0 = AN.setV;
@@ -158,7 +165,8 @@
           seg('lh', 'فاصله‌ی سطرها', [[1, 'عادی'], [2, 'باز'], [3, 'بازتر']]) + seg('w', 'پهنای ستون', [[1, 'باریک'], [2, 'عادی'], [3, 'پهن']]) +
           sw('ease', 'فاصله‌گذاری آسان‌خوان', 'فاصله‌ی بیشتر میان واژه‌ها و بندها؛ برای خوانش راحت‌تر')) +
         sec('حرکت و جلوه‌ها', sw('motion', 'جلوه‌های حرکتی', osRM ? 'دستگاه شما «حرکت کمتر» را خواسته است؛ همین رعایت می‌شود.' : 'خاموشش کنید تا صفحه آرام و بی‌حرکت بماند.', osRM) +
-          sw('sky', 'آسمان پویای پس‌زمینه') + sw('vt', 'گذار نرم میان صفحه‌ها', 'در مرورگرهایی که پشتیبانی می‌کنند') + ($('[data-an="sound"]') ? sw('snd', 'صدای وبلاگ', 'همان دکمه‌ی صدا در نوار بالا (M)') : '')) +
+          sw('sky', 'آسمان پویای پس‌زمینه') + sw('vt', 'گذار نرم میان صفحه‌ها', 'در مرورگرهایی که پشتیبانی می‌کنند') + ($('[data-an="sound"]') ? sw('snd', 'صدای وبلاگ', 'همان دکمه‌ی صدا در نوار بالا (M)') : '') +
+          (OPT.guide ? sw('guide', 'نگار، راهنمای وبلاگ', 'شکل کوچکی از نور در گوشه‌ی صفحه که با یک کلیک (یا کلید G) صفحه را معرفی می‌کند') : '')) +
         sec(post ? 'این مقاله' : 'این صفحه', actions()) +
         (OPT.passport ? sec('گذرنامه‌ی آینده', '<div class="an-x-pp"></div>', 'an-x-sec-pp') : '') +
         (OPT.marks ? sec('نشان‌شده‌ها', '<div class="an-x-marks"></div>') : '') +
@@ -235,7 +243,8 @@
     }
     var kl = $('#an-keys .an-keys-list');
     if (kl) kl.insertAdjacentHTML('beforeend', (OPT.tools ? '<dt><kbd>R</kbd></dt><dd>ابزار خواننده: پوسته، اندازه‌ی متن، خط‌کش، گذرنامه و نشان‌ها</dd>' : '') +
-      (OPT.focus ? '<dt><kbd>F</kbd></dt><dd>حالت تمرکز، در صفحه‌ی هر مقاله</dd>' : '') + (OPT.qr ? '<dt><kbd>Q</kbd></dt><dd>کد QR همین صفحه، برای باز کردنش روی گوشی</dd>' : ''));
+      (OPT.focus ? '<dt><kbd>F</kbd></dt><dd>حالت تمرکز، در صفحه‌ی هر مقاله</dd>' : '') + (OPT.qr ? '<dt><kbd>Q</kbd></dt><dd>کد QR همین صفحه، برای باز کردنش روی گوشی</dd>' : '') +
+      (OPT.guide ? '<dt><kbd>G</kbd></dt><dd>نگار، راهنمای وبلاگ: معرفی همین صفحه و گشت کوتاه در آن</dd>' : ''));
     D.addEventListener('keydown', function (e) {
       if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
       var t = e.target || {}, tag = (t.tagName || '').toLowerCase(), k = e.key;
@@ -247,6 +256,8 @@
       } else if (open) return;
       else if ((k === 'f' || k === 'F' || k === 'ب') && post && OPT.focus) { e.preventDefault(); setFocus(!P.focus); }
       else if ((k === 'q' || k === 'Q' || k === 'ض') && OPT.qr) { e.preventDefault(); qrDlg(); }
+      // G, or the same key on a Persian keyboard (ل)
+      else if ((k === 'g' || k === 'G' || k === 'ل') && guide.el && !guide.el.hidden) { e.preventDefault(); guideToggle(); }
     });
 
     /* ---------- bookmarks ---------- */
@@ -318,6 +329,7 @@
           if (seal) { seal.innerHTML = sealHTML(true, n); seal.classList.add('stamp'); }
           AN.toast('مهر «' + AN.TOPICS[post.topic].n + '» خورد: ' + fa(n) + ' از ' + fa(pkeys().length) + ' روایت در گذرنامه‌ی آینده.');
           if (n === pkeys().length) confetti();
+          guideJoy();
           sync();
         }
       }
@@ -535,22 +547,32 @@
       if (navigator.clipboard && W.isSecureContext) navigator.clipboard.writeText(text).then(function () { AN.toast(ok); }, manual); else manual();
     }
 
-    /* ---------- QR code of this page ---------- */
-    // The encoder (qrcode-generator, MIT, Kazuhiko Arase) is a second file, fetched only when this window opens,
-    // from the same address as this script and checked with Subresource Integrity like the others.
-    function loadQR(cb) {
-      if (W.AN_QR) { cb(); return; }
+    /* ---------- files fetched on demand ---------- */
+    // The QR encoder and the guide's card are separate files, fetched only when first needed, from the same address
+    // as this script (then the backups) and checked with Subresource Integrity like the others. spec: [file, SRI];
+    // ready(): whether the file has run. Callers that ask while it is on its way wait for the same request.
+    var LZ = {};
+    function lazy(spec, ready, cb) {
+      if (ready()) { cb(); return; }
+      if (!Array.isArray(spec)) { cb(new Error('missing')); return; }
+      var q = LZ[spec[0]]; if (q) { q.push(cb); return; }
+      q = LZ[spec[0]] = [cb];
       var bases = [], i = 0;
       [X.base].concat(X.mirrors || []).forEach(function (b) { if (typeof b === 'string' && bases.indexOf(b) < 0) bases.push(b); });
+      function done(err) { delete LZ[spec[0]]; q.forEach(function (f) { try { f(err); } catch (e) { if (W.console) console.warn('[آینده‌نگار]', e); } }); }
       (function next() {
-        if (i >= bases.length || !Array.isArray(QR)) { cb(new Error('qr')); return; }
-        var s = D.createElement('script'); s.src = bases[i++] + QR[0];
-        if (X.sri) { s.integrity = QR[1]; s.crossOrigin = 'anonymous'; }
-        s.addEventListener('load', function () { cb(W.AN_QR ? null : new Error('qr')); });
+        if (i >= bases.length) { done(new Error('load')); return; }
+        var s = D.createElement('script'); s.src = bases[i++] + spec[0];
+        if (X.sri) { s.integrity = spec[1]; s.crossOrigin = 'anonymous'; }
+        s.addEventListener('load', function () { done(ready() ? null : new Error('load')); });
         s.addEventListener('error', function () { s.remove(); next(); });
         D.head.appendChild(s);
       })();
     }
+
+    /* ---------- QR code of this page ---------- */
+    // The encoder is qrcode-generator (MIT, Kazuhiko Arase).
+    function loadQR(cb) { lazy(QR, function () { return !!W.AN_QR; }, cb); }
     function qrSVG(text) {
       var q = W.AN_QR(0, 'M'); q.addData(text, 'Byte'); q.make();
       var n = q.getModuleCount(), d = '', s = n + 8;
@@ -579,6 +601,114 @@
         if (err) { img.innerHTML = '<span class="an-x-note">کد QR ساخته نشد: فایلش از اینترنت نرسید. پیوند زیر را می‌توانید کپی کنید.</span>'; return; }
         try { img.innerHTML = qrSVG(here); img.setAttribute('data-for', here); } catch (e) { img.innerHTML = '<span class="an-x-note">این پیوند برای کد QR بیش از اندازه بلند است.</span>'; }
       });
+    }
+
+    /* ---------- «نگار», the blog's guide ---------- */
+    // An original, symbolic figure made of light: a drop-shaped body, a ring with a running light around it, two
+    // lines of energy for arms and a few sparks. Not a person and not a religious figure. Here: the button in the
+    // corner across from «to the top», the figure, its glance toward the pointer and a one-time hello beside it. Its
+    // card and the walk through the page (src/addons/guide.js) arrive on the first press. It never opens by itself:
+    // Blogfa forbids pop-ups in the box, and a reader is never interrupted.
+    // The light version (phones, touch screens, weak graphics, data saver) keeps the figure still.
+    var LITE = !!(AN.gpu === 'soft' || (W.matchMedia && W.matchMedia('(max-width: 700px), (pointer: coarse)').matches) || (navigator.connection && navigator.connection.saveData));
+    function figure(id) {
+      var ring = 'M7 38a25 7.5 0 0 1 50 0a25 7.5 0 0 1-50 0';
+      // fill="none" on the root: the template's line-icon rule (svg:not([fill]), css/01-base.css) stays away
+      return '<svg class="an-g-fig" viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false"><defs>' +
+        '<radialGradient id="' + id + 'a"><stop offset="0" class="an-g-s1"/><stop offset="1" class="an-g-s0"/></radialGradient>' +
+        '<linearGradient id="' + id + 'b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="an-g-s2"/><stop offset="1" class="an-g-s3"/></linearGradient>' +
+        '<radialGradient id="' + id + 'c" cx=".38" cy=".34" r=".72"><stop offset="0" class="an-g-s4"/><stop offset=".5" class="an-g-s2"/><stop offset="1" class="an-g-s3"/></radialGradient>' +
+        '<clipPath id="' + id + 'd" clipPathUnits="userSpaceOnUse"><rect x="0" y="38" width="64" height="30"/></clipPath></defs>' +
+        '<circle cx="32" cy="34" r="30" fill="url(#' + id + 'a)"/>' +
+        // the far half of the ring, behind the body; the running light passes behind it there
+        '<g transform="rotate(-16 32 38)"><path class="an-g-orb" d="M7 38a25 7.5 0 0 1 50 0"/><path class="an-g-run" d="' + ring + '" pathLength="100"/></g>' +
+        '<path d="M32 25c6.2 0 9.4 4.6 9.4 10.6 0 7.4-4.6 14.6-9.4 21.4-4.8-6.8-9.4-14-9.4-21.4 0-6 3.2-10.6 9.4-10.6z" fill="url(#' + id + 'b)"/>' +
+        '<path class="an-g-arm" d="M25.4 31.5c-4 1.6-6.6 4.8-8 9"/><path class="an-g-arm an-g-wave" d="M38.6 31.5c4 1.6 6.6 4.8 8 9"/>' +
+        '<path class="an-g-spark" d="M32 33.4l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z"/>' +
+        '<circle cx="32" cy="17.5" r="7.2" fill="url(#' + id + 'c)"/>' +
+        '<g class="an-g-look"><g class="an-g-eyes"><ellipse cx="29.4" cy="17.7" rx="1.15" ry="1.5"/><ellipse cx="34.6" cy="17.7" rx="1.15" ry="1.5"/></g></g>' +
+        // the near half, in front of the body
+        '<g transform="rotate(-16 32 38)"><path class="an-g-orb" d="M57 38a25 7.5 0 0 1-50 0"/><path class="an-g-run" d="' + ring + '" pathLength="100" clip-path="url(#' + id + 'd)"/></g>' +
+        '<g class="an-g-dots"><circle cx="9" cy="17" r="1.1"/><circle cx="55" cy="12" r=".9"/><circle cx="58" cy="50" r="1.2"/><circle cx="7" cy="48" r=".8"/><circle cx="46" cy="5" r=".7"/></g></svg>';
+    }
+    function guideReady() { return typeof W.AN_GUIDE === 'function'; }
+    function guidePreload() { lazy(GUIDE, guideReady, function () {}); }
+    function guideShow() {
+      if (!guide.ready) return;
+      guide.el.hidden = !P.guide;
+      if (!P.guide) { guideChip(); if (guide.mod) guide.mod.close(true); }
+    }
+    function guideToggle() {
+      var b = guide.el; if (!b || b.hidden) return;
+      guideChip();
+      if (guide.mod) { guide.mod.toggle(); return; }
+      b.setAttribute('aria-busy', 'true');
+      lazy(GUIDE, guideReady, function (err) {
+        b.removeAttribute('aria-busy');
+        if (err) { AN.toast('کارت «نگار» از اینترنت نرسید؛ اتصال را بررسی کنید و دوباره امتحان کنید.'); return; }
+        if (!guide.mod) guide.mod = W.AN_GUIDE({
+          AN: AN, OPT: OPT, btn: b, post: post, page: AN.page, here: here, idx: idx, fig: figure,
+          get: get, put: put, path: path, esc: esc, fa: fa,
+          // the stories read to the end, only when the passport keeps them
+          read: function () { return OPT.passport ? get('an-x-read', {}) || {} : null; },
+          tools: OPT.tools ? function () { openPanel(b); } : null,
+          hide: function () { P.guide = 0; save(); apply(); sync(); }
+        });
+        guide.mod.toggle();
+      });
+    }
+    // the hello: once in this browser, a few seconds after the first page, on a screen with room for it
+    function guideHello(b) {
+      if ((get('an-x-guide', {}) || {}).hi || W.innerWidth < 560) return;
+      setTimeout(function () {
+        if (b.hidden || $('.an-dlg.on') || H.classList.contains('an-present') || (post && P.focus && OPT.focus) || (guide.mod && guide.mod.busy())) return;
+        var g = get('an-x-guide', {}) || {}; g.hi = 1; put('an-x-guide', g);
+        var c = el('span', 'an-g-chip', 'سلام! من «نگار» هستم، راهنمای این وبلاگ. هر وقت خواستید روی من بزنید.');
+        c.setAttribute('aria-hidden', 'true'); D.body.appendChild(c); guide.chip = c;
+        requestAnimationFrame(function () { requestAnimationFrame(function () { c.classList.add('on'); b.classList.add('hi'); }); });
+        setTimeout(guideChip, 7000);
+      }, 3500);
+    }
+    function guideChip() {
+      var c = guide.chip; if (!c) return;
+      guide.chip = null; c.classList.remove('on'); guide.el.classList.remove('hi');
+      setTimeout(function () { c.remove(); }, 400);
+    }
+    // the eyes follow a mouse pointer (not on touch, not in the light version, not with reduced motion)
+    function guideLook(b) {
+      var look = b.querySelector('.an-g-look'), x = 0, y = 0, tick = false;
+      D.addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        x = e.clientX; y = e.clientY;
+        if (tick) return;
+        tick = true;
+        requestAnimationFrame(function () {
+          tick = false; if (b.hidden || AN.rm) return;
+          var r = b.getBoundingClientRect(), dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height * 0.27), d = Math.sqrt(dx * dx + dy * dy) || 1, k = Math.min(1, d / 160);
+          look.setAttribute('transform', 'translate(' + (dx / d * 1.4 * k).toFixed(2) + ' ' + (dy / d * 1.1 * k).toFixed(2) + ')');
+        });
+      }, { passive: true });
+    }
+    // a small jump of joy when a story gets its stamp
+    function guideJoy() {
+      var b = guide.el; if (!b || b.hidden || AN.rm) return;
+      b.classList.remove('joy'); void b.offsetWidth; b.classList.add('joy');
+      setTimeout(function () { b.classList.remove('joy'); }, 1600);
+    }
+    function guideInit() {
+      if (!OPT.guide || !D.body) return;
+      var b = el('button', 'an-g' + (LITE ? ' lite' : ''), figure('an-g-'));
+      b.type = 'button'; b.title = 'نگار، راهنمای وبلاگ';
+      b.setAttribute('aria-label', 'نگار، راهنمای وبلاگ (G)'); b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-expanded', 'false'); b.setAttribute('aria-keyshortcuts', 'G');
+      // on an article the ring takes the colour of the article's realm
+      var t = post && AN.TOPICS[post.topic]; if (t && AN.color) b.style.setProperty('--g-ring', AN.color(t.c));
+      D.body.appendChild(b);
+      guide.el = b; guide.ready = true;
+      b.addEventListener('click', guideToggle);
+      ['pointerenter', 'focus', 'touchstart'].forEach(function (n) { b.addEventListener(n, guidePreload, { passive: true, once: true }); });
+      guideShow();
+      if (!LITE && !osRM && W.matchMedia && W.matchMedia('(pointer: fine)').matches) guideLook(b);
+      if (P.guide) guideHello(b);
     }
 
     /* ---------- a little celebration (never with reduced motion) ---------- */
@@ -622,7 +752,8 @@
       sync(); pressed('mark', isMarked());
     }
 
+    guideInit();
     H.classList.add('an-x-on');
-    AN.x = { v: 8, open: openPanel, theme: theme, opt: OPT };
+    AN.x = { v: 9, open: openPanel, theme: theme, opt: OPT, guide: guideToggle };
   }
 })();

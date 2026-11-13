@@ -20,6 +20,9 @@
   10. Kit 9: the live sky. With no version chosen the blog shows «روز» while the sun is up for the visitor's clock
       and «شب» after dusk, with the phase of the day, a moon with its real phase and the season's constellation;
       a chosen version is kept; the approximations are measured against tools/astro.mjs.
+  11. Kit 9: «نگار», the blog's guide. The figure in the corner, a hello once, the card (on a press or G) with its
+      answers drawn from the page, the walk that lights one part at a time, hiding and bringing it back, the box
+      option guide: 0, the light version on a phone, reduced motion, and what it keeps and asks for.
 
    node tools/behaviour.mjs          → preview/,     quality/behaviour-results.json, exit 1 on any failure
    node tools/behaviour.mjs --cdn    → preview-cdn/ (CDN addresses answered from dist/cdn/), quality/behaviour-cdn-results.json
@@ -528,6 +531,216 @@ if (CDN) {
   const asks = ['geolocation', 'fetch(', 'XMLHttpRequest', 'sendBeacon', 'WebSocket', 'EventSource', 'document.cookie'].filter(w => skySrc.includes(w));
   ok('kit9-sky', 'the sky uses the clock only: no location, cookie or network call in its code', asks.length === 0, asks.join(', '));
   ok('kit9-sky', 'no console error', errs.length === 0, errs.slice(0, 2).join(' | '));
+}
+
+/* ---------- 11. kit 9: «نگار», the blog's guide (figure in src/addons/addons.js, card and walk in src/addons/guide.js) ---------- */
+{
+  const errs = [], asked = [];
+  async function openG(file, o = {}) {
+    const ctx = await browser.newContext({ viewport: o.viewport || { width: 1366, height: 900 }, deviceScaleFactor: 1, locale: 'fa-IR', timezoneId: 'UTC', reducedMotion: o.rm ? 'reduce' : 'no-preference', isMobile: !!o.mobile, hasTouch: !!o.mobile });
+    if (CDN) await routeCdn(ctx);
+    await ctx.addInitScript(n => { window.AN_NOW = n; }, o.now || '2026-11-13T22:30:00');
+    if (o.store) await ctx.addInitScript(s => { try { if (!sessionStorage.getItem('t-once')) { for (const k in s) localStorage.setItem(k, s[k]); sessionStorage.setItem('t-once', '1'); } } catch (e) {} }, o.store);
+    // the page as Blogfa would serve it with the owner's box changed (o.html edits the page's text)
+    if (o.html) await ctx.route(u => new URL(u).pathname.endsWith('.html'), async route => { const r = await route.fetch(); await route.fulfill({ response: r, body: o.html(await r.text()) }); });
+    const page = await ctx.newPage();
+    page.on('console', m => { if (m.type() === 'error') errs.push(file + ': ' + m.text()); });
+    page.on('pageerror', e => errs.push(file + ': ' + String(e)));
+    page.on('request', q => { if (/\/an-guide\.[0-9a-f]+\.js$/.test(q.url())) asked.push(q.url()); });
+    await page.goto(BASE + file, { waitUntil: 'load' });
+    await page.waitForFunction(() => window.AN && window.AN.ok && document.documentElement.classList.contains('an-x-on'), null, { timeout: 15000 }).catch(() => {});
+    return { ctx, page };
+  }
+  const cardOn = page => page.waitForSelector('.an-g-card.on', { timeout: 10000 }).then(() => page.waitForTimeout(350)).catch(() => {});
+  const msg = page => page.evaluate(() => { const m = document.querySelector('.an-g-msg'); return m ? m.textContent.replace(/\s+/g, ' ').trim() : ''; });
+  const PARTS = ['#an-nav', '[data-an="menu"]', '[data-an="search"]', '[data-an="ab"]', '[data-an="sound"]', '.an-x-btn', '#an-realms', '#an-cards', '.an-keys', '.an-toc', '.an-lab', '.an-x-after', '.an-related'];
+  // one step of the walk: its counter and title, how far the light is from the part it lights (the same clipping as
+  // the guide: 6 px around the part, inside the screen and above the ad bar), and whether the note is on the screen
+  const step = page => page.evaluate(parts => {
+    const t = document.querySelector('.an-g-tip'), s = document.querySelector('.an-g-spot'); if (!t || !s) return null;
+    const sp = s.getBoundingClientRect(), tr = t.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = innerHeight;
+    const ad = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--an-ad')) || 0, room = vh - ad;
+    let off = 1e9, part = '';
+    for (const q of parts) {
+      const e = document.querySelector(q); if (!e) continue;
+      const r = e.getBoundingClientRect(), want = [Math.max(r.top - 6, 4), Math.max(r.left - 6, 4), Math.min(r.right + 6, vw - 4), Math.min(r.bottom + 6, room - 4)];
+      const d = Math.max(Math.abs(want[0] - sp.top), Math.abs(want[1] - sp.left), Math.abs(want[2] - sp.right), Math.abs(want[3] - sp.bottom));
+      if (d < off) { off = d; part = q; }
+    }
+    return { n: t.querySelector('.an-g-n').textContent, h: t.querySelector('h2').textContent, off: Math.round(off), part,
+      inside: tr.top >= 0 && tr.left >= 0 && tr.right <= vw && tr.bottom <= room, label: t.getAttribute('aria-labelledby') === 'an-g-tip-h' && t.getAttribute('role') === 'dialog' };
+  }, PARTS);
+  async function walk(page, max = 12) {
+    const S = [];
+    await page.waitForSelector('.an-g-tip', { timeout: 5000 }).catch(() => {});
+    for (let i = 0; i < max; i++) {
+      await page.waitForTimeout(900);
+      const s = await step(page); if (!s) break; S.push(s);
+      await page.click('.an-g-tip [data-t="next"]').catch(() => {});
+    }
+    await page.waitForTimeout(300);
+    return S;
+  }
+  const fine = S => S.every(s => s.off <= 2 && s.inside && s.label);
+
+  // 1. home at night, desktop: the figure, the hello, the card and its answers, the walk
+  {
+    const { ctx, page } = await openG('index.html');
+    const keys0 = await page.evaluate(() => Object.keys(localStorage));
+    const g = await page.evaluate(() => {
+      const b = document.querySelector('.an-g'), f = document.querySelector('.an-fab'); if (!b) return null;
+      const r = b.getBoundingClientRect(), q = f && f.getBoundingClientRect(), apart = !q || r.right <= q.left || q.right <= r.left || r.bottom <= q.top || q.bottom <= r.top;
+      return { hidden: b.hidden, label: b.getAttribute('aria-label'), key: b.getAttribute('aria-keyshortcuts'), pop: b.getAttribute('aria-haspopup'), exp: b.getAttribute('aria-expanded'), apart, inside: r.left >= 0 && r.bottom <= innerHeight && r.width >= 44 && r.height >= 44, svg: b.querySelector('svg').getAttribute('aria-hidden') };
+    });
+    ok('kit9-guide', 'home: the figure sits in its corner, labelled with its name and key, apart from «to the top»', !!g && !g.hidden && /نگار/.test(g.label) && g.key === 'G' && g.pop === 'dialog' && g.exp === 'false' && g.apart && g.inside && g.svg === 'true', JSON.stringify(g));
+    await page.waitForTimeout(1000);
+    ok('kit9-guide', 'home: the card\'s code is not loaded with the page', asked.length === 0, `${asked.length} request(s)`);
+    const chip = await page.waitForSelector('.an-g-chip.on', { timeout: 6000 }).then(() => page.evaluate(() => ({ t: document.querySelector('.an-g-chip').textContent, hide: document.querySelector('.an-g-chip').getAttribute('aria-hidden'), saved: JSON.parse(localStorage.getItem('an-x-guide') || '{}').hi }))).catch(() => null);
+    ok('kit9-guide', 'home: a hello beside the figure a few seconds after the first page', !!chip && /نگار/.test(chip.t) && chip.hide === 'true' && chip.saved === 1, JSON.stringify(chip));
+    await page.click('.an-g'); await cardOn(page);
+    const c = await page.evaluate(() => {
+      const d = document.querySelector('.an-g-card'), a = document.activeElement;
+      return { role: d.getAttribute('role'), modal: d.getAttribute('aria-modal'), name: (document.getElementById(d.getAttribute('aria-labelledby')) || {}).textContent, exp: document.querySelector('.an-g').getAttribute('aria-expanded'), first: a === d.querySelector('.an-g-act'), acts: [...d.querySelectorAll('.an-g-act')].map(b => b.getAttribute('data-g')), chip: !!document.querySelector('.an-g-chip.on') };
+    });
+    const hello = await msg(page);
+    ok('kit9-guide', 'home: a press opens the card, a dialog beside the figure, focus on its first answer', c.role === 'dialog' && c.modal === 'false' && c.name === 'نگار' && c.exp === 'true' && c.first && !c.chip && ['tour', 'pick', 'sky', 'tip', 'tools'].every(k => c.acts.includes(k)), JSON.stringify(c));
+    ok('kit9-guide', 'home: the greeting follows the clock and the page (22:30, the front page)', /^شبتان پرستاره!/.test(hello) && /صفحه‌ی نخست/.test(hello), hello.slice(0, 90));
+    ok('kit9-guide', 'home: the card\'s code came once, from the toolkit\'s own address', asked.length === 1 && await page.evaluate(u => { const s = [...document.scripts].find(x => /an-addons\.[0-9a-f]+\.js/.test(x.src)); return !!s && s.src.replace(/[^/]+$/, '') === u.replace(/[^/]+$/, ''); }, asked[0] || ''), asked.join(' '));
+    await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+    const esc = await page.evaluate(() => ({ hidden: document.querySelector('.an-g-card').hidden, focus: document.activeElement.classList.contains('an-g'), exp: document.querySelector('.an-g').getAttribute('aria-expanded') }));
+    ok('kit9-guide', 'home: Escape closes the card and gives the focus back to the figure', esc.hidden && esc.focus && esc.exp === 'false', JSON.stringify(esc));
+    await page.keyboard.press('g'); await cardOn(page);
+    const g1 = await page.evaluate(() => !document.querySelector('.an-g-card').hidden);
+    await page.keyboard.press('g'); await page.waitForTimeout(250);
+    const g2 = await page.evaluate(() => document.querySelector('.an-g-card').hidden);
+    // Playwright's keyboard has no Persian layout: the key event a Persian keyboard sends for the same key
+    await page.evaluate(() => (document.activeElement || document.body).dispatchEvent(new KeyboardEvent('keydown', { key: 'ل', code: 'KeyG', bubbles: true, cancelable: true }))); await cardOn(page);
+    const g3 = await page.evaluate(() => !document.querySelector('.an-g-card').hidden);
+    ok('kit9-guide', 'home: the key G (ل on a Persian keyboard) opens and closes the card', g1 && g2 && g3, `${g1} ${g2} ${g3}`);
+    await page.click('.an-g-acts [data-g="pick"]'); await page.waitForTimeout(150);
+    const p1 = await page.evaluate(() => { const a = document.querySelector('.an-g-msg a'); return a ? a.getAttribute('href') : ''; });
+    await page.click('.an-g-msg [data-g="pick"]'); await page.waitForTimeout(150);
+    const p2 = await page.evaluate(() => { const a = document.querySelector('.an-g-msg a'); return { h: a ? a.getAttribute('href') : '', focus: document.activeElement.getAttribute('data-g') }; });
+    const real = h => /post-\d+\.html$|\/post\/\d+$/.test(h);
+    ok('kit9-guide', '«یک روایت برایم انتخاب کن»: a real story, and «یکی دیگر» gives another one', real(p1) && real(p2.h) && p1 !== p2.h && p2.focus === 'pick', `${p1} → ${p2.h}`);
+    await page.click('.an-g-acts [data-g="sky"]'); await page.waitForTimeout(150);
+    const sky = await msg(page), sk = await page.evaluate(() => ({ phase: document.documentElement.getAttribute('data-sky'), cons: (document.querySelector('.an-sky-const svg') || { getAttribute: () => '' }).getAttribute('data-name') }));
+    ok('kit9-guide', '«آسمان همین لحظه»: the phase and the constellation the sky shows, and no location asked', sk.phase === 'night' && /«شب»/.test(sky) && !!sk.cons && sky.includes('(' + sk.cons + ')') && /ماه/.test(sky) && /مکان شما پرسیده نمی‌شود/.test(sky), `${sk.phase}/${sk.cons}: ${sky.slice(0, 120)}`);
+    await page.click('.an-g-acts [data-g="tip"]'); await page.waitForTimeout(100);
+    const t1 = await msg(page);
+    await page.click('.an-g-msg [data-g="tip"]'); await page.waitForTimeout(100);
+    const t2 = await msg(page);
+    ok('kit9-guide', '«یک راز از وبلاگ»: the tips come in turn', /^راز ۱ از [۰-۹]+:/.test(t1) && /^راز ۲ از [۰-۹]+:/.test(t2), `${t1.slice(0, 40)} | ${t2.slice(0, 40)}`);
+    await page.click('.an-g-acts [data-g="tour"]');
+    const S = await walk(page);
+    const end = await page.evaluate(() => ({ tip: !!document.querySelector('.an-g-tip'), spot: !!document.querySelector('.an-g-spot'), focus: document.activeElement.classList.contains('an-g') }));
+    ok('kit9-guide', 'home: the walk lights each part in turn and its note stays on the screen', S.length >= 5 && fine(S) && S.every((s, i) => s.n === `گام ${fa(i + 1)} از ${fa(S.length)}`), S.map(s => `${s.h}(${s.off}px${s.inside ? '' : ', off screen'})`).join(', '));
+    ok('kit9-guide', 'home: «پایان» ends the walk and gives the focus back to the figure', !end.tip && !end.spot && end.focus, JSON.stringify(end));
+    await page.keyboard.press('g'); await cardOn(page);
+    await page.click('.an-g-acts [data-g="tour"]'); await page.waitForTimeout(900);
+    await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+    const esc2 = await page.evaluate(() => ({ tip: !!document.querySelector('.an-g-tip'), focus: document.activeElement.classList.contains('an-g') }));
+    ok('kit9-guide', 'home: Escape ends the walk too', !esc2.tip && esc2.focus, JSON.stringify(esc2));
+    const keys1 = await page.evaluate(() => Object.keys(localStorage));
+    const added = keys1.filter(k => !keys0.includes(k));
+    ok('kit9-guide', 'the guide keeps only «an-x-guide» in this browser', added.length === 1 && added[0] === 'an-x-guide', added.join(', '));
+    await page.reload({ waitUntil: 'load' }); await page.waitForTimeout(4500);
+    ok('kit9-guide', 'home: the hello is shown only once', await page.evaluate(() => !document.querySelector('.an-g-chip')));
+    await ctx.close();
+  }
+
+  // 2. an article by day: what the card says about it, its summary box, the walk in page order, the colours of B
+  {
+    const { ctx, page } = await openG('post-1.html', { now: '2026-11-13T09:00:00' });
+    await page.keyboard.press('g'); await cardOn(page);
+    const m = await msg(page), col = await page.evaluate(() => ({ v: document.documentElement.getAttribute('data-v'), core: getComputedStyle(document.querySelector('.an-g')).getPropertyValue('--g-core').trim() }));
+    ok('kit9-guide', 'article: the card greets by the clock, names the realm and the reading time', /^صبح بخیر!/.test(m) && /این روایت درباره‌ی «[^»]+» است/.test(m) && /دقیقه/.test(m), m.slice(0, 110));
+    ok('kit9-guide', 'article: the figure takes the colours of version B by day', col.v === 'b' && col.core.toUpperCase() === '#FFB547', JSON.stringify(col));
+    await page.click('.an-g-acts [data-g="gist"]'); await page.waitForTimeout(150);
+    const gi = await page.evaluate(() => {
+      const k = document.querySelector('.an-keys'), all = [...k.querySelectorAll('li')].map(x => x.textContent.replace(/\s+/g, ' ').trim());
+      return { want: all.slice(0, 3), more: all.length - 3, title: k.querySelector('.an-box-t').textContent.trim(), got: [...document.querySelectorAll('.an-g-msg .an-g-list li')].map(x => x.textContent), text: document.querySelector('.an-g-msg').textContent };
+    });
+    ok('kit9-guide', 'article: «جمع‌بندی این روایت» quotes the article\'s own summary box under its own title', JSON.stringify(gi.got) === JSON.stringify(gi.want) && gi.text.includes('«' + gi.title + '»') && (gi.more <= 0 || gi.text.includes('و ' + fa(gi.more) + ' مورد دیگر')), `«${gi.title}», ${gi.got.length} of ${gi.want.length + Math.max(gi.more, 0)}`);
+    await page.click('.an-g-msg [data-g="keys"]');
+    // the page may grow while it scrolls (labs are built as they come near): wait until the box has settled on the screen
+    await page.waitForFunction(() => { const r = document.querySelector('.an-keys').getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight * 0.75; }, null, { timeout: 8000 }).catch(() => {});
+    const kf = await page.evaluate(() => ({ focus: document.activeElement.classList.contains('an-keys'), card: document.querySelector('.an-g-card').hidden, seen: (r => r.top < innerHeight && r.bottom > 0)(document.querySelector('.an-keys').getBoundingClientRect()) }));
+    ok('kit9-guide', 'article: «رفتن به این جعبه» closes the card and brings the box into view with the focus', kf.focus && kf.card && kf.seen, JSON.stringify(kf));
+    await page.keyboard.press('g'); await cardOn(page);
+    await page.click('.an-g-acts [data-g="tour"]');
+    const S = await walk(page);
+    const title = await page.evaluate(() => document.querySelector('.an-keys .an-box-t').textContent.trim());
+    // the order of the page itself (the table of contents is sticky, so its place on screen depends on the scroll)
+    const inOrder = await page.evaluate(q => { const e = q.map(x => document.querySelector(x)); return e.every((x, i) => i === 0 || !!(e[i - 1].compareDocumentPosition(x) & 4)); }, S.map(s => s.part));
+    ok('kit9-guide', 'article: the walk follows the order of the page, the summary box under its own title', S.length >= 4 && fine(S) && inOrder && S.some(s => s.part === '.an-keys' && s.h === title), S.map(s => `${s.h}(${s.off}px)`).join(', '));
+    await ctx.close();
+  }
+
+  // 3. hiding the figure from its card, and the toolkit's switch that brings it back
+  {
+    const { ctx, page } = await openG('post-1.html');
+    await page.keyboard.press('g'); await cardOn(page);
+    await page.click('.an-g-card [data-g="hide"]'); await page.waitForTimeout(300);
+    const h = await page.evaluate(() => ({ hidden: document.querySelector('.an-g').hidden, card: document.querySelector('.an-g-card').hidden, saved: (JSON.parse(localStorage.getItem('an-x') || '{}')).guide, toast: (document.getElementById('an-toast') || {}).textContent || '' }));
+    await page.reload({ waitUntil: 'load' });
+    await page.waitForFunction(() => document.documentElement.classList.contains('an-x-on'), null, { timeout: 15000 }).catch(() => {});
+    await page.keyboard.press('g'); await page.waitForTimeout(400);
+    const h2 = await page.evaluate(() => ({ hidden: !!document.querySelector('.an-g') && document.querySelector('.an-g').hidden, card: !document.querySelector('.an-g-card.on') }));
+    ok('kit9-guide', '«پنهان کردن نگار»: the figure goes, the choice is saved and kept after a reload, G stays quiet', h.hidden && h.card && h.saved === 0 && /پنهان شد/.test(h.toast) && h2.hidden && h2.card, JSON.stringify({ ...h, after: h2 }));
+    await page.evaluate(() => window.AN.x.open()); await page.waitForTimeout(300);
+    await page.click('#an-x input[data-p="guide"]'); await page.waitForTimeout(200);
+    const back = await page.evaluate(() => ({ shown: !document.querySelector('.an-g').hidden, on: document.querySelector('#an-x input[data-p="guide"]').checked }));
+    ok('kit9-guide', 'the toolkit\'s switch «نگار، راهنمای وبلاگ» brings it back', back.shown && back.on, JSON.stringify(back));
+    await ctx.close();
+  }
+
+  // 4. the owner turns it off in the box (guide: 0): nothing of it is on the page and its file is never asked for
+  {
+    const n0 = asked.length; let swapped = 0;
+    const { ctx, page } = await openG('post-1.html', { html: t => t.replace(/(AN_X_OPT\s*=\s*\{[^}]*guide:\s*)1/, (m, a) => { swapped++; return a + '0'; }) });
+    await page.keyboard.press('g'); await page.waitForTimeout(500);
+    await page.evaluate(() => window.AN.x.open()); await page.waitForTimeout(300);
+    const off = await page.evaluate(() => ({ fig: !!document.querySelector('.an-g'), card: !!document.querySelector('.an-g-card'), sw: !!document.querySelector('#an-x input[data-p="guide"]'), key: /<kbd>G<\/kbd>/.test((document.querySelector('#an-keys .an-keys-list') || {}).innerHTML || '') }));
+    ok('kit9-guide', 'box option guide: 0 leaves no figure, no switch, no key and no request', swapped === 1 && !off.fig && !off.card && !off.sw && !off.key && asked.length === n0, JSON.stringify({ swapped, ...off, requests: asked.length - n0 }));
+    await ctx.close();
+  }
+
+  // 5. a phone: the light version, clear of «to the top», the card inside the screen, no hello on a narrow screen
+  {
+    const { ctx, page } = await openG('index.html', { viewport: { width: 390, height: 844 }, mobile: true });
+    await page.waitForTimeout(4200);
+    const ph = await page.evaluate(() => {
+      const b = document.querySelector('.an-g'), r = b.getBoundingClientRect(), q = document.querySelector('.an-fab').getBoundingClientRect(), run = b.querySelector('.an-g-run');
+      return { lite: b.classList.contains('lite'), run: getComputedStyle(run).display, apart: r.right <= q.left || q.right <= r.left || r.bottom <= q.top || q.bottom <= r.top, inside: r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight, chip: !!document.querySelector('.an-g-chip') };
+    });
+    await page.tap('.an-g'); await cardOn(page);
+    const cr = await page.evaluate(() => { const r = document.querySelector('.an-g-card').getBoundingClientRect(); return { l: Math.round(r.left), r: Math.round(r.right), t: Math.round(r.top), b: Math.round(r.bottom), w: innerWidth, h: innerHeight, sx: document.documentElement.scrollWidth }; });
+    ok('kit9-guide', 'phone: the light version (no running light), apart from «to the top», no hello on a narrow screen', ph.lite && ph.run === 'none' && ph.apart && ph.inside && !ph.chip, JSON.stringify(ph));
+    ok('kit9-guide', 'phone: the card fits the screen without sideways scrolling', cr.l >= 0 && cr.r <= cr.w && cr.t >= 0 && cr.b <= cr.h && cr.sx <= cr.w, JSON.stringify(cr));
+    await page.tap('.an-g-acts [data-g="tour"]');
+    const S = await walk(page, 3);
+    ok('kit9-guide', 'phone: the walk starts at the menu button and its note stays on the screen', S.length >= 1 && S[0].part === '[data-an="menu"]' && fine(S), S.map(s => `${s.h}(${s.off}px)`).join(', '));
+    await ctx.close();
+  }
+
+  // 6. reduced motion: the figure stands still, the card and the walk come without movement
+  {
+    const { ctx, page } = await openG('index.html', { rm: true });
+    await page.waitForTimeout(800);
+    await page.click('.an-g'); await cardOn(page);
+    const st = await page.evaluate(() => ({ running: document.getAnimations().filter(a => a.playState === 'running').length, card: getComputedStyle(document.querySelector('.an-g-card')).transitionDuration }));
+    await page.click('.an-g-acts [data-g="tour"]'); await page.waitForTimeout(600);
+    const sp = await page.evaluate(() => { const s = document.querySelector('.an-g-spot'); return s ? getComputedStyle(s).transitionDuration : 'none'; });
+    ok('kit9-guide', 'reduced motion: nothing of the guide moves', st.running === 0 && /^(0s[ ,]*)+$/.test(st.card) && /^(0s[ ,]*)+$/.test(sp), `${st.running} running, card ${st.card}, spot ${sp}`);
+    await ctx.close();
+  }
+
+  // nothing is sent and nothing is run from text: the guide's code names no network interface, location or eval
+  const gSrc = fs.readFileSync(path.join(ROOT, 'src/addons/guide.js'), 'utf8');
+  const bad = ['fetch(', 'XMLHttpRequest', 'sendBeacon', 'WebSocket', 'EventSource', 'geolocation', 'document.cookie', 'eval(', 'new Function', 'window.open', 'location.href =', 'location.assign', 'location.replace'].filter(w => gSrc.includes(w));
+  ok('kit9-guide', 'the card\'s code sends nothing, asks no location and runs no text as code', bad.length === 0, bad.join(', '));
+  ok('kit9-guide', 'no console error', errs.length === 0, errs.slice(0, 2).join(' | '));
 }
 
 await browser.close();

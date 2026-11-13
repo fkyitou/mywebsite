@@ -197,8 +197,8 @@ fs.mkdirSync(path.dirname(cmFile), { recursive: true }); fs.writeFileSync(cmFile
 // the font files the inline stylesheets point to, next to the pages (a CDN template gets them from jsDelivr instead)
 const CDN_FILES = path.join(ROOT, 'dist', 'cdn');
 if (fs.existsSync(CDN_FILES)) for (const f of fs.readdirSync(CDN_FILES).filter(f => f.endsWith('.woff2'))) fs.copyFileSync(path.join(CDN_FILES, f), path.join(OUT, f));
-// and the toolkit's files for a local box (stylesheet, script, and the QR encoder it fetches when asked)
-if (BOX && !CDN_TPL && fs.existsSync(CDN_FILES)) for (const f of fs.readdirSync(CDN_FILES).filter(f => /^an-(addons|qr)\./.test(f))) fs.copyFileSync(path.join(CDN_FILES, f), path.join(OUT, f));
+// and the toolkit's files for a local box (stylesheet, script, and the QR encoder and guide card it fetches when asked)
+if (BOX && !CDN_TPL && fs.existsSync(CDN_FILES)) for (const f of fs.readdirSync(CDN_FILES).filter(f => /^an-(addons|qr|guide)\./.test(f))) fs.copyFileSync(path.join(CDN_FILES, f), path.join(OUT, f));
 
 console.log(`preview (${MODE}) → ${path.relative(ROOT, OUT)}/  ·  ${posts.length} posts, ${cats.length} categories, ${allTags.length} tags, ${pages.length} pages  ·  template ${path.relative(ROOT, TPL)}  ·  box ${BOX_FILE ? path.relative(ROOT, BOX_FILE) : 'empty'}`);
 if (unknown.size) console.log('note: tags/blocks the emulator does not know (left empty):', [...unknown].join(' '));
