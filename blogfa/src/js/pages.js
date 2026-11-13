@@ -133,9 +133,19 @@
       '<h1 class="an-post-title">' + esc(p.title) + '</h1>' +
       '<div class="an-banner-by"><span class="an-mono" aria-hidden="true">ا.ه</span><span class="an-by-list"><span class="an-by-in"><span>نوشته‌ی <b>امیرحسین همتی</b></span><span>' + esc(p.date) + '</span><span>' + AN.fa(p.min) + ' دقیقه خواندن</span><span>' + AN.fa(p.words) + ' واژه</span></span></span></div></div>';
     main.insertBefore(ban, feed); D.documentElement.classList.add('an-banner-on'); // same task: the band in 04-post.css gives way to the banner without a shift
-    var bcv = ban.querySelector('canvas');
-    function drawBanner() { if (AN.cover) AN.cover(bcv, p.topic, p.id || 1, { banner: true }); }
+    var bcv = ban.querySelector('canvas'), bmeta = ban.querySelector('.an-post-meta'), bbar = $('.an-bar'), btop = 0;
+    // the art belongs to the band between the top bar and the chips. On a narrow screen the text sits under the art, so the dark
+    // veil behind the text follows where the text starts (--ban-k) and a title of four lines stays as readable as one of two.
+    function drawBanner() {
+      if (!AN.cover) return;
+      var b = ban.getBoundingClientRect(); btop = bmeta.getBoundingClientRect().top - b.top;
+      if (!b.height || b.width > b.height * 1.25) ban.style.removeProperty('--ban-k');
+      else ban.style.setProperty('--ban-k', Math.max(40, Math.min(82, (1 - btop / b.height) * 100)).toFixed(1) + '%');
+      AN.cover(bcv, p.topic, p.id || 1, { banner: true, area: [bbar ? bbar.offsetHeight : 68, btop] });
+    }
     drawBanner(); var rz; W.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(drawBanner, 250); });
+    // the web font can move where the title wraps: draw again only if the text really moved
+    if (D.fonts && D.fonts.ready) D.fonts.ready.then(function () { if (Math.abs(bmeta.getBoundingClientRect().top - ban.getBoundingClientRect().top - btop) > 3) drawBanner(); });
     var rt = art.querySelector('.an-rt'); if (rt) rt.textContent = AN.fa(p.min) + ' دقیقه';
     // layout: article + toc
     var wrap = el('div', 'an-article'); art.appendChild(wrap); wrap.appendChild(body); if (foot) wrap.appendChild(foot);

@@ -24,9 +24,10 @@
 .an-banner { position: relative; isolation: isolate; min-height: var(--banner-h, min(78vh, 720px)); display: grid; align-items: end; overflow: hidden; background: #04060D; color: #EDF2FA; }
 .an-banner-art { position: absolute; inset: 0; z-index: -2; }
 .an-banner-art canvas { width: 100%; height: 100%; }
-.an-banner::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, var(--bg) 0%, rgba(4, 6, 13, .78) 32%, rgba(4, 6, 13, .15) 70%, rgba(4, 6, 13, .35) 100%); }
+/* --ban-k: how far up the text reaches (pages.js sets it on a narrow screen); the default gives the 32% and 70% stops this veil always had */
+.an-banner::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, var(--bg) 0%, rgba(4, 6, 13, .78) calc(var(--ban-k, 54%) - 22%), rgba(4, 6, 13, .15) calc(var(--ban-k, 54%) + 16%), rgba(4, 6, 13, .35) 100%); }
 /* B fades to the light page only in the last 28px, below the byline, so the byline stays on dark. */
-[data-v="b"] .an-banner::after { background: linear-gradient(0deg, var(--bg) 0, rgba(4, 6, 13, .86) 28px, rgba(4, 6, 13, .78) 34%, rgba(4, 6, 13, .15) 70%, rgba(4, 6, 13, .35) 100%); }
+[data-v="b"] .an-banner::after { background: linear-gradient(0deg, var(--bg) 0, rgba(4, 6, 13, .86) 28px, rgba(4, 6, 13, .78) calc(var(--ban-k, 54%) - 20%), rgba(4, 6, 13, .15) calc(var(--ban-k, 54%) + 16%), rgba(4, 6, 13, .35) 100%); }
 .an-banner-in { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: calc(var(--bar-h) + var(--s8)) var(--gut) var(--s7); }
 .an-banner .an-post-meta { color: rgba(237, 242, 250, .78); font-size: var(--fs-1); }
 .an-banner .an-post-title { font-size: var(--fs-7); max-width: 20ch; margin-bottom: var(--s4); color: #FFFFFF; text-shadow: 0 4px 30px rgba(0, 0, 0, .5); }

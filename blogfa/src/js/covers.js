@@ -385,11 +385,14 @@
 
   /* AI video: the five frames of one clip come out of the noise together, above the timeline of clips */
   M.video = function (F) {
-    var c = F.c, u = F.u, R = F.R, P = F.P, lw = F.lw, i, j, hts = [];
+    var c = F.c, R = F.R, P = F.P, lw = F.lw, i, j, hts = [];
+    // beside the title (the wide banner) the scene is a little smaller and further from it, and the play badge goes to the far
+    // corner of the last frame, so the bright frame and the badge stay clear of the first line of a long title
+    var wide = F.b === 1, u = F.u * (wide ? 0.9 : 1), ox = F.x - (wide ? F.u * 0.23 : 0), oy = F.y - (wide ? F.u * 0.04 : 0);
     for (j = 0; j < 12; j++) hts.push(0.2 + R() * 0.36);
     for (i = 0; i < 5; i++) {
-      var t = i / 4, fw = u * (0.42 + t * 0.3), fh = fw * 9 / 16, sh = t * fw * 0.05;
-      c.save(); c.translate(F.x - u * 0.72 + t * u * 1.16, F.y - u * 0.1 + (1 - t) * u * 0.05); c.rotate(-0.1 + t * 0.06); c.translate(-fw / 2, -fh / 2);
+      var t = i / 4, fw = u * (0.5 + t * 0.42), fh = fw * 9 / 16, sh = t * fw * 0.05;
+      c.save(); c.translate(ox - u * 0.66 + t * u, oy - u * 0.15 + (1 - t) * u * 0.06); c.rotate(-0.1 + t * 0.06); c.translate(-fw / 2, -fh / 2);
       c.save(); rr(c, 0, 0, fw, fh, u * 0.02); c.clip();
       c.fillStyle = '#080C1E'; c.fillRect(0, 0, fw, fh);
       // the picture, clearer in every later frame: dawn sky, sun, skyline (the same towers in all five, moved a little)
@@ -404,11 +407,11 @@
       for (j = 0; j < 320 * (1 - t) * (1 - t) + 6; j++) { var s = fw * (0.014 + R() * 0.016); c.fillStyle = rgba(P[(R() * 3) | 0], 0.2 + R() * 0.65); c.fillRect(R() * fw, R() * fh, s, s); }
       c.restore();
       rr(c, 0, 0, fw, fh, u * 0.02); c.strokeStyle = rgba(P[2], 0.3 + t * 0.65); c.lineWidth = lw * (1 + t * 1.2); c.stroke();
-      if (i === 4) { add(c, true); glow(c, fw, fh, u * 0.2, P[1], 0.5); add(c, false); dot(c, fw, fh, u * 0.075, 'rgba(4,6,13,.82)'); c.strokeStyle = P[1]; c.lineWidth = lw * 2; c.stroke(); c.beginPath(); c.moveTo(fw - u * 0.024, fh - u * 0.036); c.lineTo(fw + u * 0.04, fh); c.lineTo(fw - u * 0.024, fh + u * 0.036); c.closePath(); c.fillStyle = '#FFFFFF'; c.fill(); }
+      if (i === 4) { var bx = wide ? 0 : fw; add(c, true); glow(c, bx, fh, u * 0.2, P[1], 0.5); add(c, false); dot(c, bx, fh, u * 0.075, 'rgba(4,6,13,.82)'); c.strokeStyle = P[1]; c.lineWidth = lw * 2; c.stroke(); c.beginPath(); c.moveTo(bx - u * 0.024, fh - u * 0.036); c.lineTo(bx + u * 0.04, fh); c.lineTo(bx - u * 0.024, fh + u * 0.036); c.closePath(); c.fillStyle = '#FFFFFF'; c.fill(); }
       c.restore();
     }
     // the timeline: four clips, the last one shorter, and a playhead
-    var x0 = F.x - u * 0.9, y0 = F.y + u * 0.34, th = u * 0.07, lens = [0.46, 0.46, 0.46, 0.3], x = x0;
+    var x0 = ox - u * 0.9, y0 = oy + u * 0.34, th = u * 0.07, lens = [0.46, 0.46, 0.46, 0.3], x = x0;
     for (i = 0; i < 4; i++) { var bw = u * lens[i]; rr(c, x, y0, bw - u * 0.014, th, u * 0.016); c.fillStyle = rgba(P[i % 2 ? 0 : 2], 0.16); c.fill(); c.strokeStyle = rgba(P[i % 2 ? 0 : 2], 0.8); c.lineWidth = lw; c.stroke(); for (j = 1; j < 8 * lens[i] / 0.46; j++) { c.strokeStyle = rgba(P[i % 2 ? 0 : 2], 0.3); c.beginPath(); c.moveTo(x + j * u * 0.0575, y0 + th * 0.62); c.lineTo(x + j * u * 0.0575, y0 + th); c.stroke(); } x += bw; }
     var px = x0 + u * 1.06; add(c, true); glow(c, px, y0 + th / 2, u * 0.16, P[1], 0.55); add(c, false);
     c.strokeStyle = P[1]; c.lineWidth = lw * 2.2; c.beginPath(); c.moveTo(px, y0 - u * 0.035); c.lineTo(px, y0 + th + u * 0.035); c.stroke(); dot(c, px, y0 - u * 0.035, u * 0.016, '#FFF1C2');
@@ -425,7 +428,7 @@
     c.fillStyle = c.createPattern(grain, 'repeat'); c.fillRect(0, 0, w, h);
   }
 
-  /* draw(canvas, topic, seed, {banner, w, h, dpr}) */
+  /* draw(canvas, topic, seed, {banner, area, w, h, dpr}) */
   AN.cover = function (cv, topic, seed, o) {
     o = o || {};
     var r = cv.getBoundingClientRect(), cw = o.w || r.width || cv.clientWidth || 640, ch = o.h || r.height || cv.clientHeight || 400;
@@ -435,8 +438,15 @@
     cv.width = w; cv.height = h;
     var c = cv.getContext('2d'); if (!c) return;
     var key = PAL[topic] ? topic : 'def', R = rng(hash(key + ':' + seed)), fx = w / 2, fy = h / 2, u = min(w / 1.9, h * 0.9);
-    if (o.banner) { if (w > h * 1.25) { fx = w * 0.3; fy = h * 0.42; u = min(w * 0.34, h * 0.62); } else { fx = w / 2; fy = h * 0.32; u = min(w * 0.46, h * 0.36); } }
-    var F = { c: c, w: w, h: h, x: fx, y: fy, u: u, R: R, P: PAL[key], k: dpr, lw: max(dpr * 0.75, u * 0.0032) };
+    var wide = o.banner && w > h * 1.25;
+    if (wide) { fx = w * 0.3; fy = h * 0.42; u = min(w * 0.34, h * 0.62); }
+    else if (o.banner) {
+      fx = w / 2; fy = h * 0.32; u = min(w * 0.46, h * 0.36);
+      // o.area = [top, bottom] in CSS pixels: the free band between the top bar and the text. A long title leaves a low band,
+      // so the scene is centred in it and scaled to it (never below a size that still reads) instead of sitting behind the text.
+      if (o.area) { var a0 = o.area[0] * dpr, band = max(0, o.area[1] * dpr - a0); fy = a0 + band / 2 + 8 * dpr; u = max(w * 0.3, min(w * 0.46, band * 0.95)); }
+    }
+    var F = { c: c, w: w, h: h, x: fx, y: fy, u: u, R: R, P: PAL[key], k: dpr, lw: max(dpr * 0.75, u * 0.0032), b: wide ? 1 : o.banner ? 2 : 0 };
     var g = c.createLinearGradient(0, 0, w, h); g.addColorStop(0, '#070B1C'); g.addColorStop(1, '#02040A'); c.fillStyle = g; c.fillRect(0, 0, w, h);
     glow(c, fx, fy, u * 1.15, F.P[0], 0.2); glow(c, fx + u * 0.7, fy - u * 0.45, u * 0.95, F.P[1], 0.12);
     var n = Math.round(w * h / (o.banner ? 3000 : 2000));
