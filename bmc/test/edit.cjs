@@ -37,7 +37,7 @@ const path = require('path');
   await retype(page.locator('#bmc [data-f="name"]'), 'کافه‌کتاب راوی');
   await retype(page.locator('#bmc .bmc-k1 li').first(), 'دانشجویان شهر');
   await page.locator('#bmc .bmc-k2 .bmc-add').click();
-  await page.keyboard.type('مورد تازهٔ آزمایشی');
+  await page.keyboard.type('مورد تازه‌ی آزمایشی');
   const second = page.locator('#bmc .bmc-k3 li').nth(1);
   await second.click(); await page.keyboard.press('Control+A'); await page.keyboard.press('Delete');
   await page.screenshot({ path: path.join(out, 'edit-mode.png') });
@@ -54,7 +54,7 @@ const path = require('path');
   let s = await read();
   check(s.name === 'کافه‌کتاب راوی', 'title edited: ' + s.name);
   check(s.k1[0] === 'دانشجویان شهر', 'block 1 first item edited');
-  check(s.k2.length === 5 && s.k2[4] === 'مورد تازهٔ آزمایشی', 'block 2 got a fifth item');
+  check(s.k2.length === 5 && s.k2[4] === 'مورد تازه‌ی آزمایشی', 'block 2 got a fifth item');
   check(s.k3.length === 3, 'emptied item of block 3 was removed (' + s.k3.length + ' left)');
   check(s.editable === 0 && s.adds === 0, 'edit controls are gone after finishing');
 
