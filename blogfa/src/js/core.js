@@ -178,32 +178,48 @@
   // o.from: the element the circle opens from; o.now: no animation; o.update: more changes made in the same frame.
   // AN.v changes at once, so code that reads it right after the call sees the new version.
   AN.setV = function (v, o) {
-    o = o || {}; AN.v = v;
+    o = o || {}; AN.v = v; if (!o.auto) AN.vm = 'man';
     function upd() {
       if (o.update) o.update();
       // o.auto: the clock changed the version (js/live.js); anything else is the visitor's own choice and is kept
       if (!o.auto) { AN.vm = 'man'; AN.store.set('an-vm', 'man'); AN.store.set('an-v', v); }
       AN.v = v; H.setAttribute('data-vm', AN.vm || 'man'); H.setAttribute('data-v', v);
-      $$('.an-v-label').forEach(function (e) { e.textContent = v.toUpperCase(); });
+      vLabel();
       var tone = H.getAttribute('data-an-tone'), m = $('meta[name="theme-color"]');
       if (m) m.setAttribute('content', tone === 'paper' ? '#F5EEDC' : tone === 'contrast' ? '#000000' : v === 'b' ? '#F6F8FB' : '#04060D');
       if (AN.onV) AN.onV(v);
     }
     if (o.now) upd(); else AN.swap(upd, o.from || $('#an-bar .an-ab-btn'));
   };
+  // the version's letter wherever it is written, and the header button's name for a screen reader
+  function vLabel() {
+    var auto = AN.vm === 'auto', name = AN.v === 'a' ? 'A شب' : 'B روز';
+    $$('.an-v-label').forEach(function (e) { e.textContent = AN.v.toUpperCase() + (auto ? ' (خودکار)' : ''); });
+    $$('.an-ab-btn').forEach(function (b) { b.setAttribute('aria-label', 'تغییر نسخه‌ی وبلاگ: اکنون ' + name + (auto ? '، خودکار با ساعت دستگاه' : '')); });
+  }
+  AN.vLabel = vLabel;
+  // what the visitor's clock asks for now: «روز» while the sun is up (js/early.js)
+  AN.autoV = function () { return AN.sunAlt && AN.sunAlt(AN.clock()) > -4 ? 'b' : 'a'; };
+  // «خودکار»: the version is handed back to the clock. o.from: the element the change opens from.
+  AN.setAuto = function (o) {
+    AN.vm = 'auto'; AN.store.set('an-vm', 'auto'); AN.store.set('an-v', '');
+    var av = AN.autoV();
+    if (av !== AN.v) AN.setV(av, { from: o && o.from, now: o && o.now, auto: true });
+    else { H.setAttribute('data-vm', 'auto'); vLabel(); if (AN.live) AN.live.state(); }
+  };
   function versions() {
-    $$('.an-v-label').forEach(function (e) { e.textContent = AN.v.toUpperCase(); });
-    // three states in turn: «خودکار» (the visitor's clock decides) → the other version → the first one → «خودکار».
-    // Every press but the last changes what is on screen; the last hands the choice back to the clock.
+    vLabel();
+    // Every press changes what is on screen. While the clock is in charge («خودکار») a press picks the other version
+    // and keeps it; a press on a kept version that differs from the clock's hands the choice back to the clock; a
+    // kept version that happens to match the clock gives way to the other one.
     $$('[data-an="ab"]').forEach(function (b) {
       b.addEventListener('click', function () {
-        var av = AN.sunAlt && AN.sunAlt(AN.clock()) > -4 ? 'b' : 'a', n = AN.v === 'a' ? 'b' : 'a';
-        if (AN.vm === 'auto' || AN.v !== av || !AN.sunAlt) {
-          AN.setV(n, { from: b }); AN.toast(n === 'a' ? 'نسخه‌ی A «شب» فعال شد' : 'نسخه‌ی B «روز» فعال شد');
+        var n = AN.v === 'a' ? 'b' : 'a';
+        if (AN.sunAlt && AN.vm !== 'auto' && AN.v !== AN.autoV()) {
+          AN.setAuto({ from: b });
+          AN.toast('حالت خودکار: اکنون نسخه‌ی ' + (n === 'a' ? 'A «شب»' : 'B «روز»') + '، با ساعت دستگاه شما');
         } else {
-          AN.vm = 'auto'; AN.store.set('an-vm', 'auto'); AN.store.set('an-v', ''); H.setAttribute('data-vm', 'auto');
-          if (AN.live) AN.live.state();
-          AN.toast('حالت خودکار: شب و روز با ساعت دستگاه شما عوض می‌شود');
+          AN.setV(n, { from: b }); AN.toast(n === 'a' ? 'نسخه‌ی A «شب» فعال شد' : 'نسخه‌ی B «روز» فعال شد');
         }
       });
     });

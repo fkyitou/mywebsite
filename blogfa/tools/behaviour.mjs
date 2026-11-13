@@ -17,6 +17,9 @@
    9. Kit 7: the web font comes from the blog's own files (no Google Fonts), no «·» sits next to a Persian digit,
       the byline's dots never open a line, the chart's reference label keeps clear of the values, and
       «ارائه در کلاس» (presentation mode) steps through an article heading by heading and leaves cleanly.
+  10. Kit 9: the live sky. With no version chosen the blog shows «روز» while the sun is up for the visitor's clock
+      and «شب» after dusk, with the phase of the day, a moon with its real phase and the season's constellation;
+      a chosen version is kept; the approximations are measured against tools/astro.mjs.
 
    node tools/behaviour.mjs          → preview/,     quality/behaviour-results.json, exit 1 on any failure
    node tools/behaviour.mjs --cdn    → preview-cdn/ (CDN addresses answered from dist/cdn/), quality/behaviour-cdn-results.json
@@ -27,6 +30,7 @@ import path from 'path';
 import { createRequire } from 'module';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { routeCdn } from './cdnroute.mjs';
+import { crossing, moonAge } from './astro.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CDN = process.argv.includes('--cdn');
@@ -358,6 +362,172 @@ if (CDN) {
       await ctx.close();
     }
   }
+}
+
+/* ---------- 10. kit 9: the live sky (day and night from the visitor's clock) ---------- */
+{
+  const errs = [];
+  async function openAt(file, now, o = {}) {
+    const ctx = await browser.newContext({ viewport: o.viewport || { width: 1366, height: 900 }, deviceScaleFactor: 1, locale: 'fa-IR', timezoneId: o.tz || 'UTC', reducedMotion: o.rm ? 'reduce' : 'no-preference' });
+    if (CDN) await routeCdn(ctx);
+    // AN_NOW is the hour the page should believe; the saved choices are written once, before the first page of the context
+    if (now) await ctx.addInitScript(n => { window.AN_NOW = n; }, now);
+    if (o.store) await ctx.addInitScript(s => { try { if (!sessionStorage.getItem('t-once')) { for (const k in s) localStorage.setItem(k, s[k]); sessionStorage.setItem('t-once', '1'); } } catch (e) {} }, o.store);
+    const page = await ctx.newPage();
+    page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
+    page.on('pageerror', e => errs.push(String(e)));
+    await page.goto(BASE + file, { waitUntil: 'load' });
+    await page.waitForFunction(() => window.AN && window.AN.ok && window.AN.live, null, { timeout: 15000 }).catch(() => {});
+    return { ctx, page };
+  }
+  const read = page => page.evaluate(() => {
+    const h = document.documentElement, q = s => document.querySelector(s), shown = e => !!e && getComputedStyle(e).display !== 'none';
+    const st = window.AN.live.state(), sun = q('.an-sky-sun'), moon = q('.an-sky-moon'), svg = q('.an-sky-const svg'), ab = q('.an-ab-btn'), lab = q('.an-v-label');
+    return {
+      v: h.getAttribute('data-v'), vm: h.getAttribute('data-vm'), sky: h.getAttribute('data-sky'), moonlight: h.hasAttribute('data-moonlight'),
+      sun: shown(sun) ? +sun.style.opacity : 0, moon: shown(moon) ? +moon.style.opacity : 0, lit: st ? st.moon.lit : -1,
+      litPath: !!q('.an-sky-moon .an-moon-lit'), cons: svg ? svg.getAttribute('data-name') : '', stars: svg ? svg.querySelectorAll('circle').length : 0, lines: svg ? svg.querySelectorAll('line').length : 0,
+      aria: ab ? ab.getAttribute('aria-label') : '', label: lab ? lab.textContent : '', sv: localStorage.getItem('an-v'), svm: localStorage.getItem('an-vm')
+    };
+  });
+  const until = (page, v) => page.waitForFunction(x => document.documentElement.getAttribute('data-v') === x, v, { timeout: 6000 }).catch(() => {});
+  const brief = r => `v ${r.v}, mode ${r.vm}, sky ${r.sky}, saved ${r.sv}/${r.svm}`;
+
+  // the phase and the version for nine moments; the last two are the same hour in June and in December
+  const PHASES = [['2026-11-13T22:30:00', 'a', 'night'], ['2026-11-13T06:50:00', 'b', 'sunrise'], ['2026-11-13T09:00:00', 'b', 'morning'], ['2026-11-13T12:10:00', 'b', 'noon'],
+    ['2026-11-13T15:00:00', 'b', 'afternoon'], ['2026-11-13T16:45:00', 'b', 'sunset'], ['2026-11-13T17:40:00', 'a', 'twilight'], ['2026-06-21T19:25:00', 'b', 'sunset'], ['2026-12-21T19:25:00', 'a', 'night']];
+  for (const [now, v, sky] of PHASES) {
+    const { ctx, page } = await openAt('index.html', now);
+    const r = await read(page);
+    ok('kit9-sky', `${now.slice(0, 16).replace('T', ' ')}: version ${v.toUpperCase()}, phase «${sky}», nothing saved`, r.v === v && r.vm === 'auto' && r.sky === sky && !r.sv && !r.svm && (v === 'b' ? r.sun > 0 && r.moon === 0 : r.sun === 0), `${brief(r)}, sun ${r.sun}, moon ${r.moon}`);
+    await ctx.close();
+  }
+  // the moon: full on 24 November 2026 and new on 9 November 2026 (tools/astro.mjs gives the same two dates)
+  {
+    const { ctx, page } = await openAt('index.html', '2026-11-24T22:00:00');
+    const full = await read(page);
+    ok('kit9-sky', 'full moon night: the moon is drawn lit and the moonlight wash is on', full.lit > 0.97 && full.moonlight && full.moon > 0.9 && full.litPath, `lit ${full.lit.toFixed(3)}, moonlight ${full.moonlight}, moon opacity ${full.moon}`);
+    const lit9 = await page.evaluate(() => window.AN.live.at(new Date('2026-11-09T22:00:00')).moon.lit);
+    ok('kit9-sky', 'new moon night: nearly nothing of the moon is lit', lit9 < 0.03, `lit ${lit9.toFixed(3)}`);
+    // the page's moon age against the fuller formula, twice a month through 2026
+    const stamps = []; for (let m = 0; m < 12; m++) for (const d of [1, 15]) stamps.push(Date.UTC(2026, m, d, 12));
+    const ages = await page.evaluate(ts => ts.map(t => window.AN.live.at(new Date(t)).moon.age), stamps);
+    const diffs = ages.map((a, i) => { const e = Math.abs(a - moonAge(new Date(stamps[i]))); return e > 0.5 ? 1 - e : e; }), worst = Math.max(...diffs);
+    ok('kit9-sky', 'the moon age stays within 0.035 of a cycle (about a day) of the reference formula through 2026', worst < 0.035, `largest difference ${worst.toFixed(4)} of a cycle = ${(worst * 29.53).toFixed(2)} days, over ${stamps.length} dates`);
+    // one constellation for each season
+    const cons = await page.evaluate(() => [['2026-01-15T22:00:00', 'Orion'], ['2026-04-15T22:00:00', 'Leo'], ['2026-07-15T23:00:00', 'Cygnus'], ['2026-10-15T22:00:00', 'Cassiopeia']].map(([t, n]) => {
+      window.AN_NOW = t; window.AN.live.state(); const s = document.querySelector('.an-sky-const svg');
+      return { want: n, got: s && s.getAttribute('data-name'), stars: s ? s.querySelectorAll('circle').length : 0, lines: s ? s.querySelectorAll('line').length : 0, sky: document.documentElement.getAttribute('data-sky') };
+    }));
+    ok('kit9-sky', 'a constellation for each season: Orion, Leo, Cygnus, Cassiopeia', cons.every(c => c.got === c.want && c.stars >= 5 && c.lines >= 4 && c.sky === 'night'), cons.map(c => `${c.got} ${c.stars}★ ${c.lines} lines`).join(', '));
+    await ctx.close();
+  }
+  // the hour of the change of version against the Sun's real height at Tehran (35.69°N, 51.39°E, UTC+3:30)
+  {
+    const { ctx, page } = await openAt('index.html', '2026-11-13T22:30:00', { tz: 'Asia/Tehran' });
+    const days = []; for (let m = 0; m < 12; m++) for (const d of [1, 15]) days.push([2026, m, d]);
+    const got = await page.evaluate(ds => ({
+      off: [new Date(2026, 0, 1).getTimezoneOffset(), new Date(2026, 6, 1).getTimezoneOffset()],
+      flips: ds.map(([y, m, d]) => { const f = (from, to, eve) => { for (let i = from; i < to; i++) if ((window.AN.sunAlt(new Date(y, m, d, 0, i)) > -4) !== eve) return i; return -1; }; return [f(0, 720, false), f(720, 1440, true)]; })
+    }), days);
+    if (got.off[0] !== -210 || got.off[1] !== -210) ok('kit9-sky', 'change of version against the real Sun at Tehran', true, `skipped: this browser's time zone data gives Tehran offsets ${got.off.join(' and ')} minutes, not +3:30 all year`);
+    else {
+      let worst = 0, sum = 0;
+      days.forEach(([y, m, d], i) => {
+        const t0 = Date.UTC(y, m, d) - 210 * 6e4, local = t => ((t.getTime() - t0) / 6e4);
+        const mor = local(crossing(new Date(t0), new Date(t0 + 720 * 6e4), 35.6892, 51.389, -4)), eve = local(crossing(new Date(t0 + 720 * 6e4), new Date(t0 + 1439 * 6e4), 35.6892, 51.389, -4));
+        for (const e of [Math.abs(got.flips[i][0] - mor), Math.abs(got.flips[i][1] - eve)]) { worst = Math.max(worst, e); sum += e; }
+      });
+      ok('kit9-sky', 'the version changes within 12 minutes of the Sun passing 4° below the horizon at Tehran, all year', worst < 12, `largest difference ${worst.toFixed(1)} min, mean ${(sum / (days.length * 2)).toFixed(1)} min, over ${days.length} days`);
+    }
+    await ctx.close();
+  }
+  // the header button: every press changes the page; a kept version goes back to the clock on the next press
+  {
+    const { ctx, page } = await openAt('index.html', '2026-11-13T22:30:00');
+    const r0 = await read(page);
+    await page.click('.an-ab-btn'); await until(page, 'b'); const r1 = await read(page);
+    ok('kit9-sky', 'button at night, «خودکار»: first press shows B «روز» and keeps it', r0.v === 'a' && r0.vm === 'auto' && /خودکار/.test(r0.aria) && r1.v === 'b' && r1.vm === 'man' && r1.sv === 'b' && r1.svm === 'man' && r1.sky === 'morning' && /B روز/.test(r1.aria) && !/خودکار/.test(r1.aria), `${brief(r0)} → ${brief(r1)}`);
+    await page.reload({ waitUntil: 'load' }); await page.waitForFunction(() => window.AN && window.AN.ok && window.AN.live).catch(() => {});
+    const r2 = await read(page);
+    ok('kit9-sky', 'the kept version is still there after a reload', r2.v === 'b' && r2.vm === 'man', brief(r2));
+    await page.click('.an-ab-btn'); await until(page, 'a'); const r3 = await read(page);
+    ok('kit9-sky', 'second press hands the choice back to the clock', r3.v === 'a' && r3.vm === 'auto' && r3.svm === 'auto' && !r3.sv && r3.sky === 'night' && /خودکار/.test(r3.label), `${brief(r3)}, footer «${r3.label}»`);
+    await page.reload({ waitUntil: 'load' }); await page.waitForFunction(() => window.AN && window.AN.ok && window.AN.live).catch(() => {});
+    const r4 = await read(page);
+    ok('kit9-sky', '«خودکار» is still on after a reload', r4.v === 'a' && r4.vm === 'auto', brief(r4));
+    await ctx.close();
+  }
+  {
+    // a kept version that matches the clock gives way to the other one
+    const { ctx, page } = await openAt('index.html', '2026-11-13T12:10:00', { store: { 'an-v': 'b', 'an-vm': 'man' } });
+    const r0 = await read(page);
+    await page.click('.an-ab-btn'); await until(page, 'a'); const r1 = await read(page);
+    ok('kit9-sky', 'button at noon with B kept: a press shows A «شب» and keeps it', r0.v === 'b' && r0.vm === 'man' && r1.v === 'a' && r1.vm === 'man' && r1.sv === 'a' && r1.sky === 'night', `${brief(r0)} → ${brief(r1)}`);
+    await ctx.close();
+  }
+  for (const [name, file, now, store, v, vm] of [
+    ['an address with ?v=a shows A at noon and keeps it', 'index.html?v=a', '2026-11-13T12:10:00', null, 'a', 'man'],
+    ['a version chosen under kit 8 (an-v alone) is kept', 'index.html', '2026-11-13T22:30:00', { 'an-v': 'b' }, 'b', 'man'],
+    ['a saved value that is not a version is ignored', 'index.html', '2026-11-13T12:10:00', { 'an-v': 'x', 'an-vm': 'man' }, 'b', 'auto']]) {
+    const { ctx, page } = await openAt(file, now, store ? { store } : {});
+    const r = await read(page);
+    ok('kit9-sky', name, r.v === v && r.vm === vm, brief(r));
+    await ctx.close();
+  }
+  {
+    // the clock moves from afternoon to dusk while the page is open
+    const { ctx, page } = await openAt('post-1.html', '2026-11-13T16:45:00');
+    const r0 = await read(page);
+    await page.evaluate(() => { window.AN_NOW = '2026-11-13T17:40:00'; window.AN.live.state(); }); await until(page, 'a');
+    const r1 = await read(page);
+    ok('kit9-sky', 'the open page turns from «روز» to «شب» when the clock passes dusk, and saves nothing', r0.v === 'b' && r0.sky === 'sunset' && r1.v === 'a' && r1.vm === 'auto' && r1.sky === 'twilight' && !r1.sv && !r1.svm, `${brief(r0)} → ${brief(r1)}`);
+    // looking at another hour and coming back
+    const p1 = await page.evaluate(() => { window.AN.live.preview(12); const h = document.documentElement; return h.getAttribute('data-v') + '/' + h.getAttribute('data-sky') + '/' + localStorage.getItem('an-v'); });
+    const p2 = await page.evaluate(() => { window.AN.live.preview(null); const h = document.documentElement; return h.getAttribute('data-v') + '/' + h.getAttribute('data-sky') + '/' + h.getAttribute('data-vm'); });
+    ok('kit9-sky', 'a look at noon and back: the page follows, nothing is saved', p1 === 'b/noon/null' && p2 === 'a/twilight/auto', `${p1} → ${p2}`);
+    await ctx.close();
+  }
+  {
+    const { ctx, page } = await openAt('index.html', '2026-11-13T22:30:00', { store: { 'an-v': 'b', 'an-vm': 'man' } });
+    const p = await page.evaluate(() => { const h = document.documentElement, o = []; window.AN.live.preview(23); o.push(h.getAttribute('data-v')); window.AN.live.preview(null); o.push(h.getAttribute('data-v'), h.getAttribute('data-vm'), localStorage.getItem('an-v')); return o.join('/'); });
+    ok('kit9-sky', 'a look at another hour with B kept: back to B afterwards, still kept', p === 'a/b/man/b', p);
+    await ctx.close();
+  }
+  {
+    // reading pages: the moon and the constellation keep clear of the text; on a phone they are left out there
+    const { ctx, page } = await openAt('post-1.html', '2026-11-24T22:00:00');
+    const g = await page.evaluate(() => {
+      const box = s => { const e = document.querySelector(s); if (!e || getComputedStyle(e).display === 'none') return null; const r = e.getBoundingClientRect(); return [r.left, r.right]; };
+      return { body: box('.an-post-body'), moon: box('.an-sky-moon'), cons: box('.an-sky-const') };
+    });
+    const clear = b => b && (b[1] <= g.body[0] || b[0] >= g.body[1]);
+    ok('kit9-sky', 'article, desktop: the moon and the constellation sit beside the text column, not behind it', !!g.body && clear(g.moon) && clear(g.cons), `text ${g.body && g.body.map(Math.round)}, moon ${g.moon && g.moon.map(Math.round)}, constellation ${g.cons && g.cons.map(Math.round)}`);
+    await ctx.close();
+    const ph = await openAt('post-1.html', '2026-11-24T22:00:00', { viewport: { width: 390, height: 800 } });
+    const hidden = await ph.page.evaluate(() => ['.an-sky-moon', '.an-sky-const', '.an-sky-sun'].map(s => getComputedStyle(document.querySelector(s)).display).join(' '));
+    ok('kit9-sky', 'article, phone: no moon, sun or constellation behind the text', hidden === 'none none none', hidden);
+    await ph.ctx.close();
+  }
+  {
+    // reduced motion: the sky is there and nothing in it is animated
+    const { ctx, page } = await openAt('index.html', '2026-11-13T16:45:00', { rm: true });
+    const r = await page.evaluate(() => ({ sky: document.documentElement.getAttribute('data-sky'), t: ['.an-sky-tint', '.an-sky-sun', '.an-sky-const'].map(s => getComputedStyle(document.querySelector(s)).transitionDuration).join(' ') }));
+    ok('kit9-sky', 'reduced motion: the phase is shown without any transition', r.sky === 'sunset' && /^(0s[ ,]*)+$/.test(r.t), `${r.sky}; transition ${r.t}`);
+    await ctx.close();
+  }
+  {
+    // the paper theme of the reader's toolkit has its own page colour: no sun, moon or wash on it
+    const { ctx, page } = await openAt('post-1.html', '2026-11-13T12:10:00', { store: { 'an-x': JSON.stringify({ tone: 'paper' }) } });
+    const r = await page.evaluate(() => ({ tone: document.documentElement.getAttribute('data-an-tone'), sky: document.documentElement.getAttribute('data-sky'), shown: ['.an-sky-tint', '.an-sky-sun', '.an-sky-moon'].map(s => getComputedStyle(document.querySelector(s)).display).join(' ') }));
+    ok('kit9-sky', 'paper theme: the live sky stays out of it', r.tone === 'paper' && !r.sky && r.shown === 'none none none', `tone ${r.tone}, sky ${r.sky}, ${r.shown}`);
+    await ctx.close();
+  }
+  // nothing is asked from the visitor and nothing is sent: the two scripts name no location or network interface
+  const skySrc = fs.readFileSync(path.join(ROOT, 'src/js/live.js'), 'utf8') + fs.readFileSync(path.join(ROOT, 'src/js/early.js'), 'utf8');
+  const asks = ['geolocation', 'fetch(', 'XMLHttpRequest', 'sendBeacon', 'WebSocket', 'EventSource', 'document.cookie'].filter(w => skySrc.includes(w));
+  ok('kit9-sky', 'the sky uses the clock only: no location, cookie or network call in its code', asks.length === 0, asks.join(', '));
+  ok('kit9-sky', 'no console error', errs.length === 0, errs.slice(0, 2).join(' | '));
 }
 
 await browser.close();

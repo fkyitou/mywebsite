@@ -1,7 +1,7 @@
 /* آینده‌نگار · live sky: the background follows the visitor's own clock (css/08-sky.css, "live sky").
    Nothing is asked from the visitor and nothing is sent anywhere: the only inputs are the clock and the date of the
-   device. The sun's height comes from the day of the year (so days are short in winter and long in summer) and the
-   hour, for a latitude of 35.7°N; the moon's phase from the date; the constellation from the season. From these:
+   device. The sun's height comes from js/early.js (day of the year and hour, for a latitude of 35.7°N, so days are
+   short in winter and long in summer); the moon's phase from the date; the constellation from the season. From these:
      · the version: «روز» (B) while the sun is up, «شب» (A) after dusk, unless the visitor chose one by hand;
      · a phase on <html data-sky>: twilight, sunrise, morning, noon, afternoon, sunset, night;
      · a soft sun or a moon with its real phase, a colour wash for the phase, and one constellation at night.
@@ -11,9 +11,9 @@
   'use strict';
   var W = window, D = document, H = D.documentElement, AN = W.AN || (W.AN = {});
   var sky = D.getElementById('an-sky');
-  if (!sky || !AN.sunAlt) return;
+  if (!sky || !AN.sol) return;
   var R = Math.PI / 180, LAT = 35.7 * R, NS = 'http://www.w3.org/2000/svg';
-  var pinned = null; // a time being previewed (hours of today), or null
+  var pinned = null, keep = null; // a time being previewed (hours of today) or null; the version kept by hand before it
 
   function el(cls, html) { var e = D.createElement('div'); e.className = cls; if (html) e.innerHTML = html; return e; }
   var grain = sky.querySelector('.an-sky-grain');
@@ -24,8 +24,8 @@
   function dayOfYear(d) { return Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 864e5); }
   function altOf(dec, ha) { return Math.asin(Math.sin(LAT) * Math.sin(dec) + Math.cos(LAT) * Math.cos(dec) * Math.cos(ha)) / R; }
   function state(d) {
-    var n = dayOfYear(d), hrs = d.getHours() + d.getMinutes() / 60;
-    var ha = (hrs - 12) * 15 * R, alt = AN.sunAlt(d), am = hrs < 12;
+    var n = dayOfYear(d), so = AN.sol(d), hrs = so.h;
+    var ha = (hrs - 12) * 15 * R, alt = so.alt, am = hrs < 12;
     // moon: age from a known new moon (6 Jan 2000, 18:14 UTC) and the mean length of a lunation; it trails the sun
     // by its age, and its declination follows the point of the ecliptic that far ahead of the sun
     var age = ((d.getTime() / 864e5 + 2440587.5 - 2451550.1) / 29.530588853) % 1; if (age < 0) age += 1;
@@ -84,11 +84,19 @@
   /* ---------- applying it ---------- */
   var last = '', lastMoon = '', lastCons = '';
   function fade(fn) {
-    // a change of version made by the clock cross-fades (the default View Transition), never the circle of a click
-    if (D.startViewTransition && !AN.rm && !D.hidden && last) { try { D.startViewTransition(fn); return; } catch (e) {} }
+    // a change of version made by the clock is a slow cross-fade (a View Transition; js/early.js sets its length for
+    // html.an-fade), never the circle of a click; with reduced motion or in a hidden tab it is made at once
+    if (D.startViewTransition && !AN.rm && !D.hidden && last) {
+      try {
+        H.classList.add('an-fade');
+        var t = D.startViewTransition(fn), done = function () { H.classList.remove('an-fade'); };
+        t.finished.then(done, done); return;
+      } catch (e) { H.classList.remove('an-fade'); }
+    }
     fn();
   }
-  function apply() {
+  // quick: a look at another hour (AN.live.preview) changes the page at once, without the slow fade
+  function apply(quick) {
     var tone = H.getAttribute('data-an-tone'), auto = AN.vm === 'auto' || pinned !== null, d = now(), s;
     if (tone) { H.removeAttribute('data-sky'); H.removeAttribute('data-moonlight'); last = 'tone'; return null; }
     if (!auto) {
@@ -109,7 +117,8 @@
       // the constellation keeps to the side of the sky away from the moon
       cons.setAttribute('data-side', s.moon.alt > 0 && s.moon.ha < 0 ? 'w' : 'e');
     }
-    if (auto && s.v !== AN.v && AN.setV) fade(function () { AN.setV(s.v, { now: true, auto: true }); paint(); });
+    var turn = function () { AN.setV(s.v, { now: true, auto: true }); paint(); };
+    if (auto && s.v !== AN.v && AN.setV) { if (quick) turn(); else fade(turn); }
     else paint();
     last = s.phase;
     return s;
@@ -127,13 +136,23 @@
     // 'auto' follows the clock; 'a' and 'b' keep one version
     mode: function () { return AN.vm === 'auto' ? 'auto' : AN.v; },
     setMode: function (m, from) {
-      pinned = null;
-      if (m === 'auto') { AN.vm = 'auto'; AN.store.set('an-vm', 'auto'); AN.store.set('an-v', ''); tick(); }
-      else if (m === 'a' || m === 'b') { if (AN.v !== m) AN.setV(m, { from: from }); else { AN.vm = 'man'; AN.store.set('an-vm', 'man'); AN.store.set('an-v', m); apply(); } }
+      pinned = null; keep = null;
+      if (m === 'auto') AN.setAuto({ from: from });
+      else if (m === 'a' || m === 'b') {
+        if (AN.v !== m) AN.setV(m, { from: from });
+        else { AN.vm = 'man'; AN.store.set('an-vm', 'man'); AN.store.set('an-v', m); H.setAttribute('data-vm', 'man'); if (AN.vLabel) AN.vLabel(); apply(); }
+      }
       return AN.live.mode();
     },
-    // look at another hour of today (0-24) without changing what is saved; preview(null) goes back
-    preview: function (h) { pinned = (typeof h === 'number' && h >= 0 && h <= 24) ? h : null; return apply(); }
+    // look at another hour of today (0-24) without changing what is saved; preview(null) goes back to the clock, or
+    // to the version the visitor had kept
+    preview: function (h) {
+      var on = typeof h === 'number' && h >= 0 && h <= 24;
+      if (on && pinned === null) keep = AN.vm === 'auto' ? null : AN.v;
+      pinned = on ? h : null;
+      if (!on && keep) { var k = keep; keep = null; if (AN.v !== k) AN.setV(k, { now: true, auto: true }); }
+      return apply(true);
+    }
   };
   tick();
 })();

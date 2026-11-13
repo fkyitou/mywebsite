@@ -12,19 +12,31 @@
   h.setAttribute('data-page', t);
   // Day and night. With no version chosen by hand the blog follows the visitor's own clock: «روز» (B) while the sun
   // is up, «شب» (A) after dusk (js/live.js draws the rest of the sky). A version picked with the header button or
-  // named in the address (?v=a) is kept until the visitor goes back to «خودکار». The sun's height in degrees comes
-  // from the day of the year and the hour, for 35.7°N; no location is asked for. AN_NOW, when a page sets it, is the
-  // time to show instead of the clock (the offline preview pins it so that the tests see the same sky every time).
+  // named in the address (?v=a) is kept until the visitor goes back to «خودکار». No location is asked for: the sun
+  // is worked out for 35.7°N from the device's date and hour alone. AN_NOW, when a page sets it, is the time to show
+  // instead of the clock (the offline preview pins it so that the tests see the same sky every time).
   var clock = function () { var n = w.AN_NOW, c = n ? new Date(n) : new Date(); return isNaN(c) ? new Date() : c; };
-  var sunAlt = function (c) {
-    var r = Math.PI / 180, n = Math.floor((c - new Date(c.getFullYear(), 0, 0)) / 864e5), dc = -23.44 * r * Math.cos(2 * Math.PI * (n + 10) / 365);
-    return Math.asin(Math.sin(35.7 * r) * Math.sin(dc) + Math.cos(35.7 * r) * Math.cos(dc) * Math.cos((c.getHours() + c.getMinutes() / 60 - 12) * 15 * r)) / r;
+  // sol(date) → { alt: the sun's height in degrees, h: the hour by the sun (12 = the sun at its highest), dec }.
+  // Declination from the day of the year, so winter days are short and summer days long. Clock → sun time: an hour
+  // of summer time is taken off where the device's zone has one, and the equation of time (the sun runs up to 16
+  // minutes ahead of or behind the clock through the year) is added.
+  var sol = function (c) {
+    var r = Math.PI / 180, y = c.getFullYear(), n = Math.floor((c - new Date(y, 0, 0)) / 864e5), b = 2 * Math.PI * (n - 81) / 364;
+    var dc = -23.44 * r * Math.cos(2 * Math.PI * (n + 10) / 365);
+    var st = (c.getTimezoneOffset() - Math.max(new Date(y, 0, 1).getTimezoneOffset(), new Date(y, 6, 1).getTimezoneOffset())) / 60;
+    var hr = c.getHours() + c.getMinutes() / 60 + st + (9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b)) / 60;
+    return { alt: Math.asin(Math.sin(35.7 * r) * Math.sin(dc) + Math.cos(35.7 * r) * Math.cos(dc) * Math.cos((hr - 12) * 15 * r)) / r, h: hr, dec: dc };
   };
+  var sunAlt = function (c) { return sol(c).alt; };
   var v = 'a', m = null, X = null, vm = 'auto', sv = '';
   try {
     m = q.match(/[?&]v=(a|b)\b/i);
     if (m) { v = m[1].toLowerCase(); vm = 'man'; localStorage.setItem('an-v', v); localStorage.setItem('an-vm', 'man'); }
-    else { sv = localStorage.getItem('an-v') || ''; vm = localStorage.getItem('an-vm') || (sv ? 'man' : 'auto'); if (vm !== 'auto' && sv) v = sv; }
+    else {
+      // a version is kept only if it was chosen (kit 8 saved the choice as an-v alone) and «خودکار» was not asked for since
+      sv = localStorage.getItem('an-v'); if (sv !== 'a' && sv !== 'b') sv = '';
+      if (sv && localStorage.getItem('an-vm') !== 'auto') { vm = 'man'; v = sv; }
+    }
     X = JSON.parse(localStorage.getItem('an-x') || 'null');
   } catch (e) {}
   if (vm === 'auto') v = sunAlt(clock()) > -4 ? 'b' : 'a';
@@ -50,7 +62,9 @@
   // or the device has no graphics chip.
   var vt = d.createElement('style');
   vt.textContent = '@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}' +
-    'html.an-swap::view-transition-old(root),html.an-swap::view-transition-new(root){animation:none;mix-blend-mode:normal}';
+    'html.an-swap::view-transition-old(root),html.an-swap::view-transition-new(root){animation:none;mix-blend-mode:normal}' +
+    // day turning to night (js/live.js) takes its time
+    'html.an-fade::view-transition-old(root),html.an-fade::view-transition-new(root){animation-duration:1.6s}';
   d.head.appendChild(vt);
   w.addEventListener('pagereveal', function (e) { if (e.viewTransition && (rm || X.vt === 0 || gpu === 'soft')) e.viewTransition.skipTransition(); });
   // software rendering (no hardware GPU): probed once per session by sky.js, known here from the second page on
@@ -58,7 +72,7 @@
   try { gpu = sessionStorage.getItem('an-gpu') || ''; } catch (e) {}
   if (gpu === 'soft') h.setAttribute('data-gpu', 'soft');
   h.setAttribute('data-vm', vm);
-  w.AN = { page: t, v: v, vm: vm, clock: clock, sunAlt: sunAlt, rm: rm, gpu: gpu, t0: Date.now() };
+  w.AN = { page: t, v: v, vm: vm, clock: clock, sol: sol, sunAlt: sunAlt, rm: rm, gpu: gpu, t0: Date.now() };
   // Self-check: if the end of the template never ran (e.g. Blogfa saved it cut short), or the CDN build could not get
   // its stylesheet or script from any address, say so instead of failing silently.
   w.addEventListener('load', function () {
