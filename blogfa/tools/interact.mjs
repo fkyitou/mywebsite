@@ -99,7 +99,8 @@ async function labControls(page, scope) {
 }
 async function operate(page, c) {
   const sel = `[data-t="${c.id}"]`;
-  if (await page.evaluate(s => { const e = document.querySelector(s); return !e || e.getAttribute('aria-pressed') === 'true' || e.getAttribute('aria-selected') === 'true' || (e.type === 'radio' && e.checked); }, sel)) return 'skip';
+  // a control another control has switched off since the list was made (a resolution a model does not offer) is not the reader's to press
+  if (await page.evaluate(s => { const e = document.querySelector(s); return !e || e.disabled || e.getAttribute('aria-pressed') === 'true' || e.getAttribute('aria-selected') === 'true' || (e.type === 'radio' && e.checked); }, sel)) return 'skip';
   const before = await page.evaluate(LAB_STATE);
   try {
     if (c.type === 'range') {

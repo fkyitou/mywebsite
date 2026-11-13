@@ -228,9 +228,15 @@ try {
     ok('panel: passport shows 1 stamp, 1 mark', pp.on === 1 && pp.marks === 1, JSON.stringify(pp));
     await page.keyboard.press('Escape');
     // home page badges
-    await page.goto(BASE + 'index.html', { waitUntil: 'load' });
-    await ready(page);
-    ok('home: read and marked badges on the card', await page.evaluate(() => document.querySelectorAll('.an-x-badge').length >= 2));
+    // the first article is on the home page only while the blog has no more posts than fit there; after that its
+    // card is on the page of its category
+    let cardPage = 'index.html';
+    for (const f of ['index.html', 'cat-1.html', 'cat-2.html', 'cat-3.html', 'cat-4.html', 'cat-5.html', 'cat-6.html', 'cat-7.html']) {
+      await page.goto(BASE + f, { waitUntil: 'load' });
+      await ready(page);
+      if (await page.evaluate(() => !!document.querySelector('a.an-card[href*="post-1.html"]'))) { cardPage = f; break; }
+    }
+    ok('home: read and marked badges on the card (' + cardPage + ')', await page.evaluate(() => document.querySelectorAll('.an-x-badge').length >= 2));
     await snap(page, '09-home-badges.png');
     // wipe
     await page.evaluate(() => window.AN.x.open());

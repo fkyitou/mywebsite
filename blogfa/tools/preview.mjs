@@ -150,6 +150,9 @@ function finish(html, kind, extraHead) {
   const cmts = `<script type="text/javascript">\nBlogComments=[${posts.map(p => `${p.id},${p.ncmt}`).join(',')}];\n</script>`;
   // Blogfa puts BlogComments at the very top of <head>
   html = html.replace(/(<head>\s*(<meta http-equiv="Content-Type"[^>]*>)?)/i, `$1${cmts}`);
+  // the preview pins the clock to a late evening, so the sky and the version are the same on every run of the tests;
+  // a test (or a reader of the preview) may set AN_NOW first to see another hour
+  html = html.replace(/(<head>)/i, '$1<script>window.AN_NOW=window.AN_NOW||"2026-11-13T22:30:00";</script>');
   if (MODE === 'flat') {
     const hint = PAGE_FOR[kind] ? `<script>window.AN_PAGE=${JSON.stringify(PAGE_FOR[kind])};</script>` : '';
     html = html.replace(/(<head>)/i, `$1${hint}`)

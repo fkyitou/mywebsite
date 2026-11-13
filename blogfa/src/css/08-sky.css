@@ -63,6 +63,44 @@
 [data-v="b"] .an-sky-grain { opacity: .03; }
 [data-v="b"] .an-sky-light { background: radial-gradient(closest-side, rgba(255, 179, 107, .12), rgba(91, 155, 255, .05) 55%, transparent 100%); }
 
+/* live sky (js/live.js): the phase of the day on <html data-sky>, from the visitor's own clock.
+   A colour wash for the low sun, a soft sun by day, the moon with its real phase and one constellation of the season
+   by night. All of it sits in the top third of the window or at its lower edge, and every colour is capped low enough
+   that text keeps its contrast wherever a layer passes behind it. On reading pages the sun, the moon and the
+   constellation keep to the margins (as the stars do) and are left out on narrow screens. */
+.an-sky-tint { opacity: 0; transition: opacity 2.4s var(--ease); }
+[data-sky="twilight"] .an-sky-tint { opacity: 1; background: radial-gradient(120% 52% at var(--hx, 88%) 116%, rgba(255, 112, 78, .17), rgba(150, 92, 205, .09) 46%, transparent 72%), linear-gradient(180deg, rgba(58, 70, 168, .13), transparent 58%); }
+[data-sky="sunrise"] .an-sky-tint, [data-sky="sunset"] .an-sky-tint { opacity: 1; background: radial-gradient(120% 56% at var(--hx, 88%) 114%, rgba(255, 128, 78, .16), rgba(255, 184, 132, .08) 46%, transparent 72%), linear-gradient(180deg, rgba(150, 150, 226, .09), transparent 48%); }
+[data-sky="noon"] .an-sky-tint { opacity: 1; background: linear-gradient(180deg, rgba(104, 168, 255, .13), transparent 52%); }
+[data-sky="afternoon"] .an-sky-tint { opacity: 1; background: radial-gradient(90% 50% at 86% -8%, rgba(255, 196, 120, .12), transparent 66%); }
+[data-sky="night"][data-moonlight] .an-sky-tint { opacity: 1; background: radial-gradient(64% 52% at var(--mx, 80%) 0%, rgba(188, 208, 255, .065), transparent 72%); }
+.an-sky > .an-sky-orb { inset: auto; left: 80%; top: 14%; opacity: 0; transition: opacity 2.4s var(--ease), left 2.4s var(--ease), top 2.4s var(--ease); }
+.an-sky > .an-sky-sun { width: 15vmin; height: 15vmin; margin: -7.5vmin; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 214, 140, .62), rgba(255, 190, 112, .3) 34%, rgba(255, 176, 96, .1) 62%, transparent); }
+[data-sky="sunrise"] .an-sky-sun, [data-sky="sunset"] .an-sky-sun { background: radial-gradient(closest-side, rgba(255, 150, 92, .6), rgba(255, 128, 84, .28) 36%, rgba(255, 120, 90, .09) 64%, transparent); }
+.an-sky > .an-sky-moon { width: 9vmin; height: 9vmin; min-width: 44px; min-height: 44px; margin: -4.5vmin; }
+.an-sky-moon svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.an-moon-dark { fill: rgba(190, 204, 236, .035); stroke: rgba(204, 216, 244, .13); stroke-width: .5; }
+.an-moon-lit { fill: rgba(226, 233, 248, .2); stroke: rgba(236, 241, 252, .34); stroke-width: .5; }
+.an-sky > .an-sky-const { inset: auto; top: 13vh; left: 6vw; width: 30vmin; height: 30vmin; opacity: 0; transition: opacity 2.4s var(--ease); }
+.an-sky > .an-sky-const[data-side="w"] { left: auto; right: 6vw; }
+.an-sky-const svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.an-const-l line { stroke: rgba(170, 196, 255, .24); stroke-width: .3; stroke-linecap: round; }
+.an-const-s circle { fill: rgba(236, 242, 255, .78); }
+[data-sky="night"] .an-sky-const { opacity: 1; }
+[data-sky="twilight"] .an-sky-const { opacity: .45; }
+[data-v="b"] .an-sky-moon, [data-v="b"] .an-sky-const, [data-v="a"] .an-sky-sun { display: none; }
+[data-page="post"] .an-sky-orb[data-side="e"], [data-page="page"] .an-sky-orb[data-side="e"] { left: 2.8% !important; }
+[data-page="post"] .an-sky-orb[data-side="w"], [data-page="page"] .an-sky-orb[data-side="w"] { left: 97.2% !important; }
+[data-page="post"] .an-sky > .an-sky-moon, [data-page="page"] .an-sky > .an-sky-moon { width: 4.2vw; height: 4.2vw; margin: -2.1vw; min-width: 0; min-height: 0; }
+[data-page="post"] .an-sky > .an-sky-const, [data-page="page"] .an-sky > .an-sky-const { width: 4.6vw; height: 4.6vw; left: .5vw; top: 46vh; }
+[data-page="post"] .an-sky > .an-sky-const[data-side="w"], [data-page="page"] .an-sky > .an-sky-const[data-side="w"] { left: auto; right: .5vw; }
+@media (max-width: 1100px) { [data-page="post"] .an-sky-orb, [data-page="page"] .an-sky-orb, [data-page="post"] .an-sky-const, [data-page="page"] .an-sky-const { display: none; } }
+@media (max-width: 700px) { .an-sky > .an-sky-const { width: 38vmin; height: 38vmin; top: 9vh; } }
+[data-an-tone] .an-sky-tint, [data-an-tone] .an-sky-orb, [data-an-tone] .an-sky-const, [data-an-sky="off"] .an-sky-tint, [data-an-sky="off"] .an-sky-orb, [data-an-sky="off"] .an-sky-const { display: none; }
+/* the header button shows when the clock is in charge */
+[data-vm="auto"] .an-ab-btn { position: relative; }
+[data-vm="auto"] .an-ab-btn::after { content: ""; position: absolute; top: 5px; inset-inline-end: 5px; width: 6px; height: 6px; border-radius: 50%; background: var(--sunrise); box-shadow: 0 0 0 2px var(--bg); }
+
 /* reduced motion: a still sky */
 [data-motion="reduce"] .an-sky *, [data-motion="reduce"] .an-sky *::before, [data-motion="reduce"] .an-sky *::after { animation: none !important; transition: none !important; }
 [data-motion="reduce"] .an-sky-spark { display: none; }

@@ -181,7 +181,9 @@
     o = o || {}; AN.v = v;
     function upd() {
       if (o.update) o.update();
-      AN.v = v; H.setAttribute('data-v', v); AN.store.set('an-v', v);
+      // o.auto: the clock changed the version (js/live.js); anything else is the visitor's own choice and is kept
+      if (!o.auto) { AN.vm = 'man'; AN.store.set('an-vm', 'man'); AN.store.set('an-v', v); }
+      AN.v = v; H.setAttribute('data-vm', AN.vm || 'man'); H.setAttribute('data-v', v);
       $$('.an-v-label').forEach(function (e) { e.textContent = v.toUpperCase(); });
       var tone = H.getAttribute('data-an-tone'), m = $('meta[name="theme-color"]');
       if (m) m.setAttribute('content', tone === 'paper' ? '#F5EEDC' : tone === 'contrast' ? '#000000' : v === 'b' ? '#F6F8FB' : '#04060D');
@@ -191,7 +193,20 @@
   };
   function versions() {
     $$('.an-v-label').forEach(function (e) { e.textContent = AN.v.toUpperCase(); });
-    $$('[data-an="ab"]').forEach(function (b) { b.addEventListener('click', function () { var n = AN.v === 'a' ? 'b' : 'a'; AN.setV(n, { from: b }); AN.toast(n === 'a' ? 'نسخه‌ی A «شب» فعال شد' : 'نسخه‌ی B «روز» فعال شد'); }); });
+    // three states in turn: «خودکار» (the visitor's clock decides) → the other version → the first one → «خودکار».
+    // Every press but the last changes what is on screen; the last hands the choice back to the clock.
+    $$('[data-an="ab"]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var av = AN.sunAlt && AN.sunAlt(AN.clock()) > -4 ? 'b' : 'a', n = AN.v === 'a' ? 'b' : 'a';
+        if (AN.vm === 'auto' || AN.v !== av || !AN.sunAlt) {
+          AN.setV(n, { from: b }); AN.toast(n === 'a' ? 'نسخه‌ی A «شب» فعال شد' : 'نسخه‌ی B «روز» فعال شد');
+        } else {
+          AN.vm = 'auto'; AN.store.set('an-vm', 'auto'); AN.store.set('an-v', ''); H.setAttribute('data-vm', 'auto');
+          if (AN.live) AN.live.state();
+          AN.toast('حالت خودکار: شب و روز با ساعت دستگاه شما عوض می‌شود');
+        }
+      });
+    });
   }
 
   /* ---------- reveal, pointer light, magnetic buttons, tilt ---------- */
