@@ -55,6 +55,9 @@ const blogfa = (h) => { // Blogfa-shaped absolute paths, as the live blog will h
   if ((m = /^\/category\/(\d+)\/?$/.exec(h))) return cats.has(m[1]) || 'no category ' + m[1];
   if ((m = /^\/comments\/\?.*postid=(\d+)/.exec(h))) return posts.has(m[1]) || 'comments for missing post ' + m[1];
   if (/^\/(archive|posts\/?|page\/about|rss|tag\/[^/]+|\d{4}\/\d{2})\/?$/.test(h)) return true;
+  // the header link to the business-model page the owner has yet to make; core.js hides it while
+  // /page/bmc answers 404 (behaviour.mjs tests that), so it is never a dead link for a reader
+  if (/^\/page\/bmc\/?$/.test(h)) return true;
   return 'unknown Blogfa path';
 };
 for (const { from, href } of links) {

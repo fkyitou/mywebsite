@@ -469,7 +469,14 @@
     host.insertBefore(cv, host.firstChild);
     ov = D.createElement('canvas'); ov.className = 'an-globe-ov'; ov.setAttribute('aria-hidden', 'true'); host.insertBefore(ov, cv.nextSibling);
     ox = ov.getContext('2d'); buildArcs(); bindInput(); ok = true; host.classList.add('an-globe-on');
-    W.addEventListener('resize', function () { layout(); kick(); if (RM) { drawGL(); drawOverlay(); } });
+    function relayout() { layout(); kick(); if (RM) { drawGL(); drawOverlay(); } }
+    W.addEventListener('resize', relayout);
+    // the hero can change height without the window resizing (a late font, the film button the reader's box
+    // adds on the home page); without this the canvas keeps its first shape and the Earth is drawn stretched
+    if ('ResizeObserver' in W) new ResizeObserver(function () {
+      var r = host.getBoundingClientRect();
+      if (Math.abs(r.width - st.w) > 1 || Math.abs(r.height - st.h) > 1) relayout();
+    }).observe(host);
     W.addEventListener('scroll', onScroll, { passive: true }); onScroll();
     D.addEventListener('visibilitychange', function () { if (!D.hidden) kick(); });
     if ('IntersectionObserver' in W) new IntersectionObserver(function (es) { st.vis = es[0].isIntersecting; if (st.vis) kick(); }, { rootMargin: '80px' }).observe(host);
