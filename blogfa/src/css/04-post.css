@@ -213,6 +213,12 @@ svg.an-ch { stroke: none; }
 /* «همه‌ی مقاله‌ها» on the archive page */
 .an-all { max-width: var(--read); margin: 0 auto var(--s7); padding: 0 var(--gut); }
 .an-all-wait { color: var(--muted); margin: 0; }
+/* while the list is on its way, its place is held so the months and the footer do not jump down when it arrives
+   (Lighthouse measured CLS 0.76 on this page before, 2026-11-13). The row heights are the measured ones: one line of
+   title on a wide screen, often two on a phone. --an-all-n is the count from the last visit, 10 at first. */
+.an-js .an-all:not(.an-all-done) { --an-row: 95px; min-height: calc(var(--an-all-n, 10) * var(--an-row) - 8px); }
+@media (max-width: 600px) { .an-js .an-all:not(.an-all-done) { --an-row: 109px; } }
+@media (max-width: 360px) { .an-js .an-all:not(.an-all-done) { --an-row: 123px; } }
 .an-all-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
 .an-all-list li { animation: an-all-in var(--t-slow) var(--ease) both; animation-delay: var(--d, 0s); }
 .an-all-a { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; align-items: center; padding: 14px 16px; border-radius: var(--r-m); background: var(--glass); border: 1px solid var(--border); color: var(--text); transition: background var(--t-fast), border-color var(--t-fast), transform var(--t-fast) var(--ease); }

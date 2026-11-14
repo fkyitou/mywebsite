@@ -43,7 +43,8 @@
 /* ---------- reset & base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 /* body stays transparent so the fixed sky (08-sky.css) shows through; html keeps the base colour */
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--bar-h) + 16px); background: var(--bg); }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--bar-h) + 16px); background: var(--bg); scrollbar-gutter: stable; }
+/* the gutter is kept so the page does not get narrower when it grows past one screen; Lighthouse saw the whole fixed sky "shift" by the scrollbar width on the archive page (2026-11-14) */
 body { margin: 0; min-height: 100vh; background: transparent; color: var(--text); font-family: var(--font); font-size: var(--fs-2); line-height: 1.95; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 img, svg, canvas, video, iframe { display: block; max-width: 100%; }
 svg:not([fill]) { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }

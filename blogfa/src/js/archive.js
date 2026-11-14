@@ -6,7 +6,11 @@
   'use strict';
   var W = window, D = document, AN = W.AN;
   if (!AN || !AN.$ || AN.page !== 'archive') return;
-  var $ = AN.$, esc = AN.esc, MAX_PAGES = 20;
+  var $ = AN.$, esc = AN.esc, MAX_PAGES = 20, KEY = 'an-all-n';
+  // the space held for the list (04-post.css) follows the count seen last time; only a number is kept, in this browser
+  function box() { return $('#an-all'); }
+  (function () { var n = 0, b = box(); try { n = parseInt(localStorage.getItem(KEY), 10) || 0; } catch (e) {} if (b && n > 0 && n < 200) b.style.setProperty('--an-all-n', n); })();
+  function done() { var b = box(); if (b) b.classList.add('an-all-done'); }
 
   // «پنجشنبه چهاردهم آبان ۱۴۰۵» → «چهاردهم آبان ۱۴۰۵»: the list is narrow, the weekday adds little
   function shortDate(d) { return String(d).replace(/^\s*(?:یک|دو|سه|چهار|پنج)?\s*‌?\s*شنبه\s+|^\s*جمعه\s+/, ''); }
@@ -36,12 +40,13 @@
         '</a></li>';
     }).join('');
     if (wait) wait.hidden = true;
+    done(); try { localStorage.setItem(KEY, String(list.length)); } catch (e) {}
     if (sub) sub.textContent = AN.fa(list.length) + ' روایت، تازه‌ترین در بالا. روی هر عنوان بزن تا مقاله و آزمایشگاه زنده‌اش باز شود.';
     // the search dialog on this page searches these articles too
     AN._idx = list.map(function (p, i) { return { id: String(p.id), url: p.url, title: p.title, date: p.date, topic: AN.topicOf(p.title), i: i }; });
   }
 
-  function fail() { var w = $('#an-all-wait'); if (w) { w.classList.add('an-all-fail'); w.firstChild.nodeValue = 'فهرست مقاله‌ها این بار نیامد. '; } }
+  function fail() { done(); var w = $('#an-all-wait'); if (w) { w.classList.add('an-all-fail'); w.firstChild.nodeValue = 'فهرست مقاله‌ها این بار نیامد. '; } }
 
   function load() {
     // a page opened from disk (the flat preview) cannot read another file, so it keeps the plain-list link
