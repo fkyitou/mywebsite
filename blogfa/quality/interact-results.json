@@ -1,0 +1,578 @@
+{
+ "generated": "2026-11-14T06:24:51.017Z",
+ "browser": "Chromium (Playwright), software WebGL",
+ "passed": 54,
+ "failed": 0,
+ "results": [
+  {
+   "group": "lab",
+   "name": "post-1.html lab «ai»: 11/11 controls respond (10 change the result, 1 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-1.html lab «ai» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-2.html lab «iot»: 22/22 controls respond (4 change the result, 18 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-2.html lab «iot» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-3.html lab «city»: 7/7 controls respond (7 change the result, 0 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-3.html lab «city» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-4.html lab «security»: 8/8 controls respond (7 change the result, 1 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-4.html lab «security» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-5.html lab «brain»: 5/5 controls respond (5 change the result, 0 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-5.html lab «brain» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-6.html lab «space»: 9/9 controls respond (9 change the result, 0 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-6.html lab «space» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-7.html lab «arch»: 9/9 controls respond (9 change the result, 0 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-7.html lab «arch» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-8.html lab «algo»: 22/22 controls respond (22 change the result, 0 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-8.html lab «algo» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-9.html lab «energy»: 7/7 controls respond (7 change the result, 0 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-9.html lab «energy» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-10.html lab «idea»: 13/13 controls respond (6 change the result, 7 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-10.html lab «idea» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-11.html lab «video»: 8/8 controls respond (8 change the result, 0 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-11.html lab «video» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "feature",
+   "name": "search: Ctrl+K opens, «مریخ» finds the Mars article, Escape closes",
+   "pass": true,
+   "info": "open=true hits=1 closed=true"
+  },
+  {
+   "group": "feature",
+   "name": "shortcuts: «?» opens the list (it includes M for sound), Escape closes",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "feature",
+   "name": "realm menu opens with one link per category",
+   "pass": true,
+   "info": "expanded=true links=7"
+  },
+  {
+   "group": "feature",
+   "name": "sound: the button turns it on, M turns it off",
+   "pass": true,
+   "info": "true → false"
+  },
+  {
+   "group": "feature",
+   "name": "A/B switch flips the version and the choice survives a reload",
+   "pass": true,
+   "info": "a → b → after reload b"
+  },
+  {
+   "group": "feature",
+   "name": "back-to-top button returns to the top",
+   "pass": true,
+   "info": "from 6706px, at the top after 1663 ms"
+  },
+  {
+   "group": "feature",
+   "name": "home: no errors during the feature tests",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "feature",
+   "name": "table of contents: a link scrolls its heading to the top of the screen",
+   "pass": true,
+   "info": "7 entries, heading at 211px after 723 ms"
+  },
+  {
+   "group": "feature",
+   "name": "comments: each article links to its Blogfa comments page",
+   "pass": true,
+   "info": "/comments/?blogid=ayandehnegar&postid=1"
+  },
+  {
+   "group": "feature",
+   "name": "reading progress bar grows while reading",
+   "pass": true,
+   "info": "375px → 629px"
+  },
+  {
+   "group": "feature",
+   "name": "article: no errors during the feature tests",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "feature",
+   "name": "mobile: the menu button opens the navigation",
+   "pass": true,
+   "info": "{\"exp\":\"true\",\"vis\":true}"
+  },
+  {
+   "group": "layout",
+   "name": "index.html at 390px: no sideways scrolling",
+   "pass": true,
+   "info": "390 / 390"
+  },
+  {
+   "group": "layout",
+   "name": "post-6.html at 390px: no sideways scrolling",
+   "pass": true,
+   "info": "390 / 390"
+  },
+  {
+   "group": "layout",
+   "name": "page-about.html at 390px: no sideways scrolling",
+   "pass": true,
+   "info": "390 / 390"
+  },
+  {
+   "group": "layout",
+   "name": "archive.html at 390px: no sideways scrolling",
+   "pass": true,
+   "info": "390 / 390"
+  },
+  {
+   "group": "layout",
+   "name": "index.html at 768px: no sideways scrolling",
+   "pass": true,
+   "info": "753 / 768"
+  },
+  {
+   "group": "layout",
+   "name": "post-6.html at 768px: no sideways scrolling",
+   "pass": true,
+   "info": "753 / 768"
+  },
+  {
+   "group": "layout",
+   "name": "page-about.html at 768px: no sideways scrolling",
+   "pass": true,
+   "info": "753 / 768"
+  },
+  {
+   "group": "layout",
+   "name": "archive.html at 768px: no sideways scrolling",
+   "pass": true,
+   "info": "753 / 768"
+  },
+  {
+   "group": "layout",
+   "name": "index.html at 1366px: no sideways scrolling",
+   "pass": true,
+   "info": "1351 / 1366"
+  },
+  {
+   "group": "layout",
+   "name": "post-6.html at 1366px: no sideways scrolling",
+   "pass": true,
+   "info": "1351 / 1366"
+  },
+  {
+   "group": "layout",
+   "name": "page-about.html at 1366px: no sideways scrolling",
+   "pass": true,
+   "info": "1351 / 1366"
+  },
+  {
+   "group": "layout",
+   "name": "archive.html at 1366px: no sideways scrolling",
+   "pass": true,
+   "info": "1351 / 1366"
+  },
+  {
+   "group": "layout",
+   "name": "index.html at 1920px: no sideways scrolling",
+   "pass": true,
+   "info": "1905 / 1920"
+  },
+  {
+   "group": "layout",
+   "name": "post-6.html at 1920px: no sideways scrolling",
+   "pass": true,
+   "info": "1905 / 1920"
+  },
+  {
+   "group": "layout",
+   "name": "page-about.html at 1920px: no sideways scrolling",
+   "pass": true,
+   "info": "1905 / 1920"
+  },
+  {
+   "group": "layout",
+   "name": "archive.html at 1920px: no sideways scrolling",
+   "pass": true,
+   "info": "1905 / 1920"
+  },
+  {
+   "group": "rtl",
+   "name": "html dir=rtl lang=fa; body and paragraphs right-to-left; Persian digits in the dates",
+   "pass": true,
+   "info": "{\"dir\":\"rtl\",\"lang\":\"fa\",\"body\":\"rtl\",\"p\":\"rtl\",\"digits\":true}"
+  },
+  {
+   "group": "render",
+   "name": "home: every <img> loaded",
+   "pass": true,
+   "info": "0 images"
+  },
+  {
+   "group": "render",
+   "name": "home: every article cover is drawn",
+   "pass": true,
+   "info": "11 of 11 covers drawn"
+  },
+  {
+   "group": "pages",
+   "name": "all 66 preview pages open with no JS error, no console error and no missing local file",
+   "pass": true,
+   "info": ""
+  }
+ ],
+ "labs": [
+  {
+   "file": "post-1.html",
+   "lab": "ai",
+   "tabs": [],
+   "output": [
+    "button «XOR»",
+    "button «دو هلال»",
+    "button «مارپیچ (چالش)»",
+    "input:range «نورون در هر لایه‌ی پنهان۸»",
+    "input:range «نرخ یادگیری۰٫۰۳۰»",
+    "input:range «نویز داده‌ها۰٫۰۸»",
+    "button «▶ شروع آموزش»",
+    "button «یک دوره»",
+    "button «شبکه‌ی تازه»",
+    "button «داده‌ی تازه»"
+   ],
+   "own": [
+    "button «آبی»"
+   ],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-2.html",
+   "lab": "iot",
+   "tabs": [],
+   "output": [
+    "button «روشن»",
+    "button «⚡ اجرای حمله‌ی شبیه‌سازی‌شده»",
+    "button «همه با تنظیمات کارخانه»",
+    "button «خانه‌ی امن»"
+   ],
+   "own": [
+    "button «رمز ضعیف»",
+    "button «رمز قوی و یکتا»",
+    "input:checkbox «به‌روز»",
+    "button «رمز ضعیف»",
+    "button «رمز قوی و یکتا»",
+    "input:checkbox «به‌روز»",
+    "button «رمز ضعیف»",
+    "button «رمز قوی و یکتا»",
+    "input:checkbox «به‌روز»",
+    "button «رمز ضعیف»",
+    "button «رمز قوی و یکتا»",
+    "input:checkbox «به‌روز»",
+    "button «رمز ضعیف»",
+    "button «رمز قوی و یکتا»",
+    "input:checkbox «به‌روز»",
+    "button «رمز ضعیف»",
+    "button «رمز قوی و یکتا»",
+    "input:checkbox «به‌روز»"
+   ],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-3.html",
+   "lab": "city",
+   "tabs": [],
+   "output": [
+    "button «هوشمند با حسگر»",
+    "input:range «ترافیک شمال–جنوب (خودرو در ساعت)۶۰۰»",
+    "input:range «ترافیک شرق–غرب (خودرو در ساعت)۲۵۰»",
+    "input:range «سبز ثابت برای هر جهت (ثانیه)۳۰»",
+    "input:range «سرعت شبیه‌سازی×۳»",
+    "button «مقایسه‌ی یک ساعت کامل با همین ترافیک»",
+    "button «از نو»"
+   ],
+   "own": [],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-4.html",
+   "lab": "security",
+   "tabs": [
+    "قدرت رمز",
+    "رمز یک‌بارمصرف (TOTP)"
+   ],
+   "output": [
+    "input:password «یک رمز نمونه بنویس (رمز واقعی‌ات را ننوی»",
+    "button «ساخت گذرعبارت فارسی تصادفی»",
+    "button «ساخت رمز تصادفی ۱۶ نویسه‌ای»",
+    "tab «رمز یک‌بارمصرف (TOTP)»",
+    "input:text «کد گوشی را وارد کن تا سرور بررسی کند»",
+    "button «ورود»",
+    "button «کلید مخفی تازه»"
+   ],
+   "own": [
+    "button «نمایش»"
+   ],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-5.html",
+   "lab": "brain",
+   "tabs": [],
+   "output": [
+    "button «بدون مرور»",
+    "button «شب امتحان (فشرده)»",
+    "button «با فاصله‌ی افزایشی»",
+    "button «هر روز»",
+    "input:range «روز امتحانروز ۳۰»"
+   ],
+   "own": [],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-6.html",
+   "lab": "space",
+   "tabs": [
+    "مدار زنده و پنجره‌ی پرتاب",
+    "زندگی روی مریخ"
+   ],
+   "output": [
+    "input:range «تاریخ۲۳ آبان ۱۴۰۵»",
+    "button «▶ حرکت زمان»",
+    "button «🚀 پرتاب از همین تاریخ»",
+    "button «برو به پنجره‌ی پرتاب بعدی»",
+    "button «امروز»",
+    "tab «زندگی روی مریخ»",
+    "input:range «جرم بدن تو (کیلوگرم)۶۰»",
+    "input:range «ارتفاع پرش تو روی زمین (سانتی‌متر)۴۰»",
+    "input:range «سن تو (سال زمینی)۱۷»"
+   ],
+   "own": [],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-7.html",
+   "lab": "arch",
+   "tabs": [],
+   "output": [
+    "button «شش‌ضلعی»",
+    "button «مثلث گرد»",
+    "button «دایره»",
+    "input:range «تعداد طبقه۶۰»",
+    "input:range «چرخش کل از پایه تا بام۹۰°»",
+    "input:range «باریک شدن به سمت بالا۱۵٪»",
+    "button «برج ساده‌ی جعبه‌ای»",
+    "button «الهام از برج کایان (۷۵ طبقه، ۹۰°)»",
+    "button «الهام از برج شانگهای (۱۲۰°)»"
+   ],
+   "own": [],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-8.html",
+   "lab": "algo",
+   "tabs": [],
+   "output": [
+    "input:range «تازگی پست۴۰»",
+    "input:range «تعامل پیش‌بینی‌شده۴۰»",
+    "input:range «شباهت به علاقه‌های من۶۰»",
+    "input:range «کیفیت و اعتبار منبع۵۰»",
+    "input:range «تنوع موضوعی۵۰»",
+    "button «فقط بیشترین تعامل»",
+    "button «متعادل»",
+    "button «آموزشی و معتبر»",
+    "button «۲۰ بار اسکرول و پسندیدن خودکار»",
+    "button «علاقه‌ها از نو»",
+    "button «پسندیدن: گل دقیقه‌ی ۹۰ در بازی دیشب»",
+    "button «پسندیدن: تصویر تازه‌ی تلسکوپ جیمز وب از »",
+    "button «پسندیدن: ویدیوی بیست‌ثانیه‌ای: گربه‌ای ک»",
+    "button «پسندیدن: دعوای لفظی دو چهره‌ی مشهور در ی»",
+    "button «پسندیدن: عکس‌های سفر دوستت به کویر مرنجا»",
+    "button «پسندیدن: آموزش پنج‌دقیقه‌ای: ساختن رمز ق»",
+    "button «پسندیدن: جشن تولد هم‌کلاسی‌ات»",
+    "button «پسندیدن: توضیح ساده‌ی یک پژوهش تازه دربا»",
+    "button «پسندیدن: چالش وایرال: چه کسی بیشتر دوام »",
+    "button «پسندیدن: بحث داغ: کدام شهر بهترین غذای خ»",
+    "button «پسندیدن: پادکست: گفت‌وگو با یک مهندس انر»",
+    "button «پسندیدن: شایعه: فلان برنامه از فردا کار »"
+   ],
+   "own": [],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-9.html",
+   "lab": "energy",
+   "tabs": [],
+   "output": [
+    "button «زمستان»",
+    "input:range «ظرفیت خورشیدی (مگاوات)۶۰»",
+    "input:range «ظرفیت بادی (مگاوات)۴۰»",
+    "input:range «باتری (مگاوات‌ساعت، ۴ ساعته)۰»",
+    "button «بیشتر شبکه‌های امروز»",
+    "button «خورشید زیاد، بدون باتری»",
+    "button «خورشید + باد + باتری»"
+   ],
+   "own": [],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-10.html",
+   "lab": "idea",
+   "tabs": [
+    "ایده‌سازی با اسکمپر",
+    "نردبان آمادگی فناوری (TRL)"
+   ],
+   "output": [
+    "input:text «یک وسیله‌ی روزمره»",
+    "button «🎲 تصادفی»",
+    "button «جمع‌بندی ایده‌های من»",
+    "button «پاک کردن»",
+    "tab «نردبان آمادگی فناوری (TRL)»",
+    "button «بله»"
+   ],
+   "own": [
+    "textarea «ایده‌ی تو برای جایگزین کن»",
+    "textarea «ایده‌ی تو برای ترکیب کن»",
+    "textarea «ایده‌ی تو برای اقتباس کن»",
+    "textarea «ایده‌ی تو برای بزرگ یا کوچکش کن»",
+    "textarea «ایده‌ی تو برای کاربرد دیگری پیدا کن»",
+    "textarea «ایده‌ی تو برای حذف کن»",
+    "textarea «ایده‌ی تو برای برعکسش کن»"
+   ],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-11.html",
+   "lab": "video",
+   "tabs": [],
+   "output": [
+    "button «Veo 3.1 Fast»",
+    "button «Veo 3.1»",
+    "button «Omni 1.2 Flash»",
+    "button «Runway Gen-4.5»",
+    "button «Luma Ray3.2»",
+    "input:range «طول ویدیو۳۰ ثانیه»",
+    "button «پخش ویدیو»",
+    "button «از نویز تا تصویر»"
+   ],
+   "own": [],
+   "none": [],
+   "error": []
+  }
+ ]
+}

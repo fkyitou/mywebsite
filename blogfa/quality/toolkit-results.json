@@ -1,0 +1,435 @@
+{
+ "generated": "2026-11-14T06:27:49.223Z",
+ "browser": "Chromium (Playwright)",
+ "box": "dist/box-local.html",
+ "passed": 71,
+ "failed": 0,
+ "results": [
+  {
+   "group": "article",
+   "name": "post: toolkit loaded (html.an-x-on, AN.x.v=9)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "post: header button first in the tools",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "post: custom box takes no room",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "post: keys list has R/F/Q",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "panel: opens as dialog with 5 themes, «خودکار» first and chosen",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "panel: focus moved into the dialog",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "theme paper: tone, version B, theme-color, saved",
+   "pass": true,
+   "info": "{\"tone\":\"paper\",\"v\":\"b\",\"tc\":\"#F5EEDC\",\"bg\":\"#F5EEDC\",\"saved\":\"paper\"}"
+  },
+  {
+   "group": "article",
+   "name": "theme contrast: tone, version A, black theme-color, sky hidden",
+   "pass": true,
+   "info": "{\"tone\":\"contrast\",\"v\":\"a\",\"tc\":\"#000000\",\"sky\":\"none\"}"
+  },
+  {
+   "group": "article",
+   "name": "text size: two steps up = 125%",
+   "pass": true,
+   "info": "{\"v\":\"1.25\",\"out\":\"۱۲۵٪\",\"px\":\"22.5px\"}"
+  },
+  {
+   "group": "article",
+   "name": "Escape closes the panel",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "template A/B switch ends the contrast theme",
+   "pass": true,
+   "info": "{\"tone\":null,\"v\":\"b\",\"saved\":\"\"}"
+  },
+  {
+   "group": "article",
+   "name": "R opens the panel",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "R closes it again",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "F: focus mode on, contents hidden",
+   "pass": true,
+   "info": "{\"attr\":true,\"toc\":\"none\"}"
+  },
+  {
+   "group": "article",
+   "name": "F again: focus mode off",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "listen: button shown for an on-device Persian voice",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "listen: player bar, sentences spoken, paragraph highlighted",
+   "pass": true,
+   "info": "{\"bar\":true,\"said\":17,\"hl\":true}"
+  },
+  {
+   "group": "article",
+   "name": "listen: stop hides the player",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "mark: saved with title",
+   "pass": true,
+   "info": "{\"u\":\"/post-1.html\",\"h\":\"http://127.0.0.1:35845/post-1.html\",\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"k\":\"ai\",\"at\":1794637625197}"
+  },
+  {
+   "group": "article",
+   "name": "ruler: on, follows the pointer",
+   "pass": true,
+   "info": "{\"hidden\":false,\"y\":\"500px\",\"h\":\"109px\"}"
+  },
+  {
+   "group": "article",
+   "name": "QR: decodes to this page address",
+   "pass": true,
+   "info": "{\"got\":\"http://127.0.0.1:35845/post-1.html\",\"want\":\"http://127.0.0.1:35845/post-1.html\"}"
+  },
+  {
+   "group": "article",
+   "name": "QR: the code as drawn on screen decodes too",
+   "pass": true,
+   "info": "http://127.0.0.1:35845/post-1.html"
+  },
+  {
+   "group": "article",
+   "name": "cite: APA text with author, blog and address",
+   "pass": true,
+   "info": "همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:35845/post-1.html"
+  },
+  {
+   "group": "article",
+   "name": "quiz: 2 to 5 questions after the article",
+   "pass": true,
+   "info": "{\"n\":5,\"kinds\":[\"an-x-q-t\",\"an-x-q-m\",\"an-x-q-t\",\"an-x-q-t\",\"an-x-q-k\"]}"
+  },
+  {
+   "group": "article",
+   "name": "quiz: scored, feedback on each, result saved, right answer marked",
+   "pass": true,
+   "info": "{\"score\":\"۲ از ۵ درست. پاسخ‌ها در متن همین مقاله‌اند (روی هر واژه‌ی نقطه‌چین بزنید تا تعریفش را ببینید). دوباره امتحان کنید.\",\"fb\":true,\"saved\":{\"ai\":{\"s\":2,\"n\":5,\"full\":false}},\"ok\":5}"
+  },
+  {
+   "group": "article",
+   "name": "quiz: «new questions» rebuilds the form",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "passport: stamp after reading to the end",
+   "pass": true,
+   "info": "{\"read\":{\"ai\":{\"id\":\"1\",\"u\":\"/post-1.html\",\"h\":\"http://127.0.0.1:35845/post-1.html\",\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"at\":1794637628478}},\"seal\":\"an-x-seal stamp\"}"
+  },
+  {
+   "group": "article",
+   "name": "resume: reading position saved",
+   "pass": true,
+   "info": "{\"1\":{\"i\":2,\"d\":747,\"f\":0.48,\"at\":1794637635469,\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"u\":\"http://127.0.0.1:35845/post-1.html\",\"m\":7}}"
+  },
+  {
+   "group": "article",
+   "name": "resume: the place keeps the title, address and length for the half-read list",
+   "pass": true,
+   "info": "{\"i\":2,\"d\":747,\"f\":0.48,\"at\":1794637635469,\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"u\":\"http://127.0.0.1:35845/post-1.html\",\"m\":7}"
+  },
+  {
+   "group": "article",
+   "name": "resume: bar offered on the next visit",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "resume: the bar says about how many minutes are left",
+   "pass": true,
+   "info": "دفعه‌ی پیش تا بخش «جهشی که همه‌چیز را عوض کرد» خوانده بودید؛ حدود ۴ دقیقه‌ی دیگر مانده است."
+  },
+  {
+   "group": "article",
+   "name": "resume: «continue» scrolls down the article",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "panel: passport shows 1 stamp, 1 mark",
+   "pass": true,
+   "info": "{\"on\":1,\"marks\":1}"
+  },
+  {
+   "group": "article",
+   "name": "home: read and marked badges on the card (index.html)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "article",
+   "name": "wipe: all toolkit data removed",
+   "pass": true,
+   "info": "[null,null,null,null,null]"
+  },
+  {
+   "group": "article",
+   "name": "post/home: no console errors",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "early.js: saved paper theme set before the first paint",
+   "pass": true,
+   "info": "{\"tone\":\"paper\",\"v\":\"b\"}"
+  },
+  {
+   "group": "pages",
+   "name": "archive: toolkit button present",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "archive: custom box takes no room",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "about: toolkit button, box hidden, paper theme kept",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "?v=a shows version A over the saved paper theme",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "pages",
+   "name": "archive/about: no console errors",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "tag",
+   "name": "unfilled tag text stays hidden",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "phone",
+   "name": "mobile: panel is a full-width bottom sheet, no sideways scroll",
+   "pass": true,
+   "info": "{\"w\":390,\"bottom\":844,\"h\":743,\"vh\":844,\"sw\":390}"
+  },
+  {
+   "group": "phone",
+   "name": "mobile: no sideways scroll at the end of the article",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "phone",
+   "name": "mobile: no console errors",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "motion",
+   "name": "reduced motion: AN.rm stays true and the motion switch is disabled",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit9",
+   "name": "first visit: «خودکار» chosen, the clock shows night (A) at 22:30",
+   "pass": true,
+   "info": "{\"v\":\"a\",\"vm\":\"auto\",\"sky\":\"night\",\"an\":[null,null],\"th\":\"auto\",\"sw\":0}"
+  },
+  {
+   "group": "kit9",
+   "name": "«روز»: version B kept by hand and saved, with the circle",
+   "pass": true,
+   "info": "{\"v\":\"b\",\"vm\":\"man\",\"sky\":\"morning\",\"an\":[\"b\",\"man\"],\"th\":\"b\",\"sw\":1}"
+  },
+  {
+   "group": "kit9",
+   "name": "«خودکار»: the version goes back to the clock (night, A), with the circle",
+   "pass": true,
+   "info": "{\"v\":\"a\",\"vm\":\"auto\",\"sky\":\"night\",\"an\":[\"\",\"auto\"],\"th\":\"auto\",\"sw\":2}"
+  },
+  {
+   "group": "kit9",
+   "name": "«شب» while the clock already shows night: kept by hand, no circle",
+   "pass": true,
+   "info": "{\"v\":\"a\",\"vm\":\"man\",\"sky\":\"night\",\"an\":[\"a\",\"man\"],\"th\":\"a\",\"sw\":2}"
+  },
+  {
+   "group": "kit9",
+   "name": "and back to «خودکار»: nothing changes on screen, no circle",
+   "pass": true,
+   "info": "{\"v\":\"a\",\"vm\":\"auto\",\"sky\":\"night\",\"an\":[\"\",\"auto\"],\"th\":\"auto\",\"sw\":2}"
+  },
+  {
+   "group": "kit9",
+   "name": "hour: the slider starts at the clock, «۲۲:۳۰، شب», no way back shown yet",
+   "pass": true,
+   "info": "{\"peek\":false,\"dim\":\"rgba(2, 4, 10, 0.66)\",\"val\":\"22.5\",\"vt\":\"۲۲:۳۰، شب\",\"dis\":false,\"out\":\"۲۲:۳۰، شب\",\"note\":\"خورشید، ماه و رنگ آسمان را در ساعت دیگری از امروز ببینید؛ چیزی ذخیره نمی‌شود.\",\"back\":false,\"v\":\"a\",\"sky\":\"night\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
+  },
+  {
+   "group": "kit9",
+   "name": "hour: the keyboard works (Home is midnight)",
+   "pass": true,
+   "info": "{\"peek\":true,\"dim\":\"rgba(2, 4, 10, 0.66)\",\"val\":\"0\",\"vt\":\"۰۰:۰۰، شب\",\"dis\":false,\"out\":\"۰۰:۰۰، شب\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"a\",\"sky\":\"night\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
+  },
+  {
+   "group": "kit9",
+   "name": "hour: noon shows version B and the noon sky; nothing saved; «خودکار» stays chosen",
+   "pass": true,
+   "info": "{\"peek\":true,\"dim\":\"rgba(2, 4, 10, 0)\",\"val\":\"12\",\"vt\":\"۱۲:۰۰، نیمروز\",\"dis\":false,\"out\":\"۱۲:۰۰، نیمروز\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"b\",\"sky\":\"noon\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
+  },
+  {
+   "group": "kit9",
+   "name": "hour: while looking, the page behind the panel is not dimmed",
+   "pass": true,
+   "info": "{\"peek\":true,\"dim\":\"rgba(0, 0, 0, 0)\",\"val\":\"12\",\"vt\":\"۱۲:۰۰، نیمروز\",\"dis\":false,\"out\":\"۱۲:۰۰، نیمروز\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"b\",\"sky\":\"noon\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
+  },
+  {
+   "group": "kit9",
+   "name": "hour: «بازگشت به اکنون» brings the clock's sky back, the slider and the dimming too, focus on it",
+   "pass": true,
+   "info": "{\"peek\":false,\"dim\":\"rgba(2, 4, 10, 0.463)\",\"val\":\"22.5\",\"vt\":\"۲۲:۳۰، شب\",\"dis\":false,\"out\":\"۲۲:۳۰، شب\",\"note\":\"خورشید، ماه و رنگ آسمان را در ساعت دیگری از امروز ببینید؛ چیزی ذخیره نمی‌شود.\",\"back\":false,\"v\":\"a\",\"sky\":\"night\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
+  },
+  {
+   "group": "kit9",
+   "name": "hour: a version kept by hand stays shown as chosen during the look",
+   "pass": true,
+   "info": "{\"peek\":true,\"dim\":\"rgba(2, 4, 10, 0.35)\",\"val\":\"12\",\"vt\":\"۱۲:۰۰، نیمروز\",\"dis\":false,\"out\":\"۱۲:۰۰، نیمروز\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"b\",\"sky\":\"noon\",\"vm\":\"man\",\"an\":[\"a\",\"man\"],\"th\":\"a\"}"
+  },
+  {
+   "group": "kit9",
+   "name": "hour: closing the panel ends the look (night, A, kept by hand)",
+   "pass": true,
+   "info": "{\"v\":\"a\",\"vm\":\"man\",\"sky\":\"night\",\"an\":[\"a\",\"man\"],\"th\":\"a\",\"sw\":2}"
+  },
+  {
+   "group": "kit9",
+   "name": "hour: off under the paper theme, and it says why",
+   "pass": true,
+   "info": "{\"peek\":false,\"dim\":\"rgba(2, 4, 10, 0.66)\",\"val\":\"22.5\",\"vt\":\"۲۲:۳۰، شب\",\"dis\":true,\"out\":\"\",\"note\":\"پوسته‌ی کاغذی و پرتضاد آسمان پس‌زمینه را نشان نمی‌دهند.\",\"back\":false,\"v\":\"b\",\"sky\":null,\"vm\":\"man\",\"an\":[\"b\",\"man\"],\"th\":\"paper\"}"
+  },
+  {
+   "group": "kit9",
+   "name": "«خودکار» from paper: the tone goes, night by the clock, the slider is on again",
+   "pass": true,
+   "info": "{\"peek\":false,\"dim\":\"rgba(2, 4, 10, 0.66)\",\"val\":\"22.5\",\"vt\":\"۲۲:۳۰، شب\",\"dis\":false,\"out\":\"۲۲:۳۰، شب\",\"note\":\"خورشید، ماه و رنگ آسمان را در ساعت دیگری از امروز ببینید؛ چیزی ذخیره نمی‌شود.\",\"back\":false,\"v\":\"a\",\"sky\":\"night\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
+  },
+  {
+   "group": "kit9",
+   "name": "half-read: the two other stories, newest first, this one left out",
+   "pass": true,
+   "info": "{\"hidden\":false,\"rows\":[{\"t\":\"هوش مصنوعی ویدیوساز: از یک جمله تا یک فیلم کوتاه، به چه قیمتی؟\",\"href\":\"http://127.0.0.1:35845/post-11.html\",\"small\":\"۴۰٪ خوانده شده، حدود ۶ دقیقه مانده\",\"w\":\"40%\"},{\"t\":\"از جرقه تا اختراع: ایده‌ها چطور به دنیا می‌آیند؟\",\"href\":\"http://127.0.0.1:35845/post-10.html\",\"small\":\"۵۰٪ خوانده شده\",\"w\":\"50%\"}]}"
+  },
+  {
+   "group": "kit9",
+   "name": "half-read: how much is read and about how long is left",
+   "pass": true,
+   "info": "[{\"t\":\"هوش مصنوعی ویدیوساز: از یک جمله تا یک فیلم کوتاه، به چه قیمتی؟\",\"href\":\"http://127.0.0.1:35845/post-11.html\",\"small\":\"۴۰٪ خوانده شده، حدود ۶ دقیقه مانده\",\"w\":\"40%\"},{\"t\":\"از جرقه تا اختراع: ایده‌ها چطور به دنیا می‌آیند؟\",\"href\":\"http://127.0.0.1:35845/post-10.html\",\"small\":\"۵۰٪ خوانده شده\",\"w\":\"50%\"}]"
+  },
+  {
+   "group": "kit9",
+   "name": "half-read: ✕ takes a story off; the focus goes to the next ✕",
+   "pass": true,
+   "info": "{\"rows\":1,\"focus\":\"unhalf\",\"pos\":[\"1\",\"10\"]}"
+  },
+  {
+   "group": "kit9",
+   "name": "half-read: the last one off hides the list; the focus goes to the close button",
+   "pass": true,
+   "info": "{\"hidden\":true,\"focus\":\"an-dlg-x\",\"pos\":[\"1\"]}"
+  },
+  {
+   "group": "kit9",
+   "name": "copy (QR window): the page address, no prompt(), nothing left behind, focus kept",
+   "pass": true,
+   "info": "{\"copied\":\"http://127.0.0.1:35845/post-1.html\",\"prompts\":0,\"left\":0,\"focus\":\"copy\",\"want\":\"http://127.0.0.1:35845/post-1.html\",\"toasts\":[\"پیوند صفحه کپی شد.\"]}"
+  },
+  {
+   "group": "kit9",
+   "name": "copy (citation): the APA text, no prompt()",
+   "pass": true,
+   "info": "{\"copied\":\"همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:35845/post-1.html\",\"want\":\"همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:35845/post-1.html\",\"prompts\":0,\"toasts\":[\"ارجاع کپی شد.\"]}"
+  },
+  {
+   "group": "kit9",
+   "name": "copy (the article's share row, template): the address, no prompt()",
+   "pass": true,
+   "info": "{\"copied\":\"http://127.0.0.1:35845/post-1.html\",\"prompts\":0,\"left\":0,\"want\":\"http://127.0.0.1:35845/post-1.html\",\"toasts\":[\"مهر «هوش مصنوعی» خورد: ۱ از ۱۱ روایت در گذرنامه‌ی آینده.\",\"پیوند مقاله کپی شد\"]}"
+  },
+  {
+   "group": "kit9",
+   "name": "«بازگرداندن تنظیم‌های نمایش» goes back to «خودکار»",
+   "pass": true,
+   "info": "{\"v\":\"a\",\"vm\":\"auto\",\"sky\":\"night\",\"an\":[\"\",\"auto\"],\"th\":\"auto\",\"sw\":6}"
+  },
+  {
+   "group": "kit9",
+   "name": "«پاک کردن همه‌ی داده‌های من»: «خودکار», and the version keys are gone too",
+   "pass": true,
+   "info": "{\"v\":\"a\",\"vm\":\"auto\",\"sky\":\"night\",\"an\":[null,null],\"th\":\"auto\",\"sw\":8}"
+  },
+  {
+   "group": "kit9",
+   "name": "kit 9 tools: no console errors",
+   "pass": true,
+   "info": ""
+  }
+ ]
+}

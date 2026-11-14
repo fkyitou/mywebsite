@@ -1,0 +1,100 @@
+/* ---------- responsive ---------- */
+@media (max-width: 1180px) {
+  .an-cards, .an-related-grid, .an-list-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .an-creator-made { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .an-foot-grid { grid-template-columns: 1fr 1fr; }
+  .an-live { width: min(320px, 34vw); }
+}
+@media (max-width: 980px) {
+  .an-article { grid-template-columns: minmax(0, 1fr); gap: var(--s5); }
+  .an-toc { grid-column: 1; grid-row: auto; position: relative; top: 0; max-height: none; }
+  .an-toc ol { max-height: 0; overflow: hidden; transition: max-height var(--t-mid) var(--ease); }
+  .an-toc.open ol { max-height: 1200px; }
+  .an-toc-h { cursor: pointer; margin: 0; }
+  .an-toc.open .an-toc-h { margin-bottom: var(--s4); }
+  .an-toc-tools { display: none; }
+  .an-toc.open .an-toc-tools { display: flex; }
+  .an-pillars { grid-template-columns: 1fr; }
+  .an-feed-wrap, .an-trl-wrap { grid-template-columns: 1fr; }
+  .an-feed-int, .an-trl-q { position: static; }
+  .an-card.an-feat { grid-template-columns: 1fr; }
+  .an-feat .an-cover { min-height: 0; aspect-ratio: 16 / 9; }
+  .an-numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .an-creator-card { grid-template-columns: 1fr; gap: var(--s5); padding: var(--s6) var(--s5); }
+  .an-creator-mono { width: 140px; }
+}
+/* 861-1100px: the menu and the tools share one row, so the items sit closer and the «Ctrl K» hint goes; before this,
+   «همه‌ی مقاله‌ها» and «بوم کسب‌وکار» broke onto two lines at 861-1023px */
+@media (max-width: 1100px) {
+  .an-nav > a, .an-dd-btn { padding-inline: 10px; }
+  .an-search-btn kbd { display: none; }
+}
+@media (max-width: 860px) {
+  :root { --head-h: 309px; }
+  .an-menu-btn { display: inline-grid; }
+  .an-search-btn kbd { display: none; }
+  .an-nav { position: fixed; inset: var(--bar-h) 0 auto 0; flex-direction: column; align-items: stretch; gap: 2px; padding: 12px var(--gut) 20px; background: var(--surface-2); border-bottom: 1px solid var(--border-2); box-shadow: var(--shadow); transform: translateY(-12px); opacity: 0; visibility: hidden; transition: opacity var(--t-fast), transform var(--t-fast), visibility var(--t-fast); max-height: calc(100vh - var(--bar-h)); overflow: auto; }
+  .an-nav.open { transform: none; opacity: 1; visibility: visible; }
+  .an-nav > a, .an-dd-btn { padding: 12px 14px; font-size: var(--fs-2); justify-content: space-between; }
+  .an-dd-menu { position: static; opacity: 1; visibility: visible; transform: none; display: none; box-shadow: none; margin: 4px 0 8px; }
+  .an-dd.open .an-dd-menu { display: block; }
+  .an-tools { margin-inline-start: auto; }
+  [data-page="home"] .an-hero { grid-template-columns: 1fr; align-items: start; min-height: max(700px, 100svh); }
+  .an-hero-in { padding-top: calc(var(--bar-h) + var(--s6)); max-width: none; }
+  .an-hero-veil { background: linear-gradient(180deg, rgba(4, 6, 13, .7) 0%, rgba(4, 6, 13, .35) 45%, rgba(4, 6, 13, 0) 62%), linear-gradient(0deg, #04060D 0%, rgba(4, 6, 13, 0) 18%); }
+  .an-hud-top { display: none; }
+  .an-live { position: relative; inset: auto; width: auto; margin: 0 var(--gut) var(--s8); align-self: end; }
+  .an-scroll-cue { display: none; }
+}
+@media (max-width: 640px) {
+  :root { --bar-h: 60px; }
+  body { font-size: 1rem; }
+  .an-logo-en { display: none; }
+  .an-mark { width: 34px; height: 34px; }
+  .an-cards, .an-related-grid, .an-list-cards, .an-pn { grid-template-columns: 1fr; }
+  .an-pn a + a { text-align: start; }
+  .an-sec { padding-top: var(--s8); }
+  .an-intro { padding-top: var(--s8); }
+  .an-statement { margin-bottom: var(--s6); }
+  .an-hero-cta .an-btn { flex: 1 1 auto; justify-content: center; }
+  .an-hero-credit { font-size: var(--fs-0); }
+  .an-live dl div { flex-direction: column; gap: 0; }
+  .an-foot-grid { grid-template-columns: 1fr; }
+  .an-post-body { font-size: 1.0625rem; line-height: 2.05; }
+  .an-simple, .an-myth, .an-fact, .an-keys, .an-discuss, .an-info, .an-sources { padding: var(--s4); }
+  :root { --banner-h: 72vh; --head-h: 311px; } /* stand-ins for what the script builds: 04-post.css, 02-chrome.css */
+  .an-ab-btn { min-width: 36px; padding: 0 6px; }
+  .an-ico-btn { height: 38px; min-width: 38px; }
+  .an-lab-body { padding: var(--s4); }
+  .an-lab-head { flex-wrap: wrap; gap: 8px; padding: var(--s3) var(--s4); }
+  .an-iot-row { grid-template-columns: 1fr auto; }
+  .an-iot-row .an-seg { grid-column: 1 / -1; grid-row: 2; }
+  .an-totp { grid-template-columns: 1fr; }
+  .an-totp-mid { transform: rotate(90deg); font-size: 1.2rem; }
+  .an-fd { grid-template-columns: 26px minmax(0, 1fr) auto; padding: 8px; }
+  .an-bar-row { grid-template-columns: minmax(70px, 34%) 1fr auto; }
+}
+/* ---------- motion & print ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+  .an-js .an-rv { opacity: 1; transform: none; }
+  .an-js .an-hero-slogan span { opacity: 1; transform: none; filter: none; }
+  .an-globe-gl { animation: none; opacity: 1; }
+}
+[data-motion="reduce"] .an-js .an-rv, [data-motion="reduce"] .an-rv { opacity: 1; transform: none; }
+[data-motion="reduce"] .an-globe-gl { animation: none; opacity: 1; }
+@media print {
+  .an-bar, .an-hero, .an-toc, .an-share, .an-fab, .an-foot-grid, .an-related, .an-pn, .an-lab-stage, .an-progress, .an-dlg { display: none !important; }
+  body { background: #fff; color: #000; }
+  .an-banner { min-height: 0; background: none; color: #000; }
+  .an-banner::after, .an-banner-art { display: none; }
+  .an-post-body { color: #000; }
+  a { color: #000; text-decoration: underline; }
+  /* a printed article for class: the labs need a screen, the source addresses are spelled out, and a heading never
+     ends a page alone */
+  .an-lab, .an-custom, .an-cmt, .an-talk, .an-tags { display: none !important; }
+  .an-sources a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .82em; overflow-wrap: anywhere; }
+  .an-post-body h2, .an-post-body h3 { break-after: avoid; page-break-after: avoid; }
+  .an-post-body figure, .an-post-body table, .an-fact, .an-myth, .an-keys, .an-discuss, .an-simple, .an-lead { break-inside: avoid; page-break-inside: avoid; }
+  .an-post-body p { orphans: 3; widows: 3; }
+}

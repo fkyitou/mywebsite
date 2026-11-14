@@ -1,0 +1,164 @@
+#!/usr/bin/env node
+/* آینده‌نگار · accessibility check
+   Runs axe-core (WCAG 2.0/2.1 A and AA rules plus axe best practices) on the preview in both versions, then checks the skip
+   link, keyboard flow and reduced motion. Kit 9: axe again with «نگار»'s card open and during its walk, and with the reader's
+   toolkit panel open (its half-read list filled, then while it shows the sky at another hour). Writes quality/a11y-results.json;
+   exits 1 on any violation.
+
+   node tools/preview.mjs && node tools/a11y.mjs        (needs Playwright, like tools/check.mjs)
+   node tools/a11y.mjs --cdn    on preview-cdn/ (made from a CDN template), the CDN addresses answered from dist/cdn/
+                                by tools/cdnroute.mjs; writes quality/a11y-cdn-results.json */
+import fs from 'node:fs';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { routeCdn } from './cdnroute.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const CDN = process.argv.includes('--cdn');
+const PREVIEW = path.join(ROOT, CDN ? 'preview-cdn' : 'preview');
+const require = createRequire(import.meta.url);
+let chromium;
+try { chromium = require('playwright').chromium; } catch (e) { console.log('Playwright not found; run with NODE_PATH=$(npm root -g)'); process.exit(1); }
+const AXE = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
+if (!fs.existsSync(path.join(PREVIEW, 'index.html'))) { console.log('Run: node tools/preview.mjs'); process.exit(1); }
+
+const url = f => pathToFileURL(path.join(PREVIEW, f)).href;
+const PAGES = ['index.html', 'post-1.html', 'post-4.html', 'post-6.html', 'post-9.html', 'page-about.html', 'archive.html', 'cat-1.html'];
+const RUNS = [];
+for (const v of ['a', 'b']) for (const f of PAGES) RUNS.push(['desktop', { width: 1440, height: 900 }, false, v, f]);
+for (const v of ['a', 'b']) for (const f of ['index.html', 'post-1.html']) RUNS.push(['mobile', { width: 390, height: 844 }, true, v, f]);
+// «ارائه در کلاس» (js/present.js, key P) on a projector-sized screen: its step bar and the bigger type
+for (const v of ['a', 'b']) RUNS.push(['present', { width: 1280, height: 720 }, false, v, 'post-1.html']);
+
+const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+const report = { at: new Date().toISOString(), axe: [], keyboard: [], motion: [] };
+let problems = 0;
+
+async function scan(p, run) {
+  await p.addScriptTag({ content: AXE });
+  const r = await p.evaluate(async () => {
+    const x = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] }, resultTypes: ['violations', 'incomplete'] });
+    return {
+      violations: x.violations.map(i => ({ id: i.id, impact: i.impact, nodes: i.nodes.map(n => n.target.join(' ') + ' :: ' + (n.failureSummary || '').slice(0, 200)) })),
+      incomplete: x.incomplete.map(i => ({ id: i.id, n: i.nodes.length })), passes: x.passes.length
+    };
+  });
+  report.axe.push({ run, ...r });
+  problems += r.violations.length;
+  console.log(`${r.violations.length ? '✗' : '✓'} ${run}  — ${r.violations.length ? r.violations.map(i => i.id + '×' + i.nodes.length).join(', ') : 'no violations'} · ${r.passes} rules passed · needs review: ${r.incomplete.map(i => i.id + '×' + i.n).join(', ') || '—'}`);
+}
+
+for (const [vn, vp, mobile, v, f] of RUNS) {
+  const ctx = await browser.newContext({ viewport: vp, isMobile: mobile, hasTouch: mobile, locale: 'fa-IR' });
+  if (CDN) await routeCdn(ctx);
+  await ctx.addInitScript(ver => { try { localStorage.setItem('an-v', ver); } catch (e) {} }, v);
+  const p = await ctx.newPage();
+  await p.goto(url(f), { waitUntil: 'load' }); await p.waitForTimeout(600);
+  // walk down so lazy covers, charts and labs mount before the scan
+  await p.evaluate(async () => { document.documentElement.style.scrollBehavior = 'auto'; const H = document.documentElement.scrollHeight; for (let y = 0; y < H; y += innerHeight * 0.8) { scrollTo(0, y); await new Promise(r => setTimeout(r, 100)); } scrollTo(0, 0); });
+  await p.waitForTimeout(500);
+  if (vn === 'present') {
+    await p.keyboard.press('p'); await p.waitForTimeout(500);
+    if (!(await p.evaluate(() => document.documentElement.classList.contains('an-present')))) { problems++; console.log(`✗ present/${v} ${f}  — P did not turn presentation mode on`); }
+  }
+  await scan(p, `${vn}/${v} ${f}`);
+  await ctx.close();
+}
+
+// «نگار» (kit 9): its card open, and its walk through the page, in both versions
+for (const v of ['a', 'b']) for (const [f, what] of [['index.html', 'card'], ['index.html', 'walk'], ['post-1.html', 'walk']]) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'fa-IR' });
+  if (CDN) await routeCdn(ctx);
+  await ctx.addInitScript(ver => { try { localStorage.setItem('an-v', ver); } catch (e) {} }, v);
+  const p = await ctx.newPage();
+  await p.goto(url(f), { waitUntil: 'load' }); await p.waitForTimeout(600);
+  await p.click('.an-g'); await p.waitForSelector('.an-g-card.on', { timeout: 10000 }).catch(() => {}); await p.waitForTimeout(400);
+  if (what === 'walk') { await p.click('.an-g-acts [data-g="tour"]'); await p.waitForTimeout(1200); }
+  const shown = await p.evaluate(w => !!document.querySelector(w === 'walk' ? '.an-g-tip' : '.an-g-card.on'), what);
+  if (!shown) { problems++; console.log(`✗ guide-${what}/${v} ${f}  — the guide's ${what} did not open`); }
+  await scan(p, `guide-${what}/${v} ${f}`);
+  await ctx.close();
+}
+
+// the reader's toolkit panel (kit 9) in both versions: with two stories left half-read, then during a look at another
+// hour, which shows the other version behind an undimmed page. The addresses are https, as on the blog (the panel lists
+// no other kind, and the preview here is opened from files).
+for (const v of ['a', 'b']) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'fa-IR' });
+  if (CDN) await routeCdn(ctx);
+  await ctx.addInitScript(ver => {
+    try {
+      localStorage.setItem('an-v', ver);
+      const now = Date.now();
+      localStorage.setItem('an-x-pos', JSON.stringify({
+        h1: { i: 2, d: 0, f: 0.4, at: now, t: 'روایت نیمه‌تمام نخست', u: 'https://ayandehnegar.blogfa.com/post/3', m: 10 },
+        h2: { i: 1, d: 0, f: 0.6, at: now - 60000, t: 'روایت نیمه‌تمام دوم', u: 'https://ayandehnegar.blogfa.com/post/4', m: 6 }
+      }));
+    } catch (e) {}
+  }, v);
+  const p = await ctx.newPage();
+  await p.goto(url('post-1.html'), { waitUntil: 'load' }); await p.waitForTimeout(600);
+  await p.evaluate(() => window.AN.x.open()); await p.waitForSelector('#an-x.on', { timeout: 10000 }).catch(() => {}); await p.waitForTimeout(500);
+  const rows = await p.evaluate(() => document.querySelectorAll('#an-x .an-x-hlist li').length);
+  if (rows !== 2) { problems++; console.log(`✗ toolkit/${v} post-1.html  — the half-read list shows ${rows} row(s), not 2`); }
+  await scan(p, `toolkit/${v} post-1.html`);
+  await p.evaluate(h => { const r = document.querySelector('#an-x-hr'); r.value = String(h); r.dispatchEvent(new Event('input', { bubbles: true })); }, v === 'a' ? 12 : 0);
+  await p.waitForTimeout(600);
+  const look = await p.evaluate(() => ({ v: document.documentElement.getAttribute('data-v'), peek: document.querySelector('#an-x').classList.contains('an-x-peek') }));
+  if (look.v === v || !look.peek) { problems++; console.log(`✗ toolkit-hour/${v} post-1.html  — the look at another hour did not start (${JSON.stringify(look)})`); }
+  await scan(p, `toolkit-hour/${v} post-1.html`);
+  await ctx.close();
+}
+
+// the introduction film's window (src/addons/teaser.js), in both versions, with its captions on
+for (const v of ['a', 'b']) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'fa-IR' });
+  if (CDN) await routeCdn(ctx);
+  await ctx.addInitScript(ver => { try { localStorage.setItem('an-v', ver); } catch (e) {} }, v);
+  const p = await ctx.newPage();
+  await p.goto(url('index.html'), { waitUntil: 'load' }); await p.waitForTimeout(600);
+  await p.click('.an-x-teaser').catch(() => {});
+  const on = await p.waitForSelector('.an-t-dlg.on', { timeout: 10000 }).then(() => true, () => false);
+  if (!on) { problems++; console.log(`✗ film/${v} index.html  — the film's window did not open`); }
+  await p.click('[data-t="caps"]').catch(() => {}); await p.waitForTimeout(500);
+  await scan(p, `film/${v} index.html`);
+  await ctx.close();
+}
+
+// keyboard: the first Tab shows the skip link, Enter jumps to main, Tab keeps moving (no trap)
+for (const f of ['index.html', 'post-1.html']) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  if (CDN) await routeCdn(ctx);
+  const p = await ctx.newPage(); await p.goto(url(f)); await p.waitForTimeout(500);
+  await p.keyboard.press('Tab'); await p.waitForTimeout(350);
+  const first = await p.evaluate(() => { const a = document.activeElement, cs = getComputedStyle(a), r = a.getBoundingClientRect(); return { cls: a.className, outline: cs.outlineStyle + ' ' + cs.outlineWidth, visible: r.width > 0 && r.height > 0 && r.top >= 0 && r.top < innerHeight }; });
+  await p.keyboard.press('Enter'); await p.waitForTimeout(300);
+  const hash = await p.evaluate(() => location.hash);
+  const seen = new Set();
+  for (let i = 0; i < 60; i++) { await p.keyboard.press('Tab'); seen.add(await p.evaluate(() => { const a = document.activeElement; return a ? a.tagName + '|' + (a.getAttribute('href') || a.textContent || '').trim().slice(0, 40) : ''; })); }
+  const ok = first.cls === 'an-skip' && first.visible && first.outline.startsWith('solid') && hash === '#an-main' && seen.size >= 20;
+  if (!ok) problems++;
+  report.keyboard.push({ page: f, first, hash, distinctStops: seen.size, ok });
+  console.log(`${ok ? '✓' : '✗'} keyboard ${f}  — skip link ${first.visible ? 'shown' : 'hidden'}, Enter → ${hash}, ${seen.size} distinct stops in 60 Tabs`);
+  await ctx.close();
+}
+
+// reduced motion: the flag is set and no CSS animation keeps running
+for (const f of ['index.html', 'post-6.html']) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+  if (CDN) await routeCdn(ctx);
+  const p = await ctx.newPage(); await p.goto(url(f)); await p.waitForTimeout(1200);
+  const m = await p.evaluate(() => ({ attr: document.documentElement.getAttribute('data-motion'), running: document.getAnimations().filter(a => a.playState === 'running').length }));
+  const ok = m.attr === 'reduce' && m.running === 0;
+  if (!ok) problems++;
+  report.motion.push({ page: f, ...m, ok });
+  console.log(`${ok ? '✓' : '✗'} reduced motion ${f}  — data-motion=${m.attr}, ${m.running} running animations`);
+  await ctx.close();
+}
+
+await browser.close();
+fs.mkdirSync(path.join(ROOT, 'quality'), { recursive: true });
+fs.writeFileSync(path.join(ROOT, 'quality', CDN ? 'a11y-cdn-results.json' : 'a11y-results.json'), JSON.stringify(report, null, 2));
+console.log(problems ? `\n${problems} problem(s)` : `\nall ${report.axe.length} axe runs clean; keyboard and reduced-motion checks passed`);
+process.exit(problems ? 1 : 0);

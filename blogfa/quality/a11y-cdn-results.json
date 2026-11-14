@@ -1,0 +1,561 @@
+{
+  "at": "2026-11-14T06:41:17.329Z",
+  "axe": [
+    {
+      "run": "desktop/a index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 183
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 41
+    },
+    {
+      "run": "desktop/a post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 128
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 48
+    },
+    {
+      "run": "desktop/a post-4.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 122
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 54
+    },
+    {
+      "run": "desktop/a post-6.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 129
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 50
+    },
+    {
+      "run": "desktop/a post-9.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 143
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 48
+    },
+    {
+      "run": "desktop/a page-about.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 17
+        }
+      ],
+      "passes": 40
+    },
+    {
+      "run": "desktop/a archive.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 8
+        }
+      ],
+      "passes": 40
+    },
+    {
+      "run": "desktop/a cat-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 83
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 39
+    },
+    {
+      "run": "desktop/b index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 183
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 41
+    },
+    {
+      "run": "desktop/b post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 126
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 48
+    },
+    {
+      "run": "desktop/b post-4.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 121
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 54
+    },
+    {
+      "run": "desktop/b post-6.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 128
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 50
+    },
+    {
+      "run": "desktop/b post-9.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 142
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 48
+    },
+    {
+      "run": "desktop/b page-about.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 17
+        }
+      ],
+      "passes": 40
+    },
+    {
+      "run": "desktop/b archive.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 8
+        }
+      ],
+      "passes": 40
+    },
+    {
+      "run": "desktop/b cat-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 83
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 39
+    },
+    {
+      "run": "mobile/a index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 264
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 41
+    },
+    {
+      "run": "mobile/a post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 176
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 48
+    },
+    {
+      "run": "mobile/b index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 264
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 41
+    },
+    {
+      "run": "mobile/b post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 174
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 48
+    },
+    {
+      "run": "present/a post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 126
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 45
+    },
+    {
+      "run": "present/b post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 176
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 45
+    },
+    {
+      "run": "guide-card/a index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "n": 1
+        },
+        {
+          "id": "color-contrast",
+          "n": 80
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 42
+    },
+    {
+      "run": "guide-walk/a index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "n": 1
+        },
+        {
+          "id": "color-contrast",
+          "n": 80
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 42
+    },
+    {
+      "run": "guide-walk/a post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "n": 1
+        },
+        {
+          "id": "color-contrast",
+          "n": 84
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 47
+    },
+    {
+      "run": "guide-card/b index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "n": 1
+        },
+        {
+          "id": "color-contrast",
+          "n": 80
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 42
+    },
+    {
+      "run": "guide-walk/b index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "n": 1
+        },
+        {
+          "id": "color-contrast",
+          "n": 80
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 42
+    },
+    {
+      "run": "guide-walk/b post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-valid-attr-value",
+          "n": 1
+        },
+        {
+          "id": "color-contrast",
+          "n": 83
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 47
+    },
+    {
+      "run": "toolkit/a post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 88
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 49
+    },
+    {
+      "run": "toolkit-hour/a post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 86
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 49
+    },
+    {
+      "run": "toolkit/b post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 86
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 49
+    },
+    {
+      "run": "toolkit-hour/b post-1.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 88
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 49
+    },
+    {
+      "run": "film/a index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 81
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 48
+    },
+    {
+      "run": "film/b index.html",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "n": 81
+        },
+        {
+          "id": "link-in-text-block",
+          "n": 1
+        }
+      ],
+      "passes": 48
+    }
+  ],
+  "keyboard": [
+    {
+      "page": "index.html",
+      "first": {
+        "cls": "an-skip",
+        "outline": "solid 2px",
+        "visible": true
+      },
+      "hash": "#an-main",
+      "distinctStops": 44,
+      "ok": true
+    },
+    {
+      "page": "post-1.html",
+      "first": {
+        "cls": "an-skip",
+        "outline": "solid 2px",
+        "visible": true
+      },
+      "hash": "#an-main",
+      "distinctStops": 47,
+      "ok": true
+    }
+  ],
+  "motion": [
+    {
+      "page": "index.html",
+      "attr": "reduce",
+      "running": 0,
+      "ok": true
+    },
+    {
+      "page": "post-6.html",
+      "attr": "reduce",
+      "running": 0,
+      "ok": true
+    }
+  ]
+}

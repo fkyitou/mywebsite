@@ -1,0 +1,31 @@
+{
+ "generated": "2026-11-14T06:14:50.418Z",
+ "validator": {
+  "html": "vnu.jar 26.11.4",
+  "css": "csstree-validator 4.0.1"
+ },
+ "html": {
+  "pages": 66,
+  "errors": 0,
+  "warnings": 64,
+  "info": 0,
+  "groups": [
+   {
+    "type": "warning",
+    "message": "The “type” attribute is unnecessary for JavaScript resources.",
+    "count": 64,
+    "pages": 64,
+    "example": {
+     "file": "preview/archive.html",
+     "line": 4,
+     "extract": "et=utf-8\"><script type=\"text/javascript\"> BlogC"
+    }
+   }
+  ]
+ },
+ "css": {
+  "files": 9,
+  "errors": [],
+  "prefixed": []
+ }
+}

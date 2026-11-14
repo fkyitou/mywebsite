@@ -1,0 +1,698 @@
+{
+  "at": "2026-11-05T03:11:37.324Z",
+  "preview": "preview",
+  "cdn": false,
+  "failed": 0,
+  "results": [
+    {
+      "name": "template.html: three template holders",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: creator credit present",
+      "pass": true,
+      "info": "5×"
+    },
+    {
+      "name": "template.html PostTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PostTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: creator credit present",
+      "pass": true,
+      "info": "1×"
+    },
+    {
+      "name": "template.html ArchiveTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html ArchiveTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: creator credit present",
+      "pass": true,
+      "info": "2×"
+    },
+    {
+      "name": "template.html PageTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html PageTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template.html: size",
+      "pass": true,
+      "info": "535.6 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+    },
+    {
+      "name": "template-lite.html: three template holders",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: creator credit present",
+      "pass": true,
+      "info": "5×"
+    },
+    {
+      "name": "template-lite.html PostTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PostTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: creator credit present",
+      "pass": true,
+      "info": "1×"
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html ArchiveTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: creator credit present",
+      "pass": true,
+      "info": "2×"
+    },
+    {
+      "name": "template-lite.html PageTemplate: no external scripts",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html PageTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-lite.html: size",
+      "pass": true,
+      "info": "479.4 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+    },
+    {
+      "name": "template-cdn.html: three template holders",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: creator credit present",
+      "pass": true,
+      "info": "5×"
+    },
+    {
+      "name": "template-cdn.html PostTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: an-full.d1d71fb964.css has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: an-post.a999cc6f13.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: loader lists the same pinned address and three backups",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: markup outside the CSS and JS identical to the inline template",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: an-full.d1d71fb964.css holds the inline stylesheet byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: an-post.a999cc6f13.js holds the inline script byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PostTemplate: part within the 60 KB budget",
+      "pass": true,
+      "info": "24.4 KB"
+    },
+    {
+      "name": "template-cdn.html PostTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: creator credit present",
+      "pass": true,
+      "info": "1×"
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: an-base.e0e10eaa6d.css has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: an-archive.92f97fea39.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: loader lists the same pinned address and three backups",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: markup outside the CSS and JS identical to the inline template",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: an-base.e0e10eaa6d.css holds the inline stylesheet byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: an-archive.92f97fea39.js holds the inline script byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: part within the 60 KB budget",
+      "pass": true,
+      "info": "10.8 KB"
+    },
+    {
+      "name": "template-cdn.html ArchiveTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: creator credit present",
+      "pass": true,
+      "info": "2×"
+    },
+    {
+      "name": "template-cdn.html PageTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: an-base.e0e10eaa6d.css has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: an-page.315f92230b.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: loader lists the same pinned address and three backups",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: markup outside the CSS and JS identical to the inline template",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: an-base.e0e10eaa6d.css holds the inline stylesheet byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: an-page.315f92230b.js holds the inline script byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html PageTemplate: part within the 60 KB budget",
+      "pass": true,
+      "info": "12.4 KB"
+    },
+    {
+      "name": "template-cdn.html PageTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn.html: size",
+      "pass": true,
+      "info": "47.8 KB"
+    },
+    {
+      "name": "template-cdn-lite.html: three template holders",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: creator credit present",
+      "pass": true,
+      "info": "5×"
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: an-full.d1d71fb964.css has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: an-post-lite.ea00b71b7f.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: loader lists the same pinned address and three backups",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: markup outside the CSS and JS identical to the inline template",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: an-full.d1d71fb964.css holds the inline stylesheet byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: an-post-lite.ea00b71b7f.js holds the inline script byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: part within the 60 KB budget",
+      "pass": true,
+      "info": "24.4 KB"
+    },
+    {
+      "name": "template-cdn-lite.html PostTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: creator credit present",
+      "pass": true,
+      "info": "1×"
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: an-base.e0e10eaa6d.css has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.92f97fea39.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: loader lists the same pinned address and three backups",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: markup outside the CSS and JS identical to the inline template",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: an-base.e0e10eaa6d.css holds the inline stylesheet byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.92f97fea39.js holds the inline script byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: part within the 60 KB budget",
+      "pass": true,
+      "info": "10.8 KB"
+    },
+    {
+      "name": "template-cdn-lite.html ArchiveTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: only documented <-tags->",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: only documented blocks",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: blocks balanced",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: creator credit present",
+      "pass": true,
+      "info": "2×"
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: one external script and one stylesheet, both from the pinned jsDelivr address",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: an-base.e0e10eaa6d.css has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: an-page.315f92230b.js has integrity and crossorigin matching dist/cdn",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: loader lists the same pinned address and three backups",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: markup outside the CSS and JS identical to the inline template",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: an-base.e0e10eaa6d.css holds the inline stylesheet byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: an-page.315f92230b.js holds the inline script byte for byte",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: part within the 60 KB budget",
+      "pass": true,
+      "info": "12.4 KB"
+    },
+    {
+      "name": "template-cdn-lite.html PageTemplate: html lang/dir",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "template-cdn-lite.html: size",
+      "pass": true,
+      "info": "47.8 KB"
+    },
+    {
+      "name": "cdn: the commit in cdn.json holds every dist/cdn file byte for byte",
+      "pass": true,
+      "info": "f490e617b607"
+    },
+    {
+      "name": "cdn: that commit is on a remote branch, so jsDelivr can read it",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "cdn: no unverified templates in dist/",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "cdn: none of the 6 files in dist/cdn holds code Blogfa blocks",
+      "pass": true,
+      "info": ""
+    }
+  ]
+}

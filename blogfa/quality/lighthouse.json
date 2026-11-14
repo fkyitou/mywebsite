@@ -1,0 +1,166 @@
+{
+ "generated": "2026-11-04T13:02:15Z",
+ "tool": "Lighthouse 13.6.0 (CLI, default simulated throttling), Chromium from Playwright, headless",
+ "environment": "Cloud container without a hardware GPU: Chromium draws with SwiftShader, a software GPU. Pages served by python http.server from preview/ (no gzip). Google Fonts reachable.",
+ "caveat": "Performance here is pessimistic for pages with heavy graphics. Calibration in the same browser: a trivial page costs about 0.1 s of GPU work in its first seconds, any page of this blog about 2.5 s even with every visual effect switched off (scratchpad experiment, docs/06-qa-report.md). Accessibility, best practices and SEO do not depend on the GPU.",
+ "before_fixes": {
+  "note": "first run on 2026-11-04, before the layout-shift stand-ins, SVG star tiles, willReadFrequently map canvases and the archive meta description; only these figures were kept",
+  "home-mobile": {
+   "performance": 34,
+   "TBT_ms": 7700
+  },
+  "post6-desktop": {
+   "performance": 36,
+   "CLS": 0.539
+  },
+  "home-lite-mobile": {
+   "performance": 44,
+   "TBT_ms": 9960
+  },
+  "archive-mobile": {
+   "seo": 90
+  }
+ },
+ "runs": [
+  {
+   "name": "archive-desktop",
+   "url": "preview/archive.html",
+   "formFactor": "desktop",
+   "scores": {
+    "performance": 97,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "metrics": {
+    "FCP_ms": 612,
+    "LCP_ms": 612,
+    "TBT_ms": 0,
+    "CLS": 0.003,
+    "SpeedIndex_ms": 1749
+   },
+   "fetchTime": "2026-11-04T13:01:40.842Z",
+   "lighthouseVersion": "13.6.0"
+  },
+  {
+   "name": "archive-mobile",
+   "url": "preview/archive.html",
+   "formFactor": "mobile",
+   "scores": {
+    "performance": 94,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "metrics": {
+    "FCP_ms": 1975,
+    "LCP_ms": 1975,
+    "TBT_ms": 0,
+    "CLS": 0,
+    "SpeedIndex_ms": 4809
+   },
+   "fetchTime": "2026-11-04T12:35:14.490Z",
+   "lighthouseVersion": "13.6.0"
+  },
+  {
+   "name": "home-desktop",
+   "url": "preview/index.html",
+   "formFactor": "desktop",
+   "scores": {
+    "performance": 60,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "metrics": {
+    "FCP_ms": 870,
+    "LCP_ms": 870,
+    "TBT_ms": 2692,
+    "CLS": 0.007,
+    "SpeedIndex_ms": 3908
+   },
+   "fetchTime": "2026-11-04T13:00:48.643Z",
+   "lighthouseVersion": "13.6.0"
+  },
+  {
+   "name": "home-lite-mobile",
+   "url": "preview-lite/index.html",
+   "formFactor": "mobile",
+   "scores": {
+    "performance": 69,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "metrics": {
+    "FCP_ms": 3770,
+    "LCP_ms": 3770,
+    "TBT_ms": 246,
+    "CLS": 0,
+    "SpeedIndex_ms": 9067
+   },
+   "fetchTime": "2026-11-04T13:01:18.366Z",
+   "lighthouseVersion": "13.6.0"
+  },
+  {
+   "name": "home-mobile",
+   "url": "preview/index.html",
+   "formFactor": "mobile",
+   "scores": {
+    "performance": 45,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "metrics": {
+    "FCP_ms": 4105,
+    "LCP_ms": 4105,
+    "TBT_ms": 1258,
+    "CLS": 0,
+    "SpeedIndex_ms": 10293
+   },
+   "fetchTime": "2026-11-04T13:00:22.087Z",
+   "lighthouseVersion": "13.6.0"
+  },
+  {
+   "name": "post6-desktop",
+   "url": "preview/post-6.html",
+   "formFactor": "desktop",
+   "scores": {
+    "performance": 95,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "metrics": {
+    "FCP_ms": 805,
+    "LCP_ms": 805,
+    "TBT_ms": 0,
+    "CLS": 0.0,
+    "SpeedIndex_ms": 1982
+   },
+   "fetchTime": "2026-11-04T12:34:46.977Z",
+   "lighthouseVersion": "13.6.0"
+  },
+  {
+   "name": "post6-mobile",
+   "url": "preview/post-6.html",
+   "formFactor": "mobile",
+   "scores": {
+    "performance": 81,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "metrics": {
+    "FCP_ms": 3118,
+    "LCP_ms": 3118,
+    "TBT_ms": 0,
+    "CLS": 0,
+    "SpeedIndex_ms": 7720
+   },
+   "fetchTime": "2026-11-04T12:34:24.976Z",
+   "lighthouseVersion": "13.6.0"
+  }
+ ]
+}
