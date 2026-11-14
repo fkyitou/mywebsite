@@ -1,18 +1,18 @@
 {
-  "builtAt": "2026-11-14T05:18:46.213Z",
+  "builtAt": "2026-11-14T06:07:17.809Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
-    "ref": "ecde8d74a2265e30daffa0b3dcc47f9479315152",
+    "ref": "a8d0cf4ce1cc068bc56335d3f36f244982e198e2",
     "dir": "blogfa/dist/cdn",
     "ok": true,
     "pushed": true,
     "missing": [],
     "unverifiedTemplates": false,
     "mirrors": [
-      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@ecde8d74a2265e30daffa0b3dcc47f9479315152/blogfa/dist/cdn/",
-      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@ecde8d74a2265e30daffa0b3dcc47f9479315152/blogfa/dist/cdn/",
-      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@ecde8d74a2265e30daffa0b3dcc47f9479315152/blogfa/dist/cdn/",
-      "https://rawcdn.githack.com/fkyitou/mywebsite/ecde8d74a2265e30daffa0b3dcc47f9479315152/blogfa/dist/cdn/"
+      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/",
+      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/",
+      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/",
+      "https://rawcdn.githack.com/fkyitou/mywebsite/a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/"
     ],
     "files": [
       {
@@ -41,9 +41,9 @@
         "sri": "sha384-RBgba00mK41dmfHmzD651HDBg12uNKXP10RxahKJ5KLQg+zcG6A4miAqrAAajFYt"
       },
       {
-        "file": "an-post.d7b6fc6b62.js",
-        "bytes": 247758,
-        "sri": "sha384-askr+3PXobCQWoIDpPZ+DBvQDpm7bw/zoeB9zLKLPiwLXGNNGhnnM0kp1m+SkofC"
+        "file": "an-post.e84ddabcca.js",
+        "bytes": 247915,
+        "sri": "sha384-J6fpSuQ9MJFi4Db5L19BvfaYklPZBV7YUhjMj8qMjq/kqoNzrsaqe1rG6W10R9qK"
       },
       {
         "file": "an-base.9e09c1c0bd.css",
@@ -96,12 +96,12 @@
     {
       "variant": "full",
       "cdn": false,
-      "bytes": 645902,
+      "bytes": 646059,
       "parts": {
         "post": {
           "css": 92331,
-          "js": 231479,
-          "html": 365233
+          "js": 231636,
+          "html": 365390
         },
         "archive": {
           "css": 76598,
@@ -156,9 +156,9 @@
       "parts": {
         "post": {
           "cssFile": "an-full.5a0445bc45.css",
-          "jsFile": "an-post.d7b6fc6b62.js",
+          "jsFile": "an-post.e84ddabcca.js",
           "css": 92331,
-          "js": 231479,
+          "js": 231636,
           "html": 27678
         },
         "archive": {
