@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /* آینده‌نگار · accessibility check
    Runs axe-core (WCAG 2.0/2.1 A and AA rules plus axe best practices) on the preview in both versions, then checks the skip
-   link, keyboard flow and reduced motion. Kit 9: axe again with «نگار»'s card open and during its walk. Writes quality/a11y-results.json; exits 1 on any violation.
+   link, keyboard flow and reduced motion. Kit 9: axe again with «نگار»'s card open and during its walk, and with the reader's
+   toolkit panel open (its half-read list filled, then while it shows the sky at another hour). Writes quality/a11y-results.json;
+   exits 1 on any violation.
 
    node tools/preview.mjs && node tools/a11y.mjs        (needs Playwright, like tools/check.mjs)
    node tools/a11y.mjs --cdn    on preview-cdn/ (made from a CDN template), the CDN addresses answered from dist/cdn/
@@ -76,6 +78,36 @@ for (const v of ['a', 'b']) for (const [f, what] of [['index.html', 'card'], ['i
   const shown = await p.evaluate(w => !!document.querySelector(w === 'walk' ? '.an-g-tip' : '.an-g-card.on'), what);
   if (!shown) { problems++; console.log(`✗ guide-${what}/${v} ${f}  — the guide's ${what} did not open`); }
   await scan(p, `guide-${what}/${v} ${f}`);
+  await ctx.close();
+}
+
+// the reader's toolkit panel (kit 9) in both versions: with two stories left half-read, then during a look at another
+// hour, which shows the other version behind an undimmed page. The addresses are https, as on the blog (the panel lists
+// no other kind, and the preview here is opened from files).
+for (const v of ['a', 'b']) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'fa-IR' });
+  if (CDN) await routeCdn(ctx);
+  await ctx.addInitScript(ver => {
+    try {
+      localStorage.setItem('an-v', ver);
+      const now = Date.now();
+      localStorage.setItem('an-x-pos', JSON.stringify({
+        h1: { i: 2, d: 0, f: 0.4, at: now, t: 'روایت نیمه‌تمام نخست', u: 'https://ayandehnegar.blogfa.com/post/3', m: 10 },
+        h2: { i: 1, d: 0, f: 0.6, at: now - 60000, t: 'روایت نیمه‌تمام دوم', u: 'https://ayandehnegar.blogfa.com/post/4', m: 6 }
+      }));
+    } catch (e) {}
+  }, v);
+  const p = await ctx.newPage();
+  await p.goto(url('post-1.html'), { waitUntil: 'load' }); await p.waitForTimeout(600);
+  await p.evaluate(() => window.AN.x.open()); await p.waitForSelector('#an-x.on', { timeout: 10000 }).catch(() => {}); await p.waitForTimeout(500);
+  const rows = await p.evaluate(() => document.querySelectorAll('#an-x .an-x-hlist li').length);
+  if (rows !== 2) { problems++; console.log(`✗ toolkit/${v} post-1.html  — the half-read list shows ${rows} row(s), not 2`); }
+  await scan(p, `toolkit/${v} post-1.html`);
+  await p.evaluate(h => { const r = document.querySelector('#an-x-hr'); r.value = String(h); r.dispatchEvent(new Event('input', { bubbles: true })); }, v === 'a' ? 12 : 0);
+  await p.waitForTimeout(600);
+  const look = await p.evaluate(() => ({ v: document.documentElement.getAttribute('data-v'), peek: document.querySelector('#an-x').classList.contains('an-x-peek') }));
+  if (look.v === v || !look.peek) { problems++; console.log(`✗ toolkit-hour/${v} post-1.html  — the look at another hour did not start (${JSON.stringify(look)})`); }
+  await scan(p, `toolkit-hour/${v} post-1.html`);
   await ctx.close();
 }
 

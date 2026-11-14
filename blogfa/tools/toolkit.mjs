@@ -3,7 +3,7 @@
    The preview pages hold the box the way Blogfa fills <-BlogCustomHtml->, and are served over http on 127.0.0.1
    (the toolkit keeps its data in localStorage, as on the real blog). In Chromium, with a fresh profile each time:
    1. Article, desktop: the toolkit starts and its bar button comes first; the box takes no room; the panel opens as
-      a dialog with four themes; «کاغذی» and «پرتضاد» set the version, the browser bar colour and the saved choice;
+      a dialog with five themes, «خودکار» first; «کاغذی» and «پرتضاد» set the version, the browser bar colour and the saved choice;
       text size; Escape; the template's A/B switch ends an extra theme; keys R and F; reading aloud (with a stub
       on-device Persian voice, since the container has none); marking; the reading ruler; the QR code decodes to
       the page address (as SVG and as the pixels on screen, with jsQR); the APA citation; the quiz (scored, each
@@ -14,6 +14,10 @@
    3. A box that shows the bare tag text (a template that left it unfilled) stays hidden.
    4. Phone 390×844: the panel is a full-width bottom sheet; no sideways scrolling.
    5. «Reduce motion»: the motion switch is off and cannot be turned on.
+   6. Kit 9 (the preview's clock says 22:30): «خودکار» and the versions kept by hand, the circle only when the page
+      changes; the sky at another hour (keyboard and value, nothing saved, back on «بازگشت به اکنون», on closing, off
+      under the paper theme); the stories left half-read (newest first, minutes left, ✕ and where the focus goes);
+      copying in a browser without the clipboard API, with no prompt() window; reset and wipe back to «خودکار».
 
    node tools/toolkit.mjs        on preview/ (dist/box-local.html, files next to the pages) → quality/toolkit-results.json,
                                  screenshots in quality/screenshots/toolkit/, exit 1 on any failure
@@ -41,6 +45,8 @@ const snap = (page, name) => SHOTS ? page.screenshot({ path: path.join(SHOTS, na
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.woff2': 'font/woff2', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml' };
 const server = http.createServer((req, res) => {
   const u = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  // the business-canvas page, as on a blog that has it, so the menu's check (js/core.js) keeps its link
+  if (u === '/page/bmc') { res.writeHead(200, { 'content-type': TYPES['.html'] }); res.end('<!doctype html><title>bmc</title>'); return; }
   const f = path.join(DIR, u === '/' ? 'index.html' : u);
   if (!f.startsWith(DIR + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end('nf'); return; }
   res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
@@ -72,7 +78,12 @@ async function fresh(opts = {}) {
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if ((m.type() === 'error' || m.type() === 'warning') && !/GL Driver Message|GPU stall/.test(m.text())) errors.push(m.type() + ': ' + m.text()); });
-  page.on('requestfailed', r => errors.push('requestfailed: ' + r.url()));
+  // the menu's check of /page/bmc (js/core.js) reads only the status and then cancels the body, which Chromium counts
+  // as an aborted request; any other failure, or that one failing in another way, is still an error
+  page.on('requestfailed', r => {
+    if (/\/page\/bmc$/.test(new URL(r.url()).pathname) && /ERR_ABORTED/.test((r.failure() || {}).errorText || '')) return;
+    errors.push('requestfailed: ' + r.url() + ' ' + ((r.failure() || {}).errorText || ''));
+  });
   return { ctx, page, errors };
 }
 const ready = page => page.waitForFunction(() => document.documentElement.classList.contains('an-x-on'), null, { timeout: 15000 });
@@ -93,7 +104,7 @@ try {
     await page.waitForSelector('#an-x.on');
     await page.waitForTimeout(450);
     await snap(page, '01-panel-desktop.png');
-    ok('panel: opens as dialog with 4 themes', await page.evaluate(() => document.querySelectorAll('#an-x input[name="an-x-theme"]').length === 4));
+    ok('panel: opens as dialog with 5 themes, «خودکار» first and chosen', await page.evaluate(() => { const r = [...document.querySelectorAll('#an-x input[name="an-x-theme"]')]; return r.length === 5 && r[0].value === 'auto' && r[0].checked; }));
     ok('panel: focus moved into the dialog', await page.evaluate(() => !!document.activeElement.closest('#an-x')));
     // paper theme
     await page.click('#an-x .an-x-th-paper');
@@ -214,10 +225,13 @@ try {
     await page.waitForTimeout(400);
     const pos = await page.evaluate(() => JSON.parse(localStorage.getItem('an-x-pos') || '{}'));
     ok('resume: reading position saved', Object.keys(pos).length === 1, JSON.stringify(pos));
+    const p0 = Object.values(pos)[0] || {};
+    ok('resume: the place keeps the title, address and length for the half-read list', !!p0.t && /post-1\.html$/.test(p0.u || '') && p0.m > 0, JSON.stringify(p0));
     await page.goto(BASE + 'post-1.html', { waitUntil: 'load' });
     await ready(page);
     await page.waitForTimeout(500);
     ok('resume: bar offered on the next visit', await page.evaluate(() => !!document.querySelector('.an-x-resume.on')));
+    ok('resume: the bar says about how many minutes are left', await page.evaluate(() => /حدود [۰-۹]+ دقیقه‌ی دیگر مانده است/.test(document.querySelector('.an-x-resume p').textContent)), await page.evaluate(() => document.querySelector('.an-x-resume p').textContent));
     await snap(page, '08-resume.png');
     await page.click('.an-x-resume [data-r="go"]');
     await page.waitForTimeout(400);
@@ -306,6 +320,132 @@ try {
     await page.goto(BASE + 'post-4.html', { waitUntil: 'load' });
     await ready(page);
     ok('reduced motion: AN.rm stays true and the motion switch is disabled', await page.evaluate(() => { window.AN.x.open(); const i = document.querySelector('#an-x input[data-p="motion"]'); return window.AN.rm === true && i.disabled && !i.checked; }));
+    await ctx.close();
+  }
+  /* 6. kit 9: «خودکار», the sky at another hour, stories left half-read, copying without a prompt() window */
+  {
+    G = 'kit9';
+    const { ctx, page, errors } = await fresh();
+    // a browser without the clipboard API, as some in-app browsers are: the older copy command has to do. A prompt()
+    // window would be counted, and each copy records the text it carried.
+    await ctx.addInitScript(() => {
+      window.__prompts = 0; window.prompt = () => { window.__prompts++; return null; };
+      Object.defineProperty(Navigator.prototype, 'clipboard', { get: () => undefined, configurable: true });
+      window.__copied = [];
+      document.addEventListener('copy', e => { const t = e.target; window.__copied.push(t && typeof t.value === 'string' ? t.value.slice(t.selectionStart, t.selectionEnd) : String(getSelection())); }, true);
+    });
+    await page.goto(BASE + 'post-1.html', { waitUntil: 'load' });
+    await ready(page);
+    // every toast is kept: reaching the end of the article stamps the passport, and that toast can follow a copy's at once
+    await page.evaluate(() => { const t = window.AN.toast; window.__toasts = []; window.AN.toast = function (m) { window.__toasts.push(String(m)); return t.apply(this, arguments); }; });
+    const toastsFrom = n => page.evaluate(n => window.__toasts.slice(n), n);
+    const st = () => page.evaluate(() => ({ v: document.documentElement.getAttribute('data-v'), vm: window.AN.vm, sky: document.documentElement.getAttribute('data-sky'), an: [localStorage.getItem('an-v'), localStorage.getItem('an-vm')], th: [...document.querySelectorAll('#an-x input[name="an-x-theme"]:checked')].map(i => i.value).join(), sw: window.__sw }));
+    const hr = () => page.evaluate(() => { const r = document.querySelector('#an-x-hr'), d = document.querySelector('#an-x'); return { peek: d.classList.contains('an-x-peek'), dim: getComputedStyle(d).backgroundColor, val: r.value, vt: r.getAttribute('aria-valuetext'), dis: r.disabled, out: document.querySelector('.an-x-hour-o').textContent, note: document.querySelector('.an-x-hour-n').textContent, back: !document.querySelector('#an-x [data-x="hr-now"]').hidden, v: document.documentElement.getAttribute('data-v'), sky: document.documentElement.getAttribute('data-sky'), vm: window.AN.vm, an: [localStorage.getItem('an-v'), localStorage.getItem('an-vm')], th: [...document.querySelectorAll('#an-x input[name="an-x-theme"]:checked')].map(i => i.value).join() }; });
+    const setHour = h => page.evaluate(h => { const r = document.querySelector('#an-x-hr'); r.value = String(h); r.dispatchEvent(new Event('input', { bubbles: true })); }, h);
+    await page.click('#an-bar .an-x-btn');
+    await page.waitForSelector('#an-x.on');
+    // every circle animation is counted: one opens only when the page really changes
+    await page.evaluate(() => { const s = window.AN.swap; window.__sw = 0; window.AN.swap = function () { window.__sw++; return s.apply(this, arguments); }; });
+    let s = await st();
+    ok('first visit: «خودکار» chosen, the clock shows night (A) at 22:30', s.th === 'auto' && s.vm === 'auto' && s.v === 'a' && s.sky === 'night', JSON.stringify(s));
+    await page.click('#an-x .an-x-th-b'); await page.waitForTimeout(900);
+    s = await st();
+    ok('«روز»: version B kept by hand and saved, with the circle', s.th === 'b' && s.vm === 'man' && s.v === 'b' && s.an[0] === 'b' && s.an[1] === 'man' && s.sw === 1, JSON.stringify(s));
+    await page.click('#an-x .an-x-th-auto'); await page.waitForTimeout(900);
+    s = await st();
+    ok('«خودکار»: the version goes back to the clock (night, A), with the circle', s.th === 'auto' && s.vm === 'auto' && s.v === 'a' && !s.an[0] && s.an[1] === 'auto' && s.sw === 2, JSON.stringify(s));
+    await page.click('#an-x .an-x-th-a'); await page.waitForTimeout(500);
+    s = await st();
+    ok('«شب» while the clock already shows night: kept by hand, no circle', s.th === 'a' && s.vm === 'man' && s.v === 'a' && s.an[1] === 'man' && s.sw === 2, JSON.stringify(s));
+    await page.click('#an-x .an-x-th-auto'); await page.waitForTimeout(500);
+    s = await st();
+    ok('and back to «خودکار»: nothing changes on screen, no circle', s.th === 'auto' && s.vm === 'auto' && s.sw === 2, JSON.stringify(s));
+    // the sky at another hour
+    let h = await hr();
+    ok('hour: the slider starts at the clock, «۲۲:۳۰، شب», no way back shown yet', h.val === '22.5' && h.vt === '۲۲:۳۰، شب' && h.out === h.vt && !h.back && !h.dis, JSON.stringify(h));
+    await page.focus('#an-x-hr'); await page.keyboard.press('Home'); await page.waitForTimeout(200);
+    h = await hr();
+    ok('hour: the keyboard works (Home is midnight)', h.val === '0' && /^۰۰:۰۰/.test(h.vt) && h.back, JSON.stringify(h));
+    await setHour(12); await page.waitForTimeout(300);
+    h = await hr();
+    ok('hour: noon shows version B and the noon sky; nothing saved; «خودکار» stays chosen', h.v === 'b' && h.sky === 'noon' && /^۱۲:۰۰، نیمروز$/.test(h.out) && h.vm === 'auto' && h.an[1] === 'auto' && h.th === 'auto', JSON.stringify(h));
+    await page.waitForTimeout(500);
+    h = await hr();
+    ok('hour: while looking, the page behind the panel is not dimmed', h.peek && h.dim === 'rgba(0, 0, 0, 0)', JSON.stringify(h));
+    await snap(page, '13-kit9-hour.png');
+    await page.click('#an-x [data-x="hr-now"]'); await page.waitForTimeout(300);
+    h = await hr();
+    ok('hour: «بازگشت به اکنون» brings the clock\'s sky back, the slider and the dimming too, focus on it', h.v === 'a' && h.sky === 'night' && h.val === '22.5' && !h.back && !h.peek && await page.evaluate(() => document.activeElement.id === 'an-x-hr'), JSON.stringify(h));
+    await page.click('#an-x .an-x-th-a'); await page.waitForTimeout(500);
+    await setHour(12); await page.waitForTimeout(300);
+    h = await hr();
+    ok('hour: a version kept by hand stays shown as chosen during the look', h.v === 'b' && h.th === 'a' && h.an[0] === 'a' && h.an[1] === 'man', JSON.stringify(h));
+    await page.keyboard.press('Escape'); await page.waitForTimeout(300);
+    s = await st();
+    ok('hour: closing the panel ends the look (night, A, kept by hand)', s.v === 'a' && s.vm === 'man' && s.an[0] === 'a', JSON.stringify(s));
+    await page.click('#an-bar .an-x-btn'); await page.waitForSelector('#an-x.on');
+    await page.click('#an-x .an-x-th-paper'); await page.waitForTimeout(900);
+    h = await hr();
+    ok('hour: off under the paper theme, and it says why', h.dis && /کاغذی/.test(h.note) && !h.out, JSON.stringify(h));
+    await page.click('#an-x .an-x-th-auto'); await page.waitForTimeout(900);
+    h = await hr();
+    ok('«خودکار» from paper: the tone goes, night by the clock, the slider is on again', !(await page.evaluate(() => document.documentElement.getAttribute('data-an-tone'))) && h.v === 'a' && h.vm === 'auto' && !h.dis && h.th === 'auto', JSON.stringify(h));
+    // stories left half-read: one kept by this kit (title, address, length), one by kit 8 (the place only)
+    const others = await page.evaluate(() => window.AN.index().filter(q => !/post-1\.html$/.test(q.url)).slice(0, 2).map(q => ({ id: q.id, url: q.url, title: q.title })));
+    await page.evaluate(o => {
+      const a = { 1: { i: 0, d: 0, f: 0.3, at: Date.now() } }; // this very article: not listed in its own panel
+      a[o[0].id] = { i: 1, d: 0, f: 0.4, at: Date.now() - 1000, t: o[0].title, u: o[0].url, m: 10 };
+      a[o[1].id] = { i: 0, d: 0, f: 0.5, at: Date.now() - 60000 };
+      localStorage.setItem('an-x-pos', JSON.stringify(a));
+    }, others);
+    await page.keyboard.press('Escape');
+    await page.click('#an-bar .an-x-btn'); await page.waitForSelector('#an-x.on');
+    const hl = await page.evaluate(() => { const sec = document.querySelector('#an-x .an-x-sec-half'); return { hidden: sec.hidden, rows: [...sec.querySelectorAll('li')].map(li => ({ t: li.querySelector('b').textContent, href: li.querySelector('a').getAttribute('href'), small: li.querySelector('small').textContent, w: li.querySelector('.an-x-hbar i').style.width })) }; });
+    ok('half-read: the two other stories, newest first, this one left out', !hl.hidden && hl.rows.length === 2 && hl.rows[0].t === others[0].title && hl.rows[0].href === others[0].url && hl.rows[1].t === others[1].title && hl.rows[1].href === others[1].url, JSON.stringify(hl));
+    ok('half-read: how much is read and about how long is left', hl.rows[0].small === '۴۰٪ خوانده شده، حدود ۶ دقیقه مانده' && hl.rows[0].w === '40%' && hl.rows[1].small === '۵۰٪ خوانده شده', JSON.stringify(hl.rows));
+    await page.evaluate(() => document.querySelector('#an-x .an-x-sec-half').scrollIntoView({ block: 'center' }));
+    await snap(page, '14-kit9-half-read.png');
+    await page.focus('#an-x [data-x="unhalf"]'); await page.keyboard.press('Enter'); await page.waitForTimeout(200);
+    let rm = await page.evaluate(() => ({ rows: document.querySelectorAll('#an-x .an-x-hlist li').length, focus: document.activeElement.getAttribute('data-x'), pos: Object.keys(JSON.parse(localStorage.getItem('an-x-pos') || '{}')) }));
+    ok('half-read: ✕ takes a story off; the focus goes to the next ✕', rm.rows === 1 && rm.focus === 'unhalf' && !rm.pos.includes(others[0].id), JSON.stringify(rm));
+    await page.keyboard.press('Enter'); await page.waitForTimeout(200);
+    rm = await page.evaluate(() => ({ hidden: document.querySelector('#an-x .an-x-sec-half').hidden, focus: document.activeElement.className, pos: Object.keys(JSON.parse(localStorage.getItem('an-x-pos') || '{}')) }));
+    ok('half-read: the last one off hides the list; the focus goes to the close button', rm.hidden && /an-dlg-x/.test(rm.focus) && rm.pos.join() === '1', JSON.stringify(rm));
+    await page.keyboard.press('Escape');
+    // copying with no clipboard API: the QR window, the citation, the article's own share row
+    await page.keyboard.press('q');
+    await page.waitForSelector('#an-x-qr.on');
+    let n0 = (await toastsFrom(0)).length;
+    await page.click('#an-x-qr [data-q="copy"]'); await page.waitForTimeout(300);
+    let cp = await page.evaluate(() => ({ copied: window.__copied.slice(-1)[0], prompts: window.__prompts, left: document.querySelectorAll('.an-x-clip, .an-clip').length, focus: document.activeElement.getAttribute('data-q'), want: location.href.split('#')[0].split('?')[0] }));
+    cp.toasts = await toastsFrom(n0);
+    ok('copy (QR window): the page address, no prompt(), nothing left behind, focus kept', cp.copied === cp.want && cp.prompts === 0 && cp.toasts.some(m => /کپی شد/.test(m)) && cp.left === 0 && cp.focus === 'copy', JSON.stringify(cp));
+    await page.keyboard.press('Escape');
+    await page.evaluate(() => document.querySelector('.an-x-after [data-x="cite"]').click());
+    await page.waitForSelector('#an-x-cite.on');
+    n0 = (await toastsFrom(0)).length;
+    await page.click('#an-x-cite [data-c="copy"]'); await page.waitForTimeout(300);
+    cp = await page.evaluate(() => ({ copied: window.__copied.slice(-1)[0], want: document.querySelector('#an-x-cite textarea').value, prompts: window.__prompts }));
+    cp.toasts = await toastsFrom(n0);
+    ok('copy (citation): the APA text, no prompt()', cp.copied === cp.want && cp.prompts === 0 && cp.toasts.some(m => /کپی شد/.test(m)), JSON.stringify(cp));
+    await page.keyboard.press('Escape');
+    await page.evaluate(() => document.querySelector('.an-share [data-an="copy"]').scrollIntoView({ block: 'center' }));
+    n0 = (await toastsFrom(0)).length;
+    await page.click('.an-share [data-an="copy"]'); await page.waitForTimeout(300);
+    cp = await page.evaluate(() => ({ copied: window.__copied.slice(-1)[0], prompts: window.__prompts, left: document.querySelectorAll('.an-clip').length, want: String(document.URL).split('#')[0] }));
+    cp.toasts = await toastsFrom(n0);
+    ok('copy (the article\'s share row, template): the address, no prompt()', cp.copied === cp.want && cp.prompts === 0 && cp.toasts.some(m => /کپی شد/.test(m)) && cp.left === 0, JSON.stringify(cp));
+    // reset and wipe (the header bar is away this far down an article, so the panel opens by its own call)
+    await page.evaluate(() => window.AN.x.open()); await page.waitForSelector('#an-x.on');
+    await page.click('#an-x .an-x-th-b'); await page.waitForTimeout(900);
+    await page.click('#an-x [data-x="reset"]'); await page.waitForTimeout(900);
+    s = await st();
+    ok('«بازگرداندن تنظیم‌های نمایش» goes back to «خودکار»', s.th === 'auto' && s.vm === 'auto' && s.v === 'a', JSON.stringify(s));
+    await page.click('#an-x .an-x-th-b'); await page.waitForTimeout(900);
+    await page.click('#an-x [data-x="wipe"]'); await page.waitForTimeout(900);
+    s = await st();
+    ok('«پاک کردن همه‌ی داده‌های من»: «خودکار», and the version keys are gone too', s.th === 'auto' && s.vm === 'auto' && s.v === 'a' && s.an[0] === null && s.an[1] === null, JSON.stringify(s));
+    ok('kit 9 tools: no console errors', errors.length === 0, errors.slice(0, 6).join(' | '));
     await ctx.close();
   }
 } catch (e) {

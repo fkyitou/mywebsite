@@ -1,8 +1,10 @@
 /* آینده‌نگار · «ابزار خواننده» (the reader's toolkit)
    Loaded by the code in Blogfa's «کدها و جاوا اسکریپت‌های اختصاصی کاربر» box (src/addons/box.js), after the template's
    own script. It adds what a reader can set and keep:
-     · theme: night (A), day (B), paper, high contrast; text size, line spacing, column width, easy-reading spacing;
-       motion, the moving sky and the soft change between pages
+     · theme: «خودکار» (night and day by the visitor's clock, with the live sky of kit 9), night (A), day (B), paper,
+       high contrast, and a look at the sky at another hour; text size, line spacing, column width, easy-reading
+       spacing; motion, the moving sky and the soft change between pages
+     · the stories left half-read, with about how many minutes each has left
      · on an article: bookmark, listen (the browser's own Persian voice, only when it has one), reading ruler,
        focus mode, citation, QR code, print, «continue where you stopped», a stamp in the «future passport» for each
        story read to the end, and a word quiz built from the article's own glossary
@@ -40,13 +42,21 @@
   function attr(n, v) { if (v == null) H.removeAttribute(n); else H.setAttribute(n, v); }
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function path(u) { try { return new URL(u, location.href).pathname.replace(/\/+$/, '') || '/'; } catch (e) { return String(u); } }
+  // only addresses that open a web page: no javascript: or data: from what a list keeps, and none for an empty one
+  // (it would resolve to this very page)
+  function safe(u) { if (!u) return ''; try { var x = new URL(u, location.href); return x.protocol === 'https:' || x.protocol === 'http:' ? x.href : ''; } catch (e) { return ''; } }
 
   function start(AN) {
     var $ = AN.$, $$ = AN.$$, el = AN.el, esc = AN.esc, fa = AN.fa;
     var STORE = ['an-x', 'an-x-read', 'an-x-quiz', 'an-x-marks', 'an-x-pos', 'an-x-idx', 'an-x-guide'];
     var osRM = !!(W.matchMedia && W.matchMedia('(prefers-reduced-motion: reduce)').matches);
     var FS = [0.9, 1, 1.12, 1.25, 1.4];
-    var THEMES = [['a', 'شب', 'نسخه‌ی A'], ['b', 'روز', 'نسخه‌ی B'], ['paper', 'کاغذی', 'گرم و آرام'], ['contrast', 'پرتضاد', 'سیاه و سفید']];
+    // «خودکار» hands day and night to the visitor's clock (js/live.js, from kit 9); an older template has no such choice
+    var LIVE = !!(AN.live && AN.live.preview && AN.live.at && AN.setAuto && AN.autoV);
+    var THEMES = (LIVE ? [['auto', 'خودکار', 'شب و روز با ساعت شما']] : []).concat([['a', 'شب', 'نسخه‌ی A'], ['b', 'روز', 'نسخه‌ی B'], ['paper', 'کاغذی', 'گرم و آرام'], ['contrast', 'پرتضاد', 'سیاه و سفید']]);
+    // the sky's phases (js/live.js) by name, for the hour preview below and for the guide's card
+    var PHASE = { night: 'شب', sunrise: 'طلوع', morning: 'صبح', noon: 'نیمروز', afternoon: 'بعدازظهر', sunset: 'غروب' };
+    function phaseName(s) { return !s ? '' : s.phase === 'twilight' ? (s.am ? 'گرگ‌ومیش صبح' : 'گرگ‌ومیش غروب') : PHASE[s.phase] || ''; }
     var I = {
       tools: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h8M16 7h4M4 17h3M11 17h9"/><circle cx="14" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></svg>',
       mark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10a1 1 0 0 1 1 1v15l-6-4-6 4V5a1 1 0 0 1 1-1z"/></svg>',
@@ -107,15 +117,58 @@
       if (!AN.swap) o.update(); // a template before kit 8 has no animated switch and ignores o
       return setV0.call(AN, v, o);
     };
-    function theme(name, from) {
+    // then: called once the change is made (inside the circle's animation it comes a moment later)
+    function theme(name, from, then) {
+      hourEnd();
+      var cur = (!forced && P.tone) || '', go;
+      if (name === 'auto' && LIVE) {
+        go = function () { forced = false; P.tone = ''; save(); attr('data-an-tone', null); AN.setAuto({ now: 1 }); sync(); if (then) then(); };
+        if (AN.swap && (cur || AN.autoV() !== AN.v)) AN.swap(go, from); else go();
+        return;
+      }
       var v = name === 'b' || name === 'paper' ? 'b' : 'a', tone = name === 'paper' || name === 'contrast' ? name : '';
-      function go() { forced = false; P.tone = tone; save(); attr('data-an-tone', tone || null); setV0.call(AN, v, { now: 1 }); sync(); }
-      if (AN.swap) AN.swap(go, from); else go();
+      go = function () { forced = false; P.tone = tone; save(); attr('data-an-tone', tone || null); setV0.call(AN, v, { now: 1 }); sync(); if (then) then(); };
+      // the circle opens only when the page really changes: picking the version already on screen just keeps it
+      if (AN.swap && (tone !== cur || v !== AN.v)) AN.swap(go, from); else go();
     }
-    function themeNow() { return (!forced && P.tone) || AN.v; }
+    // the theme shown as chosen: an extra tone, «خودکار» while the clock is in charge, else the version kept. During a
+    // look at another hour of the sky the choice from before it stays shown.
+    var pv = '';
+    function themeNow() { return pv || (!forced && P.tone) || (LIVE && AN.vm === 'auto' ? 'auto' : AN.v); }
     // a template before kit 8 does not apply the saved theme before the first paint; it is applied here instead
     if (P.tone && !forced && (H.getAttribute('data-an-tone') !== P.tone || AN.v !== (P.tone === 'paper' ? 'b' : 'a'))) { attr('data-an-tone', P.tone); setV0.call(AN, P.tone === 'paper' ? 'b' : 'a', { now: 1 }); }
     apply();
+
+    /* ---------- the sky at another hour (with the live sky) ---------- */
+    // A look only: js/live.js shows today's sky at the hour picked, version included. Nothing is saved; «بازگشت به
+    // اکنون», a theme picked or the panel closed brings back the sky of the clock, or the version the reader kept.
+    function two(n) { return (n < 10 ? '0' : '') + n; }
+    function hourAt(h) { var d = new Date((AN.clock ? AN.clock() : new Date()).getTime()); d.setHours(Math.floor(h), h % 1 ? 30 : 0, 0, 0); return d; }
+    function hourNow() { var d = AN.clock ? AN.clock() : new Date(); return Math.floor((d.getHours() + d.getMinutes() / 60) * 2) / 2; }
+    function hourText(h) { var d = hourAt(h); return AN.faDigits(two(d.getHours()) + ':' + two(d.getMinutes())) + '، ' + phaseName(AN.live.at(d)); }
+    function hourSet(h) {
+      if (!LIVE || (P.tone && !forced)) return;
+      if (!pv) pv = themeNow();
+      AN.live.preview(h);
+      hourSync();
+    }
+    function hourEnd() {
+      if (!pv) return;
+      pv = ''; AN.live.preview(null); hourSync();
+    }
+    function hourSync() {
+      var r = dlg && $('#an-x-hr', dlg); if (!r) return;
+      var off = !!(P.tone && !forced);
+      if (!pv) r.value = String(hourNow());
+      var t = hourText(+r.value);
+      r.disabled = off;
+      r.setAttribute('aria-valuetext', t);
+      $('.an-x-hour-o', dlg).textContent = off ? '' : t;
+      $('.an-x-hour-n', dlg).textContent = off ? 'پوسته‌ی کاغذی و پرتضاد آسمان پس‌زمینه را نشان نمی‌دهند.' : pv ? 'فقط برای دیدن است و چیزی ذخیره نمی‌شود.' : 'خورشید، ماه و رنگ آسمان را در ساعت دیگری از امروز ببینید؛ چیزی ذخیره نمی‌شود.';
+      $('[data-x="hr-now"]', dlg).hidden = !pv;
+      // while the reader looks at another hour, the dimming behind the panel goes, so the sky itself can be seen
+      dlg.classList.toggle('an-x-peek', !!pv);
+    }
 
     /* ---------- what this page is ---------- */
     var art = AN.page === 'post' ? $('#an-feed > .an-post') : null, post = null;
@@ -160,7 +213,10 @@
         '<div class="an-dlg-body an-x-body">' +
         sec('پوسته', '<div class="an-x-themes" role="radiogroup" aria-label="پوسته">' + THEMES.map(function (t) {
           return '<label class="an-x-th an-x-th-' + t[0] + '"><input type="radio" name="an-x-theme" value="' + t[0] + '"><span class="an-x-th-sw" aria-hidden="true"><i></i><i></i><i></i></span><b>' + t[1] + '</b><small>' + t[2] + '</small></label>';
-        }).join('') + '</div>') +
+        }).join('') + '</div>' +
+          (LIVE ? '<div class="an-x-hour"><div class="an-x-hour-h"><label for="an-x-hr">آسمان در ساعتی دیگر</label><span class="an-x-hour-o" aria-hidden="true"></span></div>' +
+            '<input type="range" id="an-x-hr" min="0" max="23.5" step="0.5"><p class="an-x-note an-x-hour-n"></p>' +
+            '<button type="button" class="an-link-btn" data-x="hr-now" hidden>بازگشت به اکنون</button></div>' : '')) +
         sec('متن مقاله', '<div class="an-x-size" role="group" aria-labelledby="an-x-fs-l"><span id="an-x-fs-l">اندازه‌ی متن</span><button type="button" class="an-x-step" data-x="fs-" aria-label="متن کوچک‌تر">−</button><output id="an-x-fs" aria-live="polite"></output><button type="button" class="an-x-step" data-x="fs+" aria-label="متن بزرگ‌تر">+</button></div>' +
           seg('lh', 'فاصله‌ی سطرها', [[1, 'عادی'], [2, 'باز'], [3, 'بازتر']]) + seg('w', 'پهنای ستون', [[1, 'باریک'], [2, 'عادی'], [3, 'پهن']]) +
           sw('ease', 'فاصله‌گذاری آسان‌خوان', 'فاصله‌ی بیشتر میان واژه‌ها و بندها؛ برای خوانش راحت‌تر')) +
@@ -168,6 +224,8 @@
           sw('sky', 'آسمان پویای پس‌زمینه') + sw('vt', 'گذار نرم میان صفحه‌ها', 'در مرورگرهایی که پشتیبانی می‌کنند') + ($('[data-an="sound"]') ? sw('snd', 'صدای وبلاگ', 'همان دکمه‌ی صدا در نوار بالا (M)') : '') +
           (OPT.guide ? sw('guide', 'نگار، راهنمای وبلاگ', 'شکل کوچکی از نور در گوشه‌ی صفحه که با یک کلیک (یا کلید G) صفحه را معرفی می‌کند') : '')) +
         sec(post ? 'این مقاله' : 'این صفحه', actions()) +
+        // shown only while some other story is left half-read
+        (OPT.resume ? '<section class="an-x-sec an-x-sec-half" hidden><h3>نیمه‌تمام‌ها</h3><div class="an-x-half"></div></section>' : '') +
         (OPT.passport ? sec('گذرنامه‌ی آینده', '<div class="an-x-pp"></div>', 'an-x-sec-pp') : '') +
         (OPT.marks ? sec('نشان‌شده‌ها', '<div class="an-x-marks"></div>') : '') +
         '</div><div class="an-dlg-foot an-x-foot"><p>این تنظیم‌ها، نشان‌ها و مهرها فقط در همین مرورگر می‌مانند و به هیچ‌جا فرستاده نمی‌شوند.</p><p><button type="button" class="an-link-btn" data-x="reset">بازگرداندن تنظیم‌های نمایش</button> · <button type="button" class="an-link-btn" data-x="wipe">پاک کردن همه‌ی داده‌های من</button></p></div>';
@@ -175,6 +233,9 @@
       dlg.setAttribute('aria-labelledby', 'an-x-h');
       dlg.addEventListener('change', onChange);
       dlg.addEventListener('click', onClick);
+      dlg.addEventListener('input', function (e) { if (e.target.id === 'an-x-hr') hourSet(+e.target.value); });
+      // closing the panel ends a look at another hour
+      dlg.onclose = hourEnd;
       return dlg;
     }
     function sync() {
@@ -193,7 +254,12 @@
       pressed('ruler', ruler.on); pressed('focus', !!P.focus); pressed('mark', isMarked()); pressed('listen', say.on);
       var pp = $('.an-x-pp', dlg); if (pp) pp.innerHTML = passport();
       var mk = $('.an-x-marks', dlg); if (mk) mk.innerHTML = marksList();
+      var hf = $('.an-x-half', dlg); if (hf) { var hl = halfList(); hf.innerHTML = hl; hf.parentNode.hidden = !hl; }
+      hourSync();
     }
+    // after a row is taken off a list, the focus goes to the next row's button, else the one before, else to the
+    // panel's close button, so a keyboard reader does not lose their place
+    function refocus(sel, i) { var bs = $$(sel, dlg), t = bs[Math.min(i, bs.length - 1)] || $('.an-dlg-x', dlg); if (t) t.focus(); }
     function pressed(k, on) { $$('[data-x="' + k + '"]').forEach(function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); }); }
     // a bar at the bottom of the screen (continue reading, listening) lifts the template's toast above it
     function bars() { H.classList.toggle('an-x-bar', !!$('.an-x-resume.on, .an-x-player.on')); }
@@ -211,9 +277,13 @@
       var b = e.target.closest && e.target.closest('[data-x]'); if (!b) return;
       var k = b.getAttribute('data-x');
       if (k === 'fs-' || k === 'fs+') { var n = FS.indexOf(P.fs) + (k === 'fs+' ? 1 : -1); if (n >= 0 && n < FS.length) { P.fs = FS[n]; save(); apply(); sync(); } }
-      else if (k === 'reset') { var keep = { focus: P.focus, ruler: P.ruler }; P = keep; clean(); save(); apply(); if (themeNow() !== 'a' || AN.v !== 'a') theme('a', b); sync(); AN.toast('تنظیم‌های نمایش به حالت نخست برگشت.'); }
-      else if (k === 'wipe') { STORE.forEach(drop); P = {}; clean(); apply(); ruler.set(false); theme('a', b); badges(); sync(); AN.toast('همه‌ی داده‌های ابزار خواننده از این مرورگر پاک شد.'); }
-      else if (k === 'unmark') { toggleMark(b.getAttribute('data-u')); }
+      // the theme a first visit has: «خودکار» with the live sky, «شب» before it
+      else if (k === 'reset') { var keep = { focus: P.focus, ruler: P.ruler }; P = keep; clean(); save(); apply(); hourEnd(); if (themeNow() !== (LIVE ? 'auto' : 'a')) theme(LIVE ? 'auto' : 'a', b); sync(); AN.toast('تنظیم‌های نمایش به حالت نخست برگشت.'); }
+      // the version the theme left in the template's own storage goes too, so nothing of the reader stays behind
+      else if (k === 'wipe') { STORE.forEach(drop); P = {}; clean(); apply(); ruler.set(false); theme(LIVE ? 'auto' : 'a', b, function () { drop('an-v'); drop('an-vm'); }); badges(); sync(); AN.toast('همه‌ی داده‌های ابزار خواننده از این مرورگر پاک شد.'); }
+      else if (k === 'unmark') { var i = $$('[data-x="unmark"]', dlg).indexOf(b); toggleMark(b.getAttribute('data-u')); refocus('[data-x="unmark"]', i); }
+      else if (k === 'unhalf') { var j = $$('[data-x="unhalf"]', dlg).indexOf(b), a = get('an-x-pos', {}) || {}; delete a[b.getAttribute('data-k')]; put('an-x-pos', a); sync(); refocus('[data-x="unhalf"]', j); }
+      else if (k === 'hr-now') { hourEnd(); var r = $('#an-x-hr', dlg); if (r) r.focus(); }
       else run(k, b);
     }
     function run(k, b) {
@@ -279,6 +349,29 @@
         var t = AN.TOPICS[x.k];
         return '<li style="--rc:' + AN.color(t ? t.c : 'default') + '"><a href="' + esc(x.h || x.u) + '"><i></i>' + esc(x.t) + '</a><button type="button" class="an-x-un" data-x="unmark" data-u="' + esc(x.u) + '" aria-label="برداشتن نشان «' + esc(x.t) + '»">✕</button></li>';
       }).join('') + '</ul>';
+    }
+
+    /* ---------- stories left half-read ---------- */
+    // From the places «continue where you stopped» keeps (an-x-pos): the five stories read last and not finished,
+    // this one aside, with how much is read and about how many minutes are left. Older entries without a title or an
+    // address take them from the blog's list of articles.
+    function minsLeft(m, f) { return m > 0 ? Math.max(1, Math.round(m * (1 - f))) : 0; }
+    function halves() {
+      var a = get('an-x-pos', {}) || {}, me = post && (post.id || path(here)), byId = {};
+      idx.forEach(function (q) { if (q.id) byId[q.id] = q; });
+      return Object.keys(a).filter(function (k) { var r = a[k]; return k !== me && r && r.f > 0.06 && r.f < 0.95; }).map(function (k) {
+        var r = a[k], q = byId[k] || {};
+        return { k: k, t: String(r.t || q.title || ''), u: safe(r.u || '') || safe(q.url || ''), f: +r.f, m: +r.m || 0, at: +r.at || 0 };
+      }).filter(function (r) { return r.t && r.u; }).sort(function (x, y) { return y.at - x.at; }).slice(0, 5);
+    }
+    function halfList() {
+      var rows = halves();
+      return rows.length ? '<ul class="an-x-hlist">' + rows.map(function (r) {
+        var pc = Math.round(r.f * 100), n = minsLeft(r.m, r.f);
+        return '<li><a href="' + esc(r.u) + '"><b>' + esc(r.t) + '</b><span class="an-x-hbar" aria-hidden="true"><i style="width:' + pc + '%"></i></span>' +
+          '<small>' + fa(pc) + '٪ خوانده شده' + (n ? '، حدود ' + fa(n) + ' دقیقه مانده' : '') + '</small></a>' +
+          '<button type="button" class="an-x-un" data-x="unhalf" data-k="' + esc(r.k) + '" aria-label="برداشتن «' + esc(r.t) + '» از نیمه‌تمام‌ها">✕</button></li>';
+      }).join('') + '</ul>' : '';
     }
 
     /* ---------- the future passport: one stamp for each story read to its end ---------- */
@@ -425,15 +518,16 @@
       function keep() {
         tick = false; var now = Date.now(); if (now - last < 1200) return; last = now;
         var p = where(), a = get('an-x-pos', {}) || {};
-        if (p.f > 0.06 && p.f < 0.95) a[id] = { i: p.i, d: p.d, f: +p.f.toFixed(3), at: now }; else delete a[id];
+        // the title, address and length come along for the list of half-read stories in the panel
+        if (p.f > 0.06 && p.f < 0.95) a[id] = { i: p.i, d: p.d, f: +p.f.toFixed(3), at: now, t: post.title, u: here, m: post.min || 0 }; else delete a[id];
         var ks = Object.keys(a); if (ks.length > 30) ks.sort(function (x, y) { return a[x].at - a[y].at; }).slice(0, ks.length - 30).forEach(function (k) { delete a[k]; });
         put('an-x-pos', a);
       }
       W.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(keep); } }, { passive: true });
       if (!saved || !(saved.f > 0.06 && saved.f < 0.95) || location.hash.length > 1 || (W.scrollY || 0) > 200) return;
-      var h = hs[saved.i], name = h ? h.textContent.trim() : '';
+      var h = hs[saved.i], name = h ? h.textContent.trim() : '', n = minsLeft(post.min, saved.f);
       var bar = el('div', 'an-x-resume'); bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', 'ادامه‌ی خواندن');
-      bar.innerHTML = '<p>دفعه‌ی پیش تا ' + (name ? 'بخش «' + esc(name) + '»' : fa(Math.round(saved.f * 100)) + '٪ این مقاله') + ' خوانده بودید.</p><button type="button" class="an-btn an-btn-primary an-btn-sm" data-r="go">ادامه از همان‌جا</button><button type="button" class="an-x-close" data-r="x" aria-label="بستن">✕</button>';
+      bar.innerHTML = '<p>دفعه‌ی پیش تا ' + (name ? 'بخش «' + esc(name) + '»' : fa(Math.round(saved.f * 100)) + '٪ این مقاله') + ' خوانده بودید' + (n ? '؛ حدود ' + fa(n) + ' دقیقه‌ی دیگر مانده است' : '') + '.</p><button type="button" class="an-btn an-btn-primary an-btn-sm" data-r="go">ادامه از همان‌جا</button><button type="button" class="an-x-close" data-r="x" aria-label="بستن">✕</button>';
       D.body.appendChild(bar);
       requestAnimationFrame(function () { bar.classList.add('on'); bars(); });
       var y0 = W.scrollY || 0;
@@ -542,9 +636,22 @@
       }
       AN.openDlg(d, '[data-c="copy"]');
     }
-    function copy(text, ok, ta) {
-      function manual() { if (ta) { ta.focus(); ta.select(); } AN.toast('متن انتخاب شد؛ با Ctrl+C کپی‌اش کنید.'); }
-      if (navigator.clipboard && W.isSecureContext) navigator.clipboard.writeText(text).then(function () { AN.toast(ok); }, manual); else manual();
+    // The clipboard where the browser allows it; else the older copy command on a hidden text box inside the open
+    // window, so the focus stays there; else the text on screen (node) is selected for Ctrl+C. Never a prompt().
+    function copy(text, ok, node) {
+      function old() {
+        var box = $('.an-dlg.on') || D.body, back = D.activeElement, t = el('textarea', 'an-x-clip'), done = false;
+        t.value = text; t.readOnly = true; t.tabIndex = -1; t.setAttribute('aria-hidden', 'true');
+        box.appendChild(t); t.select();
+        try { done = D.execCommand('copy'); } catch (e) {}
+        t.remove();
+        if (back && back.focus) back.focus({ preventScroll: true });
+        if (done) { AN.toast(ok); return; }
+        if (node && node.select) { node.focus(); node.select(); }
+        else if (node && W.getSelection) { var r = D.createRange(), s = W.getSelection(); r.selectNodeContents(node); s.removeAllRanges(); s.addRange(r); }
+        AN.toast(node ? 'متن انتخاب شد؛ با Ctrl+C کپی‌اش کنید.' : 'کپی نشد؛ نشانی را از نوار مرورگر بردارید.');
+      }
+      if (navigator.clipboard && W.isSecureContext) navigator.clipboard.writeText(text).then(function () { AN.toast(ok); }, old); else old();
     }
 
     /* ---------- files fetched on demand ---------- */
@@ -590,7 +697,7 @@
         d._wired = 1;
         d.addEventListener('click', function (e) {
           var b = e.target.closest('[data-q]'); if (!b) return;
-          if (b.getAttribute('data-q') === 'copy') copy(here, 'پیوند صفحه کپی شد.');
+          if (b.getAttribute('data-q') === 'copy') copy(here, 'پیوند صفحه کپی شد.', u);
           else { var on = !d.classList.contains('big'); d.classList.toggle('big', on); b.setAttribute('aria-pressed', String(on)); b.textContent = on ? 'کوچک‌تر' : 'بزرگ‌تر'; }
         });
         d.onclose = function () { d.classList.remove('big'); var b = d.querySelector('[data-q="big"]'); if (b) { b.setAttribute('aria-pressed', 'false'); b.textContent = 'بزرگ‌تر'; } };
@@ -648,7 +755,7 @@
         if (err) { AN.toast('کارت «نگار» از اینترنت نرسید؛ اتصال را بررسی کنید و دوباره امتحان کنید.'); return; }
         if (!guide.mod) guide.mod = W.AN_GUIDE({
           AN: AN, OPT: OPT, btn: b, post: post, page: AN.page, here: here, idx: idx, fig: figure,
-          get: get, put: put, path: path, esc: esc, fa: fa,
+          get: get, put: put, path: path, safe: safe, esc: esc, fa: fa, phase: phaseName,
           // the stories read to the end, only when the passport keeps them
           read: function () { return OPT.passport ? get('an-x-read', {}) || {} : null; },
           tools: OPT.tools ? function () { openPanel(b); } : null,

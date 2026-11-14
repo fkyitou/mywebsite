@@ -11,6 +11,9 @@
 .an-dlg.an-x-drawer { place-items: stretch; justify-items: end; padding: 0; }
 .an-x-drawer .an-dlg-box { width: min(440px, 100%); height: 100%; max-height: none; border-radius: 0; border-start-start-radius: var(--r-l); border-end-start-radius: var(--r-l); border-block: 0; border-inline-end: 0; animation: an-x-slide .42s var(--ease) both; }
 .an-x-drawer .an-dlg-head h2 { font-size: var(--fs-3); }
+/* the sky at another hour: no dimming while the reader looks (js: hourSync) */
+.an-dlg.an-x-drawer { transition: background-color var(--t-mid), -webkit-backdrop-filter var(--t-mid), backdrop-filter var(--t-mid); }
+.an-dlg.an-x-drawer.an-x-peek { background-color: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
 .an-x-drawer .an-dlg-head svg { color: var(--accent); }
 .an-x-drawer .an-dlg-head svg circle { fill: var(--surface-2); }
 @keyframes an-x-slide { from { transform: translateX(-104%); } }
@@ -27,7 +30,7 @@
 .an-x-foot p { margin: 0; }
 .an-x-foot p + p { margin-top: 4px; }
 
-/* themes: four little pages, each in its own colours */
+/* themes: little pages, each in its own colours */
 .an-x-themes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .an-x-th { position: relative; display: grid; gap: 1px; padding: 8px 8px 10px; border-radius: var(--r-m); border: 1px solid var(--border-2); background: var(--surface); cursor: pointer; transition: border-color var(--t-fast), transform var(--t-fast) var(--ease), background var(--t-fast); }
 .an-x-th:hover { border-color: var(--accent); transform: translateY(-2px); }
@@ -42,10 +45,29 @@
 .an-x-th-b .an-x-th-sw { --sb: #F6F8FB; --st: #0B1426; --sa: #B4530F; --sp: #1F5FD1; }
 .an-x-th-paper .an-x-th-sw { --sb: #F5EEDC; --st: #2A2015; --sa: #9A4A10; --sp: #0B6363; }
 .an-x-th-contrast .an-x-th-sw { --sb: #000000; --st: #FFFFFF; --sa: #FFD400; --sp: #8EC5FF; }
+/* «خودکار»: a whole row; its little page is half night with the moon, half day with the sun, over one horizon */
+.an-x-th-auto { grid-column: 1 / -1; }
+.an-x-th-auto .an-x-th-sw { background: linear-gradient(90deg, #04060D 0 50%, #F6F8FB 50% 100%); }
+.an-x-th-auto .an-x-th-sw::after { content: none; }
+.an-x-th-auto .an-x-th-sw i { opacity: 1; }
+.an-x-th-auto .an-x-th-sw i:nth-child(1) { top: 13px; inset-inline-start: 24%; width: 18px; height: 18px; border-radius: 50%; background: #FFB547; box-shadow: 0 0 14px 3px rgba(255, 181, 71, .5); }
+.an-x-th-auto .an-x-th-sw i:nth-child(2) { top: 14px; inset-inline-start: auto; inset-inline-end: 24%; width: 16px; height: 16px; border-radius: 50%; background: #EDF2FA; overflow: hidden; }
+.an-x-th-auto .an-x-th-sw i:nth-child(2)::after { content: ""; position: absolute; top: -3px; left: -6px; width: 16px; height: 16px; border-radius: 50%; background: #04060D; }
+.an-x-th-auto .an-x-th-sw i:nth-child(3) { top: auto; bottom: 14px; inset-inline: 10px; width: auto; height: 2px; border-radius: 1px; background: linear-gradient(90deg, #5B9BFF, #B4530F); opacity: .85; }
 .an-x-th input:checked ~ .an-x-th-sw::before { content: "✓"; position: absolute; z-index: 1; bottom: 6px; inset-inline-end: 8px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); font-size: 12px; font-weight: 900; line-height: 1; }
 .an-x-th input:focus-visible ~ .an-x-th-sw { outline: 2px solid var(--focus); outline-offset: 2px; }
 .an-x-th b { font-size: var(--fs-1); line-height: 1.5; }
 .an-x-th small { color: var(--muted); font-size: var(--fs-0); line-height: 1.5; }
+
+/* the sky at another hour: a look only, nothing kept */
+.an-x-hour { display: grid; gap: 4px; margin-top: var(--s3); padding: 10px 12px; border-radius: var(--r-m); border: 1px solid var(--border); background: var(--surface); }
+.an-x-hour-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.an-x-hour-h label { font-size: var(--fs-1); font-weight: 700; }
+.an-x-hour-o { color: var(--accent); font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.an-x-hour input { width: 100%; margin: 4px 0; accent-color: var(--accent); cursor: pointer; }
+.an-x-hour input:disabled { opacity: .45; cursor: default; }
+.an-x-hour .an-x-note { margin: 0; }
+.an-x-hour .an-link-btn { justify-self: start; }
 
 /* text size stepper */
 .an-x-size { display: flex; align-items: center; gap: 8px; margin-bottom: var(--s3); }
@@ -116,6 +138,17 @@ a.an-x-st:hover { text-decoration: none; border-color: var(--rc); transform: sca
 .an-x-un { width: 32px; height: 32px; flex: none; border-radius: 50%; border: 1px solid transparent; background: none; color: var(--muted); }
 .an-x-un:hover { border-color: var(--danger); color: var(--danger); }
 .an-x-empty { margin: 0; color: var(--muted); font-size: var(--fs-0); line-height: 1.9; }
+/* stories left half-read: how far, and about how long is left */
+.an-x-hlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.an-x-hlist li { display: flex; align-items: center; gap: 6px; }
+.an-x-hlist a { flex: 1; min-width: 0; display: grid; gap: 5px; padding: 8px 10px; border-radius: var(--r-s); color: var(--text); line-height: 1.7; }
+.an-x-hlist a:hover { background: var(--surface-3); text-decoration: none; }
+.an-x-hlist b { font-size: var(--fs-1); font-weight: 700; }
+.an-x-hlist small { color: var(--muted); font-size: var(--fs-0); }
+.an-x-hbar { display: block; height: 4px; border-radius: 2px; background: var(--surface-3); overflow: hidden; }
+.an-x-hbar i { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
+/* the hidden text box the older copy command reads from */
+.an-x-clip { position: fixed; top: 0; left: 0; width: 1px; height: 1px; padding: 0; border: 0; opacity: 0; pointer-events: none; }
 
 /* badges on article cards */
 .an-x-badges { position: absolute; z-index: 1; top: 12px; inset-inline-end: 12px; display: flex; gap: 6px; }

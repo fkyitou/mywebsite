@@ -207,7 +207,21 @@
       '<a href="https://www.linkedin.com/sharing/share-offsite/?url=' + uu + '" target="_blank" rel="noopener">لینکدین</a>' +
       '<button type="button" data-an="copy">کپی پیوند</button>' + (navigator.share ? '<button type="button" data-an="native">بیشتر…</button>' : '');
     if (foot) foot.insertBefore(share, foot.firstChild); else wrap.appendChild(share);
-    $$('[data-an="copy"]').forEach(function (b) { b.addEventListener('click', function () { var ok = function () { AN.toast('پیوند مقاله کپی شد'); }; if (navigator.clipboard && W.isSecureContext) navigator.clipboard.writeText(url).then(ok, function () { prompt('پیوند را کپی کن:', url); }); else prompt('پیوند را کپی کن:', url); }); });
+    // copy: the clipboard where the browser allows it, else the older copy command on a hidden text box; no prompt()
+    // window either way (some in-app browsers refuse the clipboard)
+    function copyUrl(b) {
+      function old() {
+        var t = el('textarea', 'an-clip'), done = false;
+        t.value = url; t.readOnly = true; t.tabIndex = -1; t.setAttribute('aria-hidden', 'true');
+        D.body.appendChild(t); t.select();
+        try { done = D.execCommand('copy'); } catch (e) {}
+        t.remove(); b.focus({ preventScroll: true });
+        AN.toast(done ? 'پیوند مقاله کپی شد' : 'کپی نشد؛ نشانی مقاله را از نوار مرورگر بردارید.');
+      }
+      if (navigator.clipboard && W.isSecureContext) navigator.clipboard.writeText(url).then(function () { AN.toast('پیوند مقاله کپی شد'); }, old); else old();
+    }
+    // the button beside the table of contents and the one in this row
+    $$('[data-an="copy"]').forEach(function (b) { b.addEventListener('click', function () { copyUrl(b); }); });
     var nat = share.querySelector('[data-an="native"]'); if (nat) nat.addEventListener('click', function () { navigator.share({ title: p.title, url: url }).catch(function () {}); });
     // comments: the count goes into span[data-comment-for] (from window.BlogComments); we open its page inside a dialog (falls back to the normal link)
     // comments: only when Blogfa renders the comment block for this post (comments switched on)

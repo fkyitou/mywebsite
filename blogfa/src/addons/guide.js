@@ -15,15 +15,15 @@
 
     function gs() { var g = C.get('an-x-guide', {}); return g && typeof g === 'object' ? g : {}; }
     function gput(k, v) { var g = gs(); g[k] = v; C.put('an-x-guide', g); }
-    // only addresses that open a web page (no javascript: or data: from a stored list)
-    function safe(u) { try { var x = new URL(u, location.href); return x.protocol === 'https:' || x.protocol === 'http:' ? x.href : ''; } catch (e) { return ''; } }
+    // only addresses that open a web page (no javascript: or data: from a stored list): the toolkit's own check
+    var safe = C.safe;
     function topicName(k) { var t = AN.TOPICS && AN.TOPICS[k]; return t ? t.n : ''; }
     function sayVersion(v) { return v === 'a' ? '«شب» (A)' : '«روز» (B)'; }
 
     /* ---------- what to say ---------- */
-    var PHASE = { night: 'شب', sunrise: 'طلوع', morning: 'صبح', noon: 'نیمروز', afternoon: 'بعدازظهر', sunset: 'غروب' };
     var CONS = { winter: 'شکارچی (Orion)', spring: 'شیر (Leo)', summer: 'ماکیان (Cygnus)', autumn: 'ذات‌الکرسی (Cassiopeia)' };
-    function phaseName(s) { return s.phase === 'twilight' ? (s.am ? 'گرگ‌ومیش صبح' : 'گرگ‌ومیش غروب') : PHASE[s.phase] || ''; }
+    // the phases' names come from the toolkit, which shows them in its hour preview too
+    var phaseName = C.phase;
     function moonName(a) {
       return a < 0.03 || a > 0.97 ? 'ماه نو' : a < 0.22 ? 'هلال نو' : a < 0.28 ? 'تربیع اول' : a < 0.47 ? 'رو به بدر' :
         a < 0.53 ? 'ماه کامل (بدر)' : a < 0.72 ? 'پس از بدر' : a < 0.78 ? 'تربیع دوم' : 'هلال پایانی';
