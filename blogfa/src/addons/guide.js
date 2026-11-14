@@ -284,6 +284,7 @@
       if (pool().length) b('pick', 'یک روایت برایم انتخاب کن');
       if (skyNow()) b('sky', 'آسمان همین لحظه');
       b('tip', 'یک راز از وبلاگ');
+      if (C.teaser) b('teaser', 'ویدیوی معرفی وبلاگ');
       if (C.tools) b('tools', 'ابزار خواننده');
       return a.join('');
     }
@@ -313,6 +314,7 @@
       else if (k === 'sky') sky();
       else if (k === 'tip') tip(again);
       else if (k === 'tools') { hide(true); C.tools(); }
+      else if (k === 'teaser') { hide(true); C.teaser(); }
       else if (k === 'hide') { C.hide(); AN.toast('نگار پنهان شد. از «ابزار خواننده» (R)، بخش «حرکت و جلوه‌ها»، دوباره روشنش کنید.'); }
     }
     function show() {

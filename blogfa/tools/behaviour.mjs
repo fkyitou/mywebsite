@@ -26,6 +26,8 @@
   12. Kit 9: the header menu. «بوم کسب‌وکار» hides while its page answers 404 (asked once in a visit), stays when
       the page is there or the blog does not answer; between the phone menu and a wide screen every label keeps to
       one line and the menu clears the logo and the tools.
+  13. Kit 9: the introduction film. A button on the home page only; its code arrives on the first press; nothing moves
+      and no sound is made before play; play, captions, seeking and closing; the same frame for the same moment.
 
    node tools/behaviour.mjs          → preview/,     quality/behaviour-results.json, exit 1 on any failure
    node tools/behaviour.mjs --cdn    → preview-cdn/ (CDN addresses answered from dist/cdn/), quality/behaviour-cdn-results.json
@@ -794,6 +796,84 @@ if (CDN) {
     ok('kit9-menu', `${w}px: every label on one line, the menu clear of the logo and the tools` + (w <= 1100 ? ', no «Ctrl K» hint' : ''), one && m.clear && m.over <= 0 && (w <= 1100 ? m.kbd === 'none' : m.kbd !== 'none'), JSON.stringify(m));
     await ctx.close();
   }
+}
+
+/* ---------- 13. kit 9: the introduction film (src/addons/teaser.js, opened by src/addons/addons.js) ---------- */
+{
+  const errs = [], asked = [];
+  const ctx = await browser.newContext({ viewport: { width: 1366, height: 900 }, deviceScaleFactor: 1, locale: 'fa-IR', timezoneId: 'UTC' });
+  if (CDN) await routeCdn(ctx);
+  await ctx.addInitScript(() => {
+    window.AN_NOW = '2026-11-13T22:30:00';
+    // count the audio contexts: none may exist before the play button
+    const A = window.AudioContext; window.__ac = 0;
+    if (A) window.AudioContext = class extends A { constructor(...a) { super(...a); window.__ac++; } };
+  });
+  const page = await ctx.newPage();
+  page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
+  page.on('pageerror', e => errs.push(String(e)));
+  page.on('request', q => { if (/\/an-teaser\.[0-9a-f]+\.js$/.test(q.url())) asked.push(q.url()); });
+  await page.goto(BASE + 'index.html', { waitUntil: 'load' });
+  await page.waitForFunction(() => document.documentElement.classList.contains('an-x-on'), null, { timeout: 15000 }).catch(() => {});
+  const b = await page.evaluate(() => { const b = document.querySelector('.an-hero-cta .an-x-teaser'); return b && { t: b.textContent.trim(), pop: b.getAttribute('aria-haspopup'), type: b.type }; });
+  ok('kit9-teaser', 'home: «ویدیوی معرفی» sits beside the hero\'s two buttons, and its code is not loaded with the page', !!b && /ویدیوی معرفی/.test(b.t) && /۴۰/.test(b.t) && b.pop === 'dialog' && b.type === 'button' && asked.length === 0, JSON.stringify({ b, asked: asked.length }));
+  await page.click('.an-x-teaser');
+  await page.waitForSelector('.an-t-dlg.on', { timeout: 10000 }).catch(() => {});
+  await page.waitForTimeout(500);
+  const o = await page.evaluate(() => {
+    const d = document.querySelector('.an-t-dlg.on'); if (!d) return null;
+    return { label: d.getAttribute('aria-labelledby'), focus: document.activeElement && document.activeElement.className, big: !d.querySelector('.an-t-big').hidden,
+      cv: d.querySelector('.an-t-cv').getAttribute('role'), seek: d.querySelector('.an-t-seek').value, ac: window.__ac,
+      tr: d.querySelectorAll('.an-t-tr li').length, credit: /امیرحسین همتی/.test(d.querySelector('.an-t-tr').textContent) };
+  });
+  ok('kit9-teaser', 'the first press: the film\'s file comes once, from the toolkit\'s own address', asked.length === 1 && /\/an-teaser\.[0-9a-f]{10}\.js$/.test(asked[0]), asked.join(' '));
+  ok('kit9-teaser', 'the window opens on the poster, focus on the play button, no sound yet', !!o && o.label === 'an-t-h' && /an-t-big/.test(o.focus) && o.big && o.cv === 'img' && o.seek === '0' && o.ac === 0, JSON.stringify(o));
+  ok('kit9-teaser', 'a transcript of every caption, with the creator\'s credit', !!o && o.tr === 8 && o.credit, JSON.stringify(o));
+  await page.waitForTimeout(1200);
+  const still = await page.evaluate(() => ({ seek: document.querySelector('.an-t-seek').value, ac: window.__ac }));
+  ok('kit9-teaser', 'nothing moves and nothing plays until the play button', still.seek === '0' && still.ac === 0, JSON.stringify(still));
+  await page.click('.an-t-big');
+  await page.waitForTimeout(1600);
+  const p1 = await page.evaluate(() => ({ seek: +document.querySelector('.an-t-seek').value, big: document.querySelector('.an-t-big').hidden, btn: document.querySelector('.an-t-bar [data-t="play"]').textContent, ac: window.__ac, vt: document.querySelector('.an-t-seek').getAttribute('aria-valuetext') }));
+  ok('kit9-teaser', 'play: the film runs, the button says «مکث», the music starts with it', p1.seek >= 8 && p1.seek <= 30 && p1.big && p1.btn === 'مکث' && p1.ac === 1 && /از ۴۰ ثانیه/.test(p1.vt), JSON.stringify(p1));
+  await page.click('[data-t="caps"]');
+  await page.waitForTimeout(400);
+  const c1 = await page.evaluate(() => { const c = document.querySelector('.an-t-cap'); return { hidden: c.hidden, t: c.textContent, live: c.getAttribute('aria-live'), pressed: document.querySelector('[data-t="caps"]').getAttribute('aria-pressed') }; });
+  ok('kit9-teaser', 'captions: the line on screen, read out politely', !c1.hidden && /نقطه‌ای از نور/.test(c1.t) && c1.live === 'polite' && c1.pressed === 'true', JSON.stringify(c1));
+  await page.click('.an-t-bar [data-t="play"]');
+  await page.evaluate(() => { const s = document.querySelector('.an-t-seek'); s.value = '352'; s.dispatchEvent(new Event('input', { bubbles: true })); });
+  await page.waitForTimeout(300);
+  const s1 = await page.evaluate(() => ({ seek: document.querySelector('.an-t-seek').value, cap: document.querySelector('.an-t-cap').textContent, btn: document.querySelector('.an-t-bar [data-t="play"]').textContent }));
+  ok('kit9-teaser', 'pause and seek: still at 35.2 s, the closing caption with the credit', s1.seek === '352' && /امیرحسین همتی/.test(s1.cap) && s1.btn === 'پخش', JSON.stringify(s1));
+  // the same moment draws the same picture, every time
+  const same = await page.evaluate(() => {
+    const f = window.AN_TEASER.film, sum = t => { const c = document.createElement('canvas'); c.width = 320; c.height = 180; const x = c.getContext('2d'); f.draw(x, t, 320, 180); const d = x.getImageData(0, 0, 320, 180).data; let h = 0; for (let i = 0; i < d.length; i += 7) h = (h * 31 + d[i]) | 0; return h; };
+    return [sum(16.4), sum(3), sum(16.4)];
+  });
+  ok('kit9-teaser', 'one moment, one frame: drawn twice, the same pixels', same[0] === same[2] && same[0] !== same[1], JSON.stringify(same));
+  await page.click('.an-t-big');
+  await page.waitForTimeout(400);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(500);
+  const shut = await page.evaluate(() => ({ open: !!document.querySelector('.an-t-dlg.on'), focus: document.activeElement && document.activeElement.className, t: document.querySelector('.an-t-seek').value }));
+  await page.waitForTimeout(600);
+  const shut2 = await page.evaluate(() => document.querySelector('.an-t-seek').value);
+  ok('kit9-teaser', 'Escape closes the window, stops the film and gives focus back to the button', !shut.open && /an-x-teaser/.test(shut.focus) && shut.t === shut2, JSON.stringify({ shut, shut2 }));
+  ok('kit9-teaser', 'no console errors', errs.length === 0, errs.join(' | '));
+  await ctx.close();
+  // an article has no such button, and a box with teaser: 0 has none either
+  const ctx2 = await browser.newContext({ viewport: { width: 1366, height: 900 } });
+  if (CDN) await routeCdn(ctx2);
+  await ctx2.route(u => new URL(u).pathname.endsWith('.html'), async route => { const r = await route.fetch(); await route.fulfill({ response: r, body: (await r.text()).replace('teaser: 1 }', 'teaser: 0 }') }); });
+  const p2 = await ctx2.newPage();
+  await p2.goto(BASE + 'post-1.html', { waitUntil: 'load' });
+  await p2.waitForFunction(() => document.documentElement.classList.contains('an-x-on'), null, { timeout: 15000 }).catch(() => {});
+  const onPost = await p2.evaluate(() => !!document.querySelector('.an-x-teaser'));
+  await p2.goto(BASE + 'index.html', { waitUntil: 'load' });
+  await p2.waitForFunction(() => document.documentElement.classList.contains('an-x-on'), null, { timeout: 15000 }).catch(() => {});
+  const off = await p2.evaluate(() => ({ btn: !!document.querySelector('.an-x-teaser'), opt: window.AN.x && window.AN.x.opt.teaser }));
+  ok('kit9-teaser', 'no button on an article; none on the home page when the box says teaser: 0', !onPost && !off.btn && off.opt === 0, JSON.stringify({ onPost, off }));
+  await ctx2.close();
 }
 
 await browser.close();

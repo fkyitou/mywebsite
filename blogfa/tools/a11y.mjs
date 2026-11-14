@@ -111,6 +111,21 @@ for (const v of ['a', 'b']) {
   await ctx.close();
 }
 
+// the introduction film's window (src/addons/teaser.js), in both versions, with its captions on
+for (const v of ['a', 'b']) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'fa-IR' });
+  if (CDN) await routeCdn(ctx);
+  await ctx.addInitScript(ver => { try { localStorage.setItem('an-v', ver); } catch (e) {} }, v);
+  const p = await ctx.newPage();
+  await p.goto(url('index.html'), { waitUntil: 'load' }); await p.waitForTimeout(600);
+  await p.click('.an-x-teaser').catch(() => {});
+  const on = await p.waitForSelector('.an-t-dlg.on', { timeout: 10000 }).then(() => true, () => false);
+  if (!on) { problems++; console.log(`✗ film/${v} index.html  — the film's window did not open`); }
+  await p.click('[data-t="caps"]').catch(() => {}); await p.waitForTimeout(500);
+  await scan(p, `film/${v} index.html`);
+  await ctx.close();
+}
+
 // keyboard: the first Tab shows the skip link, Enter jumps to main, Tab keeps moving (no trap)
 for (const f of ['index.html', 'post-1.html']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });

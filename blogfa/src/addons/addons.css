@@ -343,3 +343,25 @@ a.an-x-st:hover { text-decoration: none; border-color: var(--rc); transform: sca
   .an-x-btn, .an-x-after, .an-x-resume, .an-x-player, .an-x-ruler, .an-x-confetti, .an-x-badges, .an-toc-tools,
   .an-g, .an-g-chip, .an-g-card, .an-g-spot, .an-g-tip { display: none !important; }
 }
+
+/* ---------- the introduction film (js: src/addons/teaser.js) ---------- */
+.an-x-teaser small { font-weight: 500; opacity: .75; }
+.an-x-teaser[aria-busy="true"] { opacity: .7; cursor: progress; }
+.an-t-dlg .an-dlg-box { width: min(980px, 100%); }
+.an-t-stage { position: relative; aspect-ratio: 16 / 9; margin-inline: auto; max-width: max(280px, calc((100vh - 350px) * 16 / 9)); border-radius: var(--r-md, 14px); overflow: hidden; background: #000; }
+.an-t-cv { display: block; width: 100%; height: 100%; }
+/* over the light of the title card, the poster, so the name stays readable */
+.an-t-big { position: absolute; inset: 31% auto auto 50%; transform: translate(-50%, -50%); width: 84px; height: 84px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .7); background: rgba(4, 8, 20, .55); color: #fff; display: grid; place-items: center; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: transform var(--t-fast), background var(--t-mid); }
+.an-t-big:hover { transform: translate(-50%, -50%) scale(1.06); background: rgba(4, 8, 20, .75); }
+.an-t-big:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.an-t-big svg { width: 38px; height: 38px; fill: currentColor; stroke: none; margin-inline-start: -4px; }
+.an-t-big[hidden] { display: none; }
+.an-t-cap { position: absolute; inset: auto 4% 4% 4%; margin: 0; padding: .35em .8em; border-radius: 8px; background: rgba(0, 0, 0, .78); color: #fff; font-size: clamp(14px, 2.2vw, 20px); line-height: 1.7; text-align: center; }
+.an-t-cap[hidden] { display: none; }
+.an-t-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.an-t-seek { flex: 1 1 160px; min-width: 120px; accent-color: var(--accent); }
+.an-t-time { font-variant-numeric: tabular-nums; color: var(--muted); min-width: 4.5em; text-align: center; }
+.an-t-bar [aria-pressed="false"] { opacity: .72; }
+.an-t-tr summary { cursor: pointer; font-weight: 700; margin-top: 10px; }
+.an-t-tr ol { margin: .5em 0 0; padding-inline-start: 1.4em; }
+.an-t-at { color: var(--muted); font-size: .9em; margin-inline-end: .4em; }

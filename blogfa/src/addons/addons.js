@@ -20,12 +20,12 @@
   var W = window, D = document, H = D.documentElement;
   if (W.AN_XT) return;
   W.AN_XT = 1;
-  // filled in by tools/build.mjs: the QR encoder and the guide's card as [file, SRI], every glossary term of the
-  // articles, and the first key points of each article as [topic, text]
-  var X = W.AN_X || {}, QR = '@QR@', GUIDE = '@GUIDE@', TERMS = '@TERMS@', KEYS = '@KEYS@';
+  // filled in by tools/build.mjs: the QR encoder, the guide's card and the introduction film as [file, SRI], every
+  // glossary term of the articles, and the first key points of each article as [topic, text]
+  var X = W.AN_X || {}, QR = '@QR@', GUIDE = '@GUIDE@', TEASER = '@TEASER@', TERMS = '@TERMS@', KEYS = '@KEYS@';
   // what the blog owner switched off in the box (window.AN_X_OPT): 0 turns a tool off. A box pasted before the
-  // guide existed does not name it, and the guide stays on.
-  var OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1, guide: 1 };
+  // guide or the film existed does not name them, and they stay on.
+  var OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1, guide: 1, teaser: 1 };
   var own = W.AN_X_OPT || X.opt || {};
   for (var key in OPT) if (Object.prototype.hasOwnProperty.call(own, key)) OPT[key] = own[key] ? 1 : 0;
 
@@ -710,6 +710,30 @@
       });
     }
 
+    /* ---------- the blog's introduction film ---------- */
+    // Forty seconds drawn and scored in the browser (src/addons/teaser.js), fetched on the first press. It opens in
+    // a window and waits for the play button: no picture moves and no sound starts by itself.
+    var teaser = null;
+    function teaserOpen(from) {
+      if (!OPT.teaser) return;
+      if (teaser) { teaser.open(); return; }
+      if (from) from.setAttribute('aria-busy', 'true');
+      lazy(TEASER, function () { return typeof W.AN_TEASER === 'function'; }, function (err) {
+        if (from) from.removeAttribute('aria-busy');
+        if (err) { AN.toast('ویدیوی معرفی از اینترنت نرسید؛ اتصال را بررسی کنید و دوباره امتحان کنید.'); return; }
+        if (!teaser) teaser = W.AN_TEASER({ AN: AN, fa: fa, esc: esc });
+        teaser.open();
+      });
+    }
+    function teaserInit() {
+      if (!OPT.teaser || AN.page !== 'home') return;
+      var cta = $('.an-hero-cta'); if (!cta) return;
+      var b = el('button', 'an-btn an-btn-ghost an-x-teaser', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>ویدیوی معرفی <small>(' + fa(40) + ' ثانیه)</small>');
+      b.type = 'button'; b.setAttribute('aria-haspopup', 'dialog');
+      b.addEventListener('click', function () { teaserOpen(b); });
+      cta.appendChild(b);
+    }
+
     /* ---------- «نگار», the blog's guide ---------- */
     // An original, symbolic figure made of light: a drop-shaped body, a ring with a running light around it, two
     // lines of energy for arms and a few sparks. Not a person and not a religious figure. Here: the button in the
@@ -759,6 +783,7 @@
           // the stories read to the end, only when the passport keeps them
           read: function () { return OPT.passport ? get('an-x-read', {}) || {} : null; },
           tools: OPT.tools ? function () { openPanel(b); } : null,
+          teaser: OPT.teaser ? function () { teaserOpen(null); } : null,
           hide: function () { P.guide = 0; save(); apply(); sync(); }
         });
         guide.mod.toggle();
@@ -860,7 +885,8 @@
     }
 
     guideInit();
+    teaserInit();
     H.classList.add('an-x-on');
-    AN.x = { v: 9, open: openPanel, theme: theme, opt: OPT, guide: guideToggle };
+    AN.x = { v: 9, open: openPanel, theme: theme, opt: OPT, guide: guideToggle, teaser: teaserOpen };
   }
 })();

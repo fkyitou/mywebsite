@@ -180,6 +180,9 @@ for (const f of ['template-cdn.html', 'template-cdn-lite.html']) staticChecks(pa
     // the guide's card, fetched the same way on the first press of «نگار»
     const gd = a.guide ? path.join(ROOT, 'dist', 'cdn', a.guide) : '';
     ok(`toolkit: ${a.guide || 'guide card'} named with its integrity hash`, !!a.js && !!gd && fs.existsSync(gd) && cdnText(a.js).includes(`"${a.guide}","${sha384(fs.readFileSync(gd))}"`));
+    // the introduction film, fetched the same way when a reader asks for it
+    const tz = a.teaser ? path.join(ROOT, 'dist', 'cdn', a.teaser) : '';
+    ok(`toolkit: ${a.teaser || 'introduction film'} named with its integrity hash`, !!a.js && !!tz && fs.existsSync(tz) && cdnText(a.js).includes(`"${a.teaser}","${sha384(fs.readFileSync(tz))}"`));
     ok('box.html: not written by an unverified build', !c.unverifiedTemplates, c.unverifiedTemplates ? 'built with --unverified: for offline tests only' : '');
   }
 }
