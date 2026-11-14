@@ -1,7 +1,7 @@
 {
- "generated": "2026-11-06T00:29:13.251Z",
+ "generated": "2026-11-14T06:52:02.146Z",
  "browser": "Chromium (Playwright), software WebGL",
- "passed": 52,
+ "passed": 54,
  "failed": 0,
  "results": [
   {
@@ -42,7 +42,7 @@
   },
   {
    "group": "lab",
-   "name": "post-4.html lab «security»: 8/8 controls respond (7 change the result, 1 change a setting)",
+   "name": "post-4.html lab «security»: 8/8 controls respond (6 change the result, 2 change a setting)",
    "pass": true,
    "info": ""
   },
@@ -125,6 +125,18 @@
    "info": ""
   },
   {
+   "group": "lab",
+   "name": "post-11.html lab «video»: 8/8 controls respond (8 change the result, 0 change a setting)",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "lab",
+   "name": "post-11.html lab «video» no errors while operated",
+   "pass": true,
+   "info": ""
+  },
+  {
    "group": "feature",
    "name": "search: Ctrl+K opens, «مریخ» finds the Mars article, Escape closes",
    "pass": true,
@@ -158,7 +170,7 @@
    "group": "feature",
    "name": "back-to-top button returns to the top",
    "pass": true,
-   "info": "from 6103px, at the top after 1434 ms"
+   "info": "from 6706px, at the top after 2405 ms"
   },
   {
    "group": "feature",
@@ -170,7 +182,7 @@
    "group": "feature",
    "name": "table of contents: a link scrolls its heading to the top of the screen",
    "pass": true,
-   "info": "7 entries, heading at 193px after 738 ms"
+   "info": "7 entries, heading at 193px after 727 ms"
   },
   {
    "group": "feature",
@@ -182,7 +194,7 @@
    "group": "feature",
    "name": "reading progress bar grows while reading",
    "pass": true,
-   "info": "382px → 629px"
+   "info": "376px → 620px"
   },
   {
    "group": "feature",
@@ -224,73 +236,73 @@
    "group": "layout",
    "name": "index.html at 768px: no sideways scrolling",
    "pass": true,
-   "info": "768 / 768"
+   "info": "753 / 768"
   },
   {
    "group": "layout",
    "name": "post-6.html at 768px: no sideways scrolling",
    "pass": true,
-   "info": "768 / 768"
+   "info": "753 / 768"
   },
   {
    "group": "layout",
    "name": "page-about.html at 768px: no sideways scrolling",
    "pass": true,
-   "info": "768 / 768"
+   "info": "753 / 768"
   },
   {
    "group": "layout",
    "name": "archive.html at 768px: no sideways scrolling",
    "pass": true,
-   "info": "768 / 768"
+   "info": "753 / 768"
   },
   {
    "group": "layout",
    "name": "index.html at 1366px: no sideways scrolling",
    "pass": true,
-   "info": "1366 / 1366"
+   "info": "1351 / 1366"
   },
   {
    "group": "layout",
    "name": "post-6.html at 1366px: no sideways scrolling",
    "pass": true,
-   "info": "1366 / 1366"
+   "info": "1351 / 1366"
   },
   {
    "group": "layout",
    "name": "page-about.html at 1366px: no sideways scrolling",
    "pass": true,
-   "info": "1366 / 1366"
+   "info": "1351 / 1366"
   },
   {
    "group": "layout",
    "name": "archive.html at 1366px: no sideways scrolling",
    "pass": true,
-   "info": "1366 / 1366"
+   "info": "1351 / 1366"
   },
   {
    "group": "layout",
    "name": "index.html at 1920px: no sideways scrolling",
    "pass": true,
-   "info": "1920 / 1920"
+   "info": "1905 / 1920"
   },
   {
    "group": "layout",
    "name": "post-6.html at 1920px: no sideways scrolling",
    "pass": true,
-   "info": "1920 / 1920"
+   "info": "1905 / 1920"
   },
   {
    "group": "layout",
    "name": "page-about.html at 1920px: no sideways scrolling",
    "pass": true,
-   "info": "1920 / 1920"
+   "info": "1905 / 1920"
   },
   {
    "group": "layout",
    "name": "archive.html at 1920px: no sideways scrolling",
    "pass": true,
-   "info": "1920 / 1920"
+   "info": "1905 / 1920"
   },
   {
    "group": "rtl",
@@ -308,11 +320,11 @@
    "group": "render",
    "name": "home: every article cover is drawn",
    "pass": true,
-   "info": "10 of 10 covers drawn"
+   "info": "11 of 11 covers drawn"
   },
   {
    "group": "pages",
-   "name": "all 63 preview pages open with no JS error, no console error and no missing local file",
+   "name": "all 66 preview pages open with no JS error, no console error and no missing local file",
    "pass": true,
    "info": ""
   }
@@ -402,12 +414,12 @@
     "button «ساخت گذرعبارت فارسی تصادفی»",
     "button «ساخت رمز تصادفی ۱۶ نویسه‌ای»",
     "tab «رمز یک‌بارمصرف (TOTP)»",
-    "input:text «کد گوشی را وارد کن تا سرور بررسی کند»",
     "button «ورود»",
     "button «کلید مخفی تازه»"
    ],
    "own": [
-    "button «نمایش»"
+    "button «نمایش»",
+    "input:text «کد گوشی را وارد کن تا سرور بررسی کند»"
    ],
    "none": [],
    "error": []
@@ -435,7 +447,7 @@
     "زندگی روی مریخ"
    ],
    "output": [
-    "input:range «تاریخ۱۵ آبان ۱۴۰۵»",
+    "input:range «تاریخ۲۳ آبان ۱۴۰۵»",
     "button «▶ حرکت زمان»",
     "button «🚀 پرتاب از همین تاریخ»",
     "button «برو به پنجره‌ی پرتاب بعدی»",
@@ -541,6 +553,24 @@
     "textarea «ایده‌ی تو برای حذف کن»",
     "textarea «ایده‌ی تو برای برعکسش کن»"
    ],
+   "none": [],
+   "error": []
+  },
+  {
+   "file": "post-11.html",
+   "lab": "video",
+   "tabs": [],
+   "output": [
+    "button «Veo 3.1 Fast»",
+    "button «Veo 3.1»",
+    "button «Omni 1.2 Flash»",
+    "button «Runway Gen-4.5»",
+    "button «Luma Ray3.2»",
+    "input:range «طول ویدیو۳۰ ثانیه»",
+    "button «پخش ویدیو»",
+    "button «از نویز تا تصویر»"
+   ],
+   "own": [],
    "none": [],
    "error": []
   }

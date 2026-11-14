@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-12T02:08:21.022Z",
+  "at": "2026-11-14T06:14:41.004Z",
   "preview": "preview",
   "cdn": false,
   "failed": 0,
@@ -132,7 +132,7 @@
     {
       "name": "template.html: size",
       "pass": true,
-      "info": "578.4 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+      "info": "630.9 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
     },
     {
       "name": "template-lite.html: three template holders",
@@ -262,7 +262,7 @@
     {
       "name": "template-lite.html: size",
       "pass": true,
-      "info": "522.1 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
+      "info": "574.5 KB (inline CSS and JS: for the preview only, too large for Blogfa)"
     },
     {
       "name": "template-cdn.html: three template holders",
@@ -305,12 +305,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-full.495af90d88.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PostTemplate: an-full.5a0445bc45.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-post.7bf2715c10.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PostTemplate: an-post.e84ddabcca.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -335,19 +335,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-full.495af90d88.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn.html PostTemplate: an-full.5a0445bc45.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PostTemplate: an-post.7bf2715c10.js holds the inline script byte for byte",
+      "name": "template-cdn.html PostTemplate: an-post.e84ddabcca.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn.html PostTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "26.1 KB"
+      "info": "27.0 KB"
     },
     {
       "name": "template-cdn.html PostTemplate: html lang/dir",
@@ -390,12 +390,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-base.f457dad461.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html ArchiveTemplate: an-base.9e09c1c0bd.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-archive.e142cc7506.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html ArchiveTemplate: an-archive.43db5e7608.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -420,19 +420,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-base.f457dad461.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn.html ArchiveTemplate: an-base.9e09c1c0bd.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html ArchiveTemplate: an-archive.e142cc7506.js holds the inline script byte for byte",
+      "name": "template-cdn.html ArchiveTemplate: an-archive.43db5e7608.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn.html ArchiveTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "12.7 KB"
+      "info": "13.6 KB"
     },
     {
       "name": "template-cdn.html ArchiveTemplate: html lang/dir",
@@ -475,12 +475,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-base.f457dad461.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PageTemplate: an-base.9e09c1c0bd.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-page.995b4c8acb.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn.html PageTemplate: an-page.aee8212046.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -505,19 +505,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-base.f457dad461.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn.html PageTemplate: an-base.9e09c1c0bd.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn.html PageTemplate: an-page.995b4c8acb.js holds the inline script byte for byte",
+      "name": "template-cdn.html PageTemplate: an-page.aee8212046.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn.html PageTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "14.3 KB"
+      "info": "15.2 KB"
     },
     {
       "name": "template-cdn.html PageTemplate: html lang/dir",
@@ -527,7 +527,7 @@
     {
       "name": "template-cdn.html: size",
       "pass": true,
-      "info": "53.3 KB"
+      "info": "56.0 KB"
     },
     {
       "name": "template-cdn-lite.html: three template holders",
@@ -570,12 +570,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-full.495af90d88.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PostTemplate: an-full.5a0445bc45.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-post-lite.a98b976c41.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PostTemplate: an-post-lite.3ad002a26d.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -600,19 +600,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-full.495af90d88.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn-lite.html PostTemplate: an-full.5a0445bc45.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PostTemplate: an-post-lite.a98b976c41.js holds the inline script byte for byte",
+      "name": "template-cdn-lite.html PostTemplate: an-post-lite.3ad002a26d.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn-lite.html PostTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "26.1 KB"
+      "info": "27.1 KB"
     },
     {
       "name": "template-cdn-lite.html PostTemplate: html lang/dir",
@@ -655,12 +655,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-base.f457dad461.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-base.9e09c1c0bd.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.e142cc7506.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.43db5e7608.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -685,19 +685,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-base.f457dad461.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-base.9e09c1c0bd.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.e142cc7506.js holds the inline script byte for byte",
+      "name": "template-cdn-lite.html ArchiveTemplate: an-archive.43db5e7608.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn-lite.html ArchiveTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "12.7 KB"
+      "info": "13.6 KB"
     },
     {
       "name": "template-cdn-lite.html ArchiveTemplate: html lang/dir",
@@ -740,12 +740,12 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-base.f457dad461.css has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PageTemplate: an-base.9e09c1c0bd.css has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-page.995b4c8acb.js has integrity and crossorigin matching dist/cdn",
+      "name": "template-cdn-lite.html PageTemplate: an-page.aee8212046.js has integrity and crossorigin matching dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -770,19 +770,19 @@
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-base.f457dad461.css holds the inline stylesheet byte for byte",
+      "name": "template-cdn-lite.html PageTemplate: an-base.9e09c1c0bd.css holds the inline stylesheet byte for byte",
       "pass": true,
       "info": ""
     },
     {
-      "name": "template-cdn-lite.html PageTemplate: an-page.995b4c8acb.js holds the inline script byte for byte",
+      "name": "template-cdn-lite.html PageTemplate: an-page.aee8212046.js holds the inline script byte for byte",
       "pass": true,
       "info": ""
     },
     {
       "name": "template-cdn-lite.html PageTemplate: part within the 60 KB budget",
       "pass": true,
-      "info": "14.3 KB"
+      "info": "15.2 KB"
     },
     {
       "name": "template-cdn-lite.html PageTemplate: html lang/dir",
@@ -792,12 +792,12 @@
     {
       "name": "template-cdn-lite.html: size",
       "pass": true,
-      "info": "53.3 KB"
+      "info": "56.0 KB"
     },
     {
       "name": "cdn: the commit in cdn.json holds every dist/cdn file byte for byte",
       "pass": true,
-      "info": "0005840ca312"
+      "info": "a8d0cf4ce1cc"
     },
     {
       "name": "cdn: that commit is on a remote branch, so jsDelivr can read it",
@@ -810,7 +810,7 @@
       "info": ""
     },
     {
-      "name": "cdn: none of the 9 stylesheets and scripts in dist/cdn holds code Blogfa blocks",
+      "name": "cdn: none of the 11 stylesheets and scripts in dist/cdn holds code Blogfa blocks",
       "pass": true,
       "info": ""
     },
@@ -832,7 +832,7 @@
     {
       "name": "box.html: small enough to paste",
       "pass": true,
-      "info": "2.1 KB"
+      "info": "2.2 KB"
     },
     {
       "name": "box.html: the credit in its comment",
@@ -842,15 +842,15 @@
     {
       "name": "box.html: loads from the pinned jsDelivr address and three backups",
       "pass": true,
-      "info": "0005840ca312"
+      "info": "a8d0cf4ce1cc"
     },
     {
-      "name": "box.html: an-addons.c1ba7ced11.css named with the integrity hash of dist/cdn",
+      "name": "box.html: an-addons.59381673ae.css named with the integrity hash of dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "box.html: an-addons.4b63ae8ae9.js named with the integrity hash of dist/cdn",
+      "name": "box.html: an-addons.bf460cedef.js named with the integrity hash of dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -865,6 +865,16 @@
       "info": ""
     },
     {
+      "name": "toolkit: an-guide.2536c925d3.js named with its integrity hash",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "toolkit: an-teaser.ac96eae9f5.js named with its integrity hash",
+      "pass": true,
+      "info": ""
+    },
+    {
       "name": "box.html: not written by an unverified build",
       "pass": true,
       "info": ""
@@ -872,7 +882,7 @@
     {
       "name": "desktop/a index.html",
       "pass": true,
-      "info": "home, 10 cards"
+      "info": "home, 11 cards"
     },
     {
       "name": "desktop/a archive.html",
@@ -882,7 +892,7 @@
     {
       "name": "desktop/a cat-1.html",
       "pass": true,
-      "info": "list, 2 cards"
+      "info": "list, 3 cards"
     },
     {
       "name": "desktop/a cat-2.html",
@@ -970,9 +980,14 @@
       "info": "post, 3 cards, lab ok, 1 chart"
     },
     {
+      "name": "desktop/a post-11.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
       "name": "desktop/b index.html",
       "pass": true,
-      "info": "home, 10 cards"
+      "info": "home, 11 cards"
     },
     {
       "name": "desktop/b archive.html",
@@ -992,7 +1007,7 @@
     {
       "name": "mobile/a index.html",
       "pass": true,
-      "info": "home, 10 cards"
+      "info": "home, 11 cards"
     },
     {
       "name": "mobile/a archive.html",
@@ -1002,7 +1017,7 @@
     {
       "name": "mobile/a cat-1.html",
       "pass": true,
-      "info": "list, 2 cards"
+      "info": "list, 3 cards"
     },
     {
       "name": "mobile/a cat-2.html",
@@ -1090,9 +1105,14 @@
       "info": "post, 3 cards, lab ok, 1 chart"
     },
     {
+      "name": "mobile/a post-11.html",
+      "pass": true,
+      "info": "post, 3 cards, lab ok, 1 chart"
+    },
+    {
       "name": "mobile/b index.html",
       "pass": true,
-      "info": "home, 10 cards"
+      "info": "home, 11 cards"
     },
     {
       "name": "mobile/b archive.html",

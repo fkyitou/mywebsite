@@ -1,39 +1,39 @@
 {
- "generated": "2026-11-06T00:21:25.321Z",
+ "generated": "2026-11-14T06:41:13.886Z",
  "browser": "Chromium (Playwright)",
  "served": "http://127.0.0.1 (test-only server)",
- "passed": 75,
+ "passed": 161,
  "failed": 0,
  "results": [
   {
    "group": "archive",
-   "name": "lists every article (10)",
+   "name": "lists every article (11)",
    "pass": true,
-   "info": "10 items, 10 with titles"
+   "info": "11 items, 11 with titles"
   },
   {
    "group": "archive",
    "name": "newest first, each linking to its post",
    "pass": true,
-   "info": "10 9 8 7 6 5 4 3 2 1"
+   "info": "11 10 9 8 7 6 5 4 3 2 1"
   },
   {
    "group": "archive",
    "name": "every item shows its topic and date",
    "pass": true,
-   "info": "10 topics, 10 dates"
+   "info": "11 topics, 11 dates"
   },
   {
    "group": "archive",
    "name": "the waiting note is gone and the count is shown",
    "pass": true,
-   "info": "۱۰ روایت، تازه‌ترین در بالا. روی هر عنوان بزن تا مقاله و آزمایشگاه زنده‌اش باز شود."
+   "info": "۱۱ روایت، تازه‌ترین در بالا. روی هر عنوان بزن تا مقاله و آزمایشگاه زنده‌اش باز شود."
   },
   {
    "group": "archive",
    "name": "search on this page knows the articles",
    "pass": true,
-   "info": "10 in the search index"
+   "info": "11 in the search index"
   },
   {
    "group": "archive",
@@ -63,7 +63,7 @@
    "group": "posts",
    "name": "index.html: every post carries its category",
    "pass": true,
-   "info": "10 of 10"
+   "info": "11 of 11"
   },
   {
    "group": "posts",
@@ -81,7 +81,7 @@
    "group": "posts",
    "name": "index.html: the minutes of the time have two digits",
    "pass": true,
-   "info": "۹:۰۳ ۱۷:۵۶ ۱۶:۴۹ ۱۵:۴۲ ۱۴:۳۵ ۱۳:۲۸ ۱۲:۲۱ ۱۱:۱۴ ۱۰:۰۷ ۹:۰۰"
+   "info": "۱۰:۱۰ ۹:۰۳ ۱۷:۵۶ ۱۶:۴۹ ۱۵:۴۲ ۱۴:۳۵ ۱۳:۲۸ ۱۲:۲۱ ۱۱:۱۴ ۱۰:۰۷ ۹:۰۰"
   },
   {
    "group": "posts",
@@ -117,7 +117,7 @@
    "group": "posts",
    "name": "post banner links to its category",
    "pass": true,
-   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:39321/cat-1.html"
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:44539/cat-1.html"
   },
   {
    "group": "posts",
@@ -129,7 +129,7 @@
    "group": "posts",
    "name": "cat-1.html: every post carries its category",
    "pass": true,
-   "info": "2 of 2"
+   "info": "3 of 3"
   },
   {
    "group": "posts",
@@ -147,7 +147,7 @@
    "group": "posts",
    "name": "cat-1.html: the minutes of the time have two digits",
    "pass": true,
-   "info": "۱۶:۴۹ ۹:۰۰"
+   "info": "۱۰:۱۰ ۱۶:۴۹ ۹:۰۰"
   },
   {
    "group": "posts",
@@ -231,7 +231,7 @@
    "group": "about",
    "name": "desktop: the page is as tall as the clean one",
    "pass": true,
-   "info": "clean 3451px, after the editor 3451px"
+   "info": "clean 3492px, after the editor 3492px"
   },
   {
    "group": "about",
@@ -249,7 +249,7 @@
    "group": "about",
    "name": "phone: the page is as tall as the clean one",
    "pass": true,
-   "info": "clean 4132px, after the editor 4132px"
+   "info": "clean 4231px, after the editor 4231px"
   },
   {
    "group": "about",
@@ -261,7 +261,7 @@
    "group": "spelling",
    "name": "tag cloud: names show without kashida",
    "pass": true,
-   "info": "0 of 39 with kashida"
+   "info": "0 of 41 with kashida"
   },
   {
    "group": "spelling",
@@ -357,7 +357,13 @@
    "group": "kit7",
    "name": "home: card numbers stand apart from the topic without «·»",
    "pass": true,
-   "info": "10 cards, first «۰۱ از ایده تا اختراع»"
+   "info": "11 cards, first «۰۱ ویدیوسازهای هوشمند»"
+  },
+  {
+   "group": "kit9",
+   "name": "home: the numbers band counts every post of the kit",
+   "pass": true,
+   "info": "{\"posts\":11,\"labs\":11,\"sources\":69,\"minutes\":73} for 11 post files, 11 cards on the page"
   },
   {
    "group": "kit7",
@@ -429,7 +435,7 @@
    "group": "late-css",
    "name": "desktop index.html: every canvas drawn at the shape of its box",
    "pass": true,
-   "info": "globe 1, cards 10; all match"
+   "info": "globe 1, cards 11; all match"
   },
   {
    "group": "late-css",
@@ -453,7 +459,517 @@
    "group": "late-css",
    "name": "phone index.html: every canvas drawn at the shape of its box",
    "pass": true,
-   "info": "globe 1, cards 10; all match"
+   "info": "globe 1, cards 11; all match"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "2026-11-13 22:30: version A, phase «night», nothing saved",
+   "pass": true,
+   "info": "v a, mode auto, sky night, saved null/null, sun 0, moon 0"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "2026-11-13 06:50: version B, phase «sunrise», nothing saved",
+   "pass": true,
+   "info": "v b, mode auto, sky sunrise, saved null/null, sun 0.74, moon 0"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "2026-11-13 09:00: version B, phase «morning», nothing saved",
+   "pass": true,
+   "info": "v b, mode auto, sky morning, saved null/null, sun 1, moon 0"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "2026-11-13 12:10: version B, phase «noon», nothing saved",
+   "pass": true,
+   "info": "v b, mode auto, sky noon, saved null/null, sun 1, moon 0"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "2026-11-13 15:00: version B, phase «afternoon», nothing saved",
+   "pass": true,
+   "info": "v b, mode auto, sky afternoon, saved null/null, sun 1, moon 0"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "2026-11-13 16:45: version B, phase «sunset», nothing saved",
+   "pass": true,
+   "info": "v b, mode auto, sky sunset, saved null/null, sun 0.64, moon 0"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "2026-11-13 17:40: version A, phase «twilight», nothing saved",
+   "pass": true,
+   "info": "v a, mode auto, sky twilight, saved null/null, sun 0, moon 1"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "2026-06-21 19:25: version B, phase «sunset», nothing saved",
+   "pass": true,
+   "info": "v b, mode auto, sky sunset, saved null/null, sun 0.34, moon 0"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "2026-12-21 19:25: version A, phase «night», nothing saved",
+   "pass": true,
+   "info": "v a, mode auto, sky night, saved null/null, sun 0, moon 1"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "full moon night: the moon is drawn lit and the moonlight wash is on",
+   "pass": true,
+   "info": "lit 0.998, moonlight true, moon opacity 1"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "new moon night: nearly nothing of the moon is lit",
+   "pass": true,
+   "info": "lit 0.000"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "the moon age stays within 0.035 of a cycle (about a day) of the reference formula through 2026",
+   "pass": true,
+   "info": "largest difference 0.0222 of a cycle = 0.65 days, over 24 dates"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "a constellation for each season: Orion, Leo, Cygnus, Cassiopeia",
+   "pass": true,
+   "info": "Orion 8★ 10 lines, Leo 9★ 10 lines, Cygnus 6★ 5 lines, Cassiopeia 5★ 4 lines"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "the version changes within 12 minutes of the Sun passing 4° below the horizon at Tehran, all year",
+   "pass": true,
+   "info": "largest difference 7.2 min, mean 4.0 min, over 24 days"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "button at night, «خودکار»: first press shows B «روز» and keeps it",
+   "pass": true,
+   "info": "v a, mode auto, sky night, saved null/null → v b, mode man, sky morning, saved b/man"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "the kept version is still there after a reload",
+   "pass": true,
+   "info": "v b, mode man, sky morning, saved b/man"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "second press hands the choice back to the clock",
+   "pass": true,
+   "info": "v a, mode auto, sky night, saved /auto, footer «A (خودکار)»"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "«خودکار» is still on after a reload",
+   "pass": true,
+   "info": "v a, mode auto, sky night, saved /auto"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "button at noon with B kept: a press shows A «شب» and keeps it",
+   "pass": true,
+   "info": "v b, mode man, sky morning, saved b/man → v a, mode man, sky night, saved a/man"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "an address with ?v=a shows A at noon and keeps it",
+   "pass": true,
+   "info": "v a, mode man, sky night, saved a/man"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "a version chosen under kit 8 (an-v alone) is kept",
+   "pass": true,
+   "info": "v b, mode man, sky morning, saved b/null"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "a saved value that is not a version is ignored",
+   "pass": true,
+   "info": "v b, mode auto, sky noon, saved x/man"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "the open page turns from «روز» to «شب» when the clock passes dusk, and saves nothing",
+   "pass": true,
+   "info": "v b, mode auto, sky sunset, saved null/null → v a, mode auto, sky twilight, saved null/null"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "a look at noon and back: the page follows, nothing is saved",
+   "pass": true,
+   "info": "b/noon/null → a/twilight/auto"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "a look at another hour with B kept: back to B afterwards, still kept",
+   "pass": true,
+   "info": "a/b/man/b"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "article, desktop: the moon and the constellation sit beside the text column, not behind it",
+   "pass": true,
+   "info": "text 536,1256, moon 9,67, constellation 1281,1344"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "article, phone: no moon, sun or constellation behind the text",
+   "pass": true,
+   "info": "none none none"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "reduced motion: the phase is shown without any transition",
+   "pass": true,
+   "info": "sunset; transition 0s 0s 0s"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "paper theme: the live sky stays out of it",
+   "pass": true,
+   "info": "tone paper, sky null, none none none"
+  },
+  {
+   "group": "kit9-sky",
+   "name": "the sky uses the clock only: no location, cookie or network call in its code",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit9-sky",
+   "name": "no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: the figure sits in its corner, labelled with its name and key, apart from «to the top»",
+   "pass": true,
+   "info": "{\"hidden\":false,\"label\":\"نگار، راهنمای وبلاگ (G)\",\"key\":\"G\",\"pop\":\"dialog\",\"exp\":\"false\",\"apart\":true,\"inside\":true,\"svg\":\"true\"}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: the card's code is not loaded with the page",
+   "pass": true,
+   "info": "0 request(s)"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: a hello beside the figure a few seconds after the first page",
+   "pass": true,
+   "info": "{\"t\":\"سلام! من «نگار» هستم، راهنمای این وبلاگ. هر وقت خواستید روی من بزنید.\",\"hide\":\"true\",\"saved\":1}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: a press opens the card, a dialog beside the figure, focus on its first answer",
+   "pass": true,
+   "info": "{\"role\":\"dialog\",\"modal\":\"false\",\"name\":\"نگار\",\"exp\":\"true\",\"first\":true,\"acts\":[\"tour\",\"pick\",\"sky\",\"tip\",\"teaser\",\"tools\"],\"chip\":false}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: the greeting follows the clock and the page (22:30, the front page)",
+   "pass": true,
+   "info": "شبتان پرستاره! من «نگار» هستم، راهنمای کوچک این وبلاگ.این‌جا صفحه‌ی نخست است؛ می‌توانید از"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: the card's code came once, from the toolkit's own address",
+   "pass": true,
+   "info": "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/an-guide.2536c925d3.js"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: Escape closes the card and gives the focus back to the figure",
+   "pass": true,
+   "info": "{\"hidden\":true,\"focus\":true,\"exp\":\"false\"}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: the key G (ل on a Persian keyboard) opens and closes the card",
+   "pass": true,
+   "info": "true true true"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "«یک روایت برایم انتخاب کن»: a real story, and «یکی دیگر» gives another one",
+   "pass": true,
+   "info": "http://127.0.0.1:44539/post-7.html → http://127.0.0.1:44539/post-2.html"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "«آسمان همین لحظه»: the phase and the constellation the sky shows, and no location asked",
+   "pass": true,
+   "info": "night/Cassiopeia: اکنون آسمان پس‌زمینه «شب» را نشان می‌دهد.ماه: هلال نو، حدود ۱۹٪ روشن؛ اکنون زیر افق است.صورت فلکی این فصل: ذات‌الکرسی (C"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "«یک راز از وبلاگ»: the tips come in turn",
+   "pass": true,
+   "info": "راز ۱ از ۱۲: کلید ? فهرست همه‌ی میان‌بره | راز ۲ از ۱۲: Ctrl+K یا / جست‌وجو را باز "
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: the walk lights each part in turn and its note stays on the screen",
+   "pass": true,
+   "info": "منوی اصلی(0px), جست‌وجو(0px), شب و روز(0px), صدا(0px), ابزار خواننده(0px), قلمروها(0px), تازه‌ترین روایت‌ها(0px)"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: «پایان» ends the walk and gives the focus back to the figure",
+   "pass": true,
+   "info": "{\"tip\":false,\"spot\":false,\"focus\":true}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: Escape ends the walk too",
+   "pass": true,
+   "info": "{\"tip\":false,\"focus\":true}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "the guide keeps only «an-x-guide» in this browser",
+   "pass": true,
+   "info": "an-x-guide"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "home: the hello is shown only once",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit9-guide",
+   "name": "article: the card greets by the clock, names the realm and the reading time",
+   "pass": true,
+   "info": "صبح بخیر! من «نگار» هستم، راهنمای کوچک این وبلاگ.این روایت درباره‌ی «هوش مصنوعی» است و حدود ۷ دقیقه خواندن می‌"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "article: the figure takes the colours of version B by day",
+   "pass": true,
+   "info": "{\"v\":\"b\",\"core\":\"#FFB547\"}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "article: «جمع‌بندی این روایت» quotes the article's own summary box under its own title",
+   "pass": true,
+   "info": "«نکته‌های کلیدی», 3 of 4"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "article: «رفتن به این جعبه» closes the card and brings the box into view with the focus",
+   "pass": true,
+   "info": "{\"focus\":true,\"card\":true,\"seen\":true}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "article: the walk follows the order of the page, the summary box under its own title",
+   "pass": true,
+   "info": "فهرست مطالب(0px), آزمایشگاه زنده(0px), نکته‌های کلیدی(0px), پس از خواندن(0px), روایت‌های پیشنهادی(0px)"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "«پنهان کردن نگار»: the figure goes, the choice is saved and kept after a reload, G stays quiet",
+   "pass": true,
+   "info": "{\"hidden\":true,\"card\":true,\"saved\":0,\"toast\":\"نگار پنهان شد. از «ابزار خواننده» (R)، بخش «حرکت و جلوه‌ها»، دوباره روشنش کنید.\",\"after\":{\"hidden\":true,\"card\":true}}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "the toolkit's switch «نگار، راهنمای وبلاگ» brings it back",
+   "pass": true,
+   "info": "{\"shown\":true,\"on\":true}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "box option guide: 0 leaves no figure, no switch, no key and no request",
+   "pass": true,
+   "info": "{\"swapped\":1,\"fig\":false,\"card\":false,\"sw\":false,\"key\":false,\"requests\":0}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "phone: the light version (no running light), apart from «to the top», no hello on a narrow screen",
+   "pass": true,
+   "info": "{\"lite\":true,\"run\":\"none\",\"apart\":true,\"inside\":true,\"chip\":false}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "phone: the card fits the screen without sideways scrolling",
+   "pass": true,
+   "info": "{\"l\":12,\"r\":378,\"t\":373,\"b\":764,\"w\":390,\"h\":844,\"sx\":390}"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "phone: the walk starts at the menu button and its note stays on the screen",
+   "pass": true,
+   "info": "منو(0px), جست‌وجو(0px), شب و روز(0px)"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "reduced motion: nothing of the guide moves",
+   "pass": true,
+   "info": "0 running, card 0s, spot 0s"
+  },
+  {
+   "group": "kit9-guide",
+   "name": "the card's code sends nothing, asks no location and runs no text as code",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit9-guide",
+   "name": "no console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit9-menu",
+   "name": "a blog without the page (404): «بوم کسب‌وکار» is hidden and the answer kept for the visit",
+   "pass": true,
+   "info": "{\"first\":{\"hidden\":true,\"shown\":false,\"kept\":\"404\"},\"second\":{\"hidden\":true,\"shown\":false,\"kept\":\"404\"},\"n1\":1,\"n2\":0}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "the next page hides it at once, without asking again",
+   "pass": true,
+   "info": "{\"first\":{\"hidden\":true,\"shown\":false,\"kept\":\"404\"},\"second\":{\"hidden\":true,\"shown\":false,\"kept\":\"404\"},\"n1\":1,\"n2\":0}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "a blog with the page: the link stays, asked once in the visit",
+   "pass": true,
+   "info": "{\"first\":{\"hidden\":false,\"shown\":true,\"kept\":\"ok\"},\"second\":{\"hidden\":false,\"shown\":true,\"kept\":\"ok\"},\"n1\":1,\"n2\":0}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "no answer: the link stays and nothing is kept, so the next page asks again",
+   "pass": true,
+   "info": "{\"first\":{\"hidden\":false,\"shown\":true,\"kept\":null},\"second\":{\"hidden\":false,\"shown\":true,\"kept\":null},\"n1\":1,\"n2\":1}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "no other console error",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit9-menu",
+   "name": "861px: every label on one line, the menu clear of the logo and the tools, no «Ctrl K» hint",
+   "pass": true,
+   "info": "{\"hs\":[45,45,45,45,45],\"clear\":true,\"over\":0,\"kbd\":\"none\"}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "900px: every label on one line, the menu clear of the logo and the tools, no «Ctrl K» hint",
+   "pass": true,
+   "info": "{\"hs\":[45,45,45,45,45],\"clear\":true,\"over\":0,\"kbd\":\"none\"}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "980px: every label on one line, the menu clear of the logo and the tools, no «Ctrl K» hint",
+   "pass": true,
+   "info": "{\"hs\":[45,45,45,45,45],\"clear\":true,\"over\":0,\"kbd\":\"none\"}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "1023px: every label on one line, the menu clear of the logo and the tools, no «Ctrl K» hint",
+   "pass": true,
+   "info": "{\"hs\":[45,45,45,45,45],\"clear\":true,\"over\":0,\"kbd\":\"none\"}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "1100px: every label on one line, the menu clear of the logo and the tools, no «Ctrl K» hint",
+   "pass": true,
+   "info": "{\"hs\":[45,45,45,45,45],\"clear\":true,\"over\":0,\"kbd\":\"none\"}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "1180px: every label on one line, the menu clear of the logo and the tools",
+   "pass": true,
+   "info": "{\"hs\":[45,45,45,45,45],\"clear\":true,\"over\":0,\"kbd\":\"block\"}"
+  },
+  {
+   "group": "kit9-menu",
+   "name": "1366px: every label on one line, the menu clear of the logo and the tools",
+   "pass": true,
+   "info": "{\"hs\":[45,45,45,45,45],\"clear\":true,\"over\":0,\"kbd\":\"block\"}"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "home: «ویدیوی معرفی» sits beside the hero's two buttons, and its code is not loaded with the page",
+   "pass": true,
+   "info": "{\"b\":{\"t\":\"ویدیوی معرفی (۴۰ ثانیه)\",\"pop\":\"dialog\",\"type\":\"button\"},\"asked\":0}"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "the first press: the film's file comes once, from the toolkit's own address",
+   "pass": true,
+   "info": "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/an-teaser.ac96eae9f5.js"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "the window opens on the poster, focus on the play button, no sound yet",
+   "pass": true,
+   "info": "{\"label\":\"an-t-h\",\"focus\":\"an-t-big\",\"big\":true,\"cv\":\"img\",\"seek\":\"0\",\"ac\":0,\"tr\":8,\"credit\":true}"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "a transcript of every caption, with the creator's credit",
+   "pass": true,
+   "info": "{\"label\":\"an-t-h\",\"focus\":\"an-t-big\",\"big\":true,\"cv\":\"img\",\"seek\":\"0\",\"ac\":0,\"tr\":8,\"credit\":true}"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "nothing moves and nothing plays until the play button",
+   "pass": true,
+   "info": "{\"seek\":\"0\",\"ac\":0}"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "play: the film runs, the button says «مکث», the music starts with it",
+   "pass": true,
+   "info": "{\"seek\":16,\"big\":true,\"btn\":\"مکث\",\"ac\":1,\"osc\":285,\"vt\":\"۱ از ۴۰ ثانیه\"}"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "captions: the line on screen, read out politely",
+   "pass": true,
+   "info": "{\"hidden\":false,\"t\":\"هر ایده، اول نقطه‌ای از نور است.\",\"live\":\"polite\",\"pressed\":\"true\"}"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "pause and seek: still at 35.2 s, the closing caption with the credit",
+   "pass": true,
+   "info": "{\"seek\":\"352\",\"cap\":\"آینده‌نگار؛ روایت انسان، ایده و فناوری. طراحی، مدیریت و نویسندگی: امیرحسین همتی.\",\"btn\":\"پخش\"}"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "one moment, one frame: drawn twice, the same pixels",
+   "pass": true,
+   "info": "[-196707582,1779613342,-196707582]"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "Escape closes the window, stops the film and gives focus back to the button",
+   "pass": true,
+   "info": "{\"shut\":{\"open\":false,\"focus\":\"an-btn an-btn-ghost an-x-teaser\",\"t\":\"356\"},\"shut2\":\"356\"}"
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "no console errors",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "kit9-teaser",
+   "name": "no button on an article; none on the home page when the box says teaser: 0",
+   "pass": true,
+   "info": "{\"onPost\":false,\"off\":{\"btn\":false,\"opt\":0}}"
   }
  ]
 }
