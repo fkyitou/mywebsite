@@ -23,6 +23,12 @@
   .an-creator-card { grid-template-columns: 1fr; gap: var(--s5); padding: var(--s6) var(--s5); }
   .an-creator-mono { width: 140px; }
 }
+/* 861-1100px: the menu and the tools share one row, so the items sit closer and the «Ctrl K» hint goes; before this,
+   «همه‌ی مقاله‌ها» and «بوم کسب‌وکار» broke onto two lines at 861-1023px */
+@media (max-width: 1100px) {
+  .an-nav > a, .an-dd-btn { padding-inline: 10px; }
+  .an-search-btn kbd { display: none; }
+}
 @media (max-width: 860px) {
   :root { --head-h: 309px; }
   .an-menu-btn { display: inline-grid; }

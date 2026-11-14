@@ -23,6 +23,9 @@
   11. Kit 9: «نگار», the blog's guide. The figure in the corner, a hello once, the card (on a press or G) with its
       answers drawn from the page, the walk that lights one part at a time, hiding and bringing it back, the box
       option guide: 0, the light version on a phone, reduced motion, and what it keeps and asks for.
+  12. Kit 9: the header menu. «بوم کسب‌وکار» hides while its page answers 404 (asked once in a visit), stays when
+      the page is there or the blog does not answer; between the phone menu and a wide screen every label keeps to
+      one line and the menu clears the logo and the tools.
 
    node tools/behaviour.mjs          → preview/,     quality/behaviour-results.json, exit 1 on any failure
    node tools/behaviour.mjs --cdn    → preview-cdn/ (CDN addresses answered from dist/cdn/), quality/behaviour-cdn-results.json
@@ -58,6 +61,9 @@ const editorize = body => body.replace(/^\s+|\s+$/g, '').replace(/\n[ \t]*\n\s*/
 const LIVE_ABOUT = 'page-about-live.html';
 const server = http.createServer((req, res) => {
   const rel = decodeURIComponent(new URL(req.url, 'http://x').pathname).replace(/^\/+/, '') || 'index.html';
+  // the business-canvas page, as on a blog that has it: the menu's check (js/core.js) keeps its link. Group 12
+  // answers this address itself to see the blog without that page.
+  if (rel === 'page/bmc') { res.writeHead(200, { 'Content-Type': TYPES['.html'] }); res.end('<!doctype html><title>bmc</title>'); return; }
   if (rel === LIVE_ABOUT) {
     const html = fs.readFileSync(path.join(PREVIEW, 'page-about.html'), 'utf8').replace(/(<div class="an-post-body">)([\s\S]*?)(<\/div>\s*<\/article>)/, (m, a, b, c) => a + editorize(b) + c);
     res.writeHead(200, { 'Content-Type': TYPES['.html'] }); res.end(html); return;
@@ -741,6 +747,53 @@ if (CDN) {
   const bad = ['fetch(', 'XMLHttpRequest', 'sendBeacon', 'WebSocket', 'EventSource', 'geolocation', 'document.cookie', 'eval(', 'new Function', 'window.open', 'location.href =', 'location.assign', 'location.replace'].filter(w => gSrc.includes(w));
   ok('kit9-guide', 'the card\'s code sends nothing, asks no location and runs no text as code', bad.length === 0, bad.join(', '));
   ok('kit9-guide', 'no console error', errs.length === 0, errs.slice(0, 2).join(' | '));
+}
+
+/* ---------- 12. kit 9: the header menu ---------- */
+{
+  // «بوم کسب‌وکار» opens /page/bmc, a page the owner makes in Blogfa. Each case answers that address itself: missing
+  // (404), there (200), or out of reach. The browser's own line about the failed request is expected; any other
+  // console error is not.
+  const errs = [];
+  const visit = async answer => {
+    const ctx = await browser.newContext({ viewport: { width: 1366, height: 900 }, deviceScaleFactor: 1, locale: 'fa-IR' });
+    if (CDN) await routeCdn(ctx);
+    let asked = 0;
+    await ctx.route('**/page/bmc', r => { asked++; return answer === 'down' ? r.abort('connectionrefused') : r.fulfill({ status: answer, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>x</title>' }); });
+    const page = await ctx.newPage();
+    page.on('console', m => { if (m.type() === 'error' && !/\/page\/bmc$/.test(m.location().url || '')) errs.push(m.text()); });
+    page.on('pageerror', e => errs.push(String(e)));
+    const look = () => page.evaluate(() => { const a = document.querySelector('#an-nav > a[data-nav="bmc"]'); return { hidden: a.hidden, shown: getComputedStyle(a).display !== 'none', kept: sessionStorage.getItem('an-bmc') }; });
+    const go = async f => { await page.goto(BASE + f, { waitUntil: 'load' }); await page.waitForFunction(() => window.AN && window.AN.ok, null, { timeout: 15000 }).catch(() => {}); await page.waitForTimeout(500); };
+    await go('index.html');
+    const first = await look(), n1 = asked;
+    await go('post-1.html');
+    const second = await look();
+    await ctx.close();
+    return { first, second, n1, n2: asked - n1 };
+  };
+  let r = await visit(404);
+  ok('kit9-menu', 'a blog without the page (404): «بوم کسب‌وکار» is hidden and the answer kept for the visit', r.first.hidden && !r.first.shown && r.first.kept === '404' && r.n1 === 1, JSON.stringify(r));
+  ok('kit9-menu', 'the next page hides it at once, without asking again', r.second.hidden && r.n2 === 0, JSON.stringify(r));
+  r = await visit(200);
+  ok('kit9-menu', 'a blog with the page: the link stays, asked once in the visit', !r.first.hidden && r.first.shown && r.first.kept === 'ok' && !r.second.hidden && r.n1 === 1 && r.n2 === 0, JSON.stringify(r));
+  r = await visit('down');
+  ok('kit9-menu', 'no answer: the link stays and nothing is kept, so the next page asks again', !r.first.hidden && r.first.shown && !r.first.kept && !r.second.hidden && r.n2 === 1, JSON.stringify(r));
+  ok('kit9-menu', 'no other console error', errs.length === 0, errs.slice(0, 2).join(' | '));
+
+  // between the phone menu (860px and below) and a wide screen: one line per label, nothing overlapping
+  for (const w of [861, 900, 980, 1023, 1100, 1180, 1366]) {
+    const { ctx, page } = await open(BASE + 'post-1.html', { width: w, height: 700 });
+    const m = await page.evaluate(() => {
+      const box = s => document.querySelector(s).getBoundingClientRect();
+      const items = [...document.querySelectorAll('#an-nav > a:not([hidden]), #an-nav .an-dd-btn')];
+      const nav = box('#an-nav'), tools = box('.an-tools'), logo = box('.an-logo'), bar = document.querySelector('#an-bar');
+      return { hs: items.map(a => Math.round(a.getBoundingClientRect().height)), clear: tools.right <= nav.left + 1 && nav.right <= logo.left + 1, over: bar.scrollWidth - bar.clientWidth, kbd: getComputedStyle(document.querySelector('.an-search-btn kbd')).display };
+    });
+    const one = m.hs.length >= 5 && Math.max(...m.hs) <= 46 && Math.max(...m.hs) === Math.min(...m.hs);
+    ok('kit9-menu', `${w}px: every label on one line, the menu clear of the logo and the tools` + (w <= 1100 ? ', no «Ctrl K» hint' : ''), one && m.clear && m.over <= 0 && (w <= 1100 ? m.kbd === 'none' : m.kbd !== 'none'), JSON.stringify(m));
+    await ctx.close();
+  }
 }
 
 await browser.close();

@@ -14,7 +14,9 @@
 .an-logo-fa { font-size: 1.28rem; font-weight: 900; letter-spacing: -.02em; }
 .an-logo-en { font-size: .58rem; letter-spacing: .32em; color: var(--muted); font-weight: 600; direction: ltr; text-align: end; }
 .an-nav { display: flex; align-items: center; gap: 4px; margin-inline-start: auto; }
-.an-nav > a, .an-dd-btn { display: inline-flex; align-items: center; gap: 4px; padding: 8px 14px; border-radius: var(--r-pill); color: var(--text-2); font-weight: 600; font-size: var(--fs-1); background: none; border: 0; transition: color var(--t-fast), background var(--t-fast); }
+.an-nav > a, .an-dd-btn { display: inline-flex; align-items: center; gap: 4px; padding: 8px 14px; border-radius: var(--r-pill); color: var(--text-2); font-weight: 600; font-size: var(--fs-1); white-space: nowrap; background: none; border: 0; transition: color var(--t-fast), background var(--t-fast); }
+/* «بوم کسب‌وکار» while its page does not exist yet (js/core.js) */
+.an-nav > a[hidden] { display: none; }
 .an-nav > a:hover, .an-dd-btn:hover, .an-nav > a[aria-current="page"] { color: var(--text); background: var(--glass-2); text-decoration: none; }
 .an-nav > a[aria-current="page"] { box-shadow: inset 0 -2px 0 var(--accent); }
 .an-dd { position: relative; }
@@ -28,7 +30,7 @@
 .an-dd-menu a small { margin-inline-start: auto; color: var(--muted); }
 .an-dd-empty { padding: 10px 12px; color: var(--muted); font-size: var(--fs-0); margin: 0; }
 .an-tools { display: flex; align-items: center; gap: 8px; }
-.an-search-btn kbd { margin-inline-start: 2px; }
+.an-search-btn kbd { margin-inline-start: 2px; white-space: nowrap; }
 .an-ab-btn { font-weight: 800; font-size: .8rem; gap: 2px; }
 /* sound: waves when on, a cross when off; the on state takes the accent colour */
 .an-snd-btn svg { width: 19px; height: 19px; }

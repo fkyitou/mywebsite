@@ -148,8 +148,26 @@
     if (mb && nav) mb.addEventListener('click', function () { var o = !nav.classList.contains('open'); nav.classList.toggle('open', o); mb.setAttribute('aria-expanded', o); D.body.classList.toggle('an-menu-open', o); });
     $$('#an-nav > a').forEach(function (a) {
       var k = a.getAttribute('data-nav');
-      if ((k === 'home' && AN.page === 'home') || (k === 'archive' && AN.page === 'archive') || (k === 'titles' && AN.page === 'titles') || (k === 'about' && /\/page\/about/i.test(location.pathname))) a.setAttribute('aria-current', 'page');
+      if ((k === 'home' && AN.page === 'home') || (k === 'archive' && AN.page === 'archive') || (k === 'titles' && AN.page === 'titles') || (k === 'about' && /\/page\/about/i.test(location.pathname)) || (k === 'bmc' && /\/page\/bmc/i.test(location.pathname))) a.setAttribute('aria-current', 'page');
     });
+    // «بوم کسب‌وکار» opens a page the owner makes in Blogfa («صفحات جداگانه», address bmc). Until it exists the link
+    // would land on Blogfa's «not found», so a definite 404 hides it; any other answer, or none, keeps it. One request
+    // to the blog itself in each visit (the answer stays in this tab's session), and nothing is sent with it.
+    var bmc = $('#an-nav > a[data-nav="bmc"]');
+    if (bmc) {
+      var said = '', keep = function (v) { try { sessionStorage.setItem('an-bmc', v); } catch (e) {} };
+      try { said = sessionStorage.getItem('an-bmc') || ''; } catch (e) {}
+      if (/\/page\/bmc/i.test(location.pathname)) keep('ok');
+      else if (said === '404') bmc.hidden = true;
+      else if (!said && W.fetch && /^https?:$/.test(location.protocol)) {
+        W.fetch(bmc.href, { cache: 'no-store' }).then(function (r) {
+          // only the answer's status is needed, not the page
+          if (r.body && r.body.cancel) r.body.cancel().catch(function () {});
+          keep(r.status === 404 ? '404' : 'ok');
+          if (r.status === 404) bmc.hidden = true;
+        }, function () {});
+      }
+    }
     // realms dropdown
     var dd = $('#an-dd'), menu = $('#an-dd-menu'), btn = dd && dd.querySelector('.an-dd-btn'), cats = AN.cats();
     if (menu) menu.innerHTML = cats.length ? cats.map(function (c) { return '<a href="' + AN.esc(c.url) + '" style="--rc:' + AN.color(c.realm) + '"><i></i>' + AN.esc(c.name) + '</a>'; }).join('') : '<p class="an-dd-empty">دسته‌ها پس از ساخت در بلاگفا اینجا می‌آیند.</p>';
