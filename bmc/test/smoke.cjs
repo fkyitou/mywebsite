@@ -61,7 +61,7 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
     await p.click('.bmc-bar .bmc-btn');
     await p.waitForSelector('.bmc-stage');
     const info = [];
-    for (let i = 0; i < 13; i++) {
+    for (let i = 0; i < 23; i++) {
       await p.waitForTimeout(1300);
       const s = await p.evaluate(() => {
         const st = document.querySelector('.bmc-stage');
@@ -69,7 +69,7 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
         const pp = sc.firstChild;
         const pz = pp.querySelector('.bmc-poster');
         const bad = innerWidth > 720 && (pz ? pz.getBoundingClientRect().bottom > sc.getBoundingClientRect().bottom + 2 : pp.scrollHeight > pp.clientHeight + 2);
-        return [pp.className, pp.style.fontSize || pp.style.getPropertyValue('--pw') || '-', st.querySelector('.bmc-tools span').textContent, bad ? 'OVERFLOW' : 'ok'].join('|');
+        return [pp.className, pp.style.fontSize || pp.style.getPropertyValue('--pw') || '-', st.querySelector('.bmc-cnt').textContent, bad ? 'OVERFLOW' : 'ok'].join('|');
       });
       info.push(s);
       check(!s.endsWith('OVERFLOW'), name + ' step ' + (i + 1) + ' overflows: ' + s);
@@ -87,7 +87,58 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
       check(await p.evaluate(() => !document.querySelector('.bmc-stage')), name + ': Esc did not close');
       await p.click('.bmc-poster .bmc-c5');
       await p.waitForTimeout(900);
-      check((await p.textContent('.bmc-stage .bmc-tools span')) === '۷ از ۱۳', name + ': clicking block 5 did not open step 7');
+      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱۳ از ۲۳', name + ': clicking block 5 did not open step 13');
+      // Details of the block replace its notes, and must fit too.
+      await p.keyboard.press('KeyD');
+      await p.waitForTimeout(900);
+      const d = await p.evaluate(() => {
+        const pp = document.querySelector('.bmc-stage .bmc-scene:not(.bmc-out)').firstChild, bx = pp.querySelector('.bmc-dbox');
+        return { on: pp.classList.contains('bmc-showd'), rows: bx ? bx.children.length : 0, over: pp.scrollHeight > pp.clientHeight + 2 || (bx && bx.scrollHeight > bx.clientHeight + 2) };
+      });
+      check(d.on && d.rows > 2 && !d.over, name + ': block details wrong ' + JSON.stringify(d));
+      await p.screenshot({ path: path.join(out, name + '-detail5.png') });
+      // Speaker notes panel.
+      await p.keyboard.press('KeyN');
+      await p.waitForTimeout(700);
+      const n = await p.evaluate(() => { const b = document.querySelector('.bmc-stage .bmc-notebox'); return b && b.offsetHeight > 20 ? b.textContent.length : 0; });
+      check(n > 60, name + ': speaker notes did not show');
+      await p.screenshot({ path: path.join(out, name + '-notes.png') });
+      // Presenter window.
+      const [pop] = await Promise.all([p.context().waitForEvent('page'), p.keyboard.press('KeyP')]);
+      await pop.waitForTimeout(500);
+      const pv = await pop.evaluate(() => [document.querySelector('h1') && document.querySelector('h1').textContent, document.querySelector('.n') && document.querySelector('.n').textContent.length]);
+      check(pv[0] && pv[0].indexOf('جریان') >= 0 && pv[1] > 60, name + ': presenter view wrong ' + JSON.stringify(pv));
+      await pop.setViewportSize({ width: 980, height: 680 });
+      await pop.screenshot({ path: path.join(out, name + '-presenter.png') });
+      await pop.click('footer button:last-child');
+      await p.waitForTimeout(700);
+      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱۴ از ۲۳', name + ': presenter next did not move the deck');
+      await p.keyboard.press('Escape');
+      await p.waitForTimeout(300);
+      check(pop.isClosed(), name + ': presenter window stayed open after close');
+      // Agenda jumps.
+      await p.click('.bmc-bar .bmc-btn');
+      await p.keyboard.press('ArrowRight');
+      await p.waitForTimeout(800);
+      await p.click('.bmc-stage .bmc-chap li:nth-child(3) button');
+      await p.waitForTimeout(800);
+      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱۸ از ۲۳', name + ': agenda chapter 3 did not open strategy');
+      await p.keyboard.press('Escape');
+      // Short pitch deck.
+      await p.click('.bmc-bar .bmc-alt2');
+      await p.waitForTimeout(800);
+      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱ از ۱۲', name + ': short deck has wrong length');
+      await p.keyboard.press('End');
+      await p.waitForTimeout(900);
+      const qs = await p.evaluate(() => document.querySelectorAll('.bmc-stage .bmc-scene:not(.bmc-out) .bmc-qs button').length);
+      check(qs === 8, name + ': short deck thanks slide lacks questions');
+      await p.keyboard.press('Escape');
+      // Page folds.
+      const f = await p.evaluate(() => {
+        const dt = document.querySelector('.bmc-d3 h3'); dt.click();
+        return [document.querySelector('.bmc-d3').classList.contains('bmc-open'), document.querySelectorAll('.bmc-dt').length, document.querySelectorAll('.bmc-q.bmc-open').length];
+      });
+      check(f[0] && f[1] === 9 && f[2] === 1, name + ': page folds wrong ' + JSON.stringify(f));
     }
     await p.close();
   }

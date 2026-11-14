@@ -71,6 +71,6 @@ if (ref) {
 const head = '<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>بوم مدل کاروکسب نِت‌امداد</title>';
 const offCss = css.replace('url(vazirmatn-arabic.woff2)', `url(data:font/woff2;base64,${font.toString('base64')})`);
 if (offCss === css) throw new Error('font url not found in css');
-const offline = `${head}<style>body{margin:0;padding:24px 16px;background:#ECF0ED}.bmc{max-width:1400px;margin:0 auto}</style><style>${offCss}</style></head><body>${page}<script>${js}</script></body></html>`;
+const offline = `${head}<style>body{margin:0;padding:24px 16px;background:#ECF0ED}.bmc:not(.bmc-stage){max-width:1400px;margin:0 auto}</style><style>${offCss}</style></head><body>${page}<script>${js}</script></body></html>`;
 fs.writeFileSync(path.join(dist, 'bmc-offline.html'), offline);
 for (const f of ['bmc-page.html', 'bmc.css', 'bmc.js', 'bmc-offline.html']) console.log(f, fs.statSync(path.join(dist, f)).size, 'bytes');
