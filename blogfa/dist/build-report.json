@@ -1,18 +1,18 @@
 {
-  "builtAt": "2026-11-12T02:02:49.382Z",
+  "builtAt": "2026-11-14T05:18:46.213Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
-    "ref": "0005840ca31245874d6bbf7601caca8338578e87",
+    "ref": "ecde8d74a2265e30daffa0b3dcc47f9479315152",
     "dir": "blogfa/dist/cdn",
     "ok": true,
     "pushed": true,
     "missing": [],
     "unverifiedTemplates": false,
     "mirrors": [
-      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/",
-      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/",
-      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/",
-      "https://rawcdn.githack.com/fkyitou/mywebsite/0005840ca31245874d6bbf7601caca8338578e87/blogfa/dist/cdn/"
+      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@ecde8d74a2265e30daffa0b3dcc47f9479315152/blogfa/dist/cdn/",
+      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@ecde8d74a2265e30daffa0b3dcc47f9479315152/blogfa/dist/cdn/",
+      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@ecde8d74a2265e30daffa0b3dcc47f9479315152/blogfa/dist/cdn/",
+      "https://rawcdn.githack.com/fkyitou/mywebsite/ecde8d74a2265e30daffa0b3dcc47f9479315152/blogfa/dist/cdn/"
     ],
     "files": [
       {
@@ -36,34 +36,34 @@
         "sri": "sha384-z5Bi81k5iPqSIXmmIAKm2cK3o4yHe4iBzcmSycFBPAszGVUydEeGnRxWtxIPhI0m"
       },
       {
-        "file": "an-full.495af90d88.css",
-        "bytes": 87770,
-        "sri": "sha384-lNPvE5uXuLQ+m+2gaDi948VBqTwD9uTlauGsqKUcQd0bzAoP4J8pKhsKOdPNzNZ3"
+        "file": "an-full.5a0445bc45.css",
+        "bytes": 92354,
+        "sri": "sha384-RBgba00mK41dmfHmzD651HDBg12uNKXP10RxahKJ5KLQg+zcG6A4miAqrAAajFYt"
       },
       {
-        "file": "an-post.7bf2715c10.js",
-        "bytes": 225370,
-        "sri": "sha384-cCTUYhXPoBYja+9VH0PKvnr68ZRoFKAQ5Fc89Uyc9+hIdbfotLdvVKYa/USl/7Qf"
+        "file": "an-post.d7b6fc6b62.js",
+        "bytes": 247758,
+        "sri": "sha384-askr+3PXobCQWoIDpPZ+DBvQDpm7bw/zoeB9zLKLPiwLXGNNGhnnM0kp1m+SkofC"
       },
       {
-        "file": "an-base.f457dad461.css",
-        "bytes": 72357,
-        "sri": "sha384-BW6ACSK7pVMNQTzDn2T5pQpckChzd+XbOQM/QtTRGe9lgbBihCPAVH29FH75ahAw"
+        "file": "an-base.9e09c1c0bd.css",
+        "bytes": 76617,
+        "sri": "sha384-nzlT/9Yl7KojXD9QSV9tw9bRlOuMrjjiV0292iR682ot5yVKPC7rSR+RkCmL0EFI"
       },
       {
-        "file": "an-archive.e142cc7506.js",
-        "bytes": 32502,
-        "sri": "sha384-p4S27fXdvXQ73FckUIyoF7gWDX3q02W+ASuqSdJhlWDWNbq82yoX872dZw7x7UtK"
+        "file": "an-archive.43db5e7608.js",
+        "bytes": 39880,
+        "sri": "sha384-XuHih9RGo26QnrazamXoAoMpDcTlmB8WfQ7mkhbPk1Y7hzc8ftV1gCKFoR94etoi"
       },
       {
-        "file": "an-page.995b4c8acb.js",
-        "bytes": 55038,
-        "sri": "sha384-L3MojV+VsWdam7g+X4mpvx4TyRKBCzbe2NGLj9IddLi9tkFz2kM59GwTqXx2lQav"
+        "file": "an-page.aee8212046.js",
+        "bytes": 63019,
+        "sri": "sha384-vgHiKnfpX5Fe9QUNOgTxpGOqpZ2AXzmdAetPPms4T+MRvLWonJaZwSWA//ngDLuT"
       },
       {
-        "file": "an-post-lite.a98b976c41.js",
-        "bytes": 167715,
-        "sri": "sha384-stnsIr5qZSYVZ/U/tTU120ICYU80TekEdhsu01rpbtG098KpriFv+ek6ElIXfH5K"
+        "file": "an-post-lite.3ad002a26d.js",
+        "bytes": 190103,
+        "sri": "sha384-20Nj0x7HRRK3FUtunb2VOrHIGak8fZdB+BQDWa4ZrAN/7JXn2D/Hi2fUei05Vm17"
       },
       {
         "file": "an-qr.1952338bb7.js",
@@ -71,14 +71,24 @@
         "sri": "sha384-I8QcCQWYJYnJjMuga5VeMsYk24eSM6jBvbxAXzwNecj04rTZ5v97CC0kDM2TNaOm"
       },
       {
-        "file": "an-addons.c1ba7ced11.css",
-        "bytes": 21367,
-        "sri": "sha384-scYOEp9ANOFszjOXl1hKAAaRbh4nqQvTurNla8PORig5ik7EdbCmkyuRkUjWPr0K"
+        "file": "an-guide.2536c925d3.js",
+        "bytes": 17669,
+        "sri": "sha384-YnEdbUZA9b1H9MOpuJ8P7Jsqno3siuV4vWnjuhW/W4WttapV7f3Z297tlCGfhO9l"
       },
       {
-        "file": "an-addons.4b63ae8ae9.js",
-        "bytes": 40474,
-        "sri": "sha384-IfZL7LWiPWWeH1yyksMDxk42eJUvZ5tivBwFOpUQzAnB2N+2HYqpfv/0QEX752Na"
+        "file": "an-teaser.ac96eae9f5.js",
+        "bytes": 17720,
+        "sri": "sha384-senE/Im59XQJ6mqGJOO/ZLW7MwSc2muKHI56kfnW2q5n+7PFtR+8SrfxRPtZECi8"
+      },
+      {
+        "file": "an-addons.59381673ae.css",
+        "bytes": 33113,
+        "sri": "sha384-n3SqVnNcwNsOqtFvv9aKYLxHajsypp3EpZmVXZVsv2O4rzHDcqigDJqywNykHfe2"
+      },
+      {
+        "file": "an-addons.bf460cedef.js",
+        "bytes": 52507,
+        "sri": "sha384-LOag8Ygav+Dg7qBCTZj7ZKIyVzAsTmwYU/ToDe4xDClSJE4kh5Z7DBf7TEIA+/bt"
       }
     ]
   },
@@ -86,137 +96,139 @@
     {
       "variant": "full",
       "cdn": false,
-      "bytes": 592262,
+      "bytes": 645902,
       "parts": {
         "post": {
-          "css": 87747,
-          "js": 210559,
-          "html": 337327
+          "css": 92331,
+          "js": 231479,
+          "html": 365233
         },
         "archive": {
-          "css": 72338,
-          "js": 31322,
-          "html": 115324
+          "css": 76598,
+          "js": 38566,
+          "html": 127883
         },
         "page": {
-          "css": 72338,
-          "js": 53022,
-          "html": 139482
+          "css": 76598,
+          "js": 60828,
+          "html": 152657
         }
       },
       "facts": {
-        "posts": 10,
-        "labs": 10,
-        "sources": 57,
-        "minutes": 64
+        "posts": 11,
+        "labs": 11,
+        "sources": 69,
+        "minutes": 73
       }
     },
     {
       "variant": "lite",
       "cdn": false,
-      "bytes": 534623,
+      "bytes": 588263,
       "parts": {
         "post": {
-          "css": 87747,
-          "js": 152909,
-          "html": 279688
+          "css": 92331,
+          "js": 173829,
+          "html": 307594
         },
         "archive": {
-          "css": 72338,
-          "js": 31322,
-          "html": 115324
+          "css": 76598,
+          "js": 38566,
+          "html": 127883
         },
         "page": {
-          "css": 72338,
-          "js": 53022,
-          "html": 139482
+          "css": 76598,
+          "js": 60828,
+          "html": 152657
         }
       },
       "facts": {
-        "posts": 10,
-        "labs": 10,
-        "sources": 57,
-        "minutes": 64
+        "posts": 11,
+        "labs": 11,
+        "sources": 69,
+        "minutes": 73
       }
     },
     {
       "variant": "cdn",
       "cdn": true,
-      "bytes": 54545,
+      "bytes": 57334,
       "parts": {
         "post": {
-          "cssFile": "an-full.495af90d88.css",
-          "jsFile": "an-post.7bf2715c10.js",
-          "css": 87747,
-          "js": 210559,
-          "html": 26744
+          "cssFile": "an-full.5a0445bc45.css",
+          "jsFile": "an-post.d7b6fc6b62.js",
+          "css": 92331,
+          "js": 231479,
+          "html": 27678
         },
         "archive": {
-          "cssFile": "an-base.f457dad461.css",
-          "jsFile": "an-archive.e142cc7506.js",
-          "css": 72338,
-          "js": 31322,
-          "html": 13028
+          "cssFile": "an-base.9e09c1c0bd.css",
+          "jsFile": "an-archive.43db5e7608.js",
+          "css": 76598,
+          "js": 38566,
+          "html": 13949
         },
         "page": {
-          "cssFile": "an-base.f457dad461.css",
-          "jsFile": "an-page.995b4c8acb.js",
-          "css": 72338,
-          "js": 53022,
-          "html": 14644
+          "cssFile": "an-base.9e09c1c0bd.css",
+          "jsFile": "an-page.aee8212046.js",
+          "css": 76598,
+          "js": 60828,
+          "html": 15578
         }
       },
       "facts": {
-        "posts": 10,
-        "labs": 10,
-        "sources": 57,
-        "minutes": 64
+        "posts": 11,
+        "labs": 11,
+        "sources": 69,
+        "minutes": 73
       }
     },
     {
       "variant": "cdn-lite",
       "cdn": true,
-      "bytes": 54571,
+      "bytes": 57360,
       "parts": {
         "post": {
-          "cssFile": "an-full.495af90d88.css",
-          "jsFile": "an-post-lite.a98b976c41.js",
-          "css": 87747,
-          "js": 152909,
-          "html": 26770
+          "cssFile": "an-full.5a0445bc45.css",
+          "jsFile": "an-post-lite.3ad002a26d.js",
+          "css": 92331,
+          "js": 173829,
+          "html": 27704
         },
         "archive": {
-          "cssFile": "an-base.f457dad461.css",
-          "jsFile": "an-archive.e142cc7506.js",
-          "css": 72338,
-          "js": 31322,
-          "html": 13028
+          "cssFile": "an-base.9e09c1c0bd.css",
+          "jsFile": "an-archive.43db5e7608.js",
+          "css": 76598,
+          "js": 38566,
+          "html": 13949
         },
         "page": {
-          "cssFile": "an-base.f457dad461.css",
-          "jsFile": "an-page.995b4c8acb.js",
-          "css": 72338,
-          "js": 53022,
-          "html": 14644
+          "cssFile": "an-base.9e09c1c0bd.css",
+          "jsFile": "an-page.aee8212046.js",
+          "css": 76598,
+          "js": 60828,
+          "html": 15578
         }
       },
       "facts": {
-        "posts": 10,
-        "labs": 10,
-        "sources": 57,
-        "minutes": 64
+        "posts": 11,
+        "labs": 11,
+        "sources": 69,
+        "minutes": 73
       }
     }
   ],
   "addons": {
-    "css": "an-addons.c1ba7ced11.css",
-    "js": "an-addons.4b63ae8ae9.js",
+    "css": "an-addons.59381673ae.css",
+    "js": "an-addons.bf460cedef.js",
     "qr": "an-qr.1952338bb7.js",
-    "box": 2150,
+    "guide": "an-guide.2536c925d3.js",
+    "teaser": "an-teaser.ac96eae9f5.js",
+    "box": 2288,
     "boxWritten": true,
     "words": {
-      "terms": 54,
-      "keys": 30
+      "terms": 65,
+      "keys": 33
     }
   }
 }
