@@ -57,7 +57,7 @@ const postFiles = fs.existsSync(POSTS) ? fs.readdirSync(POSTS).filter(f => /^\d\
 const MONTHS = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
 const DAYS = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'];
 const cats = [], tags = new Map();
-// posts are numbered in publishing order: 01 is published first, so Blogfa shows 10 on top
+// posts are numbered in publishing order: 01 is published first, so Blogfa shows the newest on top
 const posts = postFiles.map((f, i) => {
   const { meta, body } = front(path.join(POSTS, f));
   const id = i + 1;
@@ -173,8 +173,8 @@ const base = Object.assign(Object.create(null), BLOG);
 const ctxFor = (extra) => Object.assign(Object.create(base), extra);
 fs.rmSync(OUT, { recursive: true, force: true });
 
-// home: Blogfa shows N posts per page; the guide asks for 10
-const PER = 10;
+// home: Blogfa shows N posts per page (10 by default); the kit asks for at least as many as there are posts
+const PER = Math.max(10, posts.length);
 emit(U.home, finish(render(T.post, ctxFor({ _feed: posts.slice(0, PER), _next: posts.length > PER ? 'x' : '', BlogNextPageLink: '#older', BlogAndPostTitle: BLOG.BlogTitle, AutoPageTitle: BLOG.BlogTitle })), 'home'));
 // single posts
 for (const p of posts) emit(U.post(p.id), finish(render(T.post, ctxFor({ _feed: [Object.assign({}, p, { main: p.main + (p.extended || '') })], _single: true, BlogAndPostTitle: `${BLOG.BlogTitle} - ${p.title}`, AutoPageTitle: p.title })), 'post'));

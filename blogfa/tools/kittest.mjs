@@ -21,6 +21,10 @@ const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const num = t => +String(t).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/\D/g, '');
 const CDN = JSON.parse(read('dist/build-report.json')).cdn || {};
 const body = f => { const s = read(f); const i = s.indexOf('-->'); return s.slice(i + 3).trim() + '\n'; };
+// the kit has seven fixed steps plus one tick per post
+const POSTS = fs.readdirSync(path.join(ROOT, 'posts')).filter(f => /^\d\d-[\w-]+\.html$/.test(f)).sort();
+const NPOSTS = POSTS.length, NSTEPS = 7 + NPOSTS;
+const faN = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 let pass = 0, fail = 0;
 const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((cond ? '✓ ' : '✗ ') + name + (cond || !info ? '' : '  — ' + info)); };
 (async () => {
@@ -37,10 +41,10 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   const last = () => p.evaluate(() => window.__copied[window.__copied.length - 1]);
   const click = async sel => { await p.click(sel); await p.waitForTimeout(30); return last(); };
   ok('no JS or console errors on load', errs.length === 0, errs.join(' | '));
-  ok('17 steps to tick', (await p.$$('input[data-step]')).length === 17);
+  ok(NSTEPS + ' steps to tick (seven plus one per post)', (await p.$$('input[data-step]')).length === NSTEPS);
   const parts = [[1, '1-main-and-posts.html'], [2, '2-archive.html'], [3, '3-pages.html']];
   const version = (await p.textContent('#kit-version')) || '';
-  ok('version notice names kit 8 and asks for steps 2, 4 and 7', /نسخه‌ی ۸ کیت/.test(version) && /گام ۲ را دوباره انجام دهید/.test(version) && /در گام ۴ کد کادر اختصاصی را بگذارید/.test(version) && /در گام ۷ متن هر ده مقاله را عوض کنید/.test(version), version.slice(0, 160));
+  ok('version notice names kit 9 and asks for steps 2, 3, 4 and 7', /نسخه‌ی ۹ کیت/.test(version) && /گام ۲ را دوباره انجام دهید/.test(version) && new RegExp('در گام ۳ «تعداد پستها در صفحه نخست» را ' + faN(NPOSTS) + ' یا').test(version) && /در گام ۴ کد کادر اختصاصی را با کد تازه عوض کنید/.test(version) && new RegExp('در گام ۷ فقط مقاله‌ی ' + faN(NPOSTS) + ' را منتشر').test(version), version.slice(0, 160));
   // Blogfa keeps the first 100 characters of the blog's description; a longer one is cut in the footer and the meta tags
   const desc = await p.evaluate(() => JSON.parse(document.getElementById('kit-data').textContent).blog.desc);
   ok('the blog description offered is 100 characters or fewer, and the note beside it says so', !!desc && [...desc].length <= 100 && /۱۰۰ نویسه/.test(await p.textContent('#desc-note')), desc && [...desc].length);
@@ -69,6 +73,7 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   ok('about page body copies pages/about.html without the meta comment', (await click('[data-copy="page.body"]')) === body('pages/about.html'));
   ok('post 1 body copies posts/01-ai.html body', (await click('[data-copy="posts.0.body"]')) === body('posts/01-ai.html'));
   ok('post 10 body copies posts/10-idea.html body', (await click('[data-copy="posts.9.body"]')) === body('posts/10-idea.html'));
+  ok(`last post body copies posts/${POSTS[NPOSTS - 1]} body`, (await click(`[data-copy="posts.${NPOSTS - 1}.body"]`)) === body('posts/' + POSTS[NPOSTS - 1]));
   const t9 = await click('[data-copy="posts.8.tagsAll"]');
   ok('post 9 "copy all" tags: four, ASCII comma', t9 === 'انرژی پاک,خورشید,باد,شبکه‌ی برق', t9);
   const counts = await p.evaluate(() => JSON.parse(document.getElementById('kit-data').textContent).posts.map(x => x.tags.length));
@@ -76,9 +81,9 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   ok('single tag copies on its own', (await click('[data-copy="posts.0.tags.0"]')) === 'هوش مصنوعی');
   for (const id of ['s-blog', 's-cats', 'p1']) await p.click(`label[for="${id}"]`);
   const prog = (await p.textContent('#prog-t')).trim();
-  ok('progress counts ticks', prog === '۳ از ۱۷ گام', prog);
+  ok('progress counts ticks', prog === '۳ از ' + faN(NSTEPS) + ' گام', prog);
   await p.reload(); await p.waitForTimeout(100);
-  ok('ticks survive a reload', (await p.isChecked('#s-cats')) && (await p.isChecked('#p1')) && (await p.textContent('#prog-t')).trim() === '۳ از ۱۷ گام');
+  ok('ticks survive a reload', (await p.isChecked('#s-cats')) && (await p.isChecked('#p1')) && (await p.textContent('#prog-t')).trim() === '۳ از ' + faN(NSTEPS) + ' گام');
   ok('lite choice survives a reload', await p.isChecked('input[name="split-v"][value="lite"]'));
   await p.addScriptTag({ path: path.join(ROOT, 'node_modules/axe-core/axe.min.js') });
   const ax = await p.evaluate(async () => {
