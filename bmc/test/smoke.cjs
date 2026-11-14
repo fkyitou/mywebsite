@@ -61,7 +61,7 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
     await p.click('.bmc-bar .bmc-btn');
     await p.waitForSelector('.bmc-stage');
     const info = [];
-    for (let i = 0; i < 23; i++) {
+    for (let i = 0; i < 24; i++) {
       await p.waitForTimeout(1300);
       const s = await p.evaluate(() => {
         const st = document.querySelector('.bmc-stage');
@@ -87,7 +87,7 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
       check(await p.evaluate(() => !document.querySelector('.bmc-stage')), name + ': Esc did not close');
       await p.click('.bmc-poster .bmc-c5');
       await p.waitForTimeout(900);
-      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱۳ از ۲۳', name + ': clicking block 5 did not open step 13');
+      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱۴ از ۲۴', name + ': clicking block 5 did not open step 14');
       // Details of the block replace its notes, and must fit too.
       await p.keyboard.press('KeyD');
       await p.waitForTimeout(900);
@@ -112,17 +112,53 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
       await pop.screenshot({ path: path.join(out, name + '-presenter.png') });
       await pop.click('footer button:last-child');
       await p.waitForTimeout(700);
-      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱۴ از ۲۳', name + ': presenter next did not move the deck');
+      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱۵ از ۲۴', name + ': presenter next did not move the deck');
       await p.keyboard.press('Escape');
       await p.waitForTimeout(300);
       check(pop.isClosed(), name + ': presenter window stayed open after close');
+      // Whole canvas: a click on a block zooms into it; the top bar names the chapter.
+      await p.click('.bmc-bar .bmc-btn');
+      await p.keyboard.press('Digit0');
+      await p.waitForTimeout(900);
+      await p.click('.bmc-stage .bmc-scene:not(.bmc-out) .bmc-c2');
+      await p.waitForTimeout(160);
+      await p.screenshot({ path: path.join(out, name + '-zoom-mid.png') });
+      await p.waitForTimeout(800);
+      const z = await p.evaluate(() => [document.querySelector('.bmc-stage .bmc-cnt').textContent, document.querySelector('.bmc-stage .bmc-scene:not(.bmc-out)').className, document.querySelector('.bmc-stage .bmc-chapn').textContent]);
+      check(z[0] === '۱۰ از ۲۴' && z[1].indexOf('bmc-zi') >= 0 && z[2].indexOf('بوم مدل کاروکسب') >= 0, name + ': zoom into block 2 wrong ' + JSON.stringify(z));
+      // Customer journey: five stages from table 20, each with its own items, fitting the slide.
+      await p.keyboard.press('Digit3');
+      await p.keyboard.press('ArrowRight');
+      await p.waitForTimeout(1600);
+      const j = await p.evaluate(() => {
+        const pp = document.querySelector('.bmc-stage .bmc-scene:not(.bmc-out)').firstChild;
+        const st = Array.from(pp.querySelectorAll('.bmc-steps > li'));
+        return { cls: pp.className, n: st.length, items: st.map((l) => l.querySelectorAll('li').length), names: st.map((l) => l.querySelector('b').textContent), over: pp.scrollHeight > pp.clientHeight + 2 };
+      });
+      check(j.cls.indexOf('bmc-jour') >= 0 && j.n === 5 && j.items.every((k) => k >= 2) && j.names.join(',') === 'آگاهی,ارزیابی,خرید,تحویل,پس از فروش' && !j.over, name + ': journey slide wrong ' + JSON.stringify(j));
+      await p.screenshot({ path: path.join(out, name + '-journey.png') });
+      // Laser pointer and blackout.
+      await p.keyboard.press('KeyL');
+      await p.mouse.move(600, 400);
+      await p.waitForTimeout(200);
+      const lz = await p.evaluate(() => { const l = document.querySelector('.bmc-stage .bmc-laser'); return getComputedStyle(l).display + '|' + l.style.transform; });
+      check(lz.startsWith('block|translate(600px'), name + ': laser pointer wrong ' + lz);
+      await p.screenshot({ path: path.join(out, name + '-laser.png') });
+      await p.keyboard.press('KeyL');
+      await p.keyboard.press('KeyB');
+      await p.waitForTimeout(400);
+      const bk = await p.evaluate(() => document.querySelector('.bmc-stage').classList.contains('bmc-black'));
+      await p.keyboard.press('KeyB');
+      check(bk && await p.evaluate(() => !document.querySelector('.bmc-stage').classList.contains('bmc-black')), name + ': blackout did not toggle');
+      await p.keyboard.press('Escape');
+      await p.waitForTimeout(300);
       // Agenda jumps.
       await p.click('.bmc-bar .bmc-btn');
       await p.keyboard.press('ArrowRight');
       await p.waitForTimeout(800);
       await p.click('.bmc-stage .bmc-chap li:nth-child(3) button');
       await p.waitForTimeout(800);
-      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱۸ از ۲۳', name + ': agenda chapter 3 did not open strategy');
+      check((await p.textContent('.bmc-stage .bmc-cnt')) === '۱۹ از ۲۴', name + ': agenda chapter 3 did not open strategy');
       await p.keyboard.press('Escape');
       // Short pitch deck.
       await p.click('.bmc-bar .bmc-alt2');
@@ -139,6 +175,19 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
         return [document.querySelector('.bmc-d3').classList.contains('bmc-open'), document.querySelectorAll('.bmc-dt').length, document.querySelectorAll('.bmc-q.bmc-open').length];
       });
       check(f[0] && f[1] === 9 && f[2] === 1, name + ': page folds wrong ' + JSON.stringify(f));
+      // Printed report: portrait sheets with every fold open and nothing of the blog around it.
+      await p.evaluate(() => { window.print = () => {}; });
+      await p.click('.bmc-bar .bmc-print:last-child');
+      const rp = await p.evaluate(() => [document.documentElement.classList.contains('bmc-print-report'), document.querySelectorAll('.bmc-keep').length, /portrait/.test(Array.from(document.querySelectorAll('style')).map((x) => x.textContent).join(''))]);
+      check(rp[0] && rp[1] >= 1 && rp[2], name + ': report print setup wrong ' + JSON.stringify(rp));
+      await p.emulateMedia({ media: 'print' });
+      const pr = await p.evaluate(() => {
+        const r = document.getElementById('bmc'), vis = (s) => { const e = document.querySelector(s); return e && e.getBoundingClientRect().height > 0; };
+        return { h: r.getBoundingClientRect().height, top: Math.round(r.getBoundingClientRect().top), bar: vis('.bmc-bar'), d9: vis('.bmc-d9 ul'), q8: vis('.bmc-q:last-child p'), header: vis('#an-bar') };
+      });
+      check(pr.h > 3000 && pr.top <= 2 && !pr.bar && pr.d9 && pr.q8 && !pr.header, name + ': printed report layout wrong ' + JSON.stringify(pr));
+      if (name === 'desk') await p.pdf({ path: path.join(out, 'report.pdf'), preferCSSPageSize: true, printBackground: true });
+      await p.emulateMedia({ media: 'screen' });
     }
     await p.close();
   }

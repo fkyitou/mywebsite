@@ -376,3 +376,65 @@ html.bmc-lock,html.bmc-lock body{overflow:hidden!important}
   .bmc-stage .bmc-dbtn{order:4;flex-basis:100%}
   .bmc-stage .bmc-bt{font-size:1.7em}
 }
+
+/* ---------- Final round: customer journey, zoom, presenter tools, printed report ---------- */
+/* Customer journey (the five channel functions of table 20) */
+.bmc-stage .bmc-jour{width:min(86em,100%)}
+.bmc-stage .bmc-steps{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1.5em;margin-top:.6em;padding-top:1.3em}
+.bmc-stage .bmc-steps::before,.bmc-stage .bmc-steps::after{content:"";position:absolute;top:1.15em;right:9%;left:9%;height:.32em;border-radius:999px;background:var(--line)}
+.bmc-stage .bmc-steps::after{background:linear-gradient(270deg,var(--teal),var(--blue));transform-origin:right;animation:bmcTrack 1.2s .35s cubic-bezier(.2,.8,.2,1) both}
+@keyframes bmcTrack{from{transform:scaleX(0)}}
+.bmc-stage .bmc-steps>li{position:relative;z-index:1;background:var(--soft);border:1px solid var(--line);border-top:.35em solid var(--teal);border-radius:12px;padding:1.9em .85em .8em;animation:bmcRise .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d,0) * 160ms + 250ms)}
+@keyframes bmcRise{from{opacity:0;transform:translateY(1.4em)}}
+.bmc-stage .bmc-steps>li:not(:last-child)::after{content:"←";position:absolute;left:-1.2em;top:46%;font-size:1.35em;font-weight:900;color:var(--teal);line-height:1}
+.bmc-stage .bmc-sn{position:absolute;top:-1.35em;right:50%;transform:translateX(50%);width:2.5em;height:2.5em;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--teal);color:#fff;font-weight:900;font-size:1.05em;box-shadow:0 0 0 .3em var(--paper)}
+.bmc-stage .bmc-steps>li>b{display:block;text-align:center;font-size:1.4em;font-weight:900;color:var(--red);line-height:1.5;margin-bottom:.35em}
+.bmc-stage .bmc-steps>li li{font-size:1.1em;line-height:1.65;padding:.32em 0;border-top:1px dashed var(--line)}
+.bmc-stage .bmc-steps>li li:first-child{border-top:0}
+/* Zoom between the whole canvas and a block */
+.bmc-stage .bmc-scene.bmc-zi{animation:bmcZi .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes bmcZi{from{opacity:0;transform:scale(var(--zs,.3))}to{opacity:1;transform:none}}
+.bmc-stage .bmc-scene.bmc-out.bmc-zo{animation:bmcZo .45s cubic-bezier(.4,0,.6,1) both}
+@keyframes bmcZo{to{opacity:0;transform:scale(var(--zb,3))}}
+.bmc-stage .bmc-scene.bmc-zw{animation:bmcZw .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes bmcZw{from{opacity:0;transform:scale(var(--zb,2.5))}to{opacity:1;transform:none}}
+/* Chapter name in the top bar */
+.bmc-stage .bmc-chapn{flex:none;background:rgba(255,255,255,.12);border-radius:999px;padding:.1em .85em;font-size:13px;font-weight:700;white-space:nowrap;color:#FFF8C2}
+.bmc-stage .bmc-chapn[hidden]{display:none}
+/* Laser pointer and blackout */
+.bmc-stage .bmc-laser{position:fixed;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;pointer-events:none;display:none;z-index:6;transform:translate(-99px,-99px);
+  background:radial-gradient(circle,#fff 0 18%,#FF2D2D 32%,rgba(255,45,45,.4) 62%,transparent 72%);box-shadow:0 0 14px 5px rgba(255,40,40,.55)}
+.bmc-stage.bmc-lz .bmc-laser{display:block}
+.bmc-stage.bmc-lz .bmc-host{cursor:none}
+.bmc-stage.bmc-lz .bmc-tools .bmc-lzb{background:#E0262F}
+.bmc-stage.bmc-black::after{content:"";position:absolute;inset:0;z-index:7;background:#000;cursor:none;animation:bmcIn .25s both}
+@media (max-width:1200px){
+  .bmc-stage .bmc-steps{grid-template-columns:repeat(5,minmax(0,1fr));gap:1.2em}
+}
+@media (max-width:720px){
+  .bmc-stage .bmc-chapn{display:none}
+  .bmc-stage .bmc-steps{grid-template-columns:1fr;gap:2.1em;padding-top:1.4em}
+  .bmc-stage .bmc-steps::before,.bmc-stage .bmc-steps::after{display:none}
+  .bmc-stage .bmc-steps>li:not(:last-child)::after{display:none}
+}
+
+/* ---------- Printed report: the whole research page on A4 portrait ---------- */
+@media print{
+  html.bmc-print-report,html.bmc-print-report body{background:#fff!important}
+  html.bmc-print-report body *{visibility:visible}
+  html.bmc-print-report .bmc-keep>*:not(.bmc-keep):not(#bmc){display:none!important}
+  html.bmc-print-report .bmc-keep{display:block!important;position:static!important;margin:0!important;padding:0!important;width:auto!important;max-width:none!important;min-height:0!important;height:auto!important;
+    border:0!important;box-shadow:none!important;background:#fff!important;float:none!important;overflow:visible!important;transform:none!important;columns:auto!important}
+  html.bmc-print-report .bmc{max-width:none;margin:0;font-size:10.5pt;color:#000}
+  html.bmc-print-report .bmc *{animation:none!important;transition:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html.bmc-print-report .bmc .bmc-bar{display:none!important}
+  html.bmc-print-report .bmc .bmc-poster{position:static;width:auto;box-shadow:none;break-after:page}
+  html.bmc-print-report .bmc .bmc-notes li{opacity:1;filter:none}
+  html.bmc-print-report .bmc .bmc-dt ul{display:grid!important}
+  html.bmc-print-report .bmc .bmc-q p{display:block!important}
+  html.bmc-print-report .bmc .bmc-dt h3,html.bmc-print-report .bmc .bmc-q h3{padding-inline-start:.9em}
+  html.bmc-print-report .bmc .bmc-dt h3::before,html.bmc-print-report .bmc .bmc-q h3::before{display:none}
+  html.bmc-print-report .bmc h2,html.bmc-print-report .bmc h3{break-after:avoid}
+  html.bmc-print-report .bmc .bmc-dt,html.bmc-print-report .bmc .bmc-q,html.bmc-print-report .bmc .bmc-alt,html.bmc-print-report .bmc .bmc-sc,html.bmc-print-report .bmc .bmc-nd,
+  html.bmc-print-report .bmc .bmc-view,html.bmc-print-report .bmc .bmc-phase,html.bmc-print-report .bmc li{break-inside:avoid}
+}
