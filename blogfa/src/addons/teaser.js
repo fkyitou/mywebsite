@@ -298,14 +298,17 @@
   function score(ac, out, at, from) {
     from = from || 0;
     var src = [], N = rng(96);
-    var master = ac.createGain(), comp = ac.createDynamicsCompressor();
-    comp.threshold.value = -16; comp.ratio.value = 3; comp.attack.value = 0.01; comp.release.value = 0.25;
-    master.connect(comp); comp.connect(out);
+    // the mix: a gentle compressor, then a limiter that keeps the peaks a few decibels under full scale
+    var master = ac.createGain(), comp = ac.createDynamicsCompressor(), lim = ac.createDynamicsCompressor(), trim = ac.createGain();
+    comp.threshold.value = -22; comp.ratio.value = 3; comp.attack.value = 0.01; comp.release.value = 0.25;
+    lim.threshold.value = -9; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.002; lim.release.value = 0.1;
+    trim.gain.value = 1;
+    master.connect(comp); comp.connect(lim); lim.connect(trim); trim.connect(out);
     function fade(x) { return Math.min(1, x / 1.0, (DUR - x) / 1.5); }
     var mg = master.gain, t0 = at + from;
-    mg.setValueAtTime(Math.max(0, fade(from)) * 0.9, t0);
-    if (from < 1) mg.linearRampToValueAtTime(0.9, at + 1);
-    if (from < DUR - 1.5) mg.setValueAtTime(0.9, at + DUR - 1.5);
+    mg.setValueAtTime(Math.max(0, fade(from)) * 0.5, t0);
+    if (from < 1) mg.linearRampToValueAtTime(0.5, at + 1);
+    if (from < DUR - 1.5) mg.setValueAtTime(0.5, at + DUR - 1.5);
     mg.linearRampToValueAtTime(0, at + DUR);
 
     // a seeded hall for the reverb, and a dotted-eighth echo
@@ -332,7 +335,7 @@
       g.gain.setValueAtTime(env[1], at + Math.max(s + 0.01, e + dur));
       g.gain.exponentialRampToValueAtTime(0.0001, at + end);
       (sends || [master]).forEach(function (n) { g.connect(n); });
-      make(g).forEach(function (o) { o.start(T); o.stop(at + end + 0.05); src.push(o); });
+      [].concat(make(g)).forEach(function (o) { o.start(T); o.stop(at + end + 0.05); src.push(o); });
     }
     function osc(type, f, det) { return function (dest) { var o = ac.createOscillator(); o.type = type; o.frequency.value = f; if (det) o.detune.value = det; o.connect(dest); return o; }; }
     function through(filter, makers) { return function (g) { filter.connect(g); return makers.map(function (m) { return m(filter); }); }; }
@@ -352,7 +355,7 @@
       });
       // the bass, from bar 5
       if (bar >= 4) [0, 2].forEach(function (b) {
-        voice(e + b * BEAT, BEAT * 1.1, through(lp(320), [osc('sine', hz(root)), osc('triangle', hz(root), 4)]), [0.02, 0.22, 0.25]);
+        voice(e + b * BEAT, BEAT * 1.7, through(lp(260), [osc('sine', hz(root)), osc('triangle', hz(root), 4)]), [0.04, 0.09, 0.3]);
       });
       // the kick, bars 9 to 15, and one on the last downbeat
       if ((bar >= 8 && !last) || last) for (var b4 = 0; b4 < (last ? 1 : 4); b4++) kick(e + b4 * BEAT);
@@ -363,7 +366,7 @@
       if (e < from) return;
       var o = ac.createOscillator(), g = ac.createGain(), T = at + e;
       o.frequency.setValueAtTime(130, T); o.frequency.exponentialRampToValueAtTime(45, T + 0.12);
-      g.gain.setValueAtTime(0.85, T); g.gain.exponentialRampToValueAtTime(0.001, T + 0.38);
+      g.gain.setValueAtTime(0.5, T); g.gain.exponentialRampToValueAtTime(0.001, T + 0.34);
       o.connect(g); g.connect(master); o.start(T); o.stop(T + 0.4); src.push(o);
     }
     function noiseAt(e, dur, filt, env, dest) {
@@ -396,7 +399,7 @@
     return {
       stop: function () {
         src.forEach(function (o) { try { o.stop(); } catch (e) {} });
-        try { master.disconnect(); } catch (e) {}
+        try { master.disconnect(); trim.disconnect(); } catch (e) {}
       }
     };
   }

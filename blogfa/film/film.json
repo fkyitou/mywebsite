@@ -1,0 +1,12 @@
+{
+ "lufs": -16.9,
+ "file": "ayandehnegar-teaser.mp4",
+ "bytes": 6913576,
+ "seconds": 40,
+ "video": "h264 1920×1080 30/1",
+ "audio": "aac 48000 Hz 2 ch",
+ "subtitles": "mov_text",
+ "peakDb": -3.5,
+ "rmsDb": -18,
+ "fast": false
+}

@@ -575,15 +575,24 @@ if (CDN) {
       const d = Math.max(Math.abs(want[0] - sp.top), Math.abs(want[1] - sp.left), Math.abs(want[2] - sp.right), Math.abs(want[3] - sp.bottom));
       if (d < off) { off = d; part = q; }
     }
-    return { n: t.querySelector('.an-g-n').textContent, h: t.querySelector('h2').textContent, off: Math.round(off), part,
+    return { dbg: [Math.round(sp.top), Math.round(sp.bottom), Math.round(scrollY), document.documentElement.scrollHeight, ...parts.map(q => { const e = document.querySelector(q); return e ? q + ':' + Math.round(e.getBoundingClientRect().top) + '/' + Math.round(e.getBoundingClientRect().bottom) : ''; })].join(' '), n: t.querySelector('.an-g-n').textContent, h: t.querySelector('h2').textContent, off: Math.round(off), part,
       inside: tr.top >= 0 && tr.left >= 0 && tr.right <= vw && tr.bottom <= room, label: t.getAttribute('aria-labelledby') === 'an-g-tip-h' && t.getAttribute('role') === 'dialog' };
   }, PARTS);
   async function walk(page, max = 12) {
     const S = [];
     await page.waitForSelector('.an-g-tip', { timeout: 5000 }).catch(() => {});
     for (let i = 0; i < max; i++) {
+      // the page scrolls smoothly to each part, further on a long article, and the guide may then correct the scroll
+      // once the page is still (bring() in guide.js): read the step once the light has stayed put for 750 ms
       await page.waitForTimeout(900);
-      const s = await step(page); if (!s) break; S.push(s);
+      let s = await step(page), still = 0;
+      for (let k = 0; s && still < 3 && k < 24; k++) {
+        await page.waitForTimeout(250);
+        const n = await step(page);
+        still = n && n.dbg === s.dbg && n.n === s.n ? still + 1 : 0;
+        s = n;
+      }
+      if (!s) break; S.push(s);
       await page.click('.an-g-tip [data-t="next"]').catch(() => {});
     }
     await page.waitForTimeout(300);
@@ -681,7 +690,7 @@ if (CDN) {
     const title = await page.evaluate(() => document.querySelector('.an-keys .an-box-t').textContent.trim());
     // the order of the page itself (the table of contents is sticky, so its place on screen depends on the scroll)
     const inOrder = await page.evaluate(q => { const e = q.map(x => document.querySelector(x)); return e.every((x, i) => i === 0 || !!(e[i - 1].compareDocumentPosition(x) & 4)); }, S.map(s => s.part));
-    ok('kit9-guide', 'article: the walk follows the order of the page, the summary box under its own title', S.length >= 4 && fine(S) && inOrder && S.some(s => s.part === '.an-keys' && s.h === title), S.map(s => `${s.h}(${s.off}px)`).join(', '));
+    ok('kit9-guide', 'article: the walk follows the order of the page, the summary box under its own title', S.length >= 4 && fine(S) && inOrder && S.some(s => s.part === '.an-keys' && s.h === title), S.map(s => `${s.h}(${s.off}px)` + (process.env.BEH_DEBUG ? ' [' + s.dbg + ']' : '')).join(', '));
     await ctx.close();
   }
 
@@ -806,8 +815,13 @@ if (CDN) {
   await ctx.addInitScript(() => {
     window.AN_NOW = '2026-11-13T22:30:00';
     // count the audio contexts: none may exist before the play button
-    const A = window.AudioContext; window.__ac = 0;
-    if (A) window.AudioContext = class extends A { constructor(...a) { super(...a); window.__ac++; } };
+    // and count the notes really scheduled, so a score that fails half-way shows
+    const A = window.AudioContext; window.__ac = 0; window.__osc = 0;
+    if (A) {
+      const mk = A.prototype.createOscillator;
+      A.prototype.createOscillator = function () { window.__osc++; return mk.apply(this, arguments); };
+      window.AudioContext = class extends A { constructor(...a) { super(...a); window.__ac++; } };
+    }
   });
   const page = await ctx.newPage();
   page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
@@ -834,8 +848,8 @@ if (CDN) {
   ok('kit9-teaser', 'nothing moves and nothing plays until the play button', still.seek === '0' && still.ac === 0, JSON.stringify(still));
   await page.click('.an-t-big');
   await page.waitForTimeout(1600);
-  const p1 = await page.evaluate(() => ({ seek: +document.querySelector('.an-t-seek').value, big: document.querySelector('.an-t-big').hidden, btn: document.querySelector('.an-t-bar [data-t="play"]').textContent, ac: window.__ac, vt: document.querySelector('.an-t-seek').getAttribute('aria-valuetext') }));
-  ok('kit9-teaser', 'play: the film runs, the button says «مکث», the music starts with it', p1.seek >= 8 && p1.seek <= 30 && p1.big && p1.btn === 'مکث' && p1.ac === 1 && /از ۴۰ ثانیه/.test(p1.vt), JSON.stringify(p1));
+  const p1 = await page.evaluate(() => ({ seek: +document.querySelector('.an-t-seek').value, big: document.querySelector('.an-t-big').hidden, btn: document.querySelector('.an-t-bar [data-t="play"]').textContent, ac: window.__ac, osc: window.__osc, vt: document.querySelector('.an-t-seek').getAttribute('aria-valuetext') }));
+  ok('kit9-teaser', 'play: the film runs, the button says «مکث», the music starts with it', p1.seek >= 8 && p1.seek <= 30 && p1.big && p1.btn === 'مکث' && p1.ac === 1 && p1.osc >= 280 && /از ۴۰ ثانیه/.test(p1.vt), JSON.stringify(p1));
   await page.click('[data-t="caps"]');
   await page.waitForTimeout(400);
   const c1 = await page.evaluate(() => { const c = document.querySelector('.an-t-cap'); return { hidden: c.hidden, t: c.textContent, live: c.getAttribute('aria-live'), pressed: document.querySelector('[data-t="caps"]').getAttribute('aria-pressed') }; });
