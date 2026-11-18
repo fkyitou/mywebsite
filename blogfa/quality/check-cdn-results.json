@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-14T06:36:11.848Z",
+  "at": "2026-11-18T11:33:01.279Z",
   "preview": "preview-cdn",
   "cdn": true,
   "failed": 0,
@@ -815,7 +815,12 @@
       "info": ""
     },
     {
-      "name": "box.html: two plain <script> elements and nothing Blogfa would show as text",
+      "name": "box.html: one plain <script> element (options and loader together) and nothing Blogfa would show as text",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box.html: the options come before the loader in the same element",
       "pass": true,
       "info": ""
     },
@@ -832,7 +837,7 @@
     {
       "name": "box.html: small enough to paste",
       "pass": true,
-      "info": "2.2 KB"
+      "info": "2.4 KB"
     },
     {
       "name": "box.html: the credit in its comment",
@@ -876,6 +881,66 @@
     },
     {
       "name": "box.html: not written by an unverified build",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box-full.html: exactly the toolkit box followed by the canvas line",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box-full.html: two plain <script> elements and nothing Blogfa would show as text",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "box-full.html: small enough to paste",
+      "pass": true,
+      "info": "3.4 KB"
+    },
+    {
+      "name": "box-full.html: the size in the build report",
+      "pass": true,
+      "info": "3460"
+    },
+    {
+      "name": "bmc line: one plain <script> element",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "bmc line: silent unless the page is /page/bmc or holds #bmc",
+      "pass": true,
+      "info": "!function(d,w){if(!d.getElementById(\"bmc\")&&!/^\\/page\\/bmc(\\"
+    },
+    {
+      "name": "bmc line: no code Blogfa blocks or misreads",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "bmc line: no ads, earning code, pop-up, storage or network call of its own",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "bmc line: location only read, as w.location.pathname",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "bmc line: loads from this repository at one pinned commit, jsDelivr and three backups",
+      "pass": true,
+      "info": "ae67586d9dd8"
+    },
+    {
+      "name": "bmc line: loads bmc.css and bmc.js, each with an integrity hash",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "bmc line: hashes match bmc/dist at ae67586d9dd8",
       "pass": true,
       "info": ""
     },

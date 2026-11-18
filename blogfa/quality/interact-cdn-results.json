@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-14T06:52:02.146Z",
+ "generated": "2026-11-18T11:47:42.784Z",
  "browser": "Chromium (Playwright), software WebGL",
  "passed": 54,
  "failed": 0,
@@ -42,7 +42,7 @@
   },
   {
    "group": "lab",
-   "name": "post-4.html lab «security»: 8/8 controls respond (6 change the result, 2 change a setting)",
+   "name": "post-4.html lab «security»: 8/8 controls respond (7 change the result, 1 change a setting)",
    "pass": true,
    "info": ""
   },
@@ -170,7 +170,7 @@
    "group": "feature",
    "name": "back-to-top button returns to the top",
    "pass": true,
-   "info": "from 6706px, at the top after 2405 ms"
+   "info": "from 6706px, at the top after 2169 ms"
   },
   {
    "group": "feature",
@@ -182,7 +182,7 @@
    "group": "feature",
    "name": "table of contents: a link scrolls its heading to the top of the screen",
    "pass": true,
-   "info": "7 entries, heading at 193px after 727 ms"
+   "info": "7 entries, heading at 193px after 737 ms"
   },
   {
    "group": "feature",
@@ -194,7 +194,7 @@
    "group": "feature",
    "name": "reading progress bar grows while reading",
    "pass": true,
-   "info": "376px → 620px"
+   "info": "377px → 621px"
   },
   {
    "group": "feature",
@@ -414,12 +414,12 @@
     "button «ساخت گذرعبارت فارسی تصادفی»",
     "button «ساخت رمز تصادفی ۱۶ نویسه‌ای»",
     "tab «رمز یک‌بارمصرف (TOTP)»",
+    "input:text «کد گوشی را وارد کن تا سرور بررسی کند»",
     "button «ورود»",
     "button «کلید مخفی تازه»"
    ],
    "own": [
-    "button «نمایش»",
-    "input:text «کد گوشی را وارد کن تا سرور بررسی کند»"
+    "button «نمایش»"
    ],
    "none": [],
    "error": []
@@ -447,7 +447,7 @@
     "زندگی روی مریخ"
    ],
    "output": [
-    "input:range «تاریخ۲۳ آبان ۱۴۰۵»",
+    "input:range «تاریخ۲۷ آبان ۱۴۰۵»",
     "button «▶ حرکت زمان»",
     "button «🚀 پرتاب از همین تاریخ»",
     "button «برو به پنجره‌ی پرتاب بعدی»",

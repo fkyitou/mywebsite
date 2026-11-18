@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-14T06:26:56.198Z",
+ "generated": "2026-11-18T11:24:16.034Z",
  "browser": "Chromium (Playwright)",
  "served": "http://127.0.0.1 (test-only server)",
  "passed": 153,
@@ -117,7 +117,7 @@
    "group": "posts",
    "name": "post banner links to its category",
    "pass": true,
-   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:34659/cat-1.html"
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:45201/cat-1.html"
   },
   {
    "group": "posts",
@@ -633,7 +633,7 @@
    "group": "kit9-guide",
    "name": "home: the card's code came once, from the toolkit's own address",
    "pass": true,
-   "info": "http://127.0.0.1:34659/an-guide.2536c925d3.js"
+   "info": "http://127.0.0.1:45201/an-guide.2536c925d3.js"
   },
   {
    "group": "kit9-guide",
@@ -651,7 +651,7 @@
    "group": "kit9-guide",
    "name": "«یک روایت برایم انتخاب کن»: a real story, and «یکی دیگر» gives another one",
    "pass": true,
-   "info": "http://127.0.0.1:34659/post-9.html → http://127.0.0.1:34659/post-7.html"
+   "info": "http://127.0.0.1:45201/post-11.html → http://127.0.0.1:45201/post-8.html"
   },
   {
    "group": "kit9-guide",
@@ -861,7 +861,7 @@
    "group": "kit9-teaser",
    "name": "the first press: the film's file comes once, from the toolkit's own address",
    "pass": true,
-   "info": "http://127.0.0.1:34659/an-teaser.ac96eae9f5.js"
+   "info": "http://127.0.0.1:45201/an-teaser.ac96eae9f5.js"
   },
   {
    "group": "kit9-teaser",

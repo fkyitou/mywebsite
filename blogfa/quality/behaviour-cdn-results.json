@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-14T06:41:13.886Z",
+ "generated": "2026-11-18T11:37:44.263Z",
  "browser": "Chromium (Playwright)",
  "served": "http://127.0.0.1 (test-only server)",
  "passed": 161,
@@ -117,7 +117,7 @@
    "group": "posts",
    "name": "post banner links to its category",
    "pass": true,
-   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:44539/cat-1.html"
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:40585/cat-1.html"
   },
   {
    "group": "posts",
@@ -699,7 +699,7 @@
    "group": "kit9-guide",
    "name": "«یک روایت برایم انتخاب کن»: a real story, and «یکی دیگر» gives another one",
    "pass": true,
-   "info": "http://127.0.0.1:44539/post-7.html → http://127.0.0.1:44539/post-2.html"
+   "info": "http://127.0.0.1:40585/post-1.html → http://127.0.0.1:40585/post-2.html"
   },
   {
    "group": "kit9-guide",
