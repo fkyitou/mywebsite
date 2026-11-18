@@ -3,6 +3,7 @@
 // bmc.js the way the custom-code box does, then checks the content, the layout and all 13 presentation steps.
 //   BMC_KIT_CSS  optional path to the blog kit's CSS, to test against the real template styles
 //   BMC_SHOTS    screenshot folder (default test/shots)
+//   BMC_QR_TOOLS optional node_modules folder holding jsqr and pngjs, to decode the QR code shown in the presentation
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
@@ -35,7 +36,12 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
   const browser = await chromium.launch();
   const errors = [];
   async function run(name, file, vp, opts = {}) {
-    const p = await browser.newPage({ viewport: vp, hasTouch: !!opts.touch, isMobile: !!opts.touch });
+    const p = await browser.newPage({ viewport: vp, hasTouch: !!opts.touch, isMobile: !!opts.touch, reducedMotion: opts.rm ? 'reduce' : 'no-preference' });
+    // Stand-ins for the blog: its music player API (desk run only) and a shortcut listener that must stay quiet while the stage is open.
+    if (opts.music) await p.addInitScript(() => { window.AN = { x: { music: { on: false, toggle() { this.on = !this.on; window.dispatchEvent(new CustomEvent('an-music', { detail: { playing: this.on } })); },
+      play() {}, pause() {}, open() {}, playing() { return this.on; }, station() { return { id: 't', name: 'ایستگاه آزمایشی', mood: 'calm', bpm: 96 }; } } } }; });
+    await p.addInitScript(() => { window.__keys = []; window.__bp = []; document.addEventListener('keydown', (e) => window.__keys.push(e.code));
+      document.addEventListener('bmc:present', (e) => window.__bp.push(e.detail.on)); });
     p.on('pageerror', (e) => errors.push(name + ' pageerror: ' + e.message));
     p.on('console', (m) => { if (m.type() === 'error') errors.push(name + ' console: ' + m.text()); });
     await p.goto('file://' + file);
@@ -188,11 +194,164 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
       check(pr.h > 3000 && pr.top <= 2 && !pr.bar && pr.d9 && pr.q8 && !pr.header, name + ': printed report layout wrong ' + JSON.stringify(pr));
       if (name === 'desk') await p.pdf({ path: path.join(out, 'report.pdf'), preferCSSPageSize: true, printBackground: true });
       await p.emulateMedia({ media: 'screen' });
+      await extra(p, name, opts);
+    } else {
+      const ph = await p.evaluate(() => { const t = document.querySelector('.bmc-stage .bmc-top'); return [t.scrollWidth <= innerWidth + 1, document.querySelectorAll('.bmc-stage .bmc-tools .bmc-ib:not([hidden])').length,
+        Array.from(document.querySelectorAll('.bmc-stage .bmc-tools .bmc-x')).every((b) => !b.getClientRects().length)]; });
+      check(ph[0] && ph[1] >= 2 && ph[2], name + ': phone toolbar wrong ' + JSON.stringify(ph));
     }
     await p.close();
   }
-  await run('desk', tplFile, { width: 1366, height: 768 });
-  await run('proj', tplFile, { width: 1024, height: 768 });
+
+  // Tools of the final release: keys and focus, music, overview, pen, spotlight, QR, key help, autoplay, count-up, confetti, page reveal.
+  async function extra(p, name, opts) {
+    const cnt = () => p.textContent('.bmc-stage .bmc-cnt');
+    await p.click('.bmc-bar .bmc-btn');
+    await p.waitForTimeout(500);
+    const t0 = await p.evaluate(() => { const st = document.querySelector('.bmc-stage'); return { modal: st.getAttribute('aria-modal'), icons: st.querySelectorAll('.bmc-tools .bmc-ib').length, music: !st.querySelector('.bmc-mus').hidden, bp: window.__bp.join() }; });
+    check(t0.modal === 'true' && t0.icons === 12, name + ': toolbar wrong ' + JSON.stringify(t0));
+    check(t0.music === !!opts.music, name + ': music button shown ' + t0.music + ' without/with the blog player');
+    check(/^true,false,true/.test(t0.bp), name + ': bmc:present events wrong ' + t0.bp);
+    await p.evaluate(() => { window.__keys = []; });
+    await p.keyboard.press('KeyG');
+    await p.keyboard.press('Control+KeyK');
+    await p.keyboard.press('KeyM');
+    const leak = await p.evaluate(() => window.__keys.join());
+    check(!leak, name + ': keys reached the blog behind the stage: ' + leak);
+    if (opts.music) {
+      await p.click('.bmc-stage .bmc-mus');
+      await p.waitForTimeout(250);
+      const m1 = await p.evaluate(() => [document.querySelector('.bmc-stage .bmc-mus').getAttribute('aria-pressed'), window.AN.x.music.playing(), document.querySelector('.bmc-stage').classList.contains('bmc-mon')].join());
+      await p.keyboard.press('KeyM');
+      await p.waitForTimeout(250);
+      const m2 = await p.evaluate(() => [document.querySelector('.bmc-stage .bmc-mus').getAttribute('aria-pressed'), window.AN.x.music.playing()].join());
+      check(m1 === 'false,false,false' || m1 === 'true,true,true', name + ': music button wrong ' + m1);
+      check(m1.split(',')[0] !== m2.split(',')[0] && m1.split(',')[1] !== m2.split(',')[1], name + ': M did not toggle the music ' + m1 + ' / ' + m2);
+    }
+    // Enter on a focused tool runs that tool and does not turn the slide; Tab stays inside.
+    await p.focus('.bmc-stage .bmc-i-help');
+    await p.keyboard.press('Enter');
+    await p.waitForTimeout(400);
+    const hp = await p.evaluate(() => { const h = document.querySelector('.bmc-stage .bmc-help'); return h ? [h.querySelectorAll('dt').length, document.activeElement.classList.contains('bmc-hpx')] : null; });
+    check(hp && hp[0] >= 15 && hp[1] && (await cnt()) === '۱ از ۲۴', name + ': key help wrong ' + JSON.stringify(hp));
+    await p.screenshot({ path: path.join(out, name + '-help.png') });
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(200);
+    check(!(await p.$('.bmc-stage .bmc-help')) && !!(await p.$('.bmc-stage')), name + ': Esc did not close only the key help');
+    for (let k = 0; k < 40; k++) await p.keyboard.press('Tab');
+    check(await p.evaluate(() => document.querySelector('.bmc-stage').contains(document.activeElement)), name + ': Tab left the presentation');
+    await p.focus('.bmc-stage .bmc-close');
+    await p.keyboard.press('Enter');
+    await p.waitForTimeout(300);
+    const fc = await p.evaluate(() => [!document.querySelector('.bmc-stage'), document.activeElement === document.querySelector('.bmc-bar .bmc-btn')].join());
+    check(fc === 'true,true', name + ': close by Enter or focus return wrong ' + fc);
+    // Overview of all slides, moved through with the arrow keys.
+    await p.click('.bmc-bar .bmc-btn');
+    await p.waitForTimeout(400);
+    await p.keyboard.press('KeyO');
+    await p.waitForTimeout(800);
+    const ov = await p.evaluate(() => { const o = document.querySelector('.bmc-stage .bmc-ov'); return o ? [o.querySelectorAll('.bmc-ovc').length, o.querySelectorAll('.bmc-ovc .bmc-scene').length, document.activeElement.classList.contains('bmc-ovc')] : null; });
+    check(ov && ov[0] === 24 && ov[1] === 24 && ov[2], name + ': overview wrong ' + JSON.stringify(ov));
+    await p.screenshot({ path: path.join(out, name + '-overview.png') });
+    await p.keyboard.press('ArrowLeft');
+    await p.keyboard.press('ArrowLeft');
+    await p.keyboard.press('Enter');
+    await p.waitForTimeout(900);
+    check((await cnt()) === '۳ از ۲۴' && !(await p.$('.bmc-stage .bmc-ov')), name + ': overview did not go to slide 3');
+    if (opts.rm) {
+      await p.keyboard.press('ArrowRight');
+      check((await p.evaluate(() => document.querySelectorAll('.bmc-stage .bmc-host .bmc-scene').length)) === 1, name + ': old slide stays with reduced motion');
+      await p.keyboard.press('ArrowLeft');
+      await p.waitForTimeout(300);
+    }
+    // Pen: a stroke shows on the slide and C clears it; the slide does not change.
+    await p.keyboard.press('KeyW');
+    await p.waitForTimeout(200);
+    const bx = await p.locator('.bmc-stage .bmc-cv').boundingBox();
+    await p.mouse.move(bx.x + 220, bx.y + 220);
+    await p.mouse.down();
+    await p.mouse.move(bx.x + 420, bx.y + 300, { steps: 10 });
+    await p.mouse.move(bx.x + 520, bx.y + 220, { steps: 6 });
+    await p.mouse.up();
+    await p.waitForTimeout(150);
+    const px = () => p.evaluate(() => { const c = document.querySelector('.bmc-stage .bmc-cv'), d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; });
+    const inked = await px();
+    await p.screenshot({ path: path.join(out, name + '-pen.png') });
+    await p.keyboard.press('KeyC');
+    await p.waitForTimeout(100);
+    const cleared = await px();
+    check(inked > 300 && cleared === 0 && (await cnt()) === '۳ از ۲۴', name + ': pen wrong ' + inked + '/' + cleared);
+    await p.keyboard.press('KeyW');
+    // Spotlight follows the mouse; the wheel resizes it.
+    await p.keyboard.press('KeyS');
+    await p.mouse.move(520, 400);
+    await p.waitForTimeout(150);
+    const s1 = await p.evaluate(() => { const s = document.querySelector('.bmc-stage .bmc-spot'); return [getComputedStyle(s).display, s.style.getPropertyValue('--sx'), s.style.getPropertyValue('--sr')]; });
+    await p.mouse.wheel(0, 400);
+    await p.waitForTimeout(150);
+    const s2 = await p.evaluate(() => document.querySelector('.bmc-stage .bmc-spot').style.getPropertyValue('--sr'));
+    check(s1[0] === 'block' && s1[1] && s2 && s2 !== s1[2], name + ': spotlight wrong ' + JSON.stringify(s1) + ' ' + s2);
+    await p.screenshot({ path: path.join(out, name + '-spot.png') });
+    await p.keyboard.press('KeyS');
+    // QR code of the live page.
+    await p.keyboard.press('KeyQ');
+    await p.waitForTimeout(500);
+    const qrEl = p.locator('.bmc-stage .bmc-qrc .bmc-qr');
+    const bg = await qrEl.evaluate((e) => getComputedStyle(e).backgroundImage);
+    check(/svg\+xml/.test(bg), name + ': QR image missing');
+    await p.screenshot({ path: path.join(out, name + '-qr.png') });
+    if (process.env.BMC_QR_TOOLS) {
+      const jsQR = require(path.join(process.env.BMC_QR_TOOLS, 'jsqr')), { PNG } = require(path.join(process.env.BMC_QR_TOOLS, 'pngjs'));
+      const img = PNG.sync.read(await qrEl.screenshot());
+      const code = jsQR(new Uint8ClampedArray(img.data), img.width, img.height);
+      check(code && code.data === 'https://ayandehnegar.blogfa.com/page/bmc', name + ': QR decodes to ' + (code && code.data));
+    }
+    await p.keyboard.press('KeyQ');
+    await p.waitForTimeout(200);
+    check(!(await p.$('.bmc-stage .bmc-qrov')), name + ': QR did not close');
+    // Scores of table 16 count up and end on the page's own numbers.
+    await p.evaluate(() => document.querySelectorAll('.bmc-stage .bmc-dots button')[6].click());
+    await p.waitForTimeout(250);
+    const mid = await p.evaluate(() => { const b = document.querySelector('.bmc-stage .bmc-scene:not(.bmc-out) .bmc-score b'); return b && b.textContent; });
+    await p.waitForTimeout(1900);
+    const fin = await p.evaluate(() => Array.from(document.querySelectorAll('.bmc-stage .bmc-scene:not(.bmc-out) .bmc-score b')).map((b) => b.textContent).join(','));
+    check(fin === '۳۱,۲۷,۲۴,۲۰,۱۷' && (opts.rm ? mid === '۳۱' : mid !== '۳۱'), name + ': count-up wrong ' + mid + ' / ' + fin);
+    // Closing slide: QR row, confetti that removes itself.
+    await p.keyboard.press('End');
+    await p.waitForTimeout(400);
+    const th = await p.evaluate(() => { const sc = document.querySelector('.bmc-stage .bmc-scene:not(.bmc-out)'); return [!!sc.querySelector('.bmc-qrrow .bmc-qr'), !!sc.querySelector('.bmc-cf'), sc.firstChild.scrollHeight <= sc.firstChild.clientHeight + 2]; });
+    await p.screenshot({ path: path.join(out, name + '-thanks.png') });
+    await p.waitForTimeout(3600);
+    const cf = await p.evaluate(() => !!document.querySelector('.bmc-stage .bmc-cf'));
+    check(th[0] && th[1] === !opts.rm && th[2] && !cf, name + ': closing slide wrong ' + JSON.stringify(th) + ' confetti left ' + cf);
+    // Autoplay moves on by itself.
+    await p.keyboard.press('Home');
+    await p.waitForTimeout(300);
+    await p.keyboard.press('KeyA');
+    const ta = Date.now();
+    let moved = true;
+    try { await p.waitForFunction(() => document.querySelector('.bmc-stage .bmc-cnt').textContent === '۲ از ۲۴', null, { timeout: 32000 }); } catch (e) { moved = false; }
+    check(moved, name + ': autoplay did not move on');
+    console.log('  autoplay moved after ' + ((Date.now() - ta) / 1000).toFixed(1) + 's');
+    await p.keyboard.press('KeyA');
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(300);
+    check(!(await p.$('.bmc-stage')), name + ': Esc did not close after autoplay');
+    // Page: legend filter fades the other notes; section shortcuts scroll to their section, which rises into view.
+    await p.click('.bmc-poster .bmc-legend li.bmc-o');
+    await p.waitForTimeout(500);
+    const lf = await p.evaluate(() => { const r = document.querySelector('.bmc-poster'); return [+getComputedStyle(r.querySelector('.bmc-notes li.bmc-y')).opacity, getComputedStyle(r.querySelector('.bmc-notes li.bmc-o')).transform]; });
+    await p.click('.bmc-poster .bmc-legend li.bmc-o');
+    check(lf[0] < 0.5 && lf[1] !== 'none', name + ': legend filter wrong ' + JSON.stringify(lf));
+    await p.click('.bmc-jump button:has-text("جمع‌بندی")');
+    await p.waitForTimeout(1500);
+    const jp = await p.evaluate(() => { const s = document.querySelector('.bmc-sec.bmc-sum'); return [Math.round(s.querySelector('h2').getBoundingClientRect().top), s.classList.contains('bmc-rv') ? s.classList.contains('bmc-in') : 'none', +getComputedStyle(s).opacity]; });
+    check(jp[0] >= 0 && jp[0] <= 200 && (opts.rm ? jp[1] === 'none' : jp[1] === true) && jp[2] > 0.9, name + ': section shortcut wrong ' + JSON.stringify(jp));
+    await p.screenshot({ path: path.join(out, name + '-jump.png') });
+  }
+
+  await run('desk', tplFile, { width: 1366, height: 768 }, { music: true });
+  await run('proj', tplFile, { width: 1024, height: 768 }, { rm: true });
   await run('phone', tplFile, { width: 390, height: 844 }, { touch: true });
   await run('offline', path.join(dist, 'bmc-offline.html'), { width: 1440, height: 900 });
   await browser.close();

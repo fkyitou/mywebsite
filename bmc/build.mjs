@@ -40,7 +40,10 @@ const svg = (body) => `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 2
   .replace(/</g, '%3C').replace(/>/g, '%3E').replace(/"/g, "'");
 const iconCss = Object.entries(ICONS).map(([k, b]) => `.bmc-c${k}{--ic:url("data:image/svg+xml,${svg(b)}")}`).join('\n');
 
-const css = (await esbuild.transform(rd('bmc.css') + '\n' + iconCss, { loader: 'css', minify: true, charset: 'utf8', legalComments: 'none' })).code.trim();
+// QR code of the live page (src/qr.svg, made once with the qrcode package and checked by decoding it in the test).
+const qrSvg = rd('qr.svg').trim().replace(/"/g, "'").replace(/\s+/g, ' ').replace(/</g, '%3C').replace(/>/g, '%3E').replace(/#/g, '%23');
+const qrCss = `.bmc .bmc-qr{background-image:url("data:image/svg+xml,${qrSvg}")}`;
+const css = (await esbuild.transform(rd('bmc.css') + '\n' + iconCss + '\n' + qrCss, { loader: 'css', minify: true, charset: 'utf8', legalComments: 'none' })).code.trim();
 const js = (await esbuild.transform(rd('bmc.js'), { minify: true, charset: 'utf8', target: 'es2017', legalComments: 'none' })).code.trim();
 if (/<\/script|<!--/i.test(js)) throw new Error('script contains </script or <!--');
 if (/<\/style/i.test(css)) throw new Error('css contains </style');
