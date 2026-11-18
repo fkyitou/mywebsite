@@ -1,18 +1,18 @@
 {
-  "builtAt": "2026-11-18T11:05:41.879Z",
+  "builtAt": "2026-11-18T16:03:55.284Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
-    "ref": "a8d0cf4ce1cc068bc56335d3f36f244982e198e2",
+    "ref": "8661d27b6c33012cf9f1c0a3482f199f25c23f9b",
     "dir": "blogfa/dist/cdn",
     "ok": true,
     "pushed": true,
     "missing": [],
     "unverifiedTemplates": false,
     "mirrors": [
-      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/",
-      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/",
-      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/",
-      "https://rawcdn.githack.com/fkyitou/mywebsite/a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/"
+      "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@8661d27b6c33012cf9f1c0a3482f199f25c23f9b/blogfa/dist/cdn/",
+      "https://fastly.jsdelivr.net/gh/fkyitou/mywebsite@8661d27b6c33012cf9f1c0a3482f199f25c23f9b/blogfa/dist/cdn/",
+      "https://gcore.jsdelivr.net/gh/fkyitou/mywebsite@8661d27b6c33012cf9f1c0a3482f199f25c23f9b/blogfa/dist/cdn/",
+      "https://rawcdn.githack.com/fkyitou/mywebsite/8661d27b6c33012cf9f1c0a3482f199f25c23f9b/blogfa/dist/cdn/"
     ],
     "files": [
       {
@@ -71,24 +71,29 @@
         "sri": "sha384-I8QcCQWYJYnJjMuga5VeMsYk24eSM6jBvbxAXzwNecj04rTZ5v97CC0kDM2TNaOm"
       },
       {
-        "file": "an-guide.2536c925d3.js",
-        "bytes": 17669,
-        "sri": "sha384-YnEdbUZA9b1H9MOpuJ8P7Jsqno3siuV4vWnjuhW/W4WttapV7f3Z297tlCGfhO9l"
+        "file": "an-guide.764f8c30c7.js",
+        "bytes": 17743,
+        "sri": "sha384-d0ftZ/uMBP71IWNSLYKX9GxU40NR+mA6l9joMuM+JgpBPS6kXfRlgiHe65A1LDao"
       },
       {
-        "file": "an-teaser.ac96eae9f5.js",
-        "bytes": 17720,
-        "sri": "sha384-senE/Im59XQJ6mqGJOO/ZLW7MwSc2muKHI56kfnW2q5n+7PFtR+8SrfxRPtZECi8"
+        "file": "an-teaser.4fd9a8eae0.js",
+        "bytes": 19151,
+        "sri": "sha384-NWXcp+dHUMVsi6QmFOb4EECfnoznwV0KVk4k3PWdAXFG+g9/sO4MLSg6h1KwfHQy"
       },
       {
-        "file": "an-addons.59381673ae.css",
-        "bytes": 33113,
-        "sri": "sha384-n3SqVnNcwNsOqtFvv9aKYLxHajsypp3EpZmVXZVsv2O4rzHDcqigDJqywNykHfe2"
+        "file": "an-music.731edf13db.js",
+        "bytes": 23089,
+        "sri": "sha384-6LJjJvHTMZb4/TodjHzm5w3QFCnDT2omjGM6+Q/qKe3z813IM2BGKFdr+btcZZ/A"
       },
       {
-        "file": "an-addons.bf460cedef.js",
-        "bytes": 52507,
-        "sri": "sha384-LOag8Ygav+Dg7qBCTZj7ZKIyVzAsTmwYU/ToDe4xDClSJE4kh5Z7DBf7TEIA+/bt"
+        "file": "an-addons.c461519185.css",
+        "bytes": 42835,
+        "sri": "sha384-cqsGMyo7BMzU5hSZSo8ix3NtxSSoWm7wzeCexl0J7bMEe2qvFqzS9E9dVbRJboNA"
+      },
+      {
+        "file": "an-addons.25c28bddeb.js",
+        "bytes": 59224,
+        "sri": "sha384-56ZZc5hjgj0Cv1FHLETnKboC8fhnArNnNv0k5f8/9lQBANGbjK9vMvPkUjFaRObE"
       }
     ]
   },
@@ -219,14 +224,15 @@
     }
   ],
   "addons": {
-    "css": "an-addons.59381673ae.css",
-    "js": "an-addons.bf460cedef.js",
+    "css": "an-addons.c461519185.css",
+    "js": "an-addons.25c28bddeb.js",
     "qr": "an-qr.1952338bb7.js",
-    "guide": "an-guide.2536c925d3.js",
-    "teaser": "an-teaser.ac96eae9f5.js",
-    "box": 2449,
+    "guide": "an-guide.764f8c30c7.js",
+    "teaser": "an-teaser.4fd9a8eae0.js",
+    "music": "an-music.731edf13db.js",
+    "box": 2519,
     "boxWritten": true,
-    "boxFull": 3460,
+    "boxFull": 3530,
     "words": {
       "terms": 65,
       "keys": 33
