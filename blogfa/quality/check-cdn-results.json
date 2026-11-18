@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-18T11:33:01.279Z",
+  "at": "2026-11-18T17:20:35.194Z",
   "preview": "preview-cdn",
   "cdn": true,
   "failed": 0,
@@ -797,7 +797,7 @@
     {
       "name": "cdn: the commit in cdn.json holds every dist/cdn file byte for byte",
       "pass": true,
-      "info": "a8d0cf4ce1cc"
+      "info": "8661d27b6c33"
     },
     {
       "name": "cdn: that commit is on a remote branch, so jsDelivr can read it",
@@ -810,7 +810,7 @@
       "info": ""
     },
     {
-      "name": "cdn: none of the 11 stylesheets and scripts in dist/cdn holds code Blogfa blocks",
+      "name": "cdn: none of the 12 stylesheets and scripts in dist/cdn holds code Blogfa blocks",
       "pass": true,
       "info": ""
     },
@@ -837,7 +837,7 @@
     {
       "name": "box.html: small enough to paste",
       "pass": true,
-      "info": "2.4 KB"
+      "info": "2.5 KB"
     },
     {
       "name": "box.html: the credit in its comment",
@@ -847,15 +847,15 @@
     {
       "name": "box.html: loads from the pinned jsDelivr address and three backups",
       "pass": true,
-      "info": "a8d0cf4ce1cc"
+      "info": "8661d27b6c33"
     },
     {
-      "name": "box.html: an-addons.59381673ae.css named with the integrity hash of dist/cdn",
+      "name": "box.html: an-addons.c461519185.css named with the integrity hash of dist/cdn",
       "pass": true,
       "info": ""
     },
     {
-      "name": "box.html: an-addons.bf460cedef.js named with the integrity hash of dist/cdn",
+      "name": "box.html: an-addons.25c28bddeb.js named with the integrity hash of dist/cdn",
       "pass": true,
       "info": ""
     },
@@ -870,12 +870,17 @@
       "info": ""
     },
     {
-      "name": "toolkit: an-guide.2536c925d3.js named with its integrity hash",
+      "name": "toolkit: an-guide.764f8c30c7.js named with its integrity hash",
       "pass": true,
       "info": ""
     },
     {
-      "name": "toolkit: an-teaser.ac96eae9f5.js named with its integrity hash",
+      "name": "toolkit: an-teaser.4fd9a8eae0.js named with its integrity hash",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "name": "toolkit: an-music.731edf13db.js named with its integrity hash",
       "pass": true,
       "info": ""
     },
@@ -902,7 +907,7 @@
     {
       "name": "box-full.html: the size in the build report",
       "pass": true,
-      "info": "3460"
+      "info": "3530"
     },
     {
       "name": "bmc line: one plain <script> element",
@@ -932,7 +937,7 @@
     {
       "name": "bmc line: loads from this repository at one pinned commit, jsDelivr and three backups",
       "pass": true,
-      "info": "ae67586d9dd8"
+      "info": "8877f232848b"
     },
     {
       "name": "bmc line: loads bmc.css and bmc.js, each with an integrity hash",
@@ -940,7 +945,7 @@
       "info": ""
     },
     {
-      "name": "bmc line: hashes match bmc/dist at ae67586d9dd8",
+      "name": "bmc line: hashes match bmc/dist at 8877f232848b",
       "pass": true,
       "info": ""
     },

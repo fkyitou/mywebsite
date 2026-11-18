@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-18T11:37:44.263Z",
+ "generated": "2026-11-18T16:46:26.519Z",
  "browser": "Chromium (Playwright)",
  "served": "http://127.0.0.1 (test-only server)",
  "passed": 161,
@@ -117,7 +117,7 @@
    "group": "posts",
    "name": "post banner links to its category",
    "pass": true,
-   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:40585/cat-1.html"
+   "info": "«هوش مصنوعی و داده» → http://127.0.0.1:34603/cat-1.html"
   },
   {
    "group": "posts",
@@ -669,7 +669,7 @@
    "group": "kit9-guide",
    "name": "home: a press opens the card, a dialog beside the figure, focus on its first answer",
    "pass": true,
-   "info": "{\"role\":\"dialog\",\"modal\":\"false\",\"name\":\"نگار\",\"exp\":\"true\",\"first\":true,\"acts\":[\"tour\",\"pick\",\"sky\",\"tip\",\"teaser\",\"tools\"],\"chip\":false}"
+   "info": "{\"role\":\"dialog\",\"modal\":\"false\",\"name\":\"نگار\",\"exp\":\"true\",\"first\":true,\"acts\":[\"tour\",\"pick\",\"sky\",\"tip\",\"teaser\",\"music\",\"tools\"],\"chip\":false}"
   },
   {
    "group": "kit9-guide",
@@ -681,7 +681,7 @@
    "group": "kit9-guide",
    "name": "home: the card's code came once, from the toolkit's own address",
    "pass": true,
-   "info": "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/an-guide.2536c925d3.js"
+   "info": "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@8661d27b6c33012cf9f1c0a3482f199f25c23f9b/blogfa/dist/cdn/an-guide.764f8c30c7.js"
   },
   {
    "group": "kit9-guide",
@@ -699,7 +699,7 @@
    "group": "kit9-guide",
    "name": "«یک روایت برایم انتخاب کن»: a real story, and «یکی دیگر» gives another one",
    "pass": true,
-   "info": "http://127.0.0.1:40585/post-1.html → http://127.0.0.1:40585/post-2.html"
+   "info": "http://127.0.0.1:34603/post-10.html → http://127.0.0.1:34603/post-8.html"
   },
   {
    "group": "kit9-guide",
@@ -909,7 +909,7 @@
    "group": "kit9-teaser",
    "name": "the first press: the film's file comes once, from the toolkit's own address",
    "pass": true,
-   "info": "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@a8d0cf4ce1cc068bc56335d3f36f244982e198e2/blogfa/dist/cdn/an-teaser.ac96eae9f5.js"
+   "info": "https://cdn.jsdelivr.net/gh/fkyitou/mywebsite@8661d27b6c33012cf9f1c0a3482f199f25c23f9b/blogfa/dist/cdn/an-teaser.4fd9a8eae0.js"
   },
   {
    "group": "kit9-teaser",
@@ -933,7 +933,7 @@
    "group": "kit9-teaser",
    "name": "play: the film runs, the button says «مکث», the music starts with it",
    "pass": true,
-   "info": "{\"seek\":16,\"big\":true,\"btn\":\"مکث\",\"ac\":1,\"osc\":285,\"vt\":\"۱ از ۴۰ ثانیه\"}"
+   "info": "{\"seek\":17,\"big\":true,\"btn\":\"مکث\",\"ac\":1,\"osc\":285,\"vt\":\"۱ از ۴۰ ثانیه\"}"
   },
   {
    "group": "kit9-teaser",
@@ -951,7 +951,7 @@
    "group": "kit9-teaser",
    "name": "one moment, one frame: drawn twice, the same pixels",
    "pass": true,
-   "info": "[-196707582,1779613342,-196707582]"
+   "info": "[1771004227,-847136111,1771004227]"
   },
   {
    "group": "kit9-teaser",

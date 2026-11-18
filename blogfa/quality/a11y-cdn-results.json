@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-18T11:37:47.903Z",
+  "at": "2026-11-18T16:46:30.602Z",
   "axe": [
     {
       "run": "desktop/a index.html",
@@ -7,7 +7,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 183
+          "n": 143
         },
         {
           "id": "link-in-text-block",
@@ -119,7 +119,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 183
+          "n": 184
         },
         {
           "id": "link-in-text-block",
@@ -231,7 +231,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 264
+          "n": 266
         },
         {
           "id": "link-in-text-block",
@@ -261,7 +261,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 264
+          "n": 266
         },
         {
           "id": "link-in-text-block",
@@ -325,7 +325,7 @@
         },
         {
           "id": "color-contrast",
-          "n": 80
+          "n": 81
         },
         {
           "id": "link-in-text-block",
@@ -344,7 +344,7 @@
         },
         {
           "id": "color-contrast",
-          "n": 80
+          "n": 81
         },
         {
           "id": "link-in-text-block",
@@ -382,7 +382,7 @@
         },
         {
           "id": "color-contrast",
-          "n": 80
+          "n": 81
         },
         {
           "id": "link-in-text-block",
@@ -401,7 +401,7 @@
         },
         {
           "id": "color-contrast",
-          "n": 80
+          "n": 81
         },
         {
           "id": "link-in-text-block",
@@ -495,7 +495,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 81
+          "n": 82
         },
         {
           "id": "link-in-text-block",
@@ -510,7 +510,7 @@
       "incomplete": [
         {
           "id": "color-contrast",
-          "n": 81
+          "n": 82
         },
         {
           "id": "link-in-text-block",

@@ -508,6 +508,56 @@ try {
       ok('/page/bmc: no console errors with the canvas and the toolkit together', errors.length === 0, errors.slice(0, 4).join(' | '));
       await ctx.close();
     }
+    /* The presentation and «رادیو آینده» together: the canvas's music button drives the real radio through AN.x.music
+       (toggle, playing, station, the window event 'an-music'), the blog's own keys stay quiet behind the presentation,
+       and 'bmc:present' marks the open and the close. Skipped for a canvas pin without the music button. */
+    {
+      const { ctx, page, errors } = await fresh();
+      await bmcRoute(ctx);
+      await page.addInitScript(() => {
+        const ev = window.__ev = [];
+        document.addEventListener('bmc:present', e => ev.push('present:' + !!(e.detail && e.detail.on)));
+        window.addEventListener('an-music', e => ev.push('music:' + !!(e.detail && e.detail.playing)));
+      });
+      await page.goto(BASE + 'page/bmc', { waitUntil: 'load' });
+      await ready(page);
+      await page.waitForFunction(() => document.getElementById('bmc') && document.getElementById('bmc').bmcOn === 1, null, { timeout: 10000 }).catch(() => {});
+      await page.click('#bmc .bmc-bar button');
+      await page.waitForSelector('.bmc-stage', { timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(400);
+      const mb = '.bmc-stage .bmc-mus';
+      const o = await page.evaluate(mb => { const b = document.querySelector(mb); return { stage: !!document.querySelector('.bmc-stage'), btn: !!b, shown: !!b && !b.hidden && b.getClientRects().length > 0, ev: window.__ev.slice() }; }, mb);
+      if (!o.btn) {
+        console.log('· canvas line: this canvas pin has no music button, presentation and radio not tested');
+      } else {
+        ok('presentation: opens, sends bmc:present {on:true}, and shows its music button', o.stage && o.shown && o.ev.includes('present:true'), JSON.stringify(o));
+        // U and G are the blog's own keys; R is the presentation's too (it restarts its clock), Q would open its QR overlay
+        for (const k of ['u', 'g', 'r']) await page.keyboard.press(k);
+        await page.waitForTimeout(300);
+        const quiet = await page.evaluate(() => ({ radio: !!document.querySelector('#an-mu.on'), panel: !!document.querySelector('#an-x.on'), dlg: [...document.querySelectorAll('.an-dlg.on')].map(d => d.id), card: !!document.querySelector('#an-g-card.on'), playing: window.AN.x.music.playing() }));
+        ok('presentation: U, G and R do not reach the blog behind it (no radio, panel, «نگار» card or dialog, nothing playing)', !quiet.radio && !quiet.panel && !quiet.card && quiet.dlg.length === 0 && !quiet.playing, JSON.stringify(quiet));
+        await page.click(mb);
+        await page.waitForFunction(() => window.__ev.includes('music:true'), null, { timeout: 12000 }).catch(() => {});
+        await page.waitForTimeout(300);
+        const on = await page.evaluate(mb => { const b = document.querySelector(mb), s = window.AN.x.music.station(); return { playing: window.AN.x.music.playing(), pressed: b.getAttribute('aria-pressed'), mon: document.querySelector('.bmc-stage').classList.contains('bmc-mon'), title: b.title, st: s && s.name, beat: document.querySelector('.bmc-stage').style.getPropertyValue('--beat'), radioDlg: !!document.querySelector('#an-mu.on'), ev: window.__ev.slice() }; }, mb);
+        ok('presentation: its music button starts «رادیو آینده» (playing, button pressed, station name in its title, the beat from the station)', on.playing && on.pressed === 'true' && on.mon && !!on.st && on.title.includes(on.st) && /^\d+(\.\d+)?s$/.test(on.beat) && !on.radioDlg, JSON.stringify(on));
+        await page.keyboard.press('m');
+        await page.waitForFunction(() => window.__ev.lastIndexOf('music:false') > window.__ev.indexOf('music:true'), null, { timeout: 6000 }).catch(() => {});
+        await page.waitForTimeout(200);
+        const off = await page.evaluate(mb => ({ playing: window.AN.x.music.playing(), pressed: document.querySelector(mb).getAttribute('aria-pressed'), stage: !!document.querySelector('.bmc-stage') }), mb);
+        ok('presentation: M pauses the radio and the button lets go; the presentation stays open', !off.playing && off.pressed === 'false' && off.stage, JSON.stringify(off));
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(400);
+        const shut = await page.evaluate(() => ({ stage: !!document.querySelector('.bmc-stage'), ev: window.__ev.slice() }));
+        ok('presentation: Esc closes it and sends bmc:present {on:false}', !shut.stage && shut.ev.includes('present:false'), JSON.stringify(shut));
+        await page.keyboard.press('u');
+        await page.waitForSelector('#an-mu.on', { timeout: 6000 }).catch(() => {});
+        const back = await page.evaluate(() => !!document.querySelector('#an-mu.on'));
+        ok('after the presentation: U opens «رادیو آینده» again (the blog keys are back)', back, String(back));
+        ok('presentation and radio: no console errors', errors.length === 0, errors.slice(0, 4).join(' | '));
+      }
+      await ctx.close();
+    }
   } else if (CDN) { G = 'canvas line'; console.log('· canvas line: not in the preview box or its commit not in this clone, not tested'); }
 } catch (e) {
   G = 'run'; ok('script ran to the end', false, String(e && e.stack || e).slice(0, 600));

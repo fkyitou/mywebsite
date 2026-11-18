@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-18T11:47:42.784Z",
+ "generated": "2026-11-18T16:59:04.508Z",
  "browser": "Chromium (Playwright), software WebGL",
  "passed": 54,
  "failed": 0,
@@ -170,7 +170,7 @@
    "group": "feature",
    "name": "back-to-top button returns to the top",
    "pass": true,
-   "info": "from 6706px, at the top after 2169 ms"
+   "info": "from 6761px, at the top after 1464 ms"
   },
   {
    "group": "feature",
@@ -182,7 +182,7 @@
    "group": "feature",
    "name": "table of contents: a link scrolls its heading to the top of the screen",
    "pass": true,
-   "info": "7 entries, heading at 193px after 737 ms"
+   "info": "7 entries, heading at 166px after 768 ms"
   },
   {
    "group": "feature",
@@ -194,7 +194,7 @@
    "group": "feature",
    "name": "reading progress bar grows while reading",
    "pass": true,
-   "info": "377px → 621px"
+   "info": "380px → 632px"
   },
   {
    "group": "feature",

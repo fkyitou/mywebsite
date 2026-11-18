@@ -1,13 +1,13 @@
 {
- "generated": "2026-11-18T11:48:35.238Z",
+ "generated": "2026-11-18T17:23:22.235Z",
  "browser": "Chromium (Playwright)",
  "box": "dist/box-full.html",
- "passed": 79,
+ "passed": 86,
  "failed": 0,
  "results": [
   {
    "group": "article",
-   "name": "post: toolkit loaded (html.an-x-on, AN.x.v=9)",
+   "name": "post: toolkit loaded (html.an-x-on, AN.x.v=10)",
    "pass": true,
    "info": ""
   },
@@ -117,7 +117,7 @@
    "group": "article",
    "name": "mark: saved with title",
    "pass": true,
-   "info": "{\"u\":\"/post-1.html\",\"h\":\"http://127.0.0.1:43839/post-1.html\",\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"k\":\"ai\",\"at\":1795002470829}"
+   "info": "{\"u\":\"/post-1.html\",\"h\":\"http://127.0.0.1:33935/post-1.html\",\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"k\":\"ai\",\"at\":1795022553120}"
   },
   {
    "group": "article",
@@ -129,19 +129,19 @@
    "group": "article",
    "name": "QR: decodes to this page address",
    "pass": true,
-   "info": "{\"got\":\"http://127.0.0.1:43839/post-1.html\",\"want\":\"http://127.0.0.1:43839/post-1.html\"}"
+   "info": "{\"got\":\"http://127.0.0.1:33935/post-1.html\",\"want\":\"http://127.0.0.1:33935/post-1.html\"}"
   },
   {
    "group": "article",
    "name": "QR: the code as drawn on screen decodes too",
    "pass": true,
-   "info": "http://127.0.0.1:43839/post-1.html"
+   "info": "http://127.0.0.1:33935/post-1.html"
   },
   {
    "group": "article",
    "name": "cite: APA text with author, blog and address",
    "pass": true,
-   "info": "همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:43839/post-1.html"
+   "info": "همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:33935/post-1.html"
   },
   {
    "group": "article",
@@ -153,7 +153,7 @@
    "group": "article",
    "name": "quiz: scored, feedback on each, result saved, right answer marked",
    "pass": true,
-   "info": "{\"score\":\"۰ از ۵ درست. پاسخ‌ها در متن همین مقاله‌اند (روی هر واژه‌ی نقطه‌چین بزنید تا تعریفش را ببینید). دوباره امتحان کنید.\",\"fb\":true,\"saved\":{\"ai\":{\"s\":0,\"n\":5,\"full\":false}},\"ok\":5}"
+   "info": "{\"score\":\"۱ از ۵ درست. پاسخ‌ها در متن همین مقاله‌اند (روی هر واژه‌ی نقطه‌چین بزنید تا تعریفش را ببینید). دوباره امتحان کنید.\",\"fb\":true,\"saved\":{\"ai\":{\"s\":1,\"n\":5,\"full\":false}},\"ok\":5}"
   },
   {
    "group": "article",
@@ -165,19 +165,19 @@
    "group": "article",
    "name": "passport: stamp after reading to the end",
    "pass": true,
-   "info": "{\"read\":{\"ai\":{\"id\":\"1\",\"u\":\"/post-1.html\",\"h\":\"http://127.0.0.1:43839/post-1.html\",\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"at\":1795002473324}},\"seal\":\"an-x-seal stamp\"}"
+   "info": "{\"read\":{\"ai\":{\"id\":\"1\",\"u\":\"/post-1.html\",\"h\":\"http://127.0.0.1:33935/post-1.html\",\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"at\":1795022556027}},\"seal\":\"an-x-seal stamp\"}"
   },
   {
    "group": "article",
    "name": "resume: reading position saved",
    "pass": true,
-   "info": "{\"1\":{\"i\":2,\"d\":747,\"f\":0.48,\"at\":1795002479983,\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"u\":\"http://127.0.0.1:43839/post-1.html\",\"m\":7}}"
+   "info": "{\"1\":{\"i\":2,\"d\":747,\"f\":0.48,\"at\":1795022562857,\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"u\":\"http://127.0.0.1:33935/post-1.html\",\"m\":7}}"
   },
   {
    "group": "article",
    "name": "resume: the place keeps the title, address and length for the half-read list",
    "pass": true,
-   "info": "{\"i\":2,\"d\":747,\"f\":0.48,\"at\":1795002479983,\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"u\":\"http://127.0.0.1:43839/post-1.html\",\"m\":7}"
+   "info": "{\"i\":2,\"d\":747,\"f\":0.48,\"at\":1795022562857,\"t\":\"هوش مصنوعی چطور یاد می‌گیرد؟\",\"u\":\"http://127.0.0.1:33935/post-1.html\",\"m\":7}"
   },
   {
    "group": "article",
@@ -327,13 +327,13 @@
    "group": "kit9",
    "name": "hour: the keyboard works (Home is midnight)",
    "pass": true,
-   "info": "{\"peek\":true,\"dim\":\"rgba(2, 4, 10, 0.66)\",\"val\":\"0\",\"vt\":\"۰۰:۰۰، شب\",\"dis\":false,\"out\":\"۰۰:۰۰، شب\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"a\",\"sky\":\"night\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
+   "info": "{\"peek\":true,\"dim\":\"rgba(2, 4, 10, 0.416)\",\"val\":\"0\",\"vt\":\"۰۰:۰۰، شب\",\"dis\":false,\"out\":\"۰۰:۰۰، شب\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"a\",\"sky\":\"night\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
   },
   {
    "group": "kit9",
    "name": "hour: noon shows version B and the noon sky; nothing saved; «خودکار» stays chosen",
    "pass": true,
-   "info": "{\"peek\":true,\"dim\":\"rgba(2, 4, 10, 0.01)\",\"val\":\"12\",\"vt\":\"۱۲:۰۰، نیمروز\",\"dis\":false,\"out\":\"۱۲:۰۰، نیمروز\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"b\",\"sky\":\"noon\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
+   "info": "{\"peek\":true,\"dim\":\"rgba(2, 4, 10, 0.004)\",\"val\":\"12\",\"vt\":\"۱۲:۰۰، نیمروز\",\"dis\":false,\"out\":\"۱۲:۰۰، نیمروز\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"b\",\"sky\":\"noon\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
   },
   {
    "group": "kit9",
@@ -345,13 +345,13 @@
    "group": "kit9",
    "name": "hour: «بازگشت به اکنون» brings the clock's sky back, the slider and the dimming too, focus on it",
    "pass": true,
-   "info": "{\"peek\":false,\"dim\":\"rgba(2, 4, 10, 0.243)\",\"val\":\"22.5\",\"vt\":\"۲۲:۳۰، شب\",\"dis\":false,\"out\":\"۲۲:۳۰، شب\",\"note\":\"خورشید، ماه و رنگ آسمان را در ساعت دیگری از امروز ببینید؛ چیزی ذخیره نمی‌شود.\",\"back\":false,\"v\":\"a\",\"sky\":\"night\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
+   "info": "{\"peek\":false,\"dim\":\"rgba(2, 4, 10, 0.42)\",\"val\":\"22.5\",\"vt\":\"۲۲:۳۰، شب\",\"dis\":false,\"out\":\"۲۲:۳۰، شب\",\"note\":\"خورشید، ماه و رنگ آسمان را در ساعت دیگری از امروز ببینید؛ چیزی ذخیره نمی‌شود.\",\"back\":false,\"v\":\"a\",\"sky\":\"night\",\"vm\":\"auto\",\"an\":[\"\",\"auto\"],\"th\":\"auto\"}"
   },
   {
    "group": "kit9",
    "name": "hour: a version kept by hand stays shown as chosen during the look",
    "pass": true,
-   "info": "{\"peek\":true,\"dim\":\"rgba(2, 4, 10, 0.192)\",\"val\":\"12\",\"vt\":\"۱۲:۰۰، نیمروز\",\"dis\":false,\"out\":\"۱۲:۰۰، نیمروز\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"b\",\"sky\":\"noon\",\"vm\":\"man\",\"an\":[\"a\",\"man\"],\"th\":\"a\"}"
+   "info": "{\"peek\":true,\"dim\":\"rgba(2, 4, 10, 0.24)\",\"val\":\"12\",\"vt\":\"۱۲:۰۰، نیمروز\",\"dis\":false,\"out\":\"۱۲:۰۰، نیمروز\",\"note\":\"فقط برای دیدن است و چیزی ذخیره نمی‌شود.\",\"back\":true,\"v\":\"b\",\"sky\":\"noon\",\"vm\":\"man\",\"an\":[\"a\",\"man\"],\"th\":\"a\"}"
   },
   {
    "group": "kit9",
@@ -375,13 +375,13 @@
    "group": "kit9",
    "name": "half-read: the two other stories, newest first, this one left out",
    "pass": true,
-   "info": "{\"hidden\":false,\"rows\":[{\"t\":\"هوش مصنوعی ویدیوساز: از یک جمله تا یک فیلم کوتاه، به چه قیمتی؟\",\"href\":\"http://127.0.0.1:43839/post-11.html\",\"small\":\"۴۰٪ خوانده شده، حدود ۶ دقیقه مانده\",\"w\":\"40%\"},{\"t\":\"از جرقه تا اختراع: ایده‌ها چطور به دنیا می‌آیند؟\",\"href\":\"http://127.0.0.1:43839/post-10.html\",\"small\":\"۵۰٪ خوانده شده\",\"w\":\"50%\"}]}"
+   "info": "{\"hidden\":false,\"rows\":[{\"t\":\"هوش مصنوعی ویدیوساز: از یک جمله تا یک فیلم کوتاه، به چه قیمتی؟\",\"href\":\"http://127.0.0.1:33935/post-11.html\",\"small\":\"۴۰٪ خوانده شده، حدود ۶ دقیقه مانده\",\"w\":\"40%\"},{\"t\":\"از جرقه تا اختراع: ایده‌ها چطور به دنیا می‌آیند؟\",\"href\":\"http://127.0.0.1:33935/post-10.html\",\"small\":\"۵۰٪ خوانده شده\",\"w\":\"50%\"}]}"
   },
   {
    "group": "kit9",
    "name": "half-read: how much is read and about how long is left",
    "pass": true,
-   "info": "[{\"t\":\"هوش مصنوعی ویدیوساز: از یک جمله تا یک فیلم کوتاه، به چه قیمتی؟\",\"href\":\"http://127.0.0.1:43839/post-11.html\",\"small\":\"۴۰٪ خوانده شده، حدود ۶ دقیقه مانده\",\"w\":\"40%\"},{\"t\":\"از جرقه تا اختراع: ایده‌ها چطور به دنیا می‌آیند؟\",\"href\":\"http://127.0.0.1:43839/post-10.html\",\"small\":\"۵۰٪ خوانده شده\",\"w\":\"50%\"}]"
+   "info": "[{\"t\":\"هوش مصنوعی ویدیوساز: از یک جمله تا یک فیلم کوتاه، به چه قیمتی؟\",\"href\":\"http://127.0.0.1:33935/post-11.html\",\"small\":\"۴۰٪ خوانده شده، حدود ۶ دقیقه مانده\",\"w\":\"40%\"},{\"t\":\"از جرقه تا اختراع: ایده‌ها چطور به دنیا می‌آیند؟\",\"href\":\"http://127.0.0.1:33935/post-10.html\",\"small\":\"۵۰٪ خوانده شده\",\"w\":\"50%\"}]"
   },
   {
    "group": "kit9",
@@ -399,19 +399,19 @@
    "group": "kit9",
    "name": "copy (QR window): the page address, no prompt(), nothing left behind, focus kept",
    "pass": true,
-   "info": "{\"copied\":\"http://127.0.0.1:43839/post-1.html\",\"prompts\":0,\"left\":0,\"focus\":\"copy\",\"want\":\"http://127.0.0.1:43839/post-1.html\",\"toasts\":[\"پیوند صفحه کپی شد.\"]}"
+   "info": "{\"copied\":\"http://127.0.0.1:33935/post-1.html\",\"prompts\":0,\"left\":0,\"focus\":\"copy\",\"want\":\"http://127.0.0.1:33935/post-1.html\",\"toasts\":[\"پیوند صفحه کپی شد.\"]}"
   },
   {
    "group": "kit9",
    "name": "copy (citation): the APA text, no prompt()",
    "pass": true,
-   "info": "{\"copied\":\"همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:43839/post-1.html\",\"want\":\"همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:43839/post-1.html\",\"prompts\":0,\"toasts\":[\"ارجاع کپی شد.\"]}"
+   "info": "{\"copied\":\"همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:33935/post-1.html\",\"want\":\"همتی، امیرحسین. (۱۴۰۵، ۴ آبان). هوش مصنوعی چطور یاد می‌گیرد؟. آینده‌نگار. http://127.0.0.1:33935/post-1.html\",\"prompts\":0,\"toasts\":[\"ارجاع کپی شد.\"]}"
   },
   {
    "group": "kit9",
    "name": "copy (the article's share row, template): the address, no prompt()",
    "pass": true,
-   "info": "{\"copied\":\"http://127.0.0.1:43839/post-1.html\",\"prompts\":0,\"left\":0,\"want\":\"http://127.0.0.1:43839/post-1.html\",\"toasts\":[\"مهر «هوش مصنوعی» خورد: ۱ از ۱۱ روایت در گذرنامه‌ی آینده.\",\"پیوند مقاله کپی شد\"]}"
+   "info": "{\"copied\":\"http://127.0.0.1:33935/post-1.html\",\"prompts\":0,\"left\":0,\"want\":\"http://127.0.0.1:33935/post-1.html\",\"toasts\":[\"مهر «هوش مصنوعی» خورد: ۱ از ۱۱ روایت در گذرنامه‌ی آینده.\",\"پیوند مقاله کپی شد\"]}"
   },
   {
    "group": "kit9",
@@ -463,7 +463,7 @@
   },
   {
    "group": "canvas line",
-   "name": "/page/bmc: the toolkit still there (AN.x.v=9, header button)",
+   "name": "/page/bmc: the toolkit still there (AN.x.v=10, header button)",
    "pass": true,
    "info": "{\"css\":[true],\"js\":[true],\"bmc\":true,\"styled\":true,\"started\":true,\"tools\":true,\"x\":true}"
   },
@@ -476,6 +476,48 @@
   {
    "group": "canvas line",
    "name": "/page/bmc: no console errors with the canvas and the toolkit together",
+   "pass": true,
+   "info": ""
+  },
+  {
+   "group": "canvas line",
+   "name": "presentation: opens, sends bmc:present {on:true}, and shows its music button",
+   "pass": true,
+   "info": "{\"stage\":true,\"btn\":true,\"shown\":true,\"ev\":[\"present:true\"]}"
+  },
+  {
+   "group": "canvas line",
+   "name": "presentation: U, G and R do not reach the blog behind it (no radio, panel, «نگار» card or dialog, nothing playing)",
+   "pass": true,
+   "info": "{\"radio\":false,\"panel\":false,\"dlg\":[],\"card\":false,\"playing\":false}"
+  },
+  {
+   "group": "canvas line",
+   "name": "presentation: its music button starts «رادیو آینده» (playing, button pressed, station name in its title, the beat from the station)",
+   "pass": true,
+   "info": "{\"playing\":true,\"pressed\":\"true\",\"mon\":true,\"title\":\"موسیقی وبلاگ (M) · شب ستاره‌ها\",\"st\":\"شب ستاره‌ها\",\"beat\":\"1.000s\",\"radioDlg\":false,\"ev\":[\"present:true\",\"music:true\"]}"
+  },
+  {
+   "group": "canvas line",
+   "name": "presentation: M pauses the radio and the button lets go; the presentation stays open",
+   "pass": true,
+   "info": "{\"playing\":false,\"pressed\":\"false\",\"stage\":true}"
+  },
+  {
+   "group": "canvas line",
+   "name": "presentation: Esc closes it and sends bmc:present {on:false}",
+   "pass": true,
+   "info": "{\"stage\":false,\"ev\":[\"present:true\",\"music:true\",\"music:false\",\"present:false\"]}"
+  },
+  {
+   "group": "canvas line",
+   "name": "after the presentation: U opens «رادیو آینده» again (the blog keys are back)",
+   "pass": true,
+   "info": "true"
+  },
+  {
+   "group": "canvas line",
+   "name": "presentation and radio: no console errors",
    "pass": true,
    "info": ""
   }

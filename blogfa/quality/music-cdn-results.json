@@ -1,0 +1,254 @@
+{
+  "at": "2026-11-18T17:00:51.164Z",
+  "cdn": true,
+  "passed": 41,
+  "total": 41,
+  "results": [
+    {
+      "group": "radio",
+      "name": "nothing plays by itself: no audio context before a press",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "buttons: the top bar, the home page, the keys list and AN.x.music",
+      "pass": true,
+      "info": "{\"bar\":true,\"hero\":true,\"api\":true,\"key\":true}"
+    },
+    {
+      "group": "radio",
+      "name": "the radio sits right after the toolkit button",
+      "pass": true,
+      "info": "an-x-btn an-x-mu an-search-btn an-snd-btn"
+    },
+    {
+      "group": "radio",
+      "name": "U opens the radio window, and opening plays nothing",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "the window: title, five stations, focus on play",
+      "pass": true,
+      "info": "{\"h\":\"رادیو آینده\",\"n\":5,\"focus\":true}"
+    },
+    {
+      "group": "radio",
+      "name": "play: the music starts, the button says «مکث»",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "pause, with the an-music event for other code",
+      "pass": true,
+      "info": "{\"playing\":false,\"station\":\"night\"}"
+    },
+    {
+      "group": "radio",
+      "name": "next station, by hand: «همراه آسمان» turns off and the music goes on",
+      "pass": true,
+      "info": "night → dawn"
+    },
+    {
+      "group": "radio",
+      "name": "a station picked from the list",
+      "pass": true,
+      "info": "sunset"
+    },
+    {
+      "group": "radio",
+      "name": "«قطعه‌ی تازه» shows the new piece number",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "closing the window: the music goes on in a dock at the bottom",
+      "pass": true,
+      "info": "{\"name\":\"غروب نئون\",\"b\":18,\"w\":202,\"mid\":-7}"
+    },
+    {
+      "group": "radio",
+      "name": "the dock pauses",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "the dock opens the window again",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "axe: no violations in the open window",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "opening the film pauses the radio",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "✕ on the dock stops the music and hides the dock",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "settings kept in this browser only: station, volume, sky choice",
+      "pass": true,
+      "info": "{\"st\":3,\"vol\":0.7,\"auto\":0}"
+    },
+    {
+      "group": "radio",
+      "name": "after a reload: nothing plays and no dock, until a press",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "after a reload the window opens on the kept station",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "radio",
+      "name": "no errors",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "sky",
+      "name": "AN.x.music.toggle() from another button plays, and «همراه آسمان» picks the noon station",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "sky",
+      "name": "when the sky turns to night, the station follows at the next bar",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "sky",
+      "name": "the toolkit has a «رادیو آینده» section whose play button shows the state",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "sky",
+      "name": "no errors",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "phone",
+      "name": "320 px: the bar button is hidden, the home page button is there",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "phone",
+      "name": "320 px: the window fits, no sideways scroll",
+      "pass": true,
+      "info": "{\"sx\":0,\"l\":16,\"r\":16}"
+    },
+    {
+      "group": "phone",
+      "name": "320 px: the dock stays on screen and clear of «نگار»",
+      "pass": true,
+      "info": "{\"l\":75,\"r\":75,\"sx\":0,\"hitsGuide\":false}"
+    },
+    {
+      "group": "phone",
+      "name": "no errors",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "motion",
+      "name": "reduced motion: the dock and the bar icon do not move",
+      "pass": true,
+      "info": "none, none"
+    },
+    {
+      "group": "motion",
+      "name": "no errors",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "fx",
+      "name": "night sky: a shooting star crosses, hidden from screen readers, moved by CSS alone",
+      "pass": true,
+      "info": "{\"hidden\":\"true\",\"anim\":\"an-x-meteor\",\"v\":\"a\",\"sky\":\"night\"}"
+    },
+    {
+      "group": "fx",
+      "name": "the shooting star leaves the page when it has crossed",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "fx",
+      "name": "«نگار» redrawn: visor, eyes, two orbits with running lights, beacon, a turning rim",
+      "pass": true,
+      "info": "{\"visor\":true,\"runs\":4,\"beacon\":true,\"eyes\":2,\"rim\":\"an-g-spin\",\"float\":\"an-g-float\"}"
+    },
+    {
+      "group": "fx",
+      "name": "«نگار» card: «رادیو آینده» opens the radio window, and nothing plays yet",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "fx",
+      "name": "while the radio plays «نگار» sways, two beats a sway",
+      "pass": true,
+      "info": "{\"dance\":true,\"beat\":\"2.000s\",\"anim\":\"an-g-dance\"}"
+    },
+    {
+      "group": "fx",
+      "name": "paused: «نگار» stands still again",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "fx",
+      "name": "a home card leans toward the mouse, a few degrees",
+      "pass": true,
+      "info": "{\"ry\":\"1.60deg\",\"rx\":\"1.25deg\",\"tf\":\"matrix3d(0.999519, 0.000568087, -0.0267016, 2.5956e-05, -1.01721e-05, 0.999658, 0.0208873, -2.03041e-05, 0.0267076, -0.0208796, 0.999301, -0.000971398, 0, -5.10436, -0.125322, 0.999998)\"}"
+    },
+    {
+      "group": "fx",
+      "name": "no errors",
+      "pass": true,
+      "info": ""
+    },
+    {
+      "group": "fx",
+      "name": "reduced motion: no shooting stars, a still rim, no leaning cards",
+      "pass": true,
+      "info": "{\"n\":0,\"rim\":\"none\",\"tilt\":false}"
+    },
+    {
+      "group": "fx",
+      "name": "the day version: no shooting stars",
+      "pass": true,
+      "info": "{\"n\":0,\"v\":\"b\"}"
+    },
+    {
+      "group": "fx",
+      "name": "no errors",
+      "pass": true,
+      "info": ""
+    }
+  ]
+}
