@@ -50,7 +50,9 @@
 .bmc .bmc-c5 .bmc-notes,.bmc .bmc-c9 .bmc-notes{grid-template-columns:repeat(4,1fr);grid-auto-rows:3.85em;gap:.55em .9em;padding-inline:.6em}
 .bmc .bmc-c5 .bmc-notes li:nth-child(-n+3),.bmc .bmc-c9 .bmc-notes li:nth-child(-n+3){grid-row:span 2}
 .bmc .bmc-c5 .bmc-notes li:nth-child(n+4),.bmc .bmc-c9 .bmc-notes li:nth-child(n+4){font-size:.88em;line-height:1.4;padding-top:.75em;padding-bottom:.2em}
-.bmc .bmc-c3 h3,.bmc .bmc-c4 h3,.bmc .bmc-c6 h3,.bmc .bmc-c7 h3{font-size:1em;white-space:nowrap}
+/* The narrow columns hold «فعالیت‌های اصلی» and «ارتباط با مشتری» on one line with the icon and the red number;
+   at 1em the number of block 7 was pushed out of its cell and clipped. */
+.bmc .bmc-c3 h3,.bmc .bmc-c4 h3,.bmc .bmc-c6 h3,.bmc .bmc-c7 h3{font-size:.84em;gap:.25em;white-space:nowrap}
 .bmc .bmc-sign{padding:.5em 1.4em .55em;border-top:.22em solid var(--ink);font-size:1.15cqw;color:var(--muted);font-weight:600;background:var(--paper)}
 
 /* Phone: the board becomes one column in the order the blocks are presented. */

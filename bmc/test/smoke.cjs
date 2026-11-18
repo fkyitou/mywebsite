@@ -52,7 +52,7 @@ const check = (ok, msg) => { if (!ok) fails.push(msg); };
       const notes = Array.from(r.querySelectorAll('.bmc-poster .bmc-notes li'));
       const by = (k) => notes.filter((n) => n.classList.contains('bmc-' + k)).length;
       const over = notes.filter((n) => n.scrollHeight > n.clientHeight + 1 || n.scrollWidth > n.clientWidth + 1).map((n) => n.textContent);
-      const cellsOver = Array.from(r.querySelectorAll('.bmc-poster .bmc-cell')).filter((c) => c.scrollHeight > c.clientHeight + 1).map((c) => c.className);
+      const cellsOver = Array.from(r.querySelectorAll('.bmc-poster .bmc-cell')).filter((c) => { const h = c.querySelector('h3'); return c.scrollHeight > c.clientHeight + 1 || (h && h.scrollWidth > h.clientWidth + 1); }).map((c) => c.className);
       return { notes: notes.length, o: by('o'), p: by('p'), y: by('y'), g: by('g'), cells: r.querySelectorAll('.bmc-poster .bmc-cell').length,
         over, cellsOver, hscroll: document.documentElement.scrollWidth > window.innerWidth + 1, br: r.querySelectorAll('br').length,
         font: document.fonts.check('16px BmcVazir') || document.fonts.check('16px Vazirmatn') };
