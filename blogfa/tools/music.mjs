@@ -86,8 +86,9 @@ if (!CDN) {
 
 /* ---------- 2. in the browser ---------- */
 async function fresh(opts = {}) {
-  const ctx = await browser.newContext({ viewport: opts.viewport || { width: 1280, height: 900 }, deviceScaleFactor: 1, locale: 'fa-IR', reducedMotion: opts.rm ? 'reduce' : 'no-preference', hasTouch: !!opts.touch, isMobile: !!opts.mobile });
+  const ctx = await browser.newContext({ viewport: opts.viewport || { width: 1280, height: 900 }, deviceScaleFactor: 1, locale: 'fa-IR', timezoneId: opts.now ? 'UTC' : undefined, reducedMotion: opts.rm ? 'reduce' : 'no-preference', hasTouch: !!opts.touch, isMobile: !!opts.mobile });
   if (CDN) await routeCdn(ctx);
+  if (opts.now) await ctx.addInitScript(n => { window.AN_NOW = n; }, opts.now);
   // count every audio context the page makes, and when
   await ctx.addInitScript(() => {
     window.__ac = 0;
@@ -117,6 +118,7 @@ G = 'radio';
   await page.keyboard.press('u');
   await page.waitForSelector('#an-mu.on', { timeout: 10000 });
   ok('U opens the radio window, and opening plays nothing', !(await playing(page)) && await page.evaluate(() => window.__ac === 0));
+  await page.waitForFunction(() => document.activeElement && document.activeElement.classList.contains('an-mu-play'), null, { timeout: 2000 }).catch(() => {});
   const label = await page.evaluate(() => ({ h: document.querySelector('#an-mu-h').textContent, n: document.querySelectorAll('#an-mu input[name="an-mu-st"]').length, focus: document.activeElement && document.activeElement.classList.contains('an-mu-play') }));
   ok('the window: title, five stations, focus on play', label.h === 'رادیو آینده' && label.n === 5 && label.focus, JSON.stringify(label));
   await page.click('#an-mu .an-mu-play');
@@ -209,6 +211,54 @@ G = 'motion';
   ok('reduced motion: the dock and the bar icon do not move', a.every(x => x === 'none'), a.join(', '));
   ok('no errors', page.errs.length === 0, page.errs.slice(0, 3).join(' | '));
   await ctx.close();
+}
+
+/* ---------- 3. the other kit 10 touches: shooting stars, «نگار» redrawn and dancing, the cards in depth ---------- */
+const NIGHT = '2026-11-13T22:30:00', DAY = '2026-11-13T09:30:00';
+// counts the meteors the page adds to the sky, from the first moment
+const meteorCount = page => page.evaluate(() => { window.__met = 0; const s = document.querySelector('.an-sky'); new MutationObserver(m => m.forEach(r => r.addedNodes.forEach(n => { if (n.classList && n.classList.contains('an-x-meteor')) window.__met++; }))).observe(s, { childList: true }); });
+
+G = 'fx';
+{
+  const { ctx, page } = await fresh({ now: NIGHT });
+  await page.goto(BASE + 'index.html'); await ready(page);
+  const m = await page.waitForSelector('.an-sky > .an-x-meteor', { state: 'attached', timeout: 12000 }).then(() => page.evaluate(() => { const e = document.querySelector('.an-sky > .an-x-meteor'); return { hidden: e.getAttribute('aria-hidden'), anim: getComputedStyle(e).animationName, v: document.documentElement.dataset.v, sky: document.documentElement.dataset.sky }; })).catch(() => null);
+  ok('night sky: a shooting star crosses, hidden from screen readers, moved by CSS alone', !!m && m.hidden === 'true' && m.anim === 'an-x-meteor', JSON.stringify(m));
+  await page.waitForTimeout(3200);
+  ok('the shooting star leaves the page when it has crossed', await page.evaluate(() => !document.querySelector('.an-x-meteor')));
+  // «نگار» redrawn
+  const fig = await page.evaluate(() => { const g = document.querySelector('.an-g'); return { visor: !!g.querySelector('.an-g-visor'), runs: g.querySelectorAll('.an-g-run').length, beacon: !!g.querySelector('.an-g-beacon'), eyes: g.querySelectorAll('.an-g-eyes ellipse').length, rim: getComputedStyle(g, '::before').animationName, float: getComputedStyle(g.querySelector('.an-g-float')).animationName }; });
+  ok('«نگار» redrawn: visor, eyes, two orbits with running lights, beacon, a turning rim', fig.visor && fig.runs === 4 && fig.beacon && fig.eyes === 2 && fig.rim === 'an-g-spin' && fig.float === 'an-g-float', JSON.stringify(fig));
+  // its card offers the radio
+  await page.click('.an-g'); await page.waitForSelector('.an-g-card.on', { timeout: 10000 });
+  await page.click('.an-g-acts [data-g="music"]'); await page.waitForSelector('#an-mu.on', { timeout: 10000 });
+  ok('«نگار» card: «رادیو آینده» opens the radio window, and nothing plays yet', !(await playing(page)) && !(await page.evaluate(() => document.querySelector('.an-g-card.on'))));
+  await page.click('#an-mu .an-mu-play'); await page.waitForTimeout(600);
+  const d = await page.evaluate(() => { const g = document.querySelector('.an-g'); return { dance: g.classList.contains('dance'), beat: g.style.getPropertyValue('--g-beat'), anim: getComputedStyle(g.querySelector('.an-g-float')).animationName }; });
+  ok('while the radio plays «نگار» sways, two beats a sway', d.dance && /^\d\.\d{3}s$/.test(d.beat) && d.anim === 'an-g-dance', JSON.stringify(d));
+  await page.click('#an-mu .an-mu-play'); await page.waitForTimeout(300);
+  ok('paused: «نگار» stands still again', await page.evaluate(() => !document.querySelector('.an-g').classList.contains('dance')));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(300);
+  // the cards lean toward the pointer
+  const card = page.locator('#an-cards .an-card').first();
+  await card.scrollIntoViewIfNeeded(); const bb = await card.boundingBox();
+  await page.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2); await page.mouse.move(bb.x + bb.width * 0.9, bb.y + bb.height * 0.15, { steps: 4 }); await page.waitForTimeout(450);
+  const t = await card.evaluate(c => ({ ry: c.style.getPropertyValue('--ry'), rx: c.style.getPropertyValue('--rx'), tf: getComputedStyle(c).transform }));
+  ok('a home card leans toward the mouse, a few degrees', parseFloat(t.ry) > 0 && parseFloat(t.ry) <= 8 && parseFloat(t.rx) > 0 && /^matrix3d/.test(t.tf), JSON.stringify(t));
+  ok('no errors', page.errs.length === 0, page.errs.slice(0, 3).join(' | '));
+  await ctx.close();
+}
+{
+  const a = await fresh({ now: NIGHT, rm: true }), b = await fresh({ now: DAY });
+  await Promise.all([a.page.goto(BASE + 'index.html'), b.page.goto(BASE + 'index.html')]);
+  await Promise.all([ready(a.page), ready(b.page)]); await Promise.all([meteorCount(a.page), meteorCount(b.page)]);
+  await a.page.waitForTimeout(11000);
+  const ra = await a.page.evaluate(() => ({ n: window.__met, rim: getComputedStyle(document.querySelector('.an-g'), '::before').animationName, tilt: document.documentElement.classList.contains('an-x-tilt') }));
+  const rb = await b.page.evaluate(() => ({ n: window.__met, v: document.documentElement.dataset.v }));
+  ok('reduced motion: no shooting stars, a still rim, no leaning cards', ra.n === 0 && ra.rim === 'none' && !ra.tilt, JSON.stringify(ra));
+  ok('the day version: no shooting stars', rb.n === 0 && rb.v === 'b', JSON.stringify(rb));
+  ok('no errors', a.page.errs.length + b.page.errs.length === 0, a.page.errs.concat(b.page.errs).slice(0, 3).join(' | '));
+  await a.ctx.close(); await b.ctx.close();
 }
 
 await browser.close(); server.close();

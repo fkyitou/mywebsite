@@ -265,6 +265,51 @@
   var SCENES = [s1, s2, s3, s4, s5, s6];
 
   // the whole frame at film time t, on a canvas of w×h
+  /* the finishing pass over every scene (kit 10): a ring of light on every bar once the drums are in, a sweep of
+     light across each cut, a soft vignette and a fine grain. All of it follows from t alone, so a moment still draws
+     the same picture on every screen and in the MP4. */
+  var GRAIN = null;
+  function grain() {
+    if (GRAIN) return GRAIN;
+    var g = D.createElement('canvas'), r = rng(1404); g.width = g.height = 192;
+    var x = g.getContext('2d'), im = x.createImageData(192, 192), d = im.data;
+    for (var i = 0; i < d.length; i += 4) { var v = Math.round(r() * 255); d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
+    x.putImageData(im, 0, 0);
+    return (GRAIN = g);
+  }
+  function finish(c, t) {
+    // a ring on each downbeat from bar 4 (when the drums come in) until the title card
+    if (t >= BAR * 4 && t < CUTS[5]) {
+      var tb = Math.floor(t / BAR) * BAR, k = (t - tb) / BAR;
+      if (k < 0.6) {
+        var e = 1 - Math.pow(1 - k / 0.6, 3);
+        c.save(); c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.13 * (1 - k / 0.6);
+        c.strokeStyle = '#BFD6FF'; c.lineWidth = 3 - 2 * e; c.beginPath(); c.ellipse(960, 540, 90 + e * 900, (90 + e * 900) * 0.56, 0, 0, 6.2832); c.stroke();
+        c.restore();
+      }
+    }
+    // a sweep of light across each cut
+    for (var n = 1; n < CUTS.length - 1; n++) {
+      var u = (t - CUTS[n] + 0.55) / 1.1;
+      if (u <= 0 || u >= 1) continue;
+      var x0 = -700 + u * 3300;
+      c.save(); c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.24 * Math.sin(Math.PI * u);
+      c.translate(x0, 540); c.rotate(-0.36);
+      var lg = c.createLinearGradient(-260, 0, 260, 0);
+      lg.addColorStop(0, 'rgba(255,190,130,0)'); lg.addColorStop(0.5, 'rgba(255,226,190,1)'); lg.addColorStop(1, 'rgba(160,190,255,0)');
+      c.fillStyle = lg; c.fillRect(-260, -1100, 520, 2200);
+      c.restore();
+    }
+    // vignette
+    var vg = c.createRadialGradient(960, 540, 420, 960, 540, 1180);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.5)');
+    c.save(); c.fillStyle = vg; c.fillRect(0, 0, 1920, 1080); c.restore();
+    // grain, shifted 24 times a second by a number that depends on the frame alone
+    var f = Math.floor(t * 24), ox = (f * 73) % 192, oy = (f * 131) % 192;
+    c.save(); c.globalAlpha = 0.045; c.globalCompositeOperation = 'overlay';
+    c.fillStyle = c.createPattern(grain(), 'repeat'); c.translate(-ox, -oy); c.fillRect(ox, oy, 1920, 1080);
+    c.restore();
+  }
   function draw(c, t, w, h) {
     t = cl(t, 0, DUR);
     c.setTransform(w / 1920, 0, 0, h / 1080, 0, 0);
@@ -286,7 +331,9 @@
       c.restore();
       c.setTransform(w / 1920, 0, 0, h / 1080, 0, 0);
     }
-    LINES.forEach(function (L) { text(c, L.t, 960, 960, 58, 700, '#ffffff', win(t, L.a, L.b, 0.5)); });
+    finish(c, t);
+    // the lines rise a little as they come in, and settle
+    LINES.forEach(function (L) { var k = win(t, L.a, L.b, 0.5); text(c, L.t, 960, 960 + (1 - k) * 22, 58, 700, '#ffffff', k); });
     // in from black, out to black
     var dark = 1 - Math.min(sm(t / 0.8), sm((DUR - t) / 0.9));
     if (dark > 0) { c.globalAlpha = dark; c.fillStyle = '#000'; c.fillRect(0, 0, 1920, 1080); c.globalAlpha = 1; }

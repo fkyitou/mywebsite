@@ -760,6 +760,8 @@
     var muWas = null;
     function musicState(on, st) {
       on = !!on;
+      // «نگار» sways to the music, two beats a sway
+      if (guide.el) { guide.el.classList.toggle('dance', on); if (st && st.bpm) guide.el.style.setProperty('--g-beat', (120 / st.bpm).toFixed(3) + 's'); }
       if (on === muWas) return;
       muWas = on;
       H.classList.toggle('an-mu-on', on);
@@ -813,24 +815,41 @@
     // The light version (phones, touch screens, weak graphics, data saver) keeps the figure still.
     var LITE = !!(AN.gpu === 'soft' || (W.matchMedia && W.matchMedia('(max-width: 700px), (pointer: coarse)').matches) || (navigator.connection && navigator.connection.saveData));
     function figure(id) {
-      var ring = 'M7 38a25 7.5 0 0 1 50 0a25 7.5 0 0 1-50 0';
+      // two tilted orbits (the far halves behind the figure, the near halves in front), a glass helmet with a dark visor
+      // and lit eyes, a beacon on its antenna, a heart of light with a small constellation on the chest, and a pad of light
+      // under it that shrinks as it rises
+      var ring = 'M7 38a25 7.5 0 0 1 50 0a25 7.5 0 0 1-50 0', ring2 = 'M12 36a20 5 0 0 1 40 0a20 5 0 0 1-40 0';
+      function star(x, y, s) { return 'M' + x + ' ' + (y - s) + 'Q' + x + ' ' + y + ' ' + (x + s) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y + s) + 'Q' + x + ' ' + y + ' ' + (x - s) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y - s) + 'z'; }
       // fill="none" on the root: the template's line-icon rule (svg:not([fill]), css/01-base.css) stays away
       return '<svg class="an-g-fig" viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false"><defs>' +
         '<radialGradient id="' + id + 'a"><stop offset="0" class="an-g-s1"/><stop offset="1" class="an-g-s0"/></radialGradient>' +
         '<linearGradient id="' + id + 'b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="an-g-s2"/><stop offset="1" class="an-g-s3"/></linearGradient>' +
-        '<radialGradient id="' + id + 'c" cx=".38" cy=".34" r=".72"><stop offset="0" class="an-g-s4"/><stop offset=".5" class="an-g-s2"/><stop offset="1" class="an-g-s3"/></radialGradient>' +
-        '<clipPath id="' + id + 'd" clipPathUnits="userSpaceOnUse"><rect x="0" y="38" width="64" height="30"/></clipPath></defs>' +
+        '<radialGradient id="' + id + 'c" cx=".36" cy=".3" r=".75"><stop offset="0" class="an-g-s4"/><stop offset=".45" class="an-g-s2"/><stop offset="1" class="an-g-s3"/></radialGradient>' +
+        '<clipPath id="' + id + 'd" clipPathUnits="userSpaceOnUse"><rect x="0" y="38" width="64" height="30"/></clipPath>' +
+        '<clipPath id="' + id + 'e" clipPathUnits="userSpaceOnUse"><rect x="0" y="36" width="64" height="30"/></clipPath></defs>' +
         '<circle cx="32" cy="34" r="30" fill="url(#' + id + 'a)"/>' +
-        // the far half of the ring, behind the body; the running light passes behind it there
+        '<ellipse class="an-g-pad" cx="32" cy="60" rx="9" ry="1.8"/>' +
+        '<g class="an-g-float">' +
+        // the far halves of the orbits; their running lights pass behind the figure there
         '<g transform="rotate(-16 32 38)"><path class="an-g-orb" d="M7 38a25 7.5 0 0 1 50 0"/><path class="an-g-run" d="' + ring + '" pathLength="100"/></g>' +
+        '<g transform="rotate(24 32 36)"><path class="an-g-orb an-g-orb2" d="M12 36a20 5 0 0 1 40 0"/><path class="an-g-run an-g-run2" d="' + ring2 + '" pathLength="100"/></g>' +
         '<path d="M32 25c6.2 0 9.4 4.6 9.4 10.6 0 7.4-4.6 14.6-9.4 21.4-4.8-6.8-9.4-14-9.4-21.4 0-6 3.2-10.6 9.4-10.6z" fill="url(#' + id + 'b)"/>' +
-        '<path class="an-g-arm" d="M25.4 31.5c-4 1.6-6.6 4.8-8 9"/><path class="an-g-arm an-g-wave" d="M38.6 31.5c4 1.6 6.6 4.8 8 9"/>' +
+        '<path class="an-g-rim" d="M25.2 31.2c1.2-3.8 3.6-5.6 6.8-5.6"/>' +
+        '<path class="an-g-net" d="M28.4 30.6l3.6 6.1 3.6-6.1M32 36.7v9.8"/><g class="an-g-node"><circle cx="28.4" cy="30.6" r=".6"/><circle cx="35.6" cy="30.6" r=".6"/><circle cx="32" cy="46.5" r=".7"/></g>' +
+        '<path class="an-g-arm" d="M25.4 31.5c-4 1.6-6.6 4.8-8 9"/><circle class="an-g-hand" cx="17.4" cy="40.6" r="1.2"/>' +
+        '<g class="an-g-wave"><path class="an-g-arm" d="M38.6 31.5c4 1.6 6.6 4.8 8 9"/><circle class="an-g-hand" cx="46.6" cy="40.6" r="1.2"/></g>' +
+        '<circle class="an-g-core" cx="32" cy="36.7" r="3.4"/>' +
         '<path class="an-g-spark" d="M32 33.4l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z"/>' +
-        '<circle cx="32" cy="17.5" r="7.2" fill="url(#' + id + 'c)"/>' +
-        '<g class="an-g-look"><g class="an-g-eyes"><ellipse cx="29.4" cy="17.7" rx="1.15" ry="1.5"/><ellipse cx="34.6" cy="17.7" rx="1.15" ry="1.5"/></g></g>' +
-        // the near half, in front of the body
+        '<path class="an-g-ant" d="M32.4 10.4l1.2-4.6"/><circle class="an-g-glow" cx="33.8" cy="5.2" r="2.6"/><circle class="an-g-beacon" cx="33.8" cy="5.2" r="1.25"/>' +
+        '<circle cx="32" cy="17.5" r="7.4" fill="url(#' + id + 'c)"/>' +
+        '<ellipse class="an-g-visor" cx="32" cy="18.3" rx="5.4" ry="3.5"/>' +
+        '<g class="an-g-look"><g class="an-g-eyes"><ellipse cx="29.7" cy="18.3" rx="1.05" ry="1.4"/><ellipse cx="34.3" cy="18.3" rx="1.05" ry="1.4"/></g></g>' +
+        '<path class="an-g-shine" d="M27.1 14a6.3 6.3 0 0 1 4.6-3.3"/>' +
+        // the near halves, in front of the figure
         '<g transform="rotate(-16 32 38)"><path class="an-g-orb" d="M57 38a25 7.5 0 0 1-50 0"/><path class="an-g-run" d="' + ring + '" pathLength="100" clip-path="url(#' + id + 'd)"/></g>' +
-        '<g class="an-g-dots"><circle cx="9" cy="17" r="1.1"/><circle cx="55" cy="12" r=".9"/><circle cx="58" cy="50" r="1.2"/><circle cx="7" cy="48" r=".8"/><circle cx="46" cy="5" r=".7"/></g></svg>';
+        '<g transform="rotate(24 32 36)"><path class="an-g-orb an-g-orb2" d="M52 36a20 5 0 0 1-40 0"/><path class="an-g-run an-g-run2" d="' + ring2 + '" pathLength="100" clip-path="url(#' + id + 'e)"/></g>' +
+        '</g>' +
+        '<g class="an-g-dots"><circle cx="9" cy="17" r="1.1"/><path d="' + star(55, 12, 2.3) + '"/><circle cx="58" cy="50" r="1.2"/><circle cx="7" cy="48" r=".8"/><path d="' + star(46, 4.6, 1.5) + '"/><path d="' + star(12.5, 30, 1.4) + '"/></g></svg>';
     }
     function guideReady() { return typeof W.AN_GUIDE === 'function'; }
     function guidePreload() { lazy(GUIDE, guideReady, function () {}); }
@@ -854,6 +873,7 @@
           read: function () { return OPT.passport ? get('an-x-read', {}) || {} : null; },
           tools: OPT.tools ? function () { openPanel(b); } : null,
           teaser: OPT.teaser ? function () { teaserOpen(null); } : null,
+          music: OPT.music && AUDIO ? function () { musicOpen(null); } : null,
           hide: function () { P.guide = 0; save(); apply(); sync(); }
         });
         guide.mod.toggle();
@@ -896,6 +916,55 @@
       var b = guide.el; if (!b || b.hidden || AN.rm) return;
       b.classList.remove('joy'); void b.offsetWidth; b.classList.add('joy');
       setTimeout(function () { b.classList.remove('joy'); }, 1600);
+    }
+    /* ---------- shooting stars: now and then a meteor crosses the night sky (kit 10) ----------
+       One short-lived element at a time, moved only by transform and opacity, and only while the night sky is on
+       screen: not in the day version, not in a reading tone, not with the sky or motion turned off, not in a hidden
+       tab, not in the light version. Nothing is drawn or timed while any of that holds. */
+    function meteorInit() {
+      var sky = $('.an-sky'); if (!sky || LITE || !W.requestAnimationFrame) return;
+      function can() {
+        var ph = H.getAttribute('data-sky');
+        return !D.hidden && !AN.rm && P.sky && !H.getAttribute('data-an-tone') && H.getAttribute('data-v') !== 'b' && !H.classList.contains('an-present') && (!ph || ph === 'night' || ph === 'twilight');
+      }
+      function later(first) { setTimeout(fire, first ? 3500 + Math.random() * 3000 : 9000 + Math.random() * 15000); }
+      function fire() {
+        if (can() && !$('.an-x-meteor', sky)) {
+          var m = el('i', 'an-x-meteor'), down = Math.random() < 0.5, a = down ? 18 + Math.random() * 22 : 140 + Math.random() * 22;
+          m.setAttribute('aria-hidden', 'true');
+          m.style.setProperty('--x', (down ? 8 + Math.random() * 50 : 42 + Math.random() * 50).toFixed(1) + 'vw');
+          m.style.setProperty('--y', (4 + Math.random() * 38).toFixed(1) + 'vh');
+          m.style.setProperty('--a', a.toFixed(1) + 'deg');
+          m.style.setProperty('--d', (0.9 + Math.random() * 0.7).toFixed(2) + 's');
+          m.addEventListener('animationend', function () { m.remove(); });
+          sky.appendChild(m);
+          setTimeout(function () { if (m.parentNode) m.remove(); }, 3000);
+        }
+        later();
+      }
+      later(true);
+    }
+    /* ---------- the home cards lean toward a mouse pointer, a few degrees in depth (kit 10) ---------- */
+    function tiltInit() {
+      if (LITE || osRM || !W.matchMedia || !W.matchMedia('(pointer: fine)').matches) return;
+      var cur = null, x = 0, y = 0, tick = false;
+      H.classList.add('an-x-tilt');
+      function reset(c) { if (c) { c.style.removeProperty('--rx'); c.style.removeProperty('--ry'); } }
+      D.addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        var c = e.target.closest && e.target.closest('.an-card');
+        if (c !== cur) { reset(cur); cur = c; }
+        if (!c || AN.rm) return;
+        x = e.clientX; y = e.clientY;
+        if (tick) return;
+        tick = true;
+        requestAnimationFrame(function () {
+          tick = false; if (!cur) return;
+          var r = cur.getBoundingClientRect(), kx = (x - r.left) / r.width - 0.5, ky = (y - r.top) / r.height - 0.5, m = r.width > 640 ? 2 : 4;
+          cur.style.setProperty('--ry', (kx * m * 2).toFixed(2) + 'deg'); cur.style.setProperty('--rx', (-ky * m * 2).toFixed(2) + 'deg');
+        });
+      }, { passive: true });
+      D.addEventListener('pointerleave', function () { reset(cur); cur = null; });
     }
     function guideInit() {
       if (!OPT.guide || !D.body) return;
@@ -955,6 +1024,8 @@
     }
 
     guideInit();
+    meteorInit();
+    tiltInit();
     teaserInit();
     musicInit();
     H.classList.add('an-x-on');

@@ -240,16 +240,20 @@ a.an-x-st:hover { text-decoration: none; border-color: var(--rc); transform: sca
 
 /* «نگار», the blog's guide: a figure of light in the corner across from «to the top» (left in a right-to-left page),
    its card above it and the walk through the page. Colours follow the version, the hour of the sky and the tone. */
-.an-g { --g-core: #9CC3FF; --g-edge: #6D8BFF; --g-eye: #0B1430; --g-ring: var(--g-core); position: fixed; z-index: 46; inset-inline-end: 20px; bottom: 20px; width: 60px; height: 60px; padding: 0; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--border-2); background: var(--glass-2); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: var(--shadow); color: var(--text); cursor: pointer; transition: transform var(--t-mid) var(--ease), border-color var(--t-mid); }
+.an-g { --g-core: #9CC3FF; --g-edge: #6D8BFF; --g-eye: #0B1430; --g-lit: #E9F4FF; --g-ring: var(--g-core); isolation: isolate; position: fixed; z-index: 46; inset-inline-end: 20px; bottom: 20px; width: 60px; height: 60px; padding: 0; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--border-2); background: var(--glass-2); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: var(--shadow); color: var(--text); cursor: pointer; transition: transform var(--t-mid) var(--ease), border-color var(--t-mid); }
 .an-g[hidden] { display: none; }
 .an-g:hover, .an-g.open { border-color: var(--accent); transform: translateY(-2px); }
+/* a slow comet of colour round the rim, and a soft glow of the figure's own colour */
+.an-g::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0 10%, var(--g-core) 24%, transparent 36% 56%, var(--g-edge) 72%, transparent 86%); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px)); mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px)); opacity: .9; pointer-events: none; animation: an-g-spin 14s linear infinite; }
+.an-g::after { content: ""; position: absolute; inset: 8px; z-index: -1; border-radius: 50%; box-shadow: 0 0 22px 2px var(--g-core); opacity: .28; pointer-events: none; transition: opacity var(--t-mid); }
+.an-g:hover::after, .an-g.open::after { opacity: .5; }
 .an-g:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .an-g[aria-busy="true"] { cursor: progress; }
 .an-g svg, .an-g-mini svg { width: 54px; height: 54px; overflow: visible; }
-[data-v="b"] .an-g, [data-v="b"] .an-g-card { --g-core: #FFB547; --g-edge: #F2683A; --g-eye: #3A1C06; }
+[data-v="b"] .an-g, [data-v="b"] .an-g-card { --g-core: #FFB547; --g-edge: #F2683A; --g-eye: #3A1C06; --g-lit: #FFF4DC; }
 [data-sky="sunrise"] .an-g, [data-sky="sunset"] .an-g, [data-sky="twilight"] .an-g { --g-core: #FFA07A; --g-edge: #B57BFF; }
-[data-an-tone="paper"] .an-g, [data-an-tone="paper"] .an-g-card { --g-core: #C26B1E; --g-edge: #8B3A0E; --g-eye: #2B1406; }
-[data-an-tone="contrast"] .an-g, [data-an-tone="contrast"] .an-g-card { --g-core: #FFFFFF; --g-edge: #FFD400; --g-eye: #000000; }
+[data-an-tone="paper"] .an-g, [data-an-tone="paper"] .an-g-card { --g-core: #C26B1E; --g-edge: #8B3A0E; --g-eye: #2B1406; --g-lit: #FFE9C7; }
+[data-an-tone="contrast"] .an-g, [data-an-tone="contrast"] .an-g-card { --g-core: #FFFFFF; --g-edge: #FFD400; --g-eye: #000000; --g-lit: #FFFFFF; }
 .an-g-s0 { stop-color: var(--g-core); stop-opacity: 0; }
 .an-g-s1 { stop-color: var(--g-core); stop-opacity: .45; }
 .an-g-s2 { stop-color: var(--g-core); }
@@ -257,27 +261,49 @@ a.an-x-st:hover { text-decoration: none; border-color: var(--rc); transform: sca
 .an-g-s4 { stop-color: #FFFFFF; }
 .an-g-orb { stroke: var(--g-ring, var(--g-core)); stroke-width: 1.1; stroke-dasharray: 1.6 2.4; opacity: .75; }
 .an-g-run { stroke: #FFFFFF; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 7 93; animation: an-g-run 9s linear infinite; }
+.an-g-orb2 { stroke: var(--g-edge); stroke-dasharray: .8 2.2; opacity: .6; }
+.an-g-run2 { stroke: var(--g-lit); stroke-width: 1.6; stroke-dasharray: 5 95; animation-duration: 6.5s; animation-direction: reverse; }
 .an-g-arm { stroke: var(--g-core); stroke-width: 1.7; stroke-linecap: round; opacity: .9; }
+.an-g-hand { fill: var(--g-lit); }
+.an-g-rim { stroke: #FFFFFF; stroke-width: .7; stroke-linecap: round; opacity: .45; }
+.an-g-net { stroke: #FFFFFF; stroke-width: .45; stroke-linecap: round; stroke-linejoin: round; opacity: .5; }
+.an-g-node circle { fill: #FFFFFF; opacity: .8; }
+.an-g-core { fill: #FFFFFF; opacity: .3; transform-box: fill-box; transform-origin: center; animation: an-g-pulse 2.8s ease-in-out infinite; }
 .an-g-spark { fill: #FFFFFF; }
-.an-g-eyes ellipse { fill: var(--g-eye); }
-.an-g-eyes { transform-box: fill-box; transform-origin: center; animation: an-g-blink 5.5s infinite; }
-.an-g-dots circle { fill: var(--g-core); animation: an-g-tw 3.2s ease-in-out infinite alternate; }
-.an-g-dots circle:nth-child(2) { animation-delay: -1.1s; }
-.an-g-dots circle:nth-child(3) { animation-delay: -2.3s; }
-.an-g-dots circle:nth-child(4) { animation-delay: -.6s; }
-.an-g-dots circle:nth-child(5) { animation-delay: -1.7s; }
-.an-g .an-g-fig { animation: an-g-float 6s ease-in-out infinite alternate; }
+.an-g-ant { stroke: var(--g-edge); stroke-width: .9; stroke-linecap: round; }
+.an-g-beacon { fill: var(--g-lit); }
+.an-g-glow { fill: var(--g-core); opacity: .4; transform-box: fill-box; transform-origin: center; animation: an-g-pulse 2.2s ease-in-out -1s infinite; }
+.an-g-visor { fill: var(--g-eye); opacity: .9; }
+.an-g-shine { stroke: #FFFFFF; stroke-width: 1.1; stroke-linecap: round; opacity: .75; }
+.an-g-eyes ellipse { fill: var(--g-lit); }
+.an-g-eyes { transform-box: fill-box; transform-origin: center; animation: an-g-blink 5.5s infinite; transition: transform var(--t-mid) var(--ease); }
+/* with the card open the eyes smile (a squint) */
+.an-g.open .an-g-eyes { animation: none; transform: scaleY(.55); }
+.an-g-pad { fill: var(--g-core); opacity: .35; transform-box: fill-box; transform-origin: center; animation: an-g-pad 6s ease-in-out infinite alternate; }
+.an-g-dots > * { fill: var(--g-core); animation: an-g-tw 3.2s ease-in-out infinite alternate; }
+.an-g-dots > :nth-child(2) { fill: var(--g-lit); animation-delay: -1.1s; }
+.an-g-dots > :nth-child(3) { animation-delay: -2.3s; }
+.an-g-dots > :nth-child(4) { animation-delay: -.6s; }
+.an-g-dots > :nth-child(5) { fill: var(--g-lit); animation-delay: -1.7s; }
+.an-g-dots > :nth-child(6) { animation-delay: -2.8s; }
+.an-g .an-g-float { animation: an-g-float 6s ease-in-out infinite alternate; }
 .an-g.hi .an-g-wave { transform-box: fill-box; transform-origin: 0 0; animation: an-g-wave .45s ease-in-out 6 alternate; }
 .an-g.joy .an-g-fig { animation: an-g-joy .7s var(--ease) 2; }
 @keyframes an-g-run { to { stroke-dashoffset: -100; } }
+@keyframes an-g-spin { to { transform: rotate(1turn); } }
+@keyframes an-g-pulse { 0%, 100% { opacity: .18; transform: scale(.8); } 50% { opacity: .55; transform: scale(1.15); } }
+@keyframes an-g-pad { from { opacity: .4; transform: none; } to { opacity: .2; transform: scale(.72); } }
 @keyframes an-g-tw { from { opacity: .2; } to { opacity: .95; } }
 @keyframes an-g-float { from { transform: translateY(1.5px); } to { transform: translateY(-2.5px); } }
 @keyframes an-g-blink { 0%, 93%, 100% { transform: none; } 96% { transform: scaleY(.15); } }
 @keyframes an-g-wave { from { transform: rotate(-12deg); } to { transform: rotate(-46deg); } }
 @keyframes an-g-joy { 0%, 100% { transform: none; } 40% { transform: translateY(-7px) scale(1.06); } }
 /* the light version: a still figure (phones, touch screens, weak graphics, data saver) */
+/* while «رادیو آینده» plays, «نگار» sways in time (two beats a sway) */
+.an-g.dance .an-g-float { transform-box: fill-box; transform-origin: 50% 100%; animation: an-g-dance var(--g-beat, 1.5s) ease-in-out infinite; }
+@keyframes an-g-dance { 0%, 100% { transform: translateY(0) rotate(-5deg); } 25% { transform: translateY(-2px) rotate(0deg); } 50% { transform: translateY(0) rotate(5deg); } 75% { transform: translateY(-2px) rotate(0deg); } }
 .an-g.lite .an-g-run { display: none; }
-.an-g.lite .an-g-fig, .an-g.lite .an-g-dots circle { animation: none; }
+.an-g.lite .an-g-fig, .an-g.lite .an-g-float, .an-g.lite .an-g-dots > *, .an-g.lite .an-g-core, .an-g.lite .an-g-glow, .an-g.lite .an-g-pad, .an-g.lite::before { animation: none; }
 .an-g-chip { position: fixed; z-index: 46; inset-inline-end: 92px; bottom: 30px; max-width: min(300px, calc(100vw - 124px)); padding: 9px 14px; border-radius: 14px 14px 14px 4px; border: 1px solid var(--border-2); background: var(--surface); color: var(--text); box-shadow: var(--shadow); font-size: var(--fs-0); font-weight: 600; line-height: 1.8; opacity: 0; transform: translateX(-8px); transition: opacity .35s, transform .35s var(--ease); pointer-events: none; }
 .an-g-chip.on { opacity: 1; transform: none; }
 /* the card */
@@ -285,7 +311,8 @@ a.an-x-st:hover { text-decoration: none; border-color: var(--rc); transform: sca
 .an-g-card[hidden] { display: none; }
 .an-g-card.on { opacity: 1; transform: none; }
 .an-g-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.an-g-mini { width: 42px; height: 42px; flex: none; display: grid; place-items: center; }
+.an-g-card::before { content: ""; position: sticky; top: -14px; z-index: 1; display: block; height: 3px; margin: -14px -16px 11px; background: linear-gradient(90deg, var(--g-edge), var(--g-core), var(--g-edge)); }
+.an-g-mini { width: 42px; height: 42px; flex: none; display: grid; place-items: center; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--g-core) 26%, transparent), transparent 70%); }
 .an-g-mini svg { width: 42px; height: 42px; }
 .an-g-mini .an-g-run { display: none; }
 .an-g-mini * { animation: none !important; }
@@ -331,10 +358,10 @@ a.an-x-st:hover { text-decoration: none; border-color: var(--rc); transform: sca
 /* less motion: the drawer, stamps and bars appear without moving */
 [data-motion="reduce"] .an-x-btn, [data-motion="reduce"] .an-x-drawer .an-dlg-box, [data-motion="reduce"] .an-x-seal.stamp .an-x-seal-i { animation: none; }
 [data-motion="reduce"] .an-x-resume, [data-motion="reduce"] .an-x-player, [data-motion="reduce"] .an-x-sw i::after, [data-motion="reduce"] .an-x-st { transition: none; }
-[data-motion="reduce"] .an-g, [data-motion="reduce"] .an-g *, [data-motion="reduce"] .an-g-chip, [data-motion="reduce"] .an-g-card, [data-motion="reduce"] .an-g-spot { animation: none !important; transition: none !important; }
+[data-motion="reduce"] .an-g, [data-motion="reduce"] .an-g *, [data-motion="reduce"] .an-g::before, [data-motion="reduce"] .an-g-chip, [data-motion="reduce"] .an-g-card, [data-motion="reduce"] .an-g-spot { animation: none !important; transition: none !important; }
 [data-motion="reduce"] .an-g-run { display: none; }
 @media (prefers-reduced-motion: reduce) {
-  .an-g, .an-g *, .an-g-chip, .an-g-card, .an-g-spot { animation: none !important; transition: none !important; }
+  .an-g, .an-g *, .an-g::before, .an-g-chip, .an-g-card, .an-g-spot { animation: none !important; transition: none !important; }
   .an-g-run { display: none; }
 }
 
@@ -376,7 +403,7 @@ a.an-x-st:hover { text-decoration: none; border-color: var(--rc); transform: sca
 .an-x-mu[aria-busy="true"], .an-x-radio[aria-busy="true"] { opacity: .7; cursor: progress; }
 .an-x-radio svg { width: 18px; height: 18px; }
 .an-x-radio small { font-weight: 500; opacity: .75; }
-@media (max-width: 479px) { .an-x-mu { display: none; } }
+@media (max-width: 979px) { .an-x-mu { display: none; } }
 
 .an-mu-dlg .an-dlg-box { width: min(920px, 100%); }
 .an-mu-stage { position: relative; aspect-ratio: 16 / 9; margin-inline: auto; max-width: max(280px, calc((100vh - 420px) * 16 / 9)); border-radius: var(--r-md, 14px); overflow: hidden; background: #03050c; box-shadow: 0 0 0 1px rgba(255, 255, 255, .06), 0 18px 50px -20px var(--m1, #FFB36B); transition: box-shadow 1.2s var(--ease); }
@@ -427,3 +454,16 @@ a.an-x-st:hover { text-decoration: none; border-color: var(--rc); transform: sca
 [data-motion="reduce"] .an-mu-dock, [data-motion="reduce"] .an-mu-on .an-mu-ico path { animation: none; }
 @media (prefers-reduced-motion: reduce) { .an-mu-dock, .an-mu-on .an-mu-ico path { animation: none !important; } }
 @media print { .an-mu-dock, .an-x-mu, .an-x-radio { display: none !important; } }
+
+/* shooting stars (kit 10): a bright head and a fading tail, crossing the night sky once */
+.an-sky > .an-x-meteor { inset: auto; left: var(--x); top: var(--y); width: min(220px, 26vw); height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, rgba(160, 196, 255, .35) 55%, rgba(236, 244, 255, .95) 92%, #FFFFFF); box-shadow: 0 0 6px rgba(190, 214, 255, .55); transform-origin: 100% 50%; opacity: 0; animation: an-x-meteor var(--d, 1.2s) cubic-bezier(.25, .6, .35, 1) forwards; }
+@keyframes an-x-meteor {
+  0% { opacity: 0; transform: rotate(var(--a)) translateX(0) scaleX(.15); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--a)) translateX(min(320px, 34vw)) scaleX(1); }
+}
+[data-motion="reduce"] .an-x-meteor { display: none; }
+@media (prefers-reduced-motion: reduce) { .an-x-meteor { display: none; } }
+
+/* the home cards lean toward the pointer (kit 10; mouse only, never with reduced motion) */
+html.an-x-tilt:not([data-motion="reduce"]) .an-card:hover { transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px); }

@@ -104,7 +104,7 @@ try {
     const { ctx, page, errors } = await fresh({ tts: true });
     await page.goto(BASE + 'post-1.html', { waitUntil: 'load' });
     await ready(page);
-    ok('post: toolkit loaded (html.an-x-on, AN.x.v=9)', await page.evaluate(() => window.AN.x && window.AN.x.v === 9));
+    ok('post: toolkit loaded (html.an-x-on, AN.x.v=10)', await page.evaluate(() => window.AN.x && window.AN.x.v === 10));
     ok('post: header button first in the tools', await page.evaluate(() => { const t = document.querySelector('#an-bar .an-tools'); return !!t && t.firstElementChild.classList.contains('an-x-btn'); }));
     ok('post: custom box takes no room', await page.evaluate(() => { const c = document.querySelector('.an-custom'); return !!c && getComputedStyle(c).display === 'none'; }));
     ok('post: keys list has R/F/Q', await page.evaluate(() => /ابزار خواننده/.test((document.querySelector('#an-keys .an-keys-list') || {}).textContent || '')));
@@ -496,11 +496,11 @@ try {
         css: [...document.querySelectorAll('link[rel=stylesheet]')].filter(l => /\/bmc\/dist\/bmc\.css$/.test(l.href)).map(l => !!l.integrity && !!l.sheet),
         js: [...document.scripts].filter(s => /\/bmc\/dist\/bmc\.js$/.test(s.src)).map(s => !!s.integrity),
         bmc: !!document.getElementById('bmc'), styled: getComputedStyle(document.getElementById('bmc')).getPropertyValue('--ink').trim().toUpperCase() === '#15191C', started: document.getElementById('bmc').bmcOn === 1,
-        tools: !!document.querySelector('#an-bar .an-tools .an-x-btn'), x: !!(window.AN && window.AN.x && window.AN.x.v === 9)
+        tools: !!document.querySelector('#an-bar .an-tools .an-x-btn'), x: !!(window.AN && window.AN.x && window.AN.x.v === 10)
       }));
       ok('/page/bmc: bmc.css and bmc.js from the pin, each once and with integrity', asked.filter(f => f === 'bmc.css').length === 1 && asked.filter(f => f === 'bmc.js').length === 1 && r.css.length === 1 && r.css[0] && r.js.length === 1 && r.js[0], JSON.stringify({ asked, css: r.css, js: r.js }));
       ok('/page/bmc: the canvas styled by bmc.css and started by bmc.js', r.bmc && r.styled && r.started, JSON.stringify(r));
-      ok('/page/bmc: the toolkit still there (AN.x.v=9, header button)', r.x && r.tools, JSON.stringify(r));
+      ok('/page/bmc: the toolkit still there (AN.x.v=10, header button)', r.x && r.tools, JSON.stringify(r));
       await page.click('#an-bar .an-x-btn'); await page.waitForSelector('#an-x.on', { timeout: 5000 }).catch(() => {});
       const panel = await page.evaluate(() => ({ on: !!document.querySelector('#an-x.on'), sw: !!document.querySelector('#an-x [data-p="guide"]'), guide: !!document.querySelector('.an-g') }));
       ok('/page/bmc: the panel opens, and «نگار» is there (its button and its switch)', panel.on && panel.sw && panel.guide, JSON.stringify(panel));

@@ -44,7 +44,8 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   ok(NSTEPS + ' steps to tick (seven plus one per post)', (await p.$$('input[data-step]')).length === NSTEPS);
   const parts = [[1, '1-main-and-posts.html'], [2, '2-archive.html'], [3, '3-pages.html']];
   const version = (await p.textContent('#kit-version')) || '';
-  ok('version notice names kit 9 and asks for steps 2, 3, 4 and 7', /نسخه‌ی ۹ کیت/.test(version) && /گام ۲ را دوباره انجام دهید/.test(version) && new RegExp('در گام ۳ «تعداد پستها در صفحه نخست» را ' + faN(NPOSTS) + ' یا').test(version) && /در گام ۴ کد کادر اختصاصی را با کد تازه عوض کنید/.test(version) && new RegExp('در گام ۷ فقط مقاله‌ی ' + faN(NPOSTS) + ' را منتشر').test(version), version.slice(0, 160));
+  ok('version notice names kit 10, the radio, and says only step 4 over a kit 9 template', /نسخه‌ی ۱۰ کیت/.test(version) && /رادیو آینده/.test(version) && /اگر قالب کیت ۹ نصب است، فقط گام ۴ لازم است/.test(version), version.slice(0, 160));
+  ok('version notice: for a blog without the kit 9 template, still steps 2, 3, 4 and 7', /نسخه‌ی ۱۰ کیت/.test(version) && /گام ۲ را دوباره انجام دهید/.test(version) && new RegExp('در گام ۳ «تعداد پستها در صفحه نخست» را ' + faN(NPOSTS) + ' یا').test(version) && /در گام ۴ کد کادر اختصاصی را با کد تازه عوض کنید/.test(version) && new RegExp('در گام ۷ فقط مقاله‌ی ' + faN(NPOSTS) + ' را منتشر').test(version), version.slice(0, 160));
   // Blogfa keeps the first 100 characters of the blog's description; a longer one is cut in the footer and the meta tags
   const desc = await p.evaluate(() => JSON.parse(document.getElementById('kit-data').textContent).blog.desc);
   ok('the blog description offered is 100 characters or fewer, and the note beside it says so', !!desc && [...desc].length <= 100 && /۱۰۰ نویسه/.test(await p.textContent('#desc-note')), desc && [...desc].length);
@@ -72,8 +73,8 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   // the old box lost its second block; step 4 now backs the box up, empties it and pastes the one code
   const keep = await p.textContent('#box-keep'), steps = await p.textContent('#box-steps'), fix = await p.textContent('#kit-box-fix');
   ok('step 4: back up, empty the box, paste the one code (old toolkit and canvas lines are inside it)', /پشتیبان/.test(steps) && /Ctrl\s*\+?\s*A/.test(keep) && /AN_X_OPT/.test(keep) && /getElementById\("bmc"\)/.test(keep) && /در کد تازه هستند/.test(keep) && /کد دیگری از خودتان/.test(keep), (keep || '').slice(0, 120));
-  ok('step 4: checks the toolkit button, «نگار», the film button and /page/bmc', /ابزار خواننده/.test(steps) && /نگار/.test(steps) && /ویدیوی معرفی/.test(steps) && /\/page\/bmc/.test(steps));
-  ok('notice: with the kit 9 template already in, only step 4 is left', /فقط گام ۴ مانده است/.test(fix) && /بلوک دومِ بارگذار/.test(fix), (fix || '').slice(0, 100));
+  ok('step 4: checks the toolkit button, «نگار», the film and radio buttons and /page/bmc', /ابزار خواننده/.test(steps) && /نگار/.test(steps) && /ویدیوی معرفی/.test(steps) && /رادیو آینده/.test(steps) && /\/page\/bmc/.test(steps));
+  ok('notice: with the kit 9 template already in, only step 4 is left', /فقط گام ۴ مانده است/.test(fix) && /بلوک دومِ بارگذار/.test(fix) && /بایت به بایت/.test(fix), (fix || '').slice(0, 100));
   ok('step 7 explains how to replace the text of posts already published', /نوشته‌های پیشین/.test(await p.textContent('#update-posts')));
   ok('about page slug copies "about"', (await click('[data-copy="page.slug"]')) === 'about');
   ok('about page body copies pages/about.html without the meta comment', (await click('[data-copy="page.body"]')) === body('pages/about.html'));

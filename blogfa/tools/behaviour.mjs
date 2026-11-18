@@ -878,7 +878,7 @@ if (CDN) {
   // an article has no such button, and a box with teaser: 0 has none either
   const ctx2 = await browser.newContext({ viewport: { width: 1366, height: 900 } });
   if (CDN) await routeCdn(ctx2);
-  await ctx2.route(u => new URL(u).pathname.endsWith('.html'), async route => { const r = await route.fetch(); await route.fulfill({ response: r, body: (await r.text()).replace('teaser: 1 }', 'teaser: 0 }') }); });
+  await ctx2.route(u => new URL(u).pathname.endsWith('.html'), async route => { const r = await route.fetch(); await route.fulfill({ response: r, body: (await r.text()).replace(/teaser: 1\b/, 'teaser: 0') }); });
   const p2 = await ctx2.newPage();
   await p2.goto(BASE + 'post-1.html', { waitUntil: 'load' });
   await p2.waitForFunction(() => document.documentElement.classList.contains('an-x-on'), null, { timeout: 15000 }).catch(() => {});
