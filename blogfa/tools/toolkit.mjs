@@ -29,6 +29,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import { routeCdn } from './cdnroute.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -43,10 +44,18 @@ if (!fs.existsSync(path.join(DIR, 'post-1.html'))) { console.error(`${path.relat
 if (SHOTS) fs.mkdirSync(SHOTS, { recursive: true });
 const snap = (page, name) => SHOTS ? page.screenshot({ path: path.join(SHOTS, name) }) : null;
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.woff2': 'font/woff2', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml' };
+// the canvas line (src/addons/bmc-line.html) and its files, read from the commit it pins when this clone has it
+const BMC_LINE = fs.existsSync(path.join(ROOT, 'src', 'addons', 'bmc-line.html')) ? fs.readFileSync(path.join(ROOT, 'src', 'addons', 'bmc-line.html'), 'utf8') : '';
+const BMC_PIN = (BMC_LINE.match(/@([0-9a-f]{40})\/bmc\/dist\//) || [])[1] || '';
+const bmcFile = f => { try { return execFileSync('git', ['show', `${BMC_PIN}:bmc/dist/${f}`], { cwd: ROOT, maxBuffer: 1 << 26 }); } catch { return null; } };
+const BMC_ON = CDN && !!BMC_PIN && fs.readFileSync(path.join(DIR, 'post-1.html'), 'utf8').includes('getElementById("bmc")') && !!bmcFile('bmc.js');
+const BMC_PAGE = BMC_ON ? fs.readFileSync(path.join(DIR, 'page-about.html'), 'utf8').replace(/(<article class="an-post an-page"[^>]*>)/, '$1' + bmcFile('bmc-page.html').toString('utf8')) : '';
 const server = http.createServer((req, res) => {
   const u = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   // the business-canvas page, as on a blog that has it, so the menu's check (js/core.js) keeps its link
-  if (u === '/page/bmc') { res.writeHead(200, { 'content-type': TYPES['.html'] }); res.end('<!doctype html><title>bmc</title>'); return; }
+  // with the whole box (--cdn), the page holds the canvas markup the owner pastes there (bmc/dist/bmc-page.html at the
+  // line's pin), inside the About page of the preview, so the canvas line and the toolkit run on one page
+  if (u === '/page/bmc') { res.writeHead(200, { 'content-type': TYPES['.html'] }); res.end(BMC_PAGE || '<!doctype html><title>bmc</title>'); return; }
   const f = path.join(DIR, u === '/' ? 'index.html' : u);
   if (!f.startsWith(DIR + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end('nf'); return; }
   res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
@@ -448,6 +457,58 @@ try {
     ok('kit 9 tools: no console errors', errors.length === 0, errors.slice(0, 6).join(' | '));
     await ctx.close();
   }
+  /* 7. The whole box (--cdn): the business-canvas line next to the toolkit. On every other page it asks for nothing;
+        on /page/bmc it loads bmc.css and bmc.js from its pinned commit (with integrity), the canvas starts, and the
+        toolkit, «نگار» and the film button are all still there. */
+  if (BMC_ON) {
+    G = 'canvas line';
+    const bmcRoute = async ctx => {
+      const asked = [];
+      await ctx.route(/^https:\/\/((cdn|fastly|gcore)\.jsdelivr\.net\/gh\/[^/]+\/[^/@]+@|rawcdn\.githack\.com\/[^/]+\/[^/]+\/)[0-9a-f]{40}\/bmc\/dist\//, async route => {
+        const url = route.request().url(), f = path.basename(new URL(url).pathname), body = url.includes(BMC_PIN) ? bmcFile(f) : null;
+        asked.push(f);
+        if (!body) return route.fulfill({ status: 404, body: 'not at the pin', headers: { 'access-control-allow-origin': '*' } });
+        return route.fulfill({ status: 200, body, headers: { 'content-type': f.endsWith('.css') ? 'text/css; charset=utf-8' : f.endsWith('.woff2') ? 'font/woff2' : 'application/javascript; charset=utf-8', 'access-control-allow-origin': '*' } });
+      });
+      return asked;
+    };
+    {
+      const { ctx, page, errors } = await fresh();
+      const asked = await bmcRoute(ctx);
+      const seen = {};
+      for (const p of ['index.html', 'post-1.html', 'page-about.html']) {
+        await page.goto(BASE + p, { waitUntil: 'load' }); await ready(page);
+        seen[p] = await page.evaluate(() => ({ tools: !!document.querySelector('#an-bar .an-x-btn'), guide: !!document.querySelector('.an-g'), film: !!document.querySelector('.an-hero-cta .an-x-teaser') }));
+      }
+      ok('home, post and About: the canvas line asks for nothing', asked.length === 0, asked.join(', '));
+      ok('with the whole box: toolkit button and «نگار» on every page, the film button on the home page', Object.values(seen).every(v => v.tools && v.guide) && seen['index.html'].film, JSON.stringify(seen));
+      ok('home, post and About: no console errors with the whole box', errors.length === 0, errors.slice(0, 4).join(' | '));
+      await ctx.close();
+    }
+    {
+      const { ctx, page, errors } = await fresh();
+      const asked = await bmcRoute(ctx);
+      await page.goto(BASE + 'page/bmc', { waitUntil: 'load' });
+      await ready(page);
+      await page.waitForFunction(() => [...document.styleSheets].some(s => /\/bmc\.css$/.test(s.href || '')) && [...document.scripts].some(s => /\/bmc\.js$/.test(s.src)), null, { timeout: 10000 }).catch(() => {});
+      await page.waitForTimeout(1500);
+      const r = await page.evaluate(() => ({
+        css: [...document.querySelectorAll('link[rel=stylesheet]')].filter(l => /\/bmc\/dist\/bmc\.css$/.test(l.href)).map(l => !!l.integrity && !!l.sheet),
+        js: [...document.scripts].filter(s => /\/bmc\/dist\/bmc\.js$/.test(s.src)).map(s => !!s.integrity),
+        bmc: !!document.getElementById('bmc'), styled: getComputedStyle(document.getElementById('bmc')).getPropertyValue('--ink').trim().toUpperCase() === '#15191C', started: document.getElementById('bmc').bmcOn === 1,
+        tools: !!document.querySelector('#an-bar .an-tools .an-x-btn'), x: !!(window.AN && window.AN.x && window.AN.x.v === 9)
+      }));
+      ok('/page/bmc: bmc.css and bmc.js from the pin, each once and with integrity', asked.filter(f => f === 'bmc.css').length === 1 && asked.filter(f => f === 'bmc.js').length === 1 && r.css.length === 1 && r.css[0] && r.js.length === 1 && r.js[0], JSON.stringify({ asked, css: r.css, js: r.js }));
+      ok('/page/bmc: the canvas styled by bmc.css and started by bmc.js', r.bmc && r.styled && r.started, JSON.stringify(r));
+      ok('/page/bmc: the toolkit still there (AN.x.v=9, header button)', r.x && r.tools, JSON.stringify(r));
+      await page.click('#an-bar .an-x-btn'); await page.waitForSelector('#an-x.on', { timeout: 5000 }).catch(() => {});
+      const panel = await page.evaluate(() => ({ on: !!document.querySelector('#an-x.on'), sw: !!document.querySelector('#an-x [data-p="guide"]'), guide: !!document.querySelector('.an-g') }));
+      ok('/page/bmc: the panel opens, and «نگار» is there (its button and its switch)', panel.on && panel.sw && panel.guide, JSON.stringify(panel));
+      await page.keyboard.press('Escape');
+      ok('/page/bmc: no console errors with the canvas and the toolkit together', errors.length === 0, errors.slice(0, 4).join(' | '));
+      await ctx.close();
+    }
+  } else if (CDN) { G = 'canvas line'; console.log('· canvas line: not in the preview box or its commit not in this clone, not tested'); }
 } catch (e) {
   G = 'run'; ok('script ran to the end', false, String(e && e.stack || e).slice(0, 600));
 } finally {
@@ -455,6 +516,6 @@ try {
   server.close();
 }
 const failed = results.filter(r => !r.pass).length;
-fs.writeFileSync(path.join(ROOT, 'quality', CDN ? 'toolkit-cdn-results.json' : 'toolkit-results.json'), JSON.stringify({ generated: new Date().toISOString(), browser: 'Chromium (Playwright)', box: CDN ? 'dist/box.html' : 'dist/box-local.html', passed: results.length - failed, failed, results }, null, 1));
+fs.writeFileSync(path.join(ROOT, 'quality', CDN ? 'toolkit-cdn-results.json' : 'toolkit-results.json'), JSON.stringify({ generated: new Date().toISOString(), browser: 'Chromium (Playwright)', box: CDN ? (BMC_ON ? 'dist/box-full.html' : 'dist/box.html') : 'dist/box-local.html', passed: results.length - failed, failed, results }, null, 1));
 console.log(`\n${results.length - failed}/${results.length} passed`);
 process.exit(failed ? 1 : 0);

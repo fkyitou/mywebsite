@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-11-14T09:41:06.115Z",
+  "builtAt": "2026-11-14T13:38:53.763Z",
   "cdn": {
     "repo": "fkyitou/mywebsite",
     "ref": "a8d0cf4ce1cc068bc56335d3f36f244982e198e2",
@@ -224,8 +224,9 @@
     "qr": "an-qr.1952338bb7.js",
     "guide": "an-guide.2536c925d3.js",
     "teaser": "an-teaser.ac96eae9f5.js",
-    "box": 2288,
+    "box": 2449,
     "boxWritten": true,
+    "boxFull": 3460,
     "words": {
       "terms": 65,
       "keys": 33

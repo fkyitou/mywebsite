@@ -1,7 +1,7 @@
 /* آینده‌نگار · kittest — behaviour tests of the install kit (kit.html) in a real browser (Chromium via Playwright).
    Every copy button must put exactly the right text on the clipboard (the three template parts in both versions, the
    combined templates, the seven category names, the About page and each post), every template part offered must fit
-   the 60 KB budget (the kit offers the CDN build only), the code for the custom-code box must be dist/box.html exactly,
+   the 60 KB budget (the kit offers the CDN build only), the code for the custom-code box must be dist/box-full.html exactly (the toolkit and the canvas line),
    pinned to the same commit as the template, the version notice and the jsDelivr test link must be there
    and point at a real file of the pinned commit, «کپی همه» must join at most four tags
    with the ASCII comma Blogfa splits on, ticks and the version choice must survive a reload, axe must find no WCAG A/AA
@@ -66,11 +66,14 @@ const ok = (name, cond, info) => { if (cond) pass++; else fail++; console.log((c
   ok('category 7 copies its exact name', (await click('[data-copy="cats.6"]')) === 'ایده و خلاقیت');
   // the toolkit for Blogfa's custom-code box: the exact file, small, loading from the template's pinned commit
   const boxText = await click('[data-copy="box"]');
-  ok('custom-code box copies dist/box.html', boxText === read('dist/box.html'));
-  ok('custom-code box is small and loads from the pinned commit', Buffer.byteLength(boxText || '') <= 4096 && (boxText || '').includes(`https://cdn.jsdelivr.net/gh/${CDN.repo}@${CDN.ref}/${CDN.dir}/`), (boxText || '').length);
-  // the business-canvas page has its own line in the same box; replacing the box wholesale would drop it
-  const keep = await p.textContent('#box-keep');
-  ok('step 4 replaces only the old Ayandeh-Negar blocks and keeps the canvas line', /AN_X_OPT/.test(keep) && /getElementById\("bmc"\)/.test(keep) && /bmc-box-code\.txt/.test(keep) && /نگه دارید/.test(keep), (keep || '').slice(0, 120));
+  ok('custom-code box copies dist/box-full.html (the toolkit and the canvas line)', boxText === read('dist/box-full.html') && boxText.startsWith(read('dist/box.html')) && boxText.endsWith(read('src/addons/bmc-line.html').trim() + '\n'));
+  ok('custom-code box is small and loads from the pinned commit', Buffer.byteLength(boxText || '') <= 6144 && (boxText || '').includes(`https://cdn.jsdelivr.net/gh/${CDN.repo}@${CDN.ref}/${CDN.dir}/`), (boxText || '').length);
+  ok('custom-code box: options and loader in one block, then the canvas line', ((boxText || '').match(/<script>/g) || []).length === 2 && /window\.AN_X_OPT[^<]*AN_XL/.test(boxText || ''));
+  // the old box lost its second block; step 4 now backs the box up, empties it and pastes the one code
+  const keep = await p.textContent('#box-keep'), steps = await p.textContent('#box-steps'), fix = await p.textContent('#kit-box-fix');
+  ok('step 4: back up, empty the box, paste the one code (old toolkit and canvas lines are inside it)', /پشتیبان/.test(steps) && /Ctrl\s*\+?\s*A/.test(keep) && /AN_X_OPT/.test(keep) && /getElementById\("bmc"\)/.test(keep) && /در کد تازه هستند/.test(keep) && /کد دیگری از خودتان/.test(keep), (keep || '').slice(0, 120));
+  ok('step 4: checks the toolkit button, «نگار», the film button and /page/bmc', /ابزار خواننده/.test(steps) && /نگار/.test(steps) && /ویدیوی معرفی/.test(steps) && /\/page\/bmc/.test(steps));
+  ok('notice: with the kit 9 template already in, only step 4 is left', /فقط گام ۴ مانده است/.test(fix) && /بلوک دومِ بارگذار/.test(fix), (fix || '').slice(0, 100));
   ok('step 7 explains how to replace the text of posts already published', /نوشته‌های پیشین/.test(await p.textContent('#update-posts')));
   ok('about page slug copies "about"', (await click('[data-copy="page.slug"]')) === 'about');
   ok('about page body copies pages/about.html without the meta comment', (await click('[data-copy="page.body"]')) === body('pages/about.html'));

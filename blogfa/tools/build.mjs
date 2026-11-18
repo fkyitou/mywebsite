@@ -311,16 +311,20 @@ async function addons() {
   const jsA = asset('an-addons', 'js', jsCode);
   const loader = async (M, sri) => jsSource(rd('src', 'addons', 'box.js').replace("'@MIRRORS@'", JSON.stringify(M))
     .replace("'@CSSFILE@'", JSON.stringify([cssA.file, cssA.sri])).replace("'@JSFILE@'", JSON.stringify([jsA.file, jsA.sri])).replace("'@SRI@'", sri ? '1' : '0'), 'box loader');
-  // Only /* */ comments in the box: if a newline were ever lost on the way, a // comment would swallow the code after it
+  // Only /* */ comments in the box: if a newline were ever lost on the way, a // comment would swallow the code after it.
+  // One <script> holds the options and the loader together. Kits 8 and 9 used two, and on the live blog (read on
+  // 2026-11-14) the owner's box kept only the first: the options were there, nothing loaded the toolkit, so its
+  // button, «نگار» and the film were gone. A single element cannot be half kept.
   const box = code => [
     '<script>',
     '/* آینده‌نگار · «ابزار خواننده» (کیت ۹): پوسته‌ها، اندازه‌ی متن، خط‌کش خواندن، حالت تمرکز، شنیدن متن، نشان‌ها، گذرنامه‌ی آینده، خودآزمایی، ارجاع، کد QR، «نگار» راهنمای وبلاگ و ویدیوی معرفی.',
     '   طراحی، مدیریت و نویسندگی: امیرحسین همتی. بدون پاپ‌آپ، بدون انتقال صفحه، بدون دست زدن به تبلیغات بلاگفا و بدون فرستادن هیچ داده‌ای.',
+    '   همه‌ی این کد یک تکه است: از برچسب آغاز تا برچسب پایان را با هم نگه دارید و چیزی از میانش برندارید.',
     '   برای خاموش کردن یک ابزار، 1 جلوی نامش را 0 کنید: tools دکمه‌ی نوار بالا، passport گذرنامه، quiz خودآزمایی، listen شنیدن، ruler خط‌کش،',
     '   focus حالت تمرکز، marks نشان‌ها، cite ارجاع، qr کد QR، resume ادامه‌ی خواندن، guide نگار، teaser ویدیوی معرفی. */',
     'window.AN_X_OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1, guide: 1, teaser: 1 };',
-    '</script>',
-    `<script>${code}</script>`, ''
+    code,
+    '</script>', ''
   ].join('\n');
   const M = mirrorsAt(REF || 'REF-NOT-SET');
   return {
@@ -343,6 +347,12 @@ for (const r of reports) if (!r.cdn || ref.ok || UNVERIFIED) for (const [rel, s]
 // the box code names the pinned commit like the CDN templates, so it is written under the same condition
 if (ref.ok || UNVERIFIED) wr('box.html', addon.box);
 wr('box-local.html', addon.boxLocal);
+// The business-canvas page (/page/bmc) has its own one-line loader in the same box, made in its own thread and copied
+// here as src/addons/bmc-line.html (tools/check.mjs checks its shape and its hashes). dist/box-full.html is the whole
+// box, the toolkit and that line, so the owner can replace everything in the box with one paste.
+const BMC_LINE = fs.existsSync(path.join(ROOT, 'src', 'addons', 'bmc-line.html')) ? rd('src', 'addons', 'bmc-line.html').trim() : '';
+if (BMC_LINE && (ref.ok || UNVERIFIED)) wr('box-full.html', addon.box + BMC_LINE + '\n');
+if (BMC_LINE) wr('box-full-local.html', addon.boxLocal + BMC_LINE + '\n');
 const kb = n => (n / 1024).toFixed(1) + ' KB';
 console.log('\nآینده‌نگار · build OK in ' + (Date.now() - t0) + ' ms');
 for (const r of reports) {
@@ -360,5 +370,5 @@ wr('build-report.json', JSON.stringify({
   builtAt: new Date().toISOString(),
   cdn: { repo: CDN.repo, ref: REF, dir: CDN_DIR, ok: ref.ok, pushed: ref.pushed, missing: ref.missing, unverifiedTemplates: !ref.ok && UNVERIFIED, mirrors: MIRRORS, files },
   reports: reports.map(({ out, ...r }) => r),
-  addons: { css: addon.files.css.file, js: addon.files.js.file, qr: addon.files.qr.file, guide: addon.files.guide.file, teaser: addon.files.teaser.file, box: Buffer.byteLength(addon.box), boxWritten: ref.ok || UNVERIFIED, words: addon.words }
+  addons: { css: addon.files.css.file, js: addon.files.js.file, qr: addon.files.qr.file, guide: addon.files.guide.file, teaser: addon.files.teaser.file, box: Buffer.byteLength(addon.box), boxWritten: ref.ok || UNVERIFIED, boxFull: BMC_LINE ? Buffer.byteLength(addon.box + BMC_LINE + '\n') : 0, words: addon.words }
 }, null, 2));

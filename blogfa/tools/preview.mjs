@@ -24,11 +24,13 @@ const ADS = !!arg('ads', false);
 // «ابزار خواننده» (kit 8): the code the owner pastes into Blogfa's custom-code box reaches the page through
 // <-BlogCustomHtml->. A CDN template gets dist/box.html (files from jsDelivr, answered offline by the tests like the
 // template's own); an inline template gets dist/box-local.html, whose files are copied next to the pages.
+// A CDN template gets the whole box when it is built (dist/box-full.html: the toolkit and the business-canvas line),
+// since that is what the owner pastes; the canvas line stays silent on every page but /page/bmc.
 const CDN_TPL = /template-cdn/.test(path.basename(TPL));
 const BOX_ARG = arg('box', null);
 let BOX_FILE = process.argv.includes('--no-box') ? null
   : typeof BOX_ARG === 'string' ? path.resolve(ROOT, BOX_ARG)
-  : path.join(ROOT, 'dist', CDN_TPL ? 'box.html' : 'box-local.html');
+  : path.join(ROOT, 'dist', !CDN_TPL ? 'box-local.html' : fs.existsSync(path.join(ROOT, 'dist', 'box-full.html')) ? 'box-full.html' : 'box.html');
 if (BOX_FILE && !fs.existsSync(BOX_FILE)) {
   if (typeof BOX_ARG === 'string') throw new Error('no such box file: ' + BOX_FILE);
   console.log(`note: ${path.relative(ROOT, BOX_FILE)} not built, the custom-code box stays empty`);

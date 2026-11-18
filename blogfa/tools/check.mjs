@@ -19,6 +19,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
+import { execFileSync } from 'node:child_process';
 import { routeCdn } from './cdnroute.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -153,14 +154,16 @@ for (const f of ['template-cdn.html', 'template-cdn-lite.html']) staticChecks(pa
 /* ---------- the code for Blogfa's custom-code box (dist/box.html) ----------
    The owner pastes it into «کدها و جاوا اسکریپت‌های اختصاصی کاربر», which Blogfa runs on every page. Blogfa forbids code
    there that removes ads, earns money, opens pop-ups or sends the reader elsewhere, so the box holds only the toolkit's
-   options and its loader: two files from the template's pinned commit, each with its integrity hash. */
+   options and its loader in one <script> (kits 8 and 9 used two, and the live box kept only the first): two files from
+   the template's pinned commit, each with its integrity hash. */
 {
   const c = report.cdn || {}, a = report.addons || {}, file = path.join(ROOT, 'dist', 'box.html');
   if (!fs.existsSync(file)) ok('box.html exists', false, 'written once cdn.json names a pushed commit holding dist/cdn (see tools/build.mjs)');
   else {
     const box = fs.readFileSync(file, 'utf8');
     const code = [...box.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]).join('\n');
-    ok('box.html: two plain <script> elements and nothing Blogfa would show as text', (box.match(/<script>/g) || []).length === 2 && box.replace(/<script>[\s\S]*?<\/script>/g, '').trim() === '');
+    ok('box.html: one plain <script> element (options and loader together) and nothing Blogfa would show as text', (box.match(/<script\b/gi) || []).length === 1 && (box.match(/<\/script/gi) || []).length === 1 && box.replace(/<script>[\s\S]*?<\/script>/g, '').trim() === '');
+    ok('box.html: the options come before the loader in the same element', /window\.AN_X_OPT\s*=\s*\{[^}]*\};[\s\S]*AN_XL/.test(code));
     const hits = FORBIDDEN.filter(([re]) => re.test(code)).map(x => x[1]);
     ok('box.html: no code Blogfa blocks or misreads', !hits.length, hits.join(', '));
     const banned = /adsbygoogle|googlesyndication|doubleclick|popunder|\.open\s*\(|location\b|<iframe|<a\b|\.innerHTML|\.style\b/i.exec(code);
@@ -184,6 +187,44 @@ for (const f of ['template-cdn.html', 'template-cdn-lite.html']) staticChecks(pa
     const tz = a.teaser ? path.join(ROOT, 'dist', 'cdn', a.teaser) : '';
     ok(`toolkit: ${a.teaser || 'introduction film'} named with its integrity hash`, !!a.js && !!tz && fs.existsSync(tz) && cdnText(a.js).includes(`"${a.teaser}","${sha384(fs.readFileSync(tz))}"`));
     ok('box.html: not written by an unverified build', !c.unverifiedTemplates, c.unverifiedTemplates ? 'built with --unverified: for offline tests only' : '');
+  }
+}
+
+/* ---------- the whole box: the toolkit and the business-canvas line (dist/box-full.html) ----------
+   The canvas page /page/bmc has its own loader line, made in its own thread and copied to src/addons/bmc-line.html. The
+   owner pastes box-full.html in place of everything in the box. The line may read location.pathname (to stay silent on
+   every other page) and nothing else of the kind; it loads only bmc.css and bmc.js from this repository at one pinned
+   commit, each with the integrity hash of that commit's file. */
+{
+  const lineFile = path.join(ROOT, 'src', 'addons', 'bmc-line.html'), full = path.join(ROOT, 'dist', 'box-full.html'), boxFile = path.join(ROOT, 'dist', 'box.html');
+  const a = report.addons || {}, c = report.cdn || {};
+  if (!fs.existsSync(lineFile)) ok('bmc-line.html exists', false, 'copy BMC-PRESENTATION/bmc-box-code.txt to src/addons/bmc-line.html');
+  else if (!fs.existsSync(full) || !fs.existsSync(boxFile)) ok('box-full.html exists', false, 'written with box.html by a verified build');
+  else {
+    const line = fs.readFileSync(lineFile, 'utf8').trim(), box = fs.readFileSync(boxFile, 'utf8'), all = fs.readFileSync(full, 'utf8');
+    ok('box-full.html: exactly the toolkit box followed by the canvas line', all === box + line + '\n');
+    ok('box-full.html: two plain <script> elements and nothing Blogfa would show as text', (all.match(/<script\b/gi) || []).length === 2 && (all.match(/<\/script/gi) || []).length === 2 && all.replace(/<script>[\s\S]*?<\/script>/g, '').trim() === '');
+    ok('box-full.html: small enough to paste', Buffer.byteLength(all) <= 6144, (Buffer.byteLength(all) / 1024).toFixed(1) + ' KB');
+    ok('box-full.html: the size in the build report', a.boxFull === Buffer.byteLength(all), String(a.boxFull));
+    const code = (line.match(/^<script>([\s\S]*)<\/script>$/) || [])[1] || '';
+    ok('bmc line: one plain <script> element', !!code && !/<\/?script/i.test(code));
+    ok('bmc line: silent unless the page is /page/bmc or holds #bmc', code.startsWith('!function(d,w){if(!d.getElementById("bmc")&&!/^\\/page\\/bmc(\\.aspx)?\\/?$/i.test(w.location.pathname))return;'), code.slice(0, 60));
+    const hits = FORBIDDEN.filter(([re]) => re.test(code)).map(x => x[1]);
+    ok('bmc line: no code Blogfa blocks or misreads', !hits.length, hits.join(', '));
+    const banned = /adsbygoogle|googlesyndication|doubleclick|popunder|\.open\s*\(|<iframe|<a\b|\.innerHTML|\.style\b|cookie|localStorage|fetch\s*\(|XMLHttpRequest|sendBeacon/i.exec(code);
+    ok('bmc line: no ads, earning code, pop-up, storage or network call of its own', !banned, banned ? banned[0] : '');
+    ok('bmc line: location only read, as w.location.pathname', (code.match(/location/g) || []).length === 1 && /w\.location\.pathname\)/.test(code));
+    const urls = [...code.matchAll(/"(https:\/\/[^"]+)"/g)].map(m => m[1]);
+    const pin = ((urls[0] || '').match(/@([0-9a-f]{40})\//) || [])[1] || '';
+    const want = pin ? [`https://cdn.jsdelivr.net/gh/${c.repo}@${pin}/bmc/dist/`, `https://fastly.jsdelivr.net/gh/${c.repo}@${pin}/bmc/dist/`, `https://gcore.jsdelivr.net/gh/${c.repo}@${pin}/bmc/dist/`, `https://rawcdn.githack.com/${c.repo}/${pin}/bmc/dist/`] : [];
+    ok('bmc line: loads from this repository at one pinned commit, jsDelivr and three backups', !!pin && JSON.stringify(urls) === JSON.stringify(want), pin ? pin.slice(0, 12) : 'no pin');
+    const files = [...code.matchAll(/n\("([\w.-]+)","(sha384-[A-Za-z0-9+/=]+)",[01],0\)/g)].map(m => [m[1], m[2]]);
+    ok('bmc line: loads bmc.css and bmc.js, each with an integrity hash', JSON.stringify(files.map(f => f[0])) === '["bmc.css","bmc.js"]' && /\.integrity=h/.test(code) && /\.crossOrigin="anonymous"/.test(code));
+    // the hashes are compared with the files of that commit when this clone has it (git fetch origin claude/project-thread-olk0wp)
+    let blobs = null;
+    try { blobs = files.map(([f]) => execFileSync('git', ['show', `${pin}:bmc/dist/${f}`], { cwd: ROOT, maxBuffer: 1 << 26 })); } catch { blobs = null; }
+    if (blobs) ok(`bmc line: hashes match bmc/dist at ${pin.slice(0, 12)}`, files.every(([, h], i) => sha384(blobs[i]) === h));
+    else console.log(`· bmc line: commit ${pin.slice(0, 12)} not in this clone, hashes not compared (git fetch origin claude/project-thread-olk0wp)`);
   }
 }
 
