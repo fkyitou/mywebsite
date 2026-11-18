@@ -14,7 +14,9 @@
    Everything stays in this browser (localStorage) and nothing is sent anywhere. Blogfa forbids popups, redirects,
    ad changes and earning code in that box; the toolkit has none of them, and the guide never opens by itself. It
    works only with the Ayandeh-Negar template (window.AN); with any other template it stays silent.
-   Keys: R toolkit, F focus mode, Q QR code, G the guide. */
+        · «رادیو آینده», music composed live in the browser (src/addons/music.js, fetched on the first press): five stations
+       that follow the live sky, a new piece each time, and a small dock that keeps it playing while the reader reads.
+   Keys: R toolkit, F focus mode, Q QR code, G the guide, U the radio. */
 (function () {
   'use strict';
   var W = window, D = document, H = D.documentElement;
@@ -22,10 +24,10 @@
   W.AN_XT = 1;
   // filled in by tools/build.mjs: the QR encoder, the guide's card and the introduction film as [file, SRI], every
   // glossary term of the articles, and the first key points of each article as [topic, text]
-  var X = W.AN_X || {}, QR = '@QR@', GUIDE = '@GUIDE@', TEASER = '@TEASER@', TERMS = '@TERMS@', KEYS = '@KEYS@';
+  var X = W.AN_X || {}, QR = '@QR@', GUIDE = '@GUIDE@', TEASER = '@TEASER@', MUSIC = '@MUSIC@', TERMS = '@TERMS@', KEYS = '@KEYS@';
   // what the blog owner switched off in the box (window.AN_X_OPT): 0 turns a tool off. A box pasted before the
-  // guide or the film existed does not name them, and they stay on.
-  var OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1, guide: 1, teaser: 1 };
+  // guide, the film or the radio existed does not name them, and they stay on.
+  var OPT = { tools: 1, passport: 1, quiz: 1, listen: 1, ruler: 1, focus: 1, marks: 1, cite: 1, qr: 1, resume: 1, guide: 1, teaser: 1, music: 1 };
   var own = W.AN_X_OPT || X.opt || {};
   for (var key in OPT) if (Object.prototype.hasOwnProperty.call(own, key)) OPT[key] = own[key] ? 1 : 0;
 
@@ -50,6 +52,8 @@
     var $ = AN.$, $$ = AN.$$, el = AN.el, esc = AN.esc, fa = AN.fa;
     var STORE = ['an-x', 'an-x-read', 'an-x-quiz', 'an-x-marks', 'an-x-pos', 'an-x-idx', 'an-x-guide'];
     var osRM = !!(W.matchMedia && W.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    // the radio needs the Web Audio API; without it, its buttons are not added at all
+    var AUDIO = !!(W.AudioContext || W.webkitAudioContext);
     var FS = [0.9, 1, 1.12, 1.25, 1.4];
     // «خودکار» hands day and night to the visitor's clock (js/live.js, from kit 9); an older template has no such choice
     var LIVE = !!(AN.live && AN.live.preview && AN.live.at && AN.setAuto && AN.autoV);
@@ -71,7 +75,9 @@
       // media controls keep their usual left-to-right shapes in a right-to-left page
       play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
       pause: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5.5" width="3.8" height="13" rx="1"/><rect x="13.7" y="5.5" width="3.8" height="13" rx="1"/></svg>',
-      next: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 6v12l8.5-6zM16 6h2.6v12H16z"/></svg>'
+      next: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 6v12l8.5-6zM16 6h2.6v12H16z"/></svg>',
+      // the radio: three bars that dance while music plays (css: .an-mu-ico)
+      music: '<svg class="an-mu-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18V11M12 18V6M18 18v-9"/><path d="M3.5 21h17" opacity=".4"/></svg>'
     };
 
     /* ---------- the reader's settings ---------- */
@@ -223,6 +229,7 @@
         sec('حرکت و جلوه‌ها', sw('motion', 'جلوه‌های حرکتی', osRM ? 'دستگاه شما «حرکت کمتر» را خواسته است؛ همین رعایت می‌شود.' : 'خاموشش کنید تا صفحه آرام و بی‌حرکت بماند.', osRM) +
           sw('sky', 'آسمان پویای پس‌زمینه') + sw('vt', 'گذار نرم میان صفحه‌ها', 'در مرورگرهایی که پشتیبانی می‌کنند') + ($('[data-an="sound"]') ? sw('snd', 'صدای وبلاگ', 'همان دکمه‌ی صدا در نوار بالا (M)') : '') +
           (OPT.guide ? sw('guide', 'نگار، راهنمای وبلاگ', 'شکل کوچکی از نور در گوشه‌ی صفحه که با یک کلیک (یا کلید G) صفحه را معرفی می‌کند') : '')) +
+        (OPT.music && AUDIO ? sec('رادیو آینده', '<p class="an-x-note">موسیقی‌ای که همین‌جا در مرورگر شما ساخته می‌شود؛ پنج ایستگاه که با آسمان وبلاگ عوض می‌شوند. فقط با دکمه‌ی پخش شروع می‌شود (کلید U).</p><div class="an-x-acts">' + act('music', 'music', 'باز کردن رادیو') + act('music-play', 'play', 'پخش یا مکث', 1) + '</div>') : '') +
         sec(post ? 'این مقاله' : 'این صفحه', actions()) +
         // shown only while some other story is left half-read
         (OPT.resume ? '<section class="an-x-sec an-x-sec-half" hidden><h3>نیمه‌تمام‌ها</h3><div class="an-x-half"></div></section>' : '') +
@@ -263,7 +270,7 @@
     function pressed(k, on) { $$('[data-x="' + k + '"]').forEach(function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); }); }
     // a bar at the bottom of the screen (continue reading, listening) lifts the template's toast above it
     function bars() { H.classList.toggle('an-x-bar', !!$('.an-x-resume.on, .an-x-player.on')); }
-    function openPanel(from) { var d = panel(); sync(); AN.openDlg(d, '.an-dlg-x'); if (from) d._from = from; }
+    function openPanel(from) { var d = panel(); sync(); pressed('music-play', !!music && music.playing()); AN.openDlg(d, '.an-dlg-x'); if (from) d._from = from; }
     function onChange(e) {
       var i = e.target, k = i.getAttribute('data-p');
       if (i.name === 'an-x-theme') { theme(i.value, i.closest('label')); return; }
@@ -295,6 +302,8 @@
       else if (k === 'cite') citeDlg();
       else if (k === 'qr') qrDlg();
       else if (k === 'print') { AN.closeDlg(); setTimeout(function () { W.print(); }, 150); }
+      else if (k === 'music') musicOpen(b);
+      else if (k === 'music-play') musicToggle(b);
     }
     function setFocus(on) {
       if (!post) return;
@@ -314,7 +323,8 @@
     var kl = $('#an-keys .an-keys-list');
     if (kl) kl.insertAdjacentHTML('beforeend', (OPT.tools ? '<dt><kbd>R</kbd></dt><dd>ابزار خواننده: پوسته، اندازه‌ی متن، خط‌کش، گذرنامه و نشان‌ها</dd>' : '') +
       (OPT.focus ? '<dt><kbd>F</kbd></dt><dd>حالت تمرکز، در صفحه‌ی هر مقاله</dd>' : '') + (OPT.qr ? '<dt><kbd>Q</kbd></dt><dd>کد QR همین صفحه، برای باز کردنش روی گوشی</dd>' : '') +
-      (OPT.guide ? '<dt><kbd>G</kbd></dt><dd>نگار، راهنمای وبلاگ: معرفی همین صفحه و گشت کوتاه در آن</dd>' : ''));
+      (OPT.guide ? '<dt><kbd>G</kbd></dt><dd>نگار، راهنمای وبلاگ: معرفی همین صفحه و گشت کوتاه در آن</dd>' : '') +
+      (OPT.music && AUDIO ? '<dt><kbd>U</kbd></dt><dd>رادیو آینده: موسیقی ساخته‌شده در مرورگر، با پنج ایستگاه همراه آسمان</dd>' : ''));
     D.addEventListener('keydown', function (e) {
       if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
       var t = e.target || {}, tag = (t.tagName || '').toLowerCase(), k = e.key;
@@ -328,6 +338,8 @@
       else if ((k === 'q' || k === 'Q' || k === 'ض') && OPT.qr) { e.preventDefault(); qrDlg(); }
       // G, or the same key on a Persian keyboard (ل)
       else if ((k === 'g' || k === 'G' || k === 'ل') && guide.el && !guide.el.hidden) { e.preventDefault(); guideToggle(); }
+      // U, or the same key on a Persian keyboard (ع)
+      else if ((k === 'u' || k === 'U' || k === 'ع') && OPT.music && AUDIO) { e.preventDefault(); musicOpen(null); }
     });
 
     /* ---------- bookmarks ---------- */
@@ -716,6 +728,7 @@
     var teaser = null;
     function teaserOpen(from) {
       if (!OPT.teaser) return;
+      if (music && music.playing()) music.pause();
       if (teaser) { teaser.open(); return; }
       if (from) from.setAttribute('aria-busy', 'true');
       lazy(TEASER, function () { return typeof W.AN_TEASER === 'function'; }, function (err) {
@@ -732,6 +745,63 @@
       b.type = 'button'; b.setAttribute('aria-haspopup', 'dialog');
       b.addEventListener('click', function () { teaserOpen(b); });
       cta.appendChild(b);
+    }
+
+    /* ---------- «رادیو آینده», the radio ---------- */
+    // The stations and the player are a separate file (src/addons/music.js), fetched on the first press or when the
+    // pointer comes near a radio button. The audio context is made here, inside the press itself, because Safari lets
+    // sound start only from a click or a key; the file then plays through that context. Nothing plays by itself.
+    var music = null, muCtx = null, muBtns = [];
+    function muUnlock() {
+      var A = W.AudioContext || W.webkitAudioContext; if (!A) return null;
+      try { if (!muCtx) muCtx = new A({ latencyHint: 'playback' }); if (muCtx.state === 'suspended') muCtx.resume(); } catch (e) { muCtx = null; }
+      return muCtx;
+    }
+    var muWas = null;
+    function musicState(on, st) {
+      on = !!on;
+      if (on === muWas) return;
+      muWas = on;
+      H.classList.toggle('an-mu-on', on);
+      muBtns.forEach(function (b) { if (b.hasAttribute('aria-pressed')) b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      pressed('music-play', on);
+      W.dispatchEvent(new CustomEvent('an-music', { detail: { playing: on, station: st ? st.id : '' } }));
+    }
+    function musicGet(cb, from) {
+      if (!OPT.music || !AUDIO) return;
+      if (music) { cb(music); return; }
+      if (from) from.setAttribute('aria-busy', 'true');
+      lazy(MUSIC, function () { return typeof W.AN_MUSIC === 'function'; }, function (err) {
+        if (from) from.removeAttribute('aria-busy');
+        if (err) { AN.toast('رادیو آینده از اینترنت نرسید؛ اتصال را بررسی کنید و دوباره امتحان کنید.'); return; }
+        if (!music) music = W.AN_MUSIC({ AN: AN, fa: fa, esc: esc, ctx: function () { return muCtx || muUnlock(); }, onState: musicState });
+        cb(music);
+      });
+    }
+    function musicPreload() { if (OPT.music && AUDIO) lazy(MUSIC, function () { return typeof W.AN_MUSIC === 'function'; }, function () {}); }
+    function musicOpen(from) { if ($('.an-dlg.on') && !(music && $('#an-mu.on'))) AN.closeDlg(); musicGet(function (m) { m.open(); }, from); }
+    function musicToggle(from) { if (!music || !music.playing()) muUnlock(); musicGet(function (m) { m.toggle(); }, from); }
+    function musicBtn(b) { muBtns.push(b); ['pointerenter', 'focus', 'touchstart'].forEach(function (n) { b.addEventListener(n, musicPreload, { passive: true, once: true }); }); return b; }
+    function musicInit() {
+      if (!OPT.music || !AUDIO) return;
+      // in the top bar, beside the toolkit (hidden on narrow phones, where the toolkit and the home page carry it)
+      var tb = $('#an-bar .an-tools');
+      if (tb) {
+        var b = musicBtn(el('button', 'an-ico-btn an-x-mu', I.music));
+        b.type = 'button'; b.title = 'رادیو آینده';
+        b.setAttribute('aria-label', 'رادیو آینده (U)'); b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-keyshortcuts', 'U');
+        b.addEventListener('click', function () { musicOpen(b); });
+        tb.insertBefore(b, btn && btn.parentNode === tb ? btn.nextSibling : tb.firstChild);
+      }
+      if (AN.page === 'home') {
+        var cta = $('.an-hero-cta');
+        if (cta) {
+          var h = musicBtn(el('button', 'an-btn an-btn-ghost an-x-radio', I.music + 'رادیو آینده <small>(موسیقی زنده)</small>'));
+          h.type = 'button'; h.setAttribute('aria-haspopup', 'dialog');
+          h.addEventListener('click', function () { musicOpen(h); });
+          cta.appendChild(h);
+        }
+      }
     }
 
     /* ---------- «نگار», the blog's guide ---------- */
@@ -886,7 +956,15 @@
 
     guideInit();
     teaserInit();
+    musicInit();
     H.classList.add('an-x-on');
-    AN.x = { v: 9, open: openPanel, theme: theme, opt: OPT, guide: guideToggle, teaser: teaserOpen };
+    // AN.x.music: for other code on the page (the canvas presentation's toolbar): toggle and play must run inside a
+    // click or key press; state changes arrive as the window event 'an-music' with detail.playing
+    AN.x = { v: 10, open: openPanel, theme: theme, opt: OPT, guide: guideToggle, teaser: teaserOpen,
+      music: OPT.music && AUDIO ? {
+        open: function () { musicOpen(null); }, toggle: function () { musicToggle(null); },
+        play: function () { muUnlock(); musicGet(function (m) { m.play(); }); }, pause: function () { if (music) music.pause(); },
+        playing: function () { return !!music && music.playing(); }, station: function () { if (!music) return null; var s = music.station(); return { id: s.id, name: s.name, mood: s.mood, bpm: s.bpm }; }
+      } : null };
   }
 })();

@@ -186,6 +186,9 @@ for (const f of ['template-cdn.html', 'template-cdn-lite.html']) staticChecks(pa
     // the introduction film, fetched the same way when a reader asks for it
     const tz = a.teaser ? path.join(ROOT, 'dist', 'cdn', a.teaser) : '';
     ok(`toolkit: ${a.teaser || 'introduction film'} named with its integrity hash`, !!a.js && !!tz && fs.existsSync(tz) && cdnText(a.js).includes(`"${a.teaser}","${sha384(fs.readFileSync(tz))}"`));
+    // «رادیو آینده», fetched the same way on the first press of a radio button
+    const mz = a.music ? path.join(ROOT, 'dist', 'cdn', a.music) : '';
+    ok(`toolkit: ${a.music || 'radio'} named with its integrity hash`, !!a.js && !!mz && fs.existsSync(mz) && cdnText(a.js).includes(`"${a.music}","${sha384(fs.readFileSync(mz))}"`));
     ok('box.html: not written by an unverified build', !c.unverifiedTemplates, c.unverifiedTemplates ? 'built with --unverified: for offline tests only' : '');
   }
 }
